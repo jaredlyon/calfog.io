@@ -1,0 +1,577 @@
+================================================================================
+XGBOOST: FOG CLASSIFICATION RESULTS
+================================================================================
+Analysis Date: 2026-03-14 03:16:50
+Number of Locations: 5
+Model: XGBClassifier (n_estimators=10000, max_depth=5, learning_rate=0.05, early_stopping=1000)
+Threshold: Optimized per location based on F1 score (not default 0.5)
+Fog Threshold: < 1610 meters (1 mile)
+
+================================================================================
+
+LOCATION 10
+--------------------------------------------------------------------------------
+WITHOUT AQI (all rows, no AQI features):
+  Records: 398764 (Train: 390001, Test: 8763)
+  Optimal Threshold: 0.550
+  Accuracy: Train=0.9975, Test=0.9861
+  Precision: Train=0.8871, Test=0.1053
+  Recall: Train=1.0000, Test=0.0779
+  F1 Score: Train=0.9402, Test=0.0896
+  ROC-AUC: Train=1.0000, Test=0.8554
+
+  Feature Importance (sorted by gain, 19 features):
+    soil_temperature_7_to_28cm: 21.55%
+    soil_moisture_0_to_7cm: 7.31%
+    previous_night_low: 6.67%
+    cooling_rate_12h: 6.37%
+    soil_temperature_0_to_7cm: 6.23%
+    soil_moisture_7_to_28cm: 5.95%
+    dew_point_2m: 5.11%
+    precipitation: 5.08%
+    et0_fao_evapotranspiration: 5.08%
+    rain: 4.25%
+    relative_humidity_2m: 3.67%
+    surface_pressure: 3.46%
+    dewpoint_depression: 3.15%
+    temperature_2m: 3.11%
+    wind_gusts_10m: 2.95%
+    cooling_rate_6h: 2.86%
+    vapour_pressure_deficit: 2.74%
+    wind_speed_100m: 2.46%
+    wind_speed_10m: 2.00%
+
+WITH AQI (filtered rows, with AQI features):
+  Records: 26829 (Train: 18066, Test: 8763)
+  Optimal Threshold: 0.550
+  Accuracy: Train=0.9955, Test=0.9904
+  Precision: Train=0.4938, Test=0.0000
+  Recall: Train=1.0000, Test=0.0000
+  F1 Score: Train=0.6612, Test=0.0000
+  ROC-AUC: Train=0.9998, Test=0.8987
+
+  Feature Importance (sorted by gain, 24 features):
+    soil_temperature_7_to_28cm: 25.04%
+    previous_night_low: 12.50%
+    soil_moisture_0_to_7cm: 9.08%
+    soil_moisture_7_to_28cm: 6.76%
+    precipitation: 6.24%
+    rain: 5.96%
+    vapour_pressure_deficit: 4.22%
+    cooling_rate_12h: 4.09%
+    dust: 3.77%
+    temperature_2m: 3.59%
+    relative_humidity_2m: 2.55%
+    cooling_rate_6h: 2.49%
+    dewpoint_depression: 2.06%
+    soil_temperature_0_to_7cm: 1.89%
+    dew_point_2m: 1.87%
+    surface_pressure: 1.31%
+    et0_fao_evapotranspiration: 1.26%
+    nitrogen_dioxide: 1.25%
+    pm10: 1.23%
+    pm2_5: 0.71%
+    aerosol_optical_depth: 0.66%
+    wind_speed_100m: 0.59%
+    wind_speed_10m: 0.46%
+    wind_gusts_10m: 0.40%
+
+WITHOUT AQI REDUCED (filtered rows, no AQI features):
+  Records: 26829 (Train: 18066, Test: 8763)
+  Optimal Threshold: 0.550
+  Accuracy: Train=0.9964, Test=0.9886
+  Precision: Train=0.5517, Test=0.1034
+  Recall: Train=1.0000, Test=0.0390
+  F1 Score: Train=0.7111, Test=0.0566
+  ROC-AUC: Train=0.9999, Test=0.8754
+
+  Feature Importance (sorted by gain, 19 features):
+    soil_temperature_7_to_28cm: 27.15%
+    previous_night_low: 11.41%
+    soil_moisture_0_to_7cm: 9.29%
+    rain: 8.93%
+    precipitation: 8.00%
+    soil_moisture_7_to_28cm: 6.80%
+    soil_temperature_0_to_7cm: 6.08%
+    cooling_rate_12h: 3.83%
+    vapour_pressure_deficit: 2.93%
+    dewpoint_depression: 2.67%
+    temperature_2m: 2.30%
+    cooling_rate_6h: 2.12%
+    relative_humidity_2m: 1.82%
+    dew_point_2m: 1.69%
+    surface_pressure: 1.66%
+    et0_fao_evapotranspiration: 1.54%
+    wind_speed_100m: 0.64%
+    wind_gusts_10m: 0.61%
+    wind_speed_10m: 0.52%
+
+================================================================================
+
+LOCATION 6
+--------------------------------------------------------------------------------
+WITHOUT AQI (all rows, no AQI features):
+  Records: 171970 (Train: 163189, Test: 8781)
+  Optimal Threshold: 0.550
+  Accuracy: Train=0.9972, Test=0.9618
+  Precision: Train=0.8859, Test=0.2932
+  Recall: Train=1.0000, Test=0.3147
+  F1 Score: Train=0.9395, Test=0.3035
+  ROC-AUC: Train=1.0000, Test=0.9166
+
+  Feature Importance (sorted by gain, 19 features):
+    soil_temperature_7_to_28cm: 15.92%
+    precipitation: 11.47%
+    rain: 8.66%
+    previous_night_low: 6.65%
+    cooling_rate_12h: 6.60%
+    relative_humidity_2m: 5.33%
+    soil_moisture_0_to_7cm: 4.64%
+    cooling_rate_6h: 4.58%
+    soil_moisture_7_to_28cm: 4.56%
+    dewpoint_depression: 4.08%
+    dew_point_2m: 3.99%
+    surface_pressure: 3.91%
+    soil_temperature_0_to_7cm: 3.69%
+    et0_fao_evapotranspiration: 3.49%
+    vapour_pressure_deficit: 2.65%
+    temperature_2m: 2.62%
+    wind_speed_100m: 2.58%
+    wind_speed_10m: 2.32%
+    wind_gusts_10m: 2.25%
+
+WITH AQI (filtered rows, with AQI features):
+  Records: 26739 (Train: 17958, Test: 8781)
+  Optimal Threshold: 0.550
+  Accuracy: Train=0.9890, Test=0.9654
+  Precision: Train=0.5490, Test=0.2662
+  Recall: Train=1.0000, Test=0.1767
+  F1 Score: Train=0.7088, Test=0.2124
+  ROC-AUC: Train=0.9996, Test=0.9033
+
+  Feature Importance (sorted by gain, 24 features):
+    soil_temperature_7_to_28cm: 20.73%
+    precipitation: 15.23%
+    rain: 9.83%
+    previous_night_low: 9.71%
+    soil_moisture_7_to_28cm: 5.02%
+    cooling_rate_12h: 3.35%
+    soil_moisture_0_to_7cm: 3.15%
+    surface_pressure: 3.12%
+    wind_speed_100m: 2.85%
+    cooling_rate_6h: 2.70%
+    temperature_2m: 2.37%
+    dew_point_2m: 2.26%
+    dust: 2.22%
+    et0_fao_evapotranspiration: 2.18%
+    aerosol_optical_depth: 1.99%
+    relative_humidity_2m: 1.94%
+    dewpoint_depression: 1.85%
+    vapour_pressure_deficit: 1.65%
+    soil_temperature_0_to_7cm: 1.56%
+    pm10: 1.54%
+    wind_gusts_10m: 1.47%
+    pm2_5: 1.32%
+    nitrogen_dioxide: 1.06%
+    wind_speed_10m: 0.90%
+
+WITHOUT AQI REDUCED (filtered rows, no AQI features):
+  Records: 26739 (Train: 17958, Test: 8781)
+  Optimal Threshold: 0.550
+  Accuracy: Train=0.9888, Test=0.9666
+  Precision: Train=0.5452, Test=0.3032
+  Recall: Train=1.0000, Test=0.2026
+  F1 Score: Train=0.7057, Test=0.2429
+  ROC-AUC: Train=0.9997, Test=0.9067
+
+  Feature Importance (sorted by gain, 19 features):
+    precipitation: 24.98%
+    soil_temperature_7_to_28cm: 15.02%
+    previous_night_low: 10.05%
+    rain: 7.46%
+    soil_moisture_7_to_28cm: 5.46%
+    soil_temperature_0_to_7cm: 4.65%
+    surface_pressure: 3.94%
+    soil_moisture_0_to_7cm: 3.70%
+    cooling_rate_12h: 3.24%
+    cooling_rate_6h: 3.19%
+    wind_speed_100m: 2.93%
+    dew_point_2m: 2.55%
+    relative_humidity_2m: 2.30%
+    temperature_2m: 2.16%
+    et0_fao_evapotranspiration: 1.95%
+    dewpoint_depression: 1.89%
+    vapour_pressure_deficit: 1.80%
+    wind_gusts_10m: 1.69%
+    wind_speed_10m: 1.03%
+
+================================================================================
+
+LOCATION 7
+--------------------------------------------------------------------------------
+WITHOUT AQI (all rows, no AQI features):
+  Records: 400168 (Train: 391385, Test: 8783)
+  Optimal Threshold: 0.550
+  Accuracy: Train=0.9917, Test=0.9657
+  Precision: Train=0.7961, Test=0.3223
+  Recall: Train=1.0000, Test=0.4314
+  F1 Score: Train=0.8865, Test=0.3690
+  ROC-AUC: Train=0.9999, Test=0.9512
+
+  Feature Importance (sorted by gain, 19 features):
+    soil_temperature_7_to_28cm: 18.41%
+    precipitation: 9.09%
+    rain: 7.88%
+    previous_night_low: 6.67%
+    cooling_rate_12h: 6.61%
+    soil_temperature_0_to_7cm: 5.39%
+    relative_humidity_2m: 5.22%
+    soil_moisture_0_to_7cm: 5.08%
+    et0_fao_evapotranspiration: 4.92%
+    soil_moisture_7_to_28cm: 4.15%
+    dewpoint_depression: 3.90%
+    vapour_pressure_deficit: 3.52%
+    cooling_rate_6h: 3.41%
+    dew_point_2m: 3.33%
+    surface_pressure: 2.81%
+    wind_gusts_10m: 2.59%
+    wind_speed_100m: 2.48%
+    wind_speed_10m: 2.33%
+    temperature_2m: 2.22%
+
+WITH AQI (filtered rows, with AQI features):
+  Records: 26869 (Train: 18086, Test: 8783)
+  Optimal Threshold: 0.550
+  Accuracy: Train=0.9894, Test=0.9724
+  Precision: Train=0.4589, Test=0.2841
+  Recall: Train=1.0000, Test=0.1225
+  F1 Score: Train=0.6291, Test=0.1712
+  ROC-AUC: Train=0.9994, Test=0.8321
+
+  Feature Importance (sorted by gain, 24 features):
+    soil_moisture_7_to_28cm: 19.53%
+    soil_temperature_7_to_28cm: 9.30%
+    precipitation: 8.55%
+    soil_moisture_0_to_7cm: 8.42%
+    rain: 7.14%
+    previous_night_low: 6.53%
+    dewpoint_depression: 4.38%
+    dust: 3.92%
+    cooling_rate_12h: 3.30%
+    relative_humidity_2m: 3.04%
+    soil_temperature_0_to_7cm: 2.64%
+    pm10: 2.42%
+    wind_speed_100m: 2.12%
+    surface_pressure: 2.10%
+    aerosol_optical_depth: 1.94%
+    vapour_pressure_deficit: 1.93%
+    wind_gusts_10m: 1.84%
+    et0_fao_evapotranspiration: 1.81%
+    dew_point_2m: 1.78%
+    temperature_2m: 1.69%
+    nitrogen_dioxide: 1.54%
+    cooling_rate_6h: 1.42%
+    pm2_5: 1.40%
+    wind_speed_10m: 1.28%
+
+WITHOUT AQI REDUCED (filtered rows, no AQI features):
+  Records: 26869 (Train: 18086, Test: 8783)
+  Optimal Threshold: 0.550
+  Accuracy: Train=0.9903, Test=0.9726
+  Precision: Train=0.4807, Test=0.3093
+  Recall: Train=1.0000, Test=0.1471
+  F1 Score: Train=0.6493, Test=0.1993
+  ROC-AUC: Train=0.9996, Test=0.8931
+
+  Feature Importance (sorted by gain, 19 features):
+    soil_moisture_7_to_28cm: 13.46%
+    soil_temperature_7_to_28cm: 13.31%
+    soil_moisture_0_to_7cm: 12.33%
+    precipitation: 9.83%
+    rain: 7.14%
+    previous_night_low: 5.72%
+    soil_temperature_0_to_7cm: 4.70%
+    cooling_rate_12h: 4.59%
+    vapour_pressure_deficit: 4.42%
+    relative_humidity_2m: 4.12%
+    surface_pressure: 3.39%
+    et0_fao_evapotranspiration: 2.69%
+    dew_point_2m: 2.51%
+    dewpoint_depression: 2.49%
+    wind_speed_100m: 2.29%
+    temperature_2m: 2.06%
+    cooling_rate_6h: 1.91%
+    wind_gusts_10m: 1.58%
+    wind_speed_10m: 1.47%
+
+================================================================================
+
+LOCATION 8
+--------------------------------------------------------------------------------
+WITHOUT AQI (all rows, no AQI features):
+  Records: 168456 (Train: 159863, Test: 8593)
+  Optimal Threshold: 0.550
+  Accuracy: Train=0.9980, Test=0.9483
+  Precision: Train=0.9388, Test=0.3408
+  Recall: Train=1.0000, Test=0.5033
+  F1 Score: Train=0.9684, Test=0.4064
+  ROC-AUC: Train=1.0000, Test=0.9317
+
+  Feature Importance (sorted by gain, 19 features):
+    rain: 17.84%
+    soil_temperature_7_to_28cm: 12.27%
+    precipitation: 9.71%
+    previous_night_low: 7.03%
+    soil_moisture_0_to_7cm: 6.03%
+    cooling_rate_12h: 5.90%
+    relative_humidity_2m: 4.75%
+    cooling_rate_6h: 4.34%
+    et0_fao_evapotranspiration: 4.19%
+    soil_moisture_7_to_28cm: 4.10%
+    soil_temperature_0_to_7cm: 3.29%
+    surface_pressure: 3.28%
+    dewpoint_depression: 3.19%
+    dew_point_2m: 3.16%
+    vapour_pressure_deficit: 2.54%
+    wind_gusts_10m: 2.35%
+    wind_speed_100m: 2.11%
+    temperature_2m: 1.99%
+    wind_speed_10m: 1.92%
+
+WITH AQI (filtered rows, with AQI features):
+  Records: 26404 (Train: 17811, Test: 8593)
+  Optimal Threshold: 0.550
+  Accuracy: Train=0.9872, Test=0.9503
+  Precision: Train=0.5682, Test=0.3100
+  Recall: Train=1.0000, Test=0.3377
+  F1 Score: Train=0.7246, Test=0.3233
+  ROC-AUC: Train=0.9994, Test=0.9159
+
+  Feature Importance (sorted by gain, 24 features):
+    previous_night_low: 17.72%
+    soil_temperature_7_to_28cm: 15.62%
+    rain: 5.78%
+    soil_moisture_0_to_7cm: 5.60%
+    soil_moisture_7_to_28cm: 5.50%
+    cooling_rate_12h: 4.12%
+    vapour_pressure_deficit: 3.73%
+    cooling_rate_6h: 3.54%
+    temperature_2m: 3.53%
+    surface_pressure: 2.94%
+    precipitation: 2.90%
+    dust: 2.88%
+    dew_point_2m: 2.76%
+    aerosol_optical_depth: 2.68%
+    dewpoint_depression: 2.61%
+    et0_fao_evapotranspiration: 2.60%
+    soil_temperature_0_to_7cm: 2.43%
+    pm2_5: 2.31%
+    relative_humidity_2m: 2.25%
+    wind_speed_100m: 2.06%
+    pm10: 2.00%
+    wind_gusts_10m: 1.75%
+    nitrogen_dioxide: 1.43%
+    wind_speed_10m: 1.24%
+
+WITHOUT AQI REDUCED (filtered rows, no AQI features):
+  Records: 26404 (Train: 17811, Test: 8593)
+  Optimal Threshold: 0.550
+  Accuracy: Train=0.9881, Test=0.9503
+  Precision: Train=0.5859, Test=0.3077
+  Recall: Train=1.0000, Test=0.3311
+  F1 Score: Train=0.7389, Test=0.3190
+  ROC-AUC: Train=0.9994, Test=0.9099
+
+  Feature Importance (sorted by gain, 19 features):
+    soil_temperature_7_to_28cm: 17.41%
+    previous_night_low: 14.90%
+    rain: 8.13%
+    soil_moisture_0_to_7cm: 6.76%
+    soil_temperature_0_to_7cm: 6.07%
+    precipitation: 5.91%
+    cooling_rate_12h: 5.02%
+    soil_moisture_7_to_28cm: 4.38%
+    cooling_rate_6h: 3.87%
+    vapour_pressure_deficit: 3.83%
+    relative_humidity_2m: 3.79%
+    surface_pressure: 3.35%
+    dewpoint_depression: 2.91%
+    temperature_2m: 2.85%
+    dew_point_2m: 2.80%
+    wind_gusts_10m: 2.42%
+    wind_speed_100m: 2.09%
+    et0_fao_evapotranspiration: 1.96%
+    wind_speed_10m: 1.55%
+
+================================================================================
+
+LOCATION 9
+--------------------------------------------------------------------------------
+WITHOUT AQI (all rows, no AQI features):
+  Records: 172165 (Train: 163387, Test: 8778)
+  Optimal Threshold: 0.550
+  Accuracy: Train=0.9952, Test=0.9430
+  Precision: Train=0.8982, Test=0.3418
+  Recall: Train=1.0000, Test=0.4587
+  F1 Score: Train=0.9464, Test=0.3917
+  ROC-AUC: Train=1.0000, Test=0.9265
+
+  Feature Importance (sorted by gain, 19 features):
+    soil_temperature_7_to_28cm: 16.97%
+    precipitation: 8.73%
+    cooling_rate_12h: 8.59%
+    soil_moisture_0_to_7cm: 6.34%
+    rain: 6.33%
+    previous_night_low: 6.29%
+    cooling_rate_6h: 5.74%
+    et0_fao_evapotranspiration: 4.67%
+    soil_moisture_7_to_28cm: 4.13%
+    relative_humidity_2m: 4.00%
+    soil_temperature_0_to_7cm: 3.78%
+    dew_point_2m: 3.59%
+    surface_pressure: 3.37%
+    wind_gusts_10m: 3.32%
+    dewpoint_depression: 3.19%
+    vapour_pressure_deficit: 3.11%
+    temperature_2m: 2.62%
+    wind_speed_10m: 2.61%
+    wind_speed_100m: 2.60%
+
+WITH AQI (filtered rows, with AQI features):
+  Records: 26863 (Train: 18085, Test: 8778)
+  Optimal Threshold: 0.550
+  Accuracy: Train=0.9887, Test=0.9515
+  Precision: Train=0.6453, Test=0.3720
+  Recall: Train=1.0000, Test=0.3105
+  F1 Score: Train=0.7844, Test=0.3385
+  ROC-AUC: Train=0.9998, Test=0.9250
+
+  Feature Importance (sorted by gain, 24 features):
+    soil_temperature_7_to_28cm: 17.25%
+    previous_night_low: 15.67%
+    precipitation: 10.86%
+    rain: 8.98%
+    cooling_rate_12h: 5.01%
+    soil_temperature_0_to_7cm: 4.29%
+    soil_moisture_7_to_28cm: 3.82%
+    cooling_rate_6h: 3.09%
+    surface_pressure: 3.00%
+    soil_moisture_0_to_7cm: 2.93%
+    temperature_2m: 2.37%
+    et0_fao_evapotranspiration: 2.22%
+    dust: 2.17%
+    dewpoint_depression: 1.91%
+    wind_speed_100m: 1.88%
+    vapour_pressure_deficit: 1.86%
+    relative_humidity_2m: 1.81%
+    aerosol_optical_depth: 1.78%
+    pm2_5: 1.76%
+    dew_point_2m: 1.68%
+    pm10: 1.62%
+    wind_gusts_10m: 1.42%
+    nitrogen_dioxide: 1.33%
+    wind_speed_10m: 1.28%
+
+WITHOUT AQI REDUCED (filtered rows, no AQI features):
+  Records: 26863 (Train: 18085, Test: 8778)
+  Optimal Threshold: 0.550
+  Accuracy: Train=0.9828, Test=0.9453
+  Precision: Train=0.5453, Test=0.3298
+  Recall: Train=1.0000, Test=0.3561
+  F1 Score: Train=0.7058, Test=0.3425
+  ROC-AUC: Train=0.9993, Test=0.9265
+
+  Feature Importance (sorted by gain, 19 features):
+    soil_temperature_7_to_28cm: 16.76%
+    previous_night_low: 15.67%
+    rain: 14.05%
+    precipitation: 8.39%
+    cooling_rate_12h: 6.83%
+    soil_temperature_0_to_7cm: 5.33%
+    soil_moisture_7_to_28cm: 4.45%
+    cooling_rate_6h: 3.78%
+    soil_moisture_0_to_7cm: 3.69%
+    surface_pressure: 3.43%
+    temperature_2m: 2.47%
+    relative_humidity_2m: 2.24%
+    vapour_pressure_deficit: 2.07%
+    wind_speed_100m: 2.05%
+    et0_fao_evapotranspiration: 1.98%
+    dewpoint_depression: 1.91%
+    dew_point_2m: 1.78%
+    wind_gusts_10m: 1.58%
+    wind_speed_10m: 1.55%
+
+================================================================================
+
+AVERAGE METRICS
+--------------------------------------------------------------------------------
+WITHOUT AQI (all rows, no AQI features) - Average across 5 locations:
+  Test Accuracy: 0.9610
+  Test Precision: 0.2807
+  Test Recall: 0.3572
+  Test F1 Score: 0.3120
+  Test ROC-AUC: 0.9163
+
+WITH AQI (filtered rows, with AQI features) - Average across 5 locations:
+  Test Accuracy: 0.9660
+  Test Precision: 0.2465
+  Test Recall: 0.1895
+  Test F1 Score: 0.2091
+  Test ROC-AUC: 0.8950
+
+WITHOUT AQI REDUCED (filtered rows, no AQI features) - Average across 5 locations:
+  Test Accuracy: 0.9647
+  Test Precision: 0.2707
+  Test Recall: 0.2152
+  Test F1 Score: 0.2321
+  Test ROC-AUC: 0.9023
+
+AVERAGE FEATURE IMPORTANCE WITHOUT AQI (across 5 locations):
+  soil_temperature_7_to_28cm: 17.02%
+  rain: 8.99%
+  precipitation: 8.81%
+  cooling_rate_12h: 6.82%
+  previous_night_low: 6.66%
+  soil_moisture_0_to_7cm: 5.88%
+  relative_humidity_2m: 4.59%
+  soil_moisture_7_to_28cm: 4.58%
+  soil_temperature_0_to_7cm: 4.48%
+  et0_fao_evapotranspiration: 4.47%
+  cooling_rate_6h: 4.19%
+  dew_point_2m: 3.84%
+  dewpoint_depression: 3.50%
+  surface_pressure: 3.37%
+  vapour_pressure_deficit: 2.91%
+  wind_gusts_10m: 2.69%
+  temperature_2m: 2.51%
+  wind_speed_100m: 2.44%
+  wind_speed_10m: 2.24%
+
+AVERAGE FEATURE IMPORTANCE WITH AQI (across 5 locations):
+  soil_temperature_7_to_28cm: 17.59%
+  previous_night_low: 12.43%
+  precipitation: 8.76%
+  soil_moisture_7_to_28cm: 8.13%
+  rain: 7.54%
+  soil_moisture_0_to_7cm: 5.83%
+  cooling_rate_12h: 3.98%
+  dust: 2.99%
+  temperature_2m: 2.71%
+  vapour_pressure_deficit: 2.68%
+  cooling_rate_6h: 2.65%
+  soil_temperature_0_to_7cm: 2.56%
+  dewpoint_depression: 2.56%
+  surface_pressure: 2.50%
+  relative_humidity_2m: 2.32%
+  dew_point_2m: 2.07%
+  et0_fao_evapotranspiration: 2.01%
+  wind_speed_100m: 1.90%
+  aerosol_optical_depth: 1.81%
+  pm10: 1.76%
+  pm2_5: 1.50%
+  wind_gusts_10m: 1.38%
+  nitrogen_dioxide: 1.32%
+  wind_speed_10m: 1.03%
+
+================================================================================

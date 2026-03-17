@@ -1,0 +1,545 @@
+================================================================================
+K-MEANS CLUSTERING: AQI SENSITIVITY ANALYSIS
+================================================================================
+Analysis Date: 2026-03-14 03:09:22
+Number of Locations: 5
+Number of Clusters: 8
+
+================================================================================
+
+LOCATION 10
+--------------------------------------------------------------------------------
+WITHOUT AQI (all rows, no AQI features):
+  Records: 365120
+  Inertia: 2617205.83
+  Silhouette Score: 0.2016
+  Davies-Bouldin Index: 1.4035
+
+  Feature Variance Across Clusters (sorted, 19 features):
+    rain: 26.34%
+    precipitation: 26.16%
+    vapour_pressure_deficit: 4.23%
+    dewpoint_depression: 3.95%
+    wind_speed_100m: 3.88%
+    relative_humidity_2m: 3.51%
+    soil_temperature_0_to_7cm: 3.38%
+    wind_speed_10m: 3.38%
+    temperature_2m: 3.29%
+    wind_gusts_10m: 3.23%
+    soil_moisture_0_to_7cm: 3.09%
+    et0_fao_evapotranspiration: 2.79%
+    soil_temperature_7_to_28cm: 2.75%
+    previous_night_low: 2.28%
+    soil_moisture_7_to_28cm: 1.91%
+    cooling_rate_6h: 1.83%
+    cooling_rate_12h: 1.79%
+    surface_pressure: 1.39%
+    dew_point_2m: 0.82%
+
+WITH AQI (filtered rows, with AQI features):
+  Records: 25691
+  Inertia: 268380.45
+  Silhouette Score: 0.1826
+  Davies-Bouldin Index: 1.5409
+
+  Feature Variance Across Clusters (sorted, 24 features):
+    rain: 27.58%
+    precipitation: 26.96%
+    pm10: 4.32%
+    dust: 3.85%
+    soil_moisture_0_to_7cm: 2.84%
+    relative_humidity_2m: 2.50%
+    wind_speed_10m: 2.29%
+    soil_temperature_7_to_28cm: 2.29%
+    wind_speed_100m: 2.29%
+    wind_gusts_10m: 2.29%
+    pm2_5: 2.27%
+    soil_temperature_0_to_7cm: 2.23%
+    dewpoint_depression: 2.21%
+    temperature_2m: 2.20%
+    previous_night_low: 2.11%
+    vapour_pressure_deficit: 2.05%
+    et0_fao_evapotranspiration: 1.80%
+    cooling_rate_6h: 1.59%
+    soil_moisture_7_to_28cm: 1.46%
+    surface_pressure: 1.38%
+    cooling_rate_12h: 1.29%
+    nitrogen_dioxide: 0.94%
+    aerosol_optical_depth: 0.77%
+    dew_point_2m: 0.48%
+
+WITHOUT AQI REDUCED (filtered rows, no AQI features):
+  Records: 25691
+  Inertia: 166323.66
+  Silhouette Score: 0.2233
+  Davies-Bouldin Index: 1.3952
+
+  Feature Variance Across Clusters (sorted, 19 features):
+    rain: 30.67%
+    precipitation: 30.07%
+    soil_moisture_0_to_7cm: 2.93%
+    relative_humidity_2m: 2.87%
+    wind_speed_100m: 2.86%
+    dewpoint_depression: 2.84%
+    soil_temperature_0_to_7cm: 2.81%
+    vapour_pressure_deficit: 2.75%
+    wind_speed_10m: 2.75%
+    temperature_2m: 2.71%
+    wind_gusts_10m: 2.54%
+    soil_temperature_7_to_28cm: 2.43%
+    et0_fao_evapotranspiration: 2.41%
+    previous_night_low: 2.17%
+    cooling_rate_6h: 1.89%
+    soil_moisture_7_to_28cm: 1.62%
+    cooling_rate_12h: 1.61%
+    surface_pressure: 1.50%
+    dew_point_2m: 0.57%
+
+================================================================================
+
+LOCATION 6
+--------------------------------------------------------------------------------
+WITHOUT AQI (all rows, no AQI features):
+  Records: 164421
+  Inertia: 1063459.57
+  Silhouette Score: 0.2088
+  Davies-Bouldin Index: 1.3889
+
+  Feature Variance Across Clusters (sorted, 19 features):
+    rain: 25.95%
+    precipitation: 25.94%
+    soil_moisture_0_to_7cm: 4.35%
+    relative_humidity_2m: 3.49%
+    soil_temperature_0_to_7cm: 3.31%
+    soil_temperature_7_to_28cm: 3.30%
+    dewpoint_depression: 3.26%
+    soil_moisture_7_to_28cm: 3.24%
+    temperature_2m: 3.15%
+    vapour_pressure_deficit: 3.11%
+    wind_speed_100m: 3.02%
+    et0_fao_evapotranspiration: 2.80%
+    wind_speed_10m: 2.75%
+    wind_gusts_10m: 2.73%
+    previous_night_low: 2.65%
+    cooling_rate_6h: 2.32%
+    cooling_rate_12h: 2.07%
+    surface_pressure: 1.84%
+    dew_point_2m: 0.73%
+
+WITH AQI (filtered rows, with AQI features):
+  Records: 25558
+  Inertia: 262365.04
+  Silhouette Score: 0.2087
+  Davies-Bouldin Index: 1.4584
+
+  Feature Variance Across Clusters (sorted, 24 features):
+    rain: 23.10%
+    precipitation: 23.01%
+    dust: 7.94%
+    pm10: 4.48%
+    soil_moisture_0_to_7cm: 3.41%
+    relative_humidity_2m: 2.63%
+    wind_gusts_10m: 2.62%
+    wind_speed_100m: 2.61%
+    wind_speed_10m: 2.57%
+    soil_temperature_0_to_7cm: 2.54%
+    temperature_2m: 2.47%
+    dewpoint_depression: 2.43%
+    soil_temperature_7_to_28cm: 2.42%
+    vapour_pressure_deficit: 2.31%
+    et0_fao_evapotranspiration: 2.21%
+    soil_moisture_7_to_28cm: 2.05%
+    previous_night_low: 2.04%
+    nitrogen_dioxide: 2.00%
+    cooling_rate_6h: 1.76%
+    cooling_rate_12h: 1.56%
+    surface_pressure: 1.56%
+    pm2_5: 1.14%
+    dew_point_2m: 0.68%
+    aerosol_optical_depth: 0.46%
+
+WITHOUT AQI REDUCED (filtered rows, no AQI features):
+  Records: 25558
+  Inertia: 164047.65
+  Silhouette Score: 0.2087
+  Davies-Bouldin Index: 1.3686
+
+  Feature Variance Across Clusters (sorted, 19 features):
+    rain: 26.36%
+    precipitation: 26.27%
+    soil_moisture_0_to_7cm: 4.18%
+    relative_humidity_2m: 3.38%
+    soil_temperature_7_to_28cm: 3.31%
+    soil_temperature_0_to_7cm: 3.30%
+    soil_moisture_7_to_28cm: 3.28%
+    dewpoint_depression: 3.20%
+    temperature_2m: 3.13%
+    vapour_pressure_deficit: 2.99%
+    et0_fao_evapotranspiration: 2.83%
+    wind_speed_100m: 2.78%
+    previous_night_low: 2.70%
+    wind_gusts_10m: 2.67%
+    wind_speed_10m: 2.63%
+    cooling_rate_6h: 2.36%
+    cooling_rate_12h: 1.93%
+    surface_pressure: 1.83%
+    dew_point_2m: 0.87%
+
+================================================================================
+
+LOCATION 7
+--------------------------------------------------------------------------------
+WITHOUT AQI (all rows, no AQI features):
+  Records: 392427
+  Inertia: 2526989.85
+  Silhouette Score: 0.2119
+  Davies-Bouldin Index: 1.3617
+
+  Feature Variance Across Clusters (sorted, 19 features):
+    precipitation: 23.50%
+    rain: 23.49%
+    soil_moisture_0_to_7cm: 4.72%
+    relative_humidity_2m: 3.88%
+    soil_temperature_7_to_28cm: 3.64%
+    soil_temperature_0_to_7cm: 3.56%
+    soil_moisture_7_to_28cm: 3.56%
+    dewpoint_depression: 3.51%
+    wind_speed_100m: 3.44%
+    temperature_2m: 3.40%
+    vapour_pressure_deficit: 3.32%
+    wind_gusts_10m: 3.12%
+    wind_speed_10m: 3.08%
+    et0_fao_evapotranspiration: 3.02%
+    previous_night_low: 2.93%
+    cooling_rate_6h: 2.62%
+    cooling_rate_12h: 2.28%
+    surface_pressure: 1.89%
+    dew_point_2m: 1.04%
+
+WITH AQI (filtered rows, with AQI features):
+  Records: 25748
+  Inertia: 259556.46
+  Silhouette Score: 0.1905
+  Davies-Bouldin Index: 1.4757
+
+  Feature Variance Across Clusters (sorted, 24 features):
+    precipitation: 25.13%
+    rain: 25.09%
+    dust: 5.79%
+    soil_moisture_0_to_7cm: 3.67%
+    soil_temperature_7_to_28cm: 2.84%
+    pm10: 2.83%
+    relative_humidity_2m: 2.70%
+    soil_temperature_0_to_7cm: 2.63%
+    dewpoint_depression: 2.44%
+    temperature_2m: 2.43%
+    soil_moisture_7_to_28cm: 2.39%
+    wind_speed_100m: 2.32%
+    previous_night_low: 2.30%
+    vapour_pressure_deficit: 2.28%
+    et0_fao_evapotranspiration: 2.24%
+    cooling_rate_6h: 2.10%
+    wind_gusts_10m: 1.94%
+    wind_speed_10m: 1.93%
+    cooling_rate_12h: 1.67%
+    surface_pressure: 1.52%
+    nitrogen_dioxide: 1.36%
+    pm2_5: 0.88%
+    dew_point_2m: 0.77%
+    aerosol_optical_depth: 0.75%
+
+WITHOUT AQI REDUCED (filtered rows, no AQI features):
+  Records: 25748
+  Inertia: 159702.68
+  Silhouette Score: 0.2038
+  Davies-Bouldin Index: 1.3619
+
+  Feature Variance Across Clusters (sorted, 19 features):
+    precipitation: 27.12%
+    rain: 27.09%
+    soil_moisture_0_to_7cm: 3.98%
+    relative_humidity_2m: 3.21%
+    soil_temperature_7_to_28cm: 3.14%
+    soil_temperature_0_to_7cm: 3.11%
+    wind_speed_100m: 3.04%
+    temperature_2m: 2.97%
+    dewpoint_depression: 2.97%
+    soil_moisture_7_to_28cm: 2.88%
+    vapour_pressure_deficit: 2.78%
+    wind_speed_10m: 2.72%
+    et0_fao_evapotranspiration: 2.71%
+    wind_gusts_10m: 2.69%
+    previous_night_low: 2.62%
+    cooling_rate_6h: 2.35%
+    cooling_rate_12h: 1.91%
+    surface_pressure: 1.75%
+    dew_point_2m: 0.95%
+
+================================================================================
+
+LOCATION 8
+--------------------------------------------------------------------------------
+WITHOUT AQI (all rows, no AQI features):
+  Records: 166085
+  Inertia: 1107510.98
+  Silhouette Score: 0.2018
+  Davies-Bouldin Index: 1.3904
+
+  Feature Variance Across Clusters (sorted, 19 features):
+    rain: 27.32%
+    precipitation: 27.24%
+    soil_moisture_0_to_7cm: 4.13%
+    relative_humidity_2m: 3.54%
+    dewpoint_depression: 3.17%
+    soil_temperature_7_to_28cm: 3.08%
+    soil_temperature_0_to_7cm: 3.04%
+    vapour_pressure_deficit: 3.00%
+    temperature_2m: 2.98%
+    soil_moisture_7_to_28cm: 2.89%
+    wind_speed_100m: 2.79%
+    previous_night_low: 2.61%
+    wind_speed_10m: 2.56%
+    wind_gusts_10m: 2.55%
+    et0_fao_evapotranspiration: 2.54%
+    cooling_rate_6h: 2.31%
+    cooling_rate_12h: 1.81%
+    surface_pressure: 1.70%
+    dew_point_2m: 0.73%
+
+WITH AQI (filtered rows, with AQI features):
+  Records: 25587
+  Inertia: 263735.98
+  Silhouette Score: 0.1897
+  Davies-Bouldin Index: 1.4858
+
+  Feature Variance Across Clusters (sorted, 24 features):
+    rain: 25.15%
+    precipitation: 25.10%
+    pm10: 6.09%
+    dust: 5.35%
+    soil_moisture_0_to_7cm: 3.10%
+    pm2_5: 2.76%
+    soil_temperature_7_to_28cm: 2.59%
+    relative_humidity_2m: 2.56%
+    soil_temperature_0_to_7cm: 2.29%
+    dewpoint_depression: 2.25%
+    temperature_2m: 2.12%
+    previous_night_low: 2.12%
+    vapour_pressure_deficit: 2.02%
+    cooling_rate_6h: 1.93%
+    et0_fao_evapotranspiration: 1.91%
+    wind_speed_100m: 1.86%
+    soil_moisture_7_to_28cm: 1.80%
+    cooling_rate_12h: 1.53%
+    wind_gusts_10m: 1.51%
+    aerosol_optical_depth: 1.50%
+    wind_speed_10m: 1.46%
+    surface_pressure: 1.27%
+    nitrogen_dioxide: 1.06%
+    dew_point_2m: 0.66%
+
+WITHOUT AQI REDUCED (filtered rows, no AQI features):
+  Records: 25587
+  Inertia: 162539.09
+  Silhouette Score: 0.2042
+  Davies-Bouldin Index: 1.3461
+
+  Feature Variance Across Clusters (sorted, 19 features):
+    rain: 28.87%
+    precipitation: 28.81%
+    soil_moisture_0_to_7cm: 3.74%
+    relative_humidity_2m: 3.20%
+    dewpoint_depression: 2.98%
+    soil_temperature_0_to_7cm: 2.90%
+    soil_temperature_7_to_28cm: 2.90%
+    temperature_2m: 2.83%
+    vapour_pressure_deficit: 2.77%
+    soil_moisture_7_to_28cm: 2.59%
+    et0_fao_evapotranspiration: 2.58%
+    previous_night_low: 2.49%
+    wind_speed_100m: 2.49%
+    wind_gusts_10m: 2.25%
+    cooling_rate_6h: 2.24%
+    wind_speed_10m: 2.08%
+    cooling_rate_12h: 1.72%
+    surface_pressure: 1.59%
+    dew_point_2m: 0.96%
+
+================================================================================
+
+LOCATION 9
+--------------------------------------------------------------------------------
+WITHOUT AQI (all rows, no AQI features):
+  Records: 164009
+  Inertia: 1087580.17
+  Silhouette Score: 0.2049
+  Davies-Bouldin Index: 1.3703
+
+  Feature Variance Across Clusters (sorted, 19 features):
+    rain: 29.26%
+    precipitation: 29.26%
+    soil_moisture_0_to_7cm: 3.66%
+    relative_humidity_2m: 3.16%
+    soil_temperature_7_to_28cm: 2.83%
+    dewpoint_depression: 2.81%
+    soil_temperature_0_to_7cm: 2.75%
+    temperature_2m: 2.68%
+    vapour_pressure_deficit: 2.65%
+    soil_moisture_7_to_28cm: 2.59%
+    wind_gusts_10m: 2.57%
+    wind_speed_100m: 2.56%
+    wind_speed_10m: 2.50%
+    previous_night_low: 2.39%
+    et0_fao_evapotranspiration: 2.28%
+    cooling_rate_6h: 2.07%
+    cooling_rate_12h: 1.67%
+    surface_pressure: 1.61%
+    dew_point_2m: 0.71%
+
+WITH AQI (filtered rows, with AQI features):
+  Records: 25677
+  Inertia: 260666.12
+  Silhouette Score: 0.1837
+  Davies-Bouldin Index: 1.5671
+
+  Feature Variance Across Clusters (sorted, 24 features):
+    precipitation: 26.86%
+    rain: 26.86%
+    dust: 5.30%
+    pm10: 4.53%
+    soil_moisture_0_to_7cm: 3.48%
+    relative_humidity_2m: 2.71%
+    soil_temperature_7_to_28cm: 2.61%
+    soil_temperature_0_to_7cm: 2.38%
+    dewpoint_depression: 2.36%
+    temperature_2m: 2.22%
+    previous_night_low: 2.20%
+    soil_moisture_7_to_28cm: 2.11%
+    vapour_pressure_deficit: 2.05%
+    cooling_rate_6h: 2.03%
+    et0_fao_evapotranspiration: 1.96%
+    wind_speed_100m: 1.71%
+    cooling_rate_12h: 1.49%
+    wind_gusts_10m: 1.46%
+    surface_pressure: 1.42%
+    wind_speed_10m: 1.32%
+    nitrogen_dioxide: 1.15%
+    dew_point_2m: 0.79%
+    pm2_5: 0.73%
+    aerosol_optical_depth: 0.26%
+
+WITHOUT AQI REDUCED (filtered rows, no AQI features):
+  Records: 25677
+  Inertia: 163830.21
+  Silhouette Score: 0.2150
+  Davies-Bouldin Index: 1.3551
+
+  Feature Variance Across Clusters (sorted, 19 features):
+    precipitation: 29.96%
+    rain: 29.96%
+    soil_moisture_0_to_7cm: 3.56%
+    relative_humidity_2m: 2.97%
+    soil_temperature_7_to_28cm: 2.77%
+    dewpoint_depression: 2.71%
+    soil_temperature_0_to_7cm: 2.71%
+    temperature_2m: 2.59%
+    soil_moisture_7_to_28cm: 2.50%
+    vapour_pressure_deficit: 2.46%
+    wind_speed_100m: 2.46%
+    previous_night_low: 2.35%
+    wind_gusts_10m: 2.33%
+    et0_fao_evapotranspiration: 2.27%
+    wind_speed_10m: 2.25%
+    cooling_rate_6h: 2.06%
+    cooling_rate_12h: 1.63%
+    surface_pressure: 1.53%
+    dew_point_2m: 0.94%
+
+================================================================================
+
+AVERAGE METRICS
+--------------------------------------------------------------------------------
+WITHOUT AQI (all rows, no AQI features) - Average across 5 locations:
+  Inertia: 1680549.28
+  Silhouette Score: 0.2058
+  Davies-Bouldin Index: 1.3830
+
+AVERAGE FEATURE VARIANCE WITHOUT AQI (across 5 locations):
+  rain: 26.47%
+  precipitation: 26.42%
+  soil_moisture_0_to_7cm: 3.99%
+  relative_humidity_2m: 3.52%
+  dewpoint_depression: 3.34%
+  vapour_pressure_deficit: 3.26%
+  soil_temperature_0_to_7cm: 3.21%
+  wind_speed_100m: 3.14%
+  soil_temperature_7_to_28cm: 3.12%
+  temperature_2m: 3.10%
+  wind_speed_10m: 2.85%
+  wind_gusts_10m: 2.84%
+  soil_moisture_7_to_28cm: 2.84%
+  et0_fao_evapotranspiration: 2.69%
+  previous_night_low: 2.57%
+  cooling_rate_6h: 2.23%
+  cooling_rate_12h: 1.92%
+  surface_pressure: 1.69%
+  dew_point_2m: 0.81%
+
+WITH AQI (filtered rows, with AQI features) - Average across 5 locations:
+  Inertia: 262940.81
+  Silhouette Score: 0.1911
+  Davies-Bouldin Index: 1.5056
+
+AVERAGE FEATURE VARIANCE WITH AQI (across 5 locations):
+  rain: 25.55%
+  precipitation: 25.41%
+  dust: 5.65%
+  pm10: 4.45%
+  soil_moisture_0_to_7cm: 3.30%
+  relative_humidity_2m: 2.62%
+  soil_temperature_7_to_28cm: 2.55%
+  soil_temperature_0_to_7cm: 2.41%
+  dewpoint_depression: 2.34%
+  temperature_2m: 2.29%
+  wind_speed_100m: 2.16%
+  previous_night_low: 2.16%
+  vapour_pressure_deficit: 2.15%
+  et0_fao_evapotranspiration: 2.02%
+  wind_gusts_10m: 1.96%
+  soil_moisture_7_to_28cm: 1.96%
+  wind_speed_10m: 1.91%
+  cooling_rate_6h: 1.88%
+  pm2_5: 1.56%
+  cooling_rate_12h: 1.51%
+  surface_pressure: 1.43%
+  nitrogen_dioxide: 1.30%
+  aerosol_optical_depth: 0.75%
+  dew_point_2m: 0.68%
+
+WITHOUT AQI REDUCED (filtered rows, no AQI features) - Average across 5 locations:
+  Inertia: 163288.66
+  Silhouette Score: 0.2110
+  Davies-Bouldin Index: 1.3654
+
+AVERAGE FEATURE VARIANCE WITHOUT AQI REDUCED (across 5 locations):
+  rain: 28.59%
+  precipitation: 28.45%
+  soil_moisture_0_to_7cm: 3.68%
+  relative_humidity_2m: 3.13%
+  soil_temperature_0_to_7cm: 2.97%
+  dewpoint_depression: 2.94%
+  soil_temperature_7_to_28cm: 2.91%
+  temperature_2m: 2.85%
+  vapour_pressure_deficit: 2.75%
+  wind_speed_100m: 2.72%
+  soil_moisture_7_to_28cm: 2.58%
+  et0_fao_evapotranspiration: 2.56%
+  wind_gusts_10m: 2.50%
+  wind_speed_10m: 2.49%
+  previous_night_low: 2.47%
+  cooling_rate_6h: 2.18%
+  cooling_rate_12h: 1.76%
+  surface_pressure: 1.64%
+  dew_point_2m: 0.86%
+
+================================================================================
