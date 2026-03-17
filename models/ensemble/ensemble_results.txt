@@ -1,29 +1,14 @@
-================================================================================
-SEQUENTIAL STACKING ENSEMBLE: FOG CLASSIFICATION RESULTS
-================================================================================
-Analysis Date: 2026-03-14 07:12:38
-Number of Locations: 5
-Architecture: Sequential Stacking (4 Layers)
-  Layer 1: Logistic Regression (learns from original features)
-  Layer 2: Random Forest (learns from features + LogReg predictions)
-  Layer 3: XGBoost (learns from features + LogReg + RF predictions)
-  Layer 4: Temporal CNN (learns from features + LogReg + RF + XGBoost predictions)
-  Final: Weighted Average (10% LogReg, 20% RF, 30% XGBoost, 40% CNN)
-Fog Threshold: < 1610 meters (1 mile)
-
-================================================================================
-
 LOCATION 10
 --------------------------------------------------------------------------------
 WITHOUT AQI (all rows, no AQI features):
   Records: 398764 (Train: 390001, Test: 8763)
   Sequences: Train=389977, Test=8739
   Optimal Threshold: 0.55
-  Accuracy: Train=0.9862, Test=0.9793
-  Precision: Train=0.5887, Test=0.1111
-  Recall: Train=0.9500, Test=0.1974
-  F1 Score: Train=0.7270, Test=0.1422
-  ROC-AUC: Train=0.9980, Test=0.9378
+  Accuracy: Train=0.9814, Test=0.9730
+  Precision: Train=0.5090, Test=0.0960
+  Recall: Train=0.9842, Test=0.2500
+  F1 Score: Train=0.6710, Test=0.1387
+  ROC-AUC: Train=0.9984, Test=0.9451
 
   Feature Importance (sorted by weighted importance, 19 features):
     soil_temperature_7_to_28cm: 21.11%
@@ -50,11 +35,11 @@ WITH AQI (filtered rows, with AQI features):
   Records: 26829 (Train: 18066, Test: 8763)
   Sequences: Train=18042, Test=8739
   Optimal Threshold: 0.55
-  Accuracy: Train=0.9934, Test=0.9913
-  Precision: Train=0.4020, Test=0.0000
-  Recall: Train=1.0000, Test=0.0000
-  F1 Score: Train=0.5735, Test=0.0000
-  ROC-AUC: Train=0.9995, Test=0.9097
+  Accuracy: Train=0.9879, Test=0.9908
+  Precision: Train=0.2685, Test=0.3750
+  Recall: Train=1.0000, Test=0.0789
+  F1 Score: Train=0.4233, Test=0.1304
+  ROC-AUC: Train=0.9995, Test=0.8894
 
   Feature Importance (sorted by weighted importance, 24 features):
     soil_moisture_0_to_7cm: 20.84%
@@ -86,11 +71,11 @@ WITHOUT AQI REDUCED (filtered rows, no AQI features):
   Records: 26829 (Train: 18066, Test: 8763)
   Sequences: Train=18042, Test=8739
   Optimal Threshold: 0.55
-  Accuracy: Train=0.9941, Test=0.9914
-  Precision: Train=0.4301, Test=0.6667
-  Recall: Train=1.0000, Test=0.0263
-  F1 Score: Train=0.6015, Test=0.0506
-  ROC-AUC: Train=0.9996, Test=0.8823
+  Accuracy: Train=0.9941, Test=0.9906
+  Precision: Train=0.4293, Test=0.0000
+  Recall: Train=0.9875, Test=0.0000
+  F1 Score: Train=0.5985, Test=0.0000
+  ROC-AUC: Train=0.9993, Test=0.9015
 
   Feature Importance (sorted by weighted importance, 19 features):
     previous_night_low: 25.99%
@@ -121,11 +106,11 @@ WITHOUT AQI (all rows, no AQI features):
   Records: 171970 (Train: 163189, Test: 8781)
   Sequences: Train=163165, Test=8757
   Optimal Threshold: 0.55
-  Accuracy: Train=0.9782, Test=0.9503
-  Precision: Train=0.4961, Test=0.2857
-  Recall: Train=0.9600, Test=0.6053
-  F1 Score: Train=0.6541, Test=0.3882
-  ROC-AUC: Train=0.9968, Test=0.9455
+  Accuracy: Train=0.9789, Test=0.9517
+  Precision: Train=0.5048, Test=0.2903
+  Recall: Train=0.9595, Test=0.5921
+  F1 Score: Train=0.6615, Test=0.3896
+  ROC-AUC: Train=0.9969, Test=0.9442
 
   Feature Importance (sorted by weighted importance, 19 features):
     soil_temperature_7_to_28cm: 15.21%
@@ -152,11 +137,11 @@ WITH AQI (filtered rows, with AQI features):
   Records: 26739 (Train: 17958, Test: 8781)
   Sequences: Train=17934, Test=8757
   Optimal Threshold: 0.55
-  Accuracy: Train=0.9677, Test=0.9556
-  Precision: Train=0.2934, Test=0.2720
-  Recall: Train=0.9959, Test=0.4211
-  F1 Score: Train=0.4533, Test=0.3305
-  ROC-AUC: Train=0.9975, Test=0.9389
+  Accuracy: Train=0.9776, Test=0.9630
+  Precision: Train=0.3750, Test=0.2966
+  Recall: Train=0.9959, Test=0.3070
+  F1 Score: Train=0.5448, Test=0.3017
+  ROC-AUC: Train=0.9977, Test=0.9379
 
   Feature Importance (sorted by weighted importance, 24 features):
     soil_temperature_7_to_28cm: 15.39%
@@ -188,11 +173,11 @@ WITHOUT AQI REDUCED (filtered rows, no AQI features):
   Records: 26739 (Train: 17958, Test: 8781)
   Sequences: Train=17934, Test=8757
   Optimal Threshold: 0.55
-  Accuracy: Train=0.9756, Test=0.9612
-  Precision: Train=0.3545, Test=0.3121
-  Recall: Train=0.9959, Test=0.4079
-  F1 Score: Train=0.5229, Test=0.3536
-  ROC-AUC: Train=0.9968, Test=0.9392
+  Accuracy: Train=0.9729, Test=0.9604
+  Precision: Train=0.3291, Test=0.3146
+  Recall: Train=0.9793, Test=0.4430
+  F1 Score: Train=0.4927, Test=0.3679
+  ROC-AUC: Train=0.9963, Test=0.9406
 
   Feature Importance (sorted by weighted importance, 19 features):
     soil_temperature_7_to_28cm: 19.07%
@@ -223,11 +208,11 @@ WITHOUT AQI (all rows, no AQI features):
   Records: 400168 (Train: 391385, Test: 8783)
   Sequences: Train=391361, Test=8759
   Optimal Threshold: 0.55
-  Accuracy: Train=0.9789, Test=0.9590
-  Precision: Train=0.6099, Test=0.3135
-  Recall: Train=0.9784, Test=0.6990
-  F1 Score: Train=0.7514, Test=0.4329
-  ROC-AUC: Train=0.9981, Test=0.9648
+  Accuracy: Train=0.9868, Test=0.9653
+  Precision: Train=0.7232, Test=0.3421
+  Recall: Train=0.9648, Test=0.5969
+  F1 Score: Train=0.8267, Test=0.4349
+  ROC-AUC: Train=0.9984, Test=0.9625
 
   Feature Importance (sorted by weighted importance, 19 features):
     soil_temperature_7_to_28cm: 15.94%
@@ -254,11 +239,11 @@ WITH AQI (filtered rows, with AQI features):
   Records: 26869 (Train: 18086, Test: 8783)
   Sequences: Train=18062, Test=8759
   Optimal Threshold: 0.55
-  Accuracy: Train=0.9868, Test=0.9733
-  Precision: Train=0.4036, Test=0.3137
-  Recall: Train=0.9815, Test=0.1633
-  F1 Score: Train=0.5719, Test=0.2148
-  ROC-AUC: Train=0.9979, Test=0.8865
+  Accuracy: Train=0.9833, Test=0.9699
+  Precision: Train=0.3472, Test=0.2875
+  Recall: Train=0.9815, Test=0.2347
+  F1 Score: Train=0.5129, Test=0.2584
+  ROC-AUC: Train=0.9978, Test=0.9221
 
   Feature Importance (sorted by weighted importance, 24 features):
     soil_moisture_7_to_28cm: 16.79%
@@ -290,11 +275,11 @@ WITHOUT AQI REDUCED (filtered rows, no AQI features):
   Records: 26869 (Train: 18086, Test: 8783)
   Sequences: Train=18062, Test=8759
   Optimal Threshold: 0.55
-  Accuracy: Train=0.9823, Test=0.9693
-  Precision: Train=0.3354, Test=0.3027
-  Recall: Train=0.9877, Test=0.2857
-  F1 Score: Train=0.5008, Test=0.2940
-  ROC-AUC: Train=0.9976, Test=0.8989
+  Accuracy: Train=0.9851, Test=0.9733
+  Precision: Train=0.3729, Test=0.3716
+  Recall: Train=0.9691, Test=0.2806
+  F1 Score: Train=0.5386, Test=0.3198
+  ROC-AUC: Train=0.9969, Test=0.9364
 
   Feature Importance (sorted by weighted importance, 19 features):
     rain: 14.91%
@@ -325,11 +310,11 @@ WITHOUT AQI (all rows, no AQI features):
   Records: 168456 (Train: 159863, Test: 8593)
   Sequences: Train=159839, Test=8569
   Optimal Threshold: 0.55
-  Accuracy: Train=0.9824, Test=0.9296
-  Precision: Train=0.6437, Test=0.2916
-  Recall: Train=0.9700, Test=0.7205
-  F1 Score: Train=0.7739, Test=0.4151
-  ROC-AUC: Train=0.9980, Test=0.9455
+  Accuracy: Train=0.9815, Test=0.9299
+  Precision: Train=0.6309, Test=0.2946
+  Recall: Train=0.9763, Test=0.7340
+  F1 Score: Train=0.7664, Test=0.4204
+  ROC-AUC: Train=0.9981, Test=0.9466
 
   Feature Importance (sorted by weighted importance, 19 features):
     soil_temperature_7_to_28cm: 12.37%
@@ -356,11 +341,11 @@ WITH AQI (filtered rows, with AQI features):
   Records: 26404 (Train: 17811, Test: 8593)
   Sequences: Train=17787, Test=8569
   Optimal Threshold: 0.55
-  Accuracy: Train=0.9707, Test=0.9407
-  Precision: Train=0.3636, Test=0.2911
-  Recall: Train=0.9867, Test=0.4949
-  F1 Score: Train=0.5314, Test=0.3666
-  ROC-AUC: Train=0.9959, Test=0.9379
+  Accuracy: Train=0.9594, Test=0.9286
+  Precision: Train=0.2931, Test=0.2464
+  Recall: Train=0.9967, Test=0.5152
+  F1 Score: Train=0.4530, Test=0.3333
+  ROC-AUC: Train=0.9958, Test=0.9272
 
   Feature Importance (sorted by weighted importance, 24 features):
     previous_night_low: 16.81%
@@ -392,11 +377,11 @@ WITHOUT AQI REDUCED (filtered rows, no AQI features):
   Records: 26404 (Train: 17811, Test: 8593)
   Sequences: Train=17787, Test=8569
   Optimal Threshold: 0.55
-  Accuracy: Train=0.9750, Test=0.9484
-  Precision: Train=0.4000, Test=0.3414
-  Recall: Train=0.9667, Test=0.5253
-  F1 Score: Train=0.5659, Test=0.4138
-  ROC-AUC: Train=0.9952, Test=0.9348
+  Accuracy: Train=0.9784, Test=0.9505
+  Precision: Train=0.4363, Test=0.3477
+  Recall: Train=0.9700, Test=0.4882
+  F1 Score: Train=0.6019, Test=0.4062
+  ROC-AUC: Train=0.9956, Test=0.9245
 
   Feature Importance (sorted by weighted importance, 19 features):
     soil_temperature_7_to_28cm: 14.98%
@@ -427,11 +412,11 @@ WITHOUT AQI (all rows, no AQI features):
   Records: 172165 (Train: 163387, Test: 8778)
   Sequences: Train=163363, Test=8754
   Optimal Threshold: 0.55
-  Accuracy: Train=0.9737, Test=0.9408
-  Precision: Train=0.6212, Test=0.3692
-  Recall: Train=0.9598, Test=0.6897
-  F1 Score: Train=0.7543, Test=0.4810
-  ROC-AUC: Train=0.9957, Test=0.9527
+  Accuracy: Train=0.9693, Test=0.9345
+  Precision: Train=0.5805, Test=0.3494
+  Recall: Train=0.9736, Test=0.7500
+  F1 Score: Train=0.7274, Test=0.4767
+  ROC-AUC: Train=0.9957, Test=0.9554
 
   Feature Importance (sorted by weighted importance, 19 features):
     soil_temperature_7_to_28cm: 16.17%
@@ -458,11 +443,11 @@ WITH AQI (filtered rows, with AQI features):
   Records: 26863 (Train: 18085, Test: 8778)
   Sequences: Train=18061, Test=8754
   Optimal Threshold: 0.55
-  Accuracy: Train=0.9726, Test=0.9512
-  Precision: Train=0.4299, Test=0.4124
-  Recall: Train=0.9946, Test=0.5345
-  F1 Score: Train=0.6003, Test=0.4656
-  ROC-AUC: Train=0.9958, Test=0.9540
+  Accuracy: Train=0.9635, Test=0.9472
+  Precision: Train=0.3608, Test=0.4024
+  Recall: Train=0.9973, Test=0.6753
+  F1 Score: Train=0.5299, Test=0.5043
+  ROC-AUC: Train=0.9959, Test=0.9543
 
   Feature Importance (sorted by weighted importance, 24 features):
     previous_night_low: 14.12%
@@ -494,11 +479,11 @@ WITHOUT AQI REDUCED (filtered rows, no AQI features):
   Records: 26863 (Train: 18085, Test: 8778)
   Sequences: Train=18061, Test=8754
   Optimal Threshold: 0.55
-  Accuracy: Train=0.9659, Test=0.9469
-  Precision: Train=0.3773, Test=0.3950
-  Recall: Train=0.9973, Test=0.6322
-  F1 Score: Train=0.5475, Test=0.4862
-  ROC-AUC: Train=0.9950, Test=0.9520
+  Accuracy: Train=0.9690, Test=0.9489
+  Precision: Train=0.3996, Test=0.4068
+  Recall: Train=0.9920, Test=0.6207
+  F1 Score: Train=0.5697, Test=0.4915
+  ROC-AUC: Train=0.9949, Test=0.9534
 
   Feature Importance (sorted by weighted importance, 19 features):
     soil_temperature_7_to_28cm: 20.96%
@@ -526,25 +511,25 @@ WITHOUT AQI REDUCED (filtered rows, no AQI features):
 AVERAGE METRICS
 --------------------------------------------------------------------------------
 WITHOUT AQI (all rows, no AQI features) - Average across 5 locations:
-  Test Accuracy: 0.9518
-  Test Precision: 0.2742
-  Test Recall: 0.5824
-  Test F1 Score: 0.3719
-  Test ROC-AUC: 0.9492
+  Test Accuracy: 0.9509
+  Test Precision: 0.2745
+  Test Recall: 0.5846
+  Test F1 Score: 0.3721
+  Test ROC-AUC: 0.9508
 
 WITH AQI (filtered rows, with AQI features) - Average across 5 locations:
-  Test Accuracy: 0.9624
-  Test Precision: 0.2578
-  Test Recall: 0.3228
-  Test F1 Score: 0.2755
-  Test ROC-AUC: 0.9254
+  Test Accuracy: 0.9599
+  Test Precision: 0.3216
+  Test Recall: 0.3622
+  Test F1 Score: 0.3056
+  Test ROC-AUC: 0.9262
 
 WITHOUT AQI REDUCED (filtered rows, no AQI features) - Average across 5 locations:
-  Test Accuracy: 0.9634
-  Test Precision: 0.4036
-  Test Recall: 0.3755
-  Test F1 Score: 0.3196
-  Test ROC-AUC: 0.9214
+  Test Accuracy: 0.9647
+  Test Precision: 0.2882
+  Test Recall: 0.3665
+  Test F1 Score: 0.3171
+  Test ROC-AUC: 0.9313
 
 AVERAGE FEATURE IMPORTANCE WITHOUT AQI (across 5 locations):
   soil_temperature_7_to_28cm: 16.16%
@@ -592,5 +577,3 @@ AVERAGE FEATURE IMPORTANCE WITH AQI (across 5 locations):
   wind_speed_10m: 1.19%
   nitrogen_dioxide: 1.15%
   wind_gusts_10m: 1.01%
-
-================================================================================

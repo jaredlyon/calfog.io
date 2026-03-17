@@ -1,18 +1,9 @@
-================================================================================
-K-MEANS CLUSTERING: AQI SENSITIVITY ANALYSIS
-================================================================================
-Analysis Date: 2026-03-14 03:09:22
-Number of Locations: 5
-Number of Clusters: 8
-
-================================================================================
-
 LOCATION 10
 --------------------------------------------------------------------------------
 WITHOUT AQI (all rows, no AQI features):
   Records: 365120
   Inertia: 2617205.83
-  Silhouette Score: 0.2016
+  Silhouette Score: 0.2041
   Davies-Bouldin Index: 1.4035
 
   Feature Variance Across Clusters (sorted, 19 features):
@@ -71,7 +62,7 @@ WITH AQI (filtered rows, with AQI features):
 WITHOUT AQI REDUCED (filtered rows, no AQI features):
   Records: 25691
   Inertia: 166323.66
-  Silhouette Score: 0.2233
+  Silhouette Score: 0.2221
   Davies-Bouldin Index: 1.3952
 
   Feature Variance Across Clusters (sorted, 19 features):
@@ -102,7 +93,7 @@ LOCATION 6
 WITHOUT AQI (all rows, no AQI features):
   Records: 164421
   Inertia: 1063459.57
-  Silhouette Score: 0.2088
+  Silhouette Score: 0.2003
   Davies-Bouldin Index: 1.3889
 
   Feature Variance Across Clusters (sorted, 19 features):
@@ -129,7 +120,7 @@ WITHOUT AQI (all rows, no AQI features):
 WITH AQI (filtered rows, with AQI features):
   Records: 25558
   Inertia: 262365.04
-  Silhouette Score: 0.2087
+  Silhouette Score: 0.2071
   Davies-Bouldin Index: 1.4584
 
   Feature Variance Across Clusters (sorted, 24 features):
@@ -161,7 +152,7 @@ WITH AQI (filtered rows, with AQI features):
 WITHOUT AQI REDUCED (filtered rows, no AQI features):
   Records: 25558
   Inertia: 164047.65
-  Silhouette Score: 0.2087
+  Silhouette Score: 0.2134
   Davies-Bouldin Index: 1.3686
 
   Feature Variance Across Clusters (sorted, 19 features):
@@ -192,7 +183,7 @@ LOCATION 7
 WITHOUT AQI (all rows, no AQI features):
   Records: 392427
   Inertia: 2526989.85
-  Silhouette Score: 0.2119
+  Silhouette Score: 0.2096
   Davies-Bouldin Index: 1.3617
 
   Feature Variance Across Clusters (sorted, 19 features):
@@ -219,7 +210,7 @@ WITHOUT AQI (all rows, no AQI features):
 WITH AQI (filtered rows, with AQI features):
   Records: 25748
   Inertia: 259556.46
-  Silhouette Score: 0.1905
+  Silhouette Score: 0.1920
   Davies-Bouldin Index: 1.4757
 
   Feature Variance Across Clusters (sorted, 24 features):
@@ -251,7 +242,7 @@ WITH AQI (filtered rows, with AQI features):
 WITHOUT AQI REDUCED (filtered rows, no AQI features):
   Records: 25748
   Inertia: 159702.68
-  Silhouette Score: 0.2038
+  Silhouette Score: 0.2067
   Davies-Bouldin Index: 1.3619
 
   Feature Variance Across Clusters (sorted, 19 features):
@@ -282,7 +273,7 @@ LOCATION 8
 WITHOUT AQI (all rows, no AQI features):
   Records: 166085
   Inertia: 1107510.98
-  Silhouette Score: 0.2018
+  Silhouette Score: 0.1988
   Davies-Bouldin Index: 1.3904
 
   Feature Variance Across Clusters (sorted, 19 features):
@@ -309,7 +300,7 @@ WITHOUT AQI (all rows, no AQI features):
 WITH AQI (filtered rows, with AQI features):
   Records: 25587
   Inertia: 263735.98
-  Silhouette Score: 0.1897
+  Silhouette Score: 0.1905
   Davies-Bouldin Index: 1.4858
 
   Feature Variance Across Clusters (sorted, 24 features):
@@ -341,7 +332,7 @@ WITH AQI (filtered rows, with AQI features):
 WITHOUT AQI REDUCED (filtered rows, no AQI features):
   Records: 25587
   Inertia: 162539.09
-  Silhouette Score: 0.2042
+  Silhouette Score: 0.2074
   Davies-Bouldin Index: 1.3461
 
   Feature Variance Across Clusters (sorted, 19 features):
@@ -372,7 +363,7 @@ LOCATION 9
 WITHOUT AQI (all rows, no AQI features):
   Records: 164009
   Inertia: 1087580.17
-  Silhouette Score: 0.2049
+  Silhouette Score: 0.2052
   Davies-Bouldin Index: 1.3703
 
   Feature Variance Across Clusters (sorted, 19 features):
@@ -399,7 +390,7 @@ WITHOUT AQI (all rows, no AQI features):
 WITH AQI (filtered rows, with AQI features):
   Records: 25677
   Inertia: 260666.12
-  Silhouette Score: 0.1837
+  Silhouette Score: 0.1846
   Davies-Bouldin Index: 1.5671
 
   Feature Variance Across Clusters (sorted, 24 features):
@@ -431,7 +422,7 @@ WITH AQI (filtered rows, with AQI features):
 WITHOUT AQI REDUCED (filtered rows, no AQI features):
   Records: 25677
   Inertia: 163830.21
-  Silhouette Score: 0.2150
+  Silhouette Score: 0.2130
   Davies-Bouldin Index: 1.3551
 
   Feature Variance Across Clusters (sorted, 19 features):
@@ -461,7 +452,7 @@ AVERAGE METRICS
 --------------------------------------------------------------------------------
 WITHOUT AQI (all rows, no AQI features) - Average across 5 locations:
   Inertia: 1680549.28
-  Silhouette Score: 0.2058
+  Silhouette Score: 0.2036
   Davies-Bouldin Index: 1.3830
 
 AVERAGE FEATURE VARIANCE WITHOUT AQI (across 5 locations):
@@ -487,7 +478,7 @@ AVERAGE FEATURE VARIANCE WITHOUT AQI (across 5 locations):
 
 WITH AQI (filtered rows, with AQI features) - Average across 5 locations:
   Inertia: 262940.81
-  Silhouette Score: 0.1911
+  Silhouette Score: 0.1914
   Davies-Bouldin Index: 1.5056
 
 AVERAGE FEATURE VARIANCE WITH AQI (across 5 locations):
@@ -518,7 +509,7 @@ AVERAGE FEATURE VARIANCE WITH AQI (across 5 locations):
 
 WITHOUT AQI REDUCED (filtered rows, no AQI features) - Average across 5 locations:
   Inertia: 163288.66
-  Silhouette Score: 0.2110
+  Silhouette Score: 0.2125
   Davies-Bouldin Index: 1.3654
 
 AVERAGE FEATURE VARIANCE WITHOUT AQI REDUCED (across 5 locations):
@@ -541,5 +532,3 @@ AVERAGE FEATURE VARIANCE WITHOUT AQI REDUCED (across 5 locations):
   cooling_rate_12h: 1.76%
   surface_pressure: 1.64%
   dew_point_2m: 0.86%
-
-================================================================================
