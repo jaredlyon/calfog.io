@@ -1,0 +1,308 @@
+{
+  "device": "NVIDIA GeForce RTX 5070",
+  "seed": 20250901,
+  "ray_tune_trials": 80,
+  "per_site": {
+    "location_6": {
+      "tuning": {
+        "nowcast": {
+          "trials": 8,
+          "best_validation_ap": 0.2770839531449144,
+          "best_config": {
+            "channels": 32,
+            "kernel": 5,
+            "dropout": 0.3,
+            "lr": 0.0016792455773297454,
+            "weight_decay": 0.001,
+            "batch_size": 512,
+            "max_neg": 25000
+          }
+        },
+        "lead_time": {
+          "trials": 8,
+          "best_validation_ap": 0.43801663756785714,
+          "best_config": {
+            "channels": 32,
+            "kernel": 3,
+            "dropout": 0.15,
+            "lr": 0.0012035726915866226,
+            "weight_decay": 0.0001,
+            "batch_size": 512,
+            "max_neg": 25000
+          }
+        }
+      },
+      "main_cnn_epochs": {
+        "nowcast": [
+          6,
+          6,
+          6
+        ],
+        "lead_time": [
+          6,
+          3,
+          6
+        ]
+      },
+      "ablation_cnn_epochs": {
+        "nowcast": [
+          5,
+          5,
+          3,
+          3,
+          5,
+          5
+        ],
+        "lead_time": [
+          3,
+          5,
+          3,
+          5,
+          5,
+          5
+        ]
+      }
+    },
+    "location_7": {
+      "tuning": {
+        "nowcast": {
+          "trials": 8,
+          "best_validation_ap": 0.398776122256973,
+          "best_config": {
+            "channels": 48,
+            "kernel": 3,
+            "dropout": 0.15,
+            "lr": 0.0011835367602940016,
+            "weight_decay": 0.0001,
+            "batch_size": 512,
+            "max_neg": 25000
+          }
+        },
+        "lead_time": {
+          "trials": 8,
+          "best_validation_ap": 0.4785817258926582,
+          "best_config": {
+            "channels": 48,
+            "kernel": 5,
+            "dropout": 0.3,
+            "lr": 0.0006745615335416725,
+            "weight_decay": 0.001,
+            "batch_size": 512,
+            "max_neg": 25000
+          }
+        }
+      },
+      "main_cnn_epochs": {
+        "nowcast": [
+          4,
+          6,
+          6
+        ],
+        "lead_time": [
+          6,
+          6,
+          4
+        ]
+      },
+      "ablation_cnn_epochs": {
+        "nowcast": [
+          3,
+          5,
+          3,
+          3,
+          5,
+          5
+        ],
+        "lead_time": [
+          5,
+          5,
+          3,
+          3,
+          5,
+          3
+        ]
+      }
+    },
+    "location_8": {
+      "tuning": {
+        "nowcast": {
+          "trials": 8,
+          "best_validation_ap": 0.40181963997609965,
+          "best_config": {
+            "channels": 48,
+            "kernel": 3,
+            "dropout": 0.15,
+            "lr": 0.0015844146227608064,
+            "weight_decay": 0.001,
+            "batch_size": 256,
+            "max_neg": 25000
+          }
+        },
+        "lead_time": {
+          "trials": 8,
+          "best_validation_ap": 0.6121884959241062,
+          "best_config": {
+            "channels": 48,
+            "kernel": 5,
+            "dropout": 0.3,
+            "lr": 0.0002205261054820551,
+            "weight_decay": 0.0001,
+            "batch_size": 512,
+            "max_neg": 25000
+          }
+        }
+      },
+      "main_cnn_epochs": {
+        "nowcast": [
+          6,
+          6,
+          5
+        ],
+        "lead_time": [
+          6,
+          6,
+          6
+        ]
+      },
+      "ablation_cnn_epochs": {
+        "nowcast": [
+          3,
+          3,
+          3,
+          3,
+          5,
+          5
+        ],
+        "lead_time": [
+          5,
+          5,
+          3,
+          5,
+          5,
+          5
+        ]
+      }
+    },
+    "location_9": {
+      "tuning": {
+        "nowcast": {
+          "trials": 8,
+          "best_validation_ap": 0.6009830015081319,
+          "best_config": {
+            "channels": 24,
+            "kernel": 3,
+            "dropout": 0.15,
+            "lr": 0.0017080679837790556,
+            "weight_decay": 0.0001,
+            "batch_size": 256,
+            "max_neg": 25000
+          }
+        },
+        "lead_time": {
+          "trials": 8,
+          "best_validation_ap": 0.7155327872685968,
+          "best_config": {
+            "channels": 16,
+            "kernel": 5,
+            "dropout": 0.15,
+            "lr": 0.0015774454326846577,
+            "weight_decay": 0.0001,
+            "batch_size": 256,
+            "max_neg": 25000
+          }
+        }
+      },
+      "main_cnn_epochs": {
+        "nowcast": [
+          6,
+          6,
+          3
+        ],
+        "lead_time": [
+          6,
+          3,
+          6
+        ]
+      },
+      "ablation_cnn_epochs": {
+        "nowcast": [
+          5,
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
+        "lead_time": [
+          5,
+          5,
+          3,
+          5,
+          5,
+          5
+        ]
+      }
+    },
+    "location_10": {
+      "tuning": {
+        "nowcast": {
+          "trials": 8,
+          "best_validation_ap": 0.25952103449155506,
+          "best_config": {
+            "channels": 24,
+            "kernel": 5,
+            "dropout": 0.15,
+            "lr": 0.0017437747974959352,
+            "weight_decay": 0.0001,
+            "batch_size": 512,
+            "max_neg": 25000
+          }
+        },
+        "lead_time": {
+          "trials": 8,
+          "best_validation_ap": 0.46147271605959544,
+          "best_config": {
+            "channels": 32,
+            "kernel": 3,
+            "dropout": 0.45,
+            "lr": 0.0019876352129365392,
+            "weight_decay": 0.0001,
+            "batch_size": 512,
+            "max_neg": 25000
+          }
+        }
+      },
+      "main_cnn_epochs": {
+        "nowcast": [
+          5,
+          4,
+          5
+        ],
+        "lead_time": [
+          6,
+          6,
+          5
+        ]
+      },
+      "ablation_cnn_epochs": {
+        "nowcast": [
+          5,
+          5,
+          3,
+          3,
+          5,
+          5
+        ],
+        "lead_time": [
+          5,
+          5,
+          3,
+          3,
+          5,
+          5
+        ]
+      }
+    }
+  },
+  "started_utc": "2026-08-16T04:51:05.029635+00:00"
+}

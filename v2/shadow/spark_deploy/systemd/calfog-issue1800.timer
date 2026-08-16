@@ -1,0 +1,11 @@
+[Unit]
+Description=CalFog V2 lead issue at fixed 18:00 America/Los_Angeles (DST-pinned, no random delay)
+
+[Timer]
+OnCalendar=*-*-* 18:00:00 America/Los_Angeles
+RandomizedDelaySec=0
+AccuracySec=1s
+Persistent=true
+
+[Install]
+WantedBy=timers.target

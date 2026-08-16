@@ -1,0 +1,56 @@
+{
+  "schema_version": "calfog-v2-schema-compatible",
+  "window_hours": 24,
+  "features": [
+    "temperature_2m",
+    "relative_humidity_2m",
+    "dew_point_2m",
+    "precipitation",
+    "surface_pressure",
+    "vapour_pressure_deficit",
+    "wind_speed_10m",
+    "wind_speed_100m",
+    "wind_gusts_10m",
+    "weather_code",
+    "cloud_cover_low"
+  ],
+  "weather_variables": [
+    "temperature_2m",
+    "relative_humidity_2m",
+    "dew_point_2m",
+    "precipitation",
+    "surface_pressure",
+    "vapour_pressure_deficit",
+    "wind_speed_10m",
+    "wind_speed_100m",
+    "wind_gusts_10m",
+    "weather_code",
+    "cloud_cover_low"
+  ],
+  "derived_calendar_features": [
+    "hour_sin",
+    "hour_cos",
+    "doy_sin",
+    "doy_cos"
+  ],
+  "model_input_order": [
+    "temperature_2m",
+    "relative_humidity_2m",
+    "dew_point_2m",
+    "precipitation",
+    "surface_pressure",
+    "vapour_pressure_deficit",
+    "wind_speed_10m",
+    "wind_speed_100m",
+    "wind_gusts_10m",
+    "weather_code",
+    "cloud_cover_low",
+    "hour_sin",
+    "hour_cos",
+    "doy_sin",
+    "doy_cos"
+  ],
+  "production_endpoint": "https://api.open-meteo.com/v1/forecast",
+  "timezone": "America/Los_Angeles",
+  "feature_time_rule": "24 hourly rows ending at and including issue_time"
+}

@@ -1,0 +1,70 @@
+2026-08-16 00:06:38,035	INFO worker.py:2024 -- Started a local Ray instance.
+Resuming completed sites: ['location_6', 'location_7', 'location_8']
+=== location_6 resume existing real artifacts ===
+=== location_7 resume existing real artifacts ===
+=== location_8 resume existing real artifacts ===
+=== location_9 archive/retrain ===
+2026-08-16 00:06:45,895	WARNING tune.py:819 -- You have passed a `SearchGenerator` instance as the `search_alg`, but `max_concurrent_trials` requires a `Searcher` instance`. `max_concurrent_trials` will be ignored.
+╭────────────────────────────────────────────────────────╮
+│ Configuration for experiment     location_9_nowcast    │
+├────────────────────────────────────────────────────────┤
+│ Search algorithm                 BasicVariantGenerator │
+│ Scheduler                        FIFOScheduler         │
+│ Number of trials                 8                     │
+╰────────────────────────────────────────────────────────╯
+
+View detailed results here: /home/pa/work/calfog.io/v2/retrain/artifacts/location_9/tune/results/location_9_nowcast
+To visualize your results with TensorBoard, run: `tensorboard --logdir /tmp/calfog_retrain_ray/session_2026-08-16_00-06-36_189376_35272/artifacts/2026-08-16_00-06-45/location_9_nowcast/driver_artifacts`
+2026-08-16 00:07:30,150	INFO tune.py:1007 -- Wrote the latest version of all result files and experiment state to '/home/pa/work/calfog.io/v2/retrain/artifacts/location_9/tune/results/location_9_nowcast' in 0.0035s.
+
+2026-08-16 00:08:23,501	WARNING tune.py:819 -- You have passed a `SearchGenerator` instance as the `search_alg`, but `max_concurrent_trials` requires a `Searcher` instance`. `max_concurrent_trials` will be ignored.
+╭─────────────────────────────────────────────────────────╮
+│ Configuration for experiment     location_9_lead_time   │
+├─────────────────────────────────────────────────────────┤
+│ Search algorithm                 BasicVariantGenerator  │
+│ Scheduler                        FIFOScheduler          │
+│ Number of trials                 8                      │
+╰─────────────────────────────────────────────────────────╯
+
+View detailed results here: /home/pa/work/calfog.io/v2/retrain/artifacts/location_9/tune/results/location_9_lead_time
+To visualize your results with TensorBoard, run: `tensorboard --logdir /tmp/calfog_retrain_ray/session_2026-08-16_00-06-36_189376_35272/artifacts/2026-08-16_00-08-23/location_9_lead_time/driver_artifacts`
+2026-08-16 00:09:02,228	INFO tune.py:1007 -- Wrote the latest version of all result files and experiment state to '/home/pa/work/calfog.io/v2/retrain/artifacts/location_9/tune/results/location_9_lead_time' in 0.0041s.
+
+=== location_10 archive/retrain ===
+2026-08-16 00:09:20,301	WARNING tune.py:819 -- You have passed a `SearchGenerator` instance as the `search_alg`, but `max_concurrent_trials` requires a `Searcher` instance`. `max_concurrent_trials` will be ignored.
+╭────────────────────────────────────────────────────────╮
+│ Configuration for experiment     location_10_nowcast   │
+├────────────────────────────────────────────────────────┤
+│ Search algorithm                 BasicVariantGenerator │
+│ Scheduler                        FIFOScheduler         │
+│ Number of trials                 8                     │
+╰────────────────────────────────────────────────────────╯
+
+View detailed results here: /home/pa/work/calfog.io/v2/retrain/artifacts/location_10/tune/results/location_10_nowcast
+To visualize your results with TensorBoard, run: `tensorboard --logdir /tmp/calfog_retrain_ray/session_2026-08-16_00-06-36_189376_35272/artifacts/2026-08-16_00-09-20/location_10_nowcast/driver_artifacts`
+2026-08-16 00:10:06,396	INFO tune.py:1007 -- Wrote the latest version of all result files and experiment state to '/home/pa/work/calfog.io/v2/retrain/artifacts/location_10/tune/results/location_10_nowcast' in 0.0047s.
+
+2026-08-16 00:12:07,437	WARNING tune.py:819 -- You have passed a `SearchGenerator` instance as the `search_alg`, but `max_concurrent_trials` requires a `Searcher` instance`. `max_concurrent_trials` will be ignored.
+╭──────────────────────────────────────────────────────────╮
+│ Configuration for experiment     location_10_lead_time   │
+├──────────────────────────────────────────────────────────┤
+│ Search algorithm                 BasicVariantGenerator   │
+│ Scheduler                        FIFOScheduler           │
+│ Number of trials                 8                       │
+╰──────────────────────────────────────────────────────────╯
+
+View detailed results here: /home/pa/work/calfog.io/v2/retrain/artifacts/location_10/tune/results/location_10_lead_time
+To visualize your results with TensorBoard, run: `tensorboard --logdir /tmp/calfog_retrain_ray/session_2026-08-16_00-06-36_189376_35272/artifacts/2026-08-16_00-12-07/location_10_lead_time/driver_artifacts`
+2026-08-16 00:12:46,501	INFO tune.py:1007 -- Wrote the latest version of all result files and experiment state to '/home/pa/work/calfog.io/v2/retrain/artifacts/location_10/tune/results/location_10_lead_time' in 0.0042s.
+
+=== location_6 approximate HF proxy ===
+=== location_7 approximate HF proxy ===
+=== location_8 approximate HF proxy ===
+=== location_9 approximate HF proxy ===
+=== location_10 approximate HF proxy ===
+{
+  "status": "complete",
+  "device": "NVIDIA GeForce RTX 5070",
+  "ray_tune_trials": 80,
+  "elapsed_seconds": 2545.809404
+}

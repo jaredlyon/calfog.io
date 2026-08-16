@@ -1,3 +1,22 @@
 *.csv
 venv/
 old models/
+
+# --- CalFog V2 (added 2026-08): commit code/reports/metrics/small-models; exclude bulky/regenerable ---
+__pycache__/
+*.pyc
+*.npz
+*.sqlite
+# re-fetched Open-Meteo archive/data (regenerable via run_*.sh)
+v2/**/data/
+# Ray Tune HPO logs, cluster runtime, cached arrays
+v2/**/ray_results/
+v2/**/ray_tmp/
+v2/**/tune/
+# raw API snapshot dumps (the live copies live on the Spark logger)
+v2/**/snapshots/
+v2/**/raw_snapshots/
+# RandomForest pickles are huge (tens of MB, one >50MB) and regenerable; keep CNN/XGB/calibrator instead
+*_random_forest.joblib
+# large regenerable shadow hindcast prediction dumps
+v2/shadow/predictions.jsonl

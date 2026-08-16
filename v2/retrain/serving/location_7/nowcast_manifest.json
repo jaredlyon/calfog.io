@@ -1,0 +1,15 @@
+{
+  "task": "nowcast",
+  "training_rows": 279917,
+  "validation_rows": 59968,
+  "climatology": 0.03972248916643148,
+  "cnn_best_validation_ap": 0.1987469478129824,
+  "cnn_epochs": 4,
+  "calibration": "isotonic fit only on chronological fold-3 validation",
+  "models": [
+    "climatology",
+    "xgboost",
+    "random_forest",
+    "temporal_cnn"
+  ]
+}

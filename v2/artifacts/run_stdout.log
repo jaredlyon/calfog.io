@@ -1,0 +1,282 @@
+2026-08-15 21:03:04,548	INFO worker.py:2024 -- Started a local Ray instance.
+2026-08-15 21:03:04,889	WARNING tune.py:819 -- You have passed a `SearchGenerator` instance as the `search_alg`, but `max_concurrent_trials` requires a `Searcher` instance`. `max_concurrent_trials` will be ignored.
+╭────────────────────────────────────────────────────────╮
+│ Configuration for experiment     cnn_lead_sweep        │
+├────────────────────────────────────────────────────────┤
+│ Search algorithm                 BasicVariantGenerator │
+│ Scheduler                        FIFOScheduler         │
+│ Number of trials                 8                     │
+╰────────────────────────────────────────────────────────╯
+
+View detailed results here: /home/pa/work/calfog.io/v2/artifacts/ray_results/cnn_lead_sweep
+To visualize your results with TensorBoard, run: `tensorboard --logdir /home/pa/work/calfog.io/v2/artifacts/ray_tmp/session_2026-08-15_21-03-02_799397_4716/artifacts/2026-08-15_21-03-04/cnn_lead_sweep/driver_artifacts`
+
+Trial status: 8 PENDING
+Current time: 2026-08-15 21:03:05. Total running time: 0s
+Logical resource usage: 2.0/8 CPUs, 1.0/1 GPUs (0.0/1.0 accelerator_type:GeForce-RTX-5070)
+╭────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ Trial name                  status       channels     kernel     dropout            lr     weight_decay     batch_size │
+├────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ ray_trainable_61cbd_00000   PENDING            16          3        0.15   0.000250292           1e-05             512 │
+│ ray_trainable_61cbd_00001   PENDING            32          3        0.15   0.000688639           0.001             256 │
+│ ray_trainable_61cbd_00002   PENDING            16          3        0.15   0.000276869           1e-05             512 │
+│ ray_trainable_61cbd_00003   PENDING            48          3        0.3    0.00173639            1e-05             256 │
+│ ray_trainable_61cbd_00004   PENDING            48          3        0.3    0.000411239           0.001             256 │
+│ ray_trainable_61cbd_00005   PENDING            48          3        0.3    0.000422844           0.0001            512 │
+│ ray_trainable_61cbd_00006   PENDING            64          5        0.3    0.00125542            1e-05             512 │
+│ ray_trainable_61cbd_00007   PENDING            64          5        0.3    0.00134792            0.001             512 │
+╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+
+Trial ray_trainable_61cbd_00000 started with configuration:
+╭─────────────────────────────────────────────────────────────────╮
+│ Trial ray_trainable_61cbd_00000 config                          │
+├─────────────────────────────────────────────────────────────────┤
+│ batch_size                                                  512 │
+│ channels                                                     16 │
+│ data_path                                  ...ray_tune_data.npz │
+│ dropout                                                    0.15 │
+│ kernel                                                        3 │
+│ lr                                                      0.00025 │
+│ max_neg                                                   40000 │
+│ weight_decay                                            0.00001 │
+╰─────────────────────────────────────────────────────────────────╯
+
+Trial ray_trainable_61cbd_00000 completed after 3 iterations at 2026-08-15 21:03:09. Total running time: 4s
+╭────────────────────────────────────────────────────╮
+│ Trial ray_trainable_61cbd_00000 result             │
+├────────────────────────────────────────────────────┤
+│ checkpoint_dir_name                                │
+│ time_this_iter_s                           0.09313 │
+│ time_total_s                               2.52657 │
+│ training_iteration                               3 │
+│ epoch                                            3 │
+│ val_ap                                     0.02634 │
+╰────────────────────────────────────────────────────╯
+
+Trial ray_trainable_61cbd_00001 started with configuration:
+╭─────────────────────────────────────────────────────────────────╮
+│ Trial ray_trainable_61cbd_00001 config                          │
+├─────────────────────────────────────────────────────────────────┤
+│ batch_size                                                  256 │
+│ channels                                                     32 │
+│ data_path                                  ...ray_tune_data.npz │
+│ dropout                                                    0.15 │
+│ kernel                                                        3 │
+│ lr                                                      0.00069 │
+│ max_neg                                                   40000 │
+│ weight_decay                                              0.001 │
+╰─────────────────────────────────────────────────────────────────╯
+
+Trial ray_trainable_61cbd_00001 completed after 5 iterations at 2026-08-15 21:03:14. Total running time: 9s
+╭────────────────────────────────────────────────────╮
+│ Trial ray_trainable_61cbd_00001 result             │
+├────────────────────────────────────────────────────┤
+│ checkpoint_dir_name                                │
+│ time_this_iter_s                           0.11352 │
+│ time_total_s                               2.56958 │
+│ training_iteration                               5 │
+│ epoch                                            5 │
+│ val_ap                                     0.09819 │
+╰────────────────────────────────────────────────────╯
+
+Trial ray_trainable_61cbd_00002 started with configuration:
+╭─────────────────────────────────────────────────────────────────╮
+│ Trial ray_trainable_61cbd_00002 config                          │
+├─────────────────────────────────────────────────────────────────┤
+│ batch_size                                                  512 │
+│ channels                                                     16 │
+│ data_path                                  ...ray_tune_data.npz │
+│ dropout                                                    0.15 │
+│ kernel                                                        3 │
+│ lr                                                      0.00028 │
+│ max_neg                                                   40000 │
+│ weight_decay                                            0.00001 │
+╰─────────────────────────────────────────────────────────────────╯
+
+Trial ray_trainable_61cbd_00002 completed after 3 iterations at 2026-08-15 21:03:19. Total running time: 14s
+╭────────────────────────────────────────────────────╮
+│ Trial ray_trainable_61cbd_00002 result             │
+├────────────────────────────────────────────────────┤
+│ checkpoint_dir_name                                │
+│ time_this_iter_s                           0.07298 │
+│ time_total_s                               2.38581 │
+│ training_iteration                               3 │
+│ epoch                                            3 │
+│ val_ap                                     0.02674 │
+╰────────────────────────────────────────────────────╯
+
+Trial ray_trainable_61cbd_00003 started with configuration:
+╭─────────────────────────────────────────────────────────────────╮
+│ Trial ray_trainable_61cbd_00003 config                          │
+├─────────────────────────────────────────────────────────────────┤
+│ batch_size                                                  256 │
+│ channels                                                     48 │
+│ data_path                                  ...ray_tune_data.npz │
+│ dropout                                                     0.3 │
+│ kernel                                                        3 │
+│ lr                                                      0.00174 │
+│ max_neg                                                   40000 │
+│ weight_decay                                            0.00001 │
+╰─────────────────────────────────────────────────────────────────╯
+
+Trial ray_trainable_61cbd_00003 completed after 5 iterations at 2026-08-15 21:03:24. Total running time: 19s
+╭────────────────────────────────────────────────────╮
+│ Trial ray_trainable_61cbd_00003 result             │
+├────────────────────────────────────────────────────┤
+│ checkpoint_dir_name                                │
+│ time_this_iter_s                           0.12214 │
+│ time_total_s                               2.75964 │
+│ training_iteration                               5 │
+│ epoch                                            5 │
+│ val_ap                                     0.11419 │
+╰────────────────────────────────────────────────────╯
+
+Trial ray_trainable_61cbd_00004 started with configuration:
+╭─────────────────────────────────────────────────────────────────╮
+│ Trial ray_trainable_61cbd_00004 config                          │
+├─────────────────────────────────────────────────────────────────┤
+│ batch_size                                                  256 │
+│ channels                                                     48 │
+│ data_path                                  ...ray_tune_data.npz │
+│ dropout                                                     0.3 │
+│ kernel                                                        3 │
+│ lr                                                      0.00041 │
+│ max_neg                                                   40000 │
+│ weight_decay                                              0.001 │
+╰─────────────────────────────────────────────────────────────────╯
+
+Trial ray_trainable_61cbd_00004 completed after 5 iterations at 2026-08-15 21:03:29. Total running time: 24s
+╭────────────────────────────────────────────────────╮
+│ Trial ray_trainable_61cbd_00004 result             │
+├────────────────────────────────────────────────────┤
+│ checkpoint_dir_name                                │
+│ time_this_iter_s                           0.12622 │
+│ time_total_s                               2.77191 │
+│ training_iteration                               5 │
+│ epoch                                            5 │
+│ val_ap                                      0.1123 │
+╰────────────────────────────────────────────────────╯
+
+Trial ray_trainable_61cbd_00005 started with configuration:
+╭─────────────────────────────────────────────────────────────────╮
+│ Trial ray_trainable_61cbd_00005 config                          │
+├─────────────────────────────────────────────────────────────────┤
+│ batch_size                                                  512 │
+│ channels                                                     48 │
+│ data_path                                  ...ray_tune_data.npz │
+│ dropout                                                     0.3 │
+│ kernel                                                        3 │
+│ lr                                                      0.00042 │
+│ max_neg                                                   40000 │
+│ weight_decay                                             0.0001 │
+╰─────────────────────────────────────────────────────────────────╯
+
+Trial ray_trainable_61cbd_00005 completed after 5 iterations at 2026-08-15 21:03:34. Total running time: 29s
+╭────────────────────────────────────────────────────╮
+│ Trial ray_trainable_61cbd_00005 result             │
+├────────────────────────────────────────────────────┤
+│ checkpoint_dir_name                                │
+│ time_this_iter_s                           0.07933 │
+│ time_total_s                               2.67215 │
+│ training_iteration                               5 │
+│ epoch                                            5 │
+│ val_ap                                     0.09463 │
+╰────────────────────────────────────────────────────╯
+
+Trial status: 6 TERMINATED | 2 PENDING
+Current time: 2026-08-15 21:03:35. Total running time: 30s
+Logical resource usage: 2.0/8 CPUs, 1.0/1 GPUs (0.0/1.0 accelerator_type:GeForce-RTX-5070)
+Current best trial: 61cbd_00003 with val_ap=0.11419191026637668 and params={'channels': 48, 'kernel': 3, 'dropout': 0.3, 'lr': 0.001736390235799647, 'weight_decay': 1e-05, 'batch_size': 256, 'max_neg': 40000}
+╭────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ Trial name                  status         channels     kernel     dropout            lr     weight_decay     batch_size     iter     total time (s)      val_ap     epoch │
+├────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ ray_trainable_61cbd_00000   TERMINATED           16          3        0.15   0.000250292           1e-05             512        3            2.52657   0.0263381         3 │
+│ ray_trainable_61cbd_00001   TERMINATED           32          3        0.15   0.000688639           0.001             256        5            2.56958   0.0981887         5 │
+│ ray_trainable_61cbd_00002   TERMINATED           16          3        0.15   0.000276869           1e-05             512        3            2.38581   0.0267388         3 │
+│ ray_trainable_61cbd_00003   TERMINATED           48          3        0.3    0.00173639            1e-05             256        5            2.75964   0.114192          5 │
+│ ray_trainable_61cbd_00004   TERMINATED           48          3        0.3    0.000411239           0.001             256        5            2.77191   0.112298          5 │
+│ ray_trainable_61cbd_00005   TERMINATED           48          3        0.3    0.000422844           0.0001            512        5            2.67215   0.0946311         5 │
+│ ray_trainable_61cbd_00006   PENDING              64          5        0.3    0.00125542            1e-05             512                                                   │
+│ ray_trainable_61cbd_00007   PENDING              64          5        0.3    0.00134792            0.001             512                                                   │
+╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+
+Trial ray_trainable_61cbd_00006 started with configuration:
+╭─────────────────────────────────────────────────────────────────╮
+│ Trial ray_trainable_61cbd_00006 config                          │
+├─────────────────────────────────────────────────────────────────┤
+│ batch_size                                                  512 │
+│ channels                                                     64 │
+│ data_path                                  ...ray_tune_data.npz │
+│ dropout                                                     0.3 │
+│ kernel                                                        5 │
+│ lr                                                      0.00126 │
+│ max_neg                                                   40000 │
+│ weight_decay                                            0.00001 │
+╰─────────────────────────────────────────────────────────────────╯
+
+Trial ray_trainable_61cbd_00006 completed after 4 iterations at 2026-08-15 21:03:39. Total running time: 34s
+╭────────────────────────────────────────────────────╮
+│ Trial ray_trainable_61cbd_00006 result             │
+├────────────────────────────────────────────────────┤
+│ checkpoint_dir_name                                │
+│ time_this_iter_s                           0.08371 │
+│ time_total_s                               2.57963 │
+│ training_iteration                               4 │
+│ epoch                                            4 │
+│ val_ap                                     0.08538 │
+╰────────────────────────────────────────────────────╯
+
+Trial ray_trainable_61cbd_00007 started with configuration:
+╭─────────────────────────────────────────────────────────────────╮
+│ Trial ray_trainable_61cbd_00007 config                          │
+├─────────────────────────────────────────────────────────────────┤
+│ batch_size                                                  512 │
+│ channels                                                     64 │
+│ data_path                                  ...ray_tune_data.npz │
+│ dropout                                                     0.3 │
+│ kernel                                                        5 │
+│ lr                                                      0.00135 │
+│ max_neg                                                   40000 │
+│ weight_decay                                              0.001 │
+╰─────────────────────────────────────────────────────────────────╯
+
+Trial ray_trainable_61cbd_00007 completed after 4 iterations at 2026-08-15 21:03:44. Total running time: 39s
+╭────────────────────────────────────────────────────╮
+│ Trial ray_trainable_61cbd_00007 result             │
+├────────────────────────────────────────────────────┤
+│ checkpoint_dir_name                                │
+│ time_this_iter_s                           0.08673 │
+│ time_total_s                               2.50564 │
+│ training_iteration                               4 │
+│ epoch                                            4 │
+│ val_ap                                     0.08541 │
+╰────────────────────────────────────────────────────╯
+2026-08-15 21:03:44,068	INFO tune.py:1007 -- Wrote the latest version of all result files and experiment state to '/home/pa/work/calfog.io/v2/artifacts/ray_results/cnn_lead_sweep' in 0.0077s.
+
+Trial status: 8 TERMINATED
+Current time: 2026-08-15 21:03:44. Total running time: 39s
+Logical resource usage: 2.0/8 CPUs, 1.0/1 GPUs (0.0/1.0 accelerator_type:GeForce-RTX-5070)
+Current best trial: 61cbd_00003 with val_ap=0.11419191026637668 and params={'channels': 48, 'kernel': 3, 'dropout': 0.3, 'lr': 0.001736390235799647, 'weight_decay': 1e-05, 'batch_size': 256, 'max_neg': 40000}
+╭────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ Trial name                  status         channels     kernel     dropout            lr     weight_decay     batch_size     iter     total time (s)      val_ap     epoch │
+├────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ ray_trainable_61cbd_00000   TERMINATED           16          3        0.15   0.000250292           1e-05             512        3            2.52657   0.0263381         3 │
+│ ray_trainable_61cbd_00001   TERMINATED           32          3        0.15   0.000688639           0.001             256        5            2.56958   0.0981887         5 │
+│ ray_trainable_61cbd_00002   TERMINATED           16          3        0.15   0.000276869           1e-05             512        3            2.38581   0.0267388         3 │
+│ ray_trainable_61cbd_00003   TERMINATED           48          3        0.3    0.00173639            1e-05             256        5            2.75964   0.114192          5 │
+│ ray_trainable_61cbd_00004   TERMINATED           48          3        0.3    0.000411239           0.001             256        5            2.77191   0.112298          5 │
+│ ray_trainable_61cbd_00005   TERMINATED           48          3        0.3    0.000422844           0.0001            512        5            2.67215   0.0946311         5 │
+│ ray_trainable_61cbd_00006   TERMINATED           64          5        0.3    0.00125542            1e-05             512        4            2.57963   0.0853791         4 │
+│ ray_trainable_61cbd_00007   TERMINATED           64          5        0.3    0.00134792            0.001             512        4            2.50564   0.0854067         4 │
+╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+
+{
+  "status": "complete",
+  "device": "NVIDIA GeForce RTX 5070",
+  "lead_ap": {
+    "climatology": 0.01117798796216681,
+    "xgboost": 0.045266536506587206,
+    "random_forest": 0.04877683933302218,
+    "temporal_cnn": 0.06415647168358539
+  }
+}

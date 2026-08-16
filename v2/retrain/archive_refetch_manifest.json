@@ -1,0 +1,60 @@
+{
+  "location_9": {
+    "site": "location_9",
+    "status": 200,
+    "rows": 400224,
+    "sha256": "e557d70c726e9ff81ad705ac29ee2963c6f451886962c3477d06bf87c7cdf22c",
+    "resolved_url": "https://archive-api.open-meteo.com/v1/archive?latitude=36.313201&longitude=-119.626015&start_date=1980-01-01&end_date=2025-08-27&hourly=temperature_2m%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Csurface_pressure%2Cvapour_pressure_deficit%2Cwind_speed_10m%2Cwind_speed_100m%2Cwind_gusts_10m%2Cweather_code%2Ccloud_cover_low&timezone=America%2FLos_Angeles",
+    "params": {
+      "latitude": 36.313201,
+      "longitude": -119.626015,
+      "start_date": "1980-01-01",
+      "end_date": "2025-08-27",
+      "hourly": "temperature_2m,relative_humidity_2m,dew_point_2m,precipitation,surface_pressure,vapour_pressure_deficit,wind_speed_10m,wind_speed_100m,wind_gusts_10m,weather_code,cloud_cover_low",
+      "timezone": "America/Los_Angeles"
+    },
+    "exact_equal_to_training_fallback": false,
+    "max_abs_difference": {
+      "temperature_2m": 11.399999999999999,
+      "relative_humidity_2m": 52.0,
+      "dew_point_2m": 14.6,
+      "precipitation": 11.9,
+      "surface_pressure": 3.6000000000000227,
+      "vapour_pressure_deficit": 3.94,
+      "wind_speed_10m": 21.4,
+      "wind_speed_100m": 33.3,
+      "wind_gusts_10m": 42.099999999999994,
+      "weather_code": 73.0,
+      "cloud_cover_low": 100.0
+    }
+  },
+  "location_10": {
+    "site": "location_10",
+    "status": 200,
+    "rows": 400224,
+    "sha256": "03273039367f960a44c7a4ac3273937042b427a5d962b52d6fb66d9c55e4bd65",
+    "resolved_url": "https://archive-api.open-meteo.com/v1/archive?latitude=35.328506&longitude=-118.997813&start_date=1980-01-01&end_date=2025-08-27&hourly=temperature_2m%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Csurface_pressure%2Cvapour_pressure_deficit%2Cwind_speed_10m%2Cwind_speed_100m%2Cwind_gusts_10m%2Cweather_code%2Ccloud_cover_low&timezone=America%2FLos_Angeles",
+    "params": {
+      "latitude": 35.328506,
+      "longitude": -118.997813,
+      "start_date": "1980-01-01",
+      "end_date": "2025-08-27",
+      "hourly": "temperature_2m,relative_humidity_2m,dew_point_2m,precipitation,surface_pressure,vapour_pressure_deficit,wind_speed_10m,wind_speed_100m,wind_gusts_10m,weather_code,cloud_cover_low",
+      "timezone": "America/Los_Angeles"
+    },
+    "exact_equal_to_training_fallback": false,
+    "max_abs_difference": {
+      "temperature_2m": 8.100000000000001,
+      "relative_humidity_2m": 54.0,
+      "dew_point_2m": 17.7,
+      "precipitation": 6.9,
+      "surface_pressure": 4.399999999999977,
+      "vapour_pressure_deficit": 2.8100000000000005,
+      "wind_speed_10m": 25.6,
+      "wind_speed_100m": 39.2,
+      "wind_gusts_10m": 45.0,
+      "weather_code": 72.0,
+      "cloud_cover_low": 100.0
+    }
+  }
+}

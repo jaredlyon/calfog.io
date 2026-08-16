@@ -1,0 +1,17 @@
+[Unit]
+Description=CalFog private forward shadow logger (no serving)
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=calfog-shadow
+Group=calfog-shadow
+WorkingDirectory=/opt/calfog-shadow-v2
+ExecStart=/opt/calfog-shadow-v2/venv/bin/python /opt/calfog-shadow-v2/v2/shadow/forward_logger.py
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/calfog-shadow-v2/v2/shadow
+Nice=10

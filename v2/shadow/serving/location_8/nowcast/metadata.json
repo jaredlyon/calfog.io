@@ -1,0 +1,29 @@
+{
+  "site": "location_8",
+  "task": "nowcast",
+  "fit_rows": 168203,
+  "fit_positives": 5367,
+  "fit_start_local": "2005-12-31 22:00:00",
+  "fit_end_local": "2025-08-25 04:00:00",
+  "all_history_refit": true,
+  "calibration_method": "isotonic on last chronological 15% predictions from auxiliary earlier-history model; final base refit on all history",
+  "calibration_rows": 25231,
+  "calibration_positives": 631,
+  "cost_thresholds": {
+    "xgboost": {
+      "1": 0.455,
+      "3": 0.235,
+      "5": 0.15666666666666665,
+      "10": 0.07666666666666667,
+      "20": 0.043333333333333335
+    },
+    "temporal_cnn": {
+      "1": 0.47666666666666674,
+      "3": 0.21666666666666665,
+      "5": 0.15333333333333335,
+      "10": 0.08833333333333333,
+      "20": 0.04666666666666667
+    }
+  },
+  "feature_spec": "../feature_spec.json"
+}

@@ -1,0 +1,15 @@
+{
+  "task": "lead_time",
+  "training_rows": 4715,
+  "validation_rows": 1010,
+  "climatology": 0.12852598091198303,
+  "cnn_best_validation_ap": 0.7011020952209402,
+  "cnn_epochs": 6,
+  "calibration": "isotonic fit only on chronological fold-3 validation",
+  "models": [
+    "climatology",
+    "xgboost",
+    "random_forest",
+    "temporal_cnn"
+  ]
+}

@@ -1,0 +1,515 @@
+{
+  "generated_utc": "2026-08-16T07:13:02.924849+00:00",
+  "requests": [
+    {
+      "kind": "production_forecast_probe",
+      "round": "initial",
+      "site": "location_6",
+      "url": "https://api.open-meteo.com/v1/forecast",
+      "params": {
+        "latitude": 36.989159,
+        "longitude": -120.11103,
+        "hourly": "temperature_2m,relative_humidity_2m,dew_point_2m,precipitation,surface_pressure,vapour_pressure_deficit,wind_speed_10m,wind_speed_100m,wind_gusts_10m,weather_code,cloud_cover_low,soil_temperature_0cm,soil_temperature_6cm,soil_temperature_0_to_7cm",
+        "timezone": "America/Los_Angeles",
+        "past_days": 7,
+        "forecast_days": 1
+      },
+      "resolved_url": "https://api.open-meteo.com/v1/forecast?latitude=36.989159&longitude=-120.11103&hourly=temperature_2m%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Csurface_pressure%2Cvapour_pressure_deficit%2Cwind_speed_10m%2Cwind_speed_100m%2Cwind_gusts_10m%2Cweather_code%2Ccloud_cover_low%2Csoil_temperature_0cm%2Csoil_temperature_6cm%2Csoil_temperature_0_to_7cm&timezone=America%2FLos_Angeles&past_days=7&forecast_days=1",
+      "http_status": 200,
+      "rows": 192,
+      "sha256": "7f3a160eee1a1d3c3bf45b040b510c4bbf686d34da47dafe1159404938f02a7b"
+    },
+    {
+      "kind": "production_forecast_probe",
+      "round": "initial",
+      "site": "location_7",
+      "url": "https://api.open-meteo.com/v1/forecast",
+      "params": {
+        "latitude": 36.777045,
+        "longitude": -119.716862,
+        "hourly": "temperature_2m,relative_humidity_2m,dew_point_2m,precipitation,surface_pressure,vapour_pressure_deficit,wind_speed_10m,wind_speed_100m,wind_gusts_10m,weather_code,cloud_cover_low,soil_temperature_0cm,soil_temperature_6cm,soil_temperature_0_to_7cm",
+        "timezone": "America/Los_Angeles",
+        "past_days": 7,
+        "forecast_days": 1
+      },
+      "resolved_url": "https://api.open-meteo.com/v1/forecast?latitude=36.777045&longitude=-119.716862&hourly=temperature_2m%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Csurface_pressure%2Cvapour_pressure_deficit%2Cwind_speed_10m%2Cwind_speed_100m%2Cwind_gusts_10m%2Cweather_code%2Ccloud_cover_low%2Csoil_temperature_0cm%2Csoil_temperature_6cm%2Csoil_temperature_0_to_7cm&timezone=America%2FLos_Angeles&past_days=7&forecast_days=1",
+      "http_status": 200,
+      "rows": 192,
+      "sha256": "03756af75ea67459738ed96e1a674351ee969dfadfb936d4508a0899941f5fd0"
+    },
+    {
+      "kind": "production_forecast_probe",
+      "round": "initial",
+      "site": "location_8",
+      "url": "https://api.open-meteo.com/v1/forecast",
+      "params": {
+        "latitude": 36.322528,
+        "longitude": -119.394712,
+        "hourly": "temperature_2m,relative_humidity_2m,dew_point_2m,precipitation,surface_pressure,vapour_pressure_deficit,wind_speed_10m,wind_speed_100m,wind_gusts_10m,weather_code,cloud_cover_low,soil_temperature_0cm,soil_temperature_6cm,soil_temperature_0_to_7cm",
+        "timezone": "America/Los_Angeles",
+        "past_days": 7,
+        "forecast_days": 1
+      },
+      "resolved_url": "https://api.open-meteo.com/v1/forecast?latitude=36.322528&longitude=-119.394712&hourly=temperature_2m%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Csurface_pressure%2Cvapour_pressure_deficit%2Cwind_speed_10m%2Cwind_speed_100m%2Cwind_gusts_10m%2Cweather_code%2Ccloud_cover_low%2Csoil_temperature_0cm%2Csoil_temperature_6cm%2Csoil_temperature_0_to_7cm&timezone=America%2FLos_Angeles&past_days=7&forecast_days=1",
+      "http_status": 200,
+      "rows": 192,
+      "sha256": "17e45c72a6f062c6e2a7370717abcba3896ff9d99d5634f479ff42a530d0295c"
+    },
+    {
+      "kind": "production_forecast_probe",
+      "round": "initial",
+      "site": "location_9",
+      "url": "https://api.open-meteo.com/v1/forecast",
+      "params": {
+        "latitude": 36.313201,
+        "longitude": -119.626015,
+        "hourly": "temperature_2m,relative_humidity_2m,dew_point_2m,precipitation,surface_pressure,vapour_pressure_deficit,wind_speed_10m,wind_speed_100m,wind_gusts_10m,weather_code,cloud_cover_low,soil_temperature_0cm,soil_temperature_6cm,soil_temperature_0_to_7cm",
+        "timezone": "America/Los_Angeles",
+        "past_days": 7,
+        "forecast_days": 1
+      },
+      "resolved_url": "https://api.open-meteo.com/v1/forecast?latitude=36.313201&longitude=-119.626015&hourly=temperature_2m%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Csurface_pressure%2Cvapour_pressure_deficit%2Cwind_speed_10m%2Cwind_speed_100m%2Cwind_gusts_10m%2Cweather_code%2Ccloud_cover_low%2Csoil_temperature_0cm%2Csoil_temperature_6cm%2Csoil_temperature_0_to_7cm&timezone=America%2FLos_Angeles&past_days=7&forecast_days=1",
+      "http_status": 200,
+      "rows": 192,
+      "sha256": "6791b4f508aff286cf0b83de1cce0c8d5026bdbd8dde7444362a92cf4b8655cc"
+    },
+    {
+      "kind": "production_forecast_probe",
+      "round": "initial",
+      "site": "location_10",
+      "url": "https://api.open-meteo.com/v1/forecast",
+      "params": {
+        "latitude": 35.328506,
+        "longitude": -118.997813,
+        "hourly": "temperature_2m,relative_humidity_2m,dew_point_2m,precipitation,surface_pressure,vapour_pressure_deficit,wind_speed_10m,wind_speed_100m,wind_gusts_10m,weather_code,cloud_cover_low,soil_temperature_0cm,soil_temperature_6cm,soil_temperature_0_to_7cm",
+        "timezone": "America/Los_Angeles",
+        "past_days": 7,
+        "forecast_days": 1
+      },
+      "resolved_url": "https://api.open-meteo.com/v1/forecast?latitude=35.328506&longitude=-118.997813&hourly=temperature_2m%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Csurface_pressure%2Cvapour_pressure_deficit%2Cwind_speed_10m%2Cwind_speed_100m%2Cwind_gusts_10m%2Cweather_code%2Ccloud_cover_low%2Csoil_temperature_0cm%2Csoil_temperature_6cm%2Csoil_temperature_0_to_7cm&timezone=America%2FLos_Angeles&past_days=7&forecast_days=1",
+      "http_status": 200,
+      "rows": 192,
+      "sha256": "5ec18d8cc16d4aa52028c3ce42b69c2b80157ee454e6dfd19b0da6683a370fd6"
+    },
+    {
+      "kind": "archive_replacement_soil_feasibility_observation",
+      "sites": [
+        "location_6",
+        "location_7",
+        "location_8",
+        "location_9",
+        "location_10"
+      ],
+      "source_file": "archive_soil_probe_observed.json",
+      "http_status": null,
+      "note": "Successful requests occurred in an earlier interrupted attempt; retained evidence has no raw-response hash."
+    },
+    {
+      "kind": "era5_archive_training_cache_from_interrupted_run",
+      "site": "location_6",
+      "url": "https://archive-api.open-meteo.com/v1/archive",
+      "params": {
+        "latitude": 36.989159,
+        "longitude": -120.11103,
+        "start_date": "1980-01-01",
+        "end_date": "2025-08-27",
+        "hourly": "temperature_2m,relative_humidity_2m,dew_point_2m,precipitation,surface_pressure,vapour_pressure_deficit,wind_speed_10m,wind_speed_100m,wind_gusts_10m,weather_code,cloud_cover_low",
+        "timezone": "America/Los_Angeles"
+      },
+      "http_status": null,
+      "rows": 400224,
+      "sha256": "3ee07e99deb7bf11e2ab4c4ab33520d6890d782a36744dab47f116d73e0a8554",
+      "sha256_scope": "saved normalized CSV",
+      "saved_file": "data/location_6_era5_archive.csv"
+    },
+    {
+      "kind": "era5_archive_training_cache_from_interrupted_run",
+      "site": "location_7",
+      "url": "https://archive-api.open-meteo.com/v1/archive",
+      "params": {
+        "latitude": 36.777045,
+        "longitude": -119.716862,
+        "start_date": "1980-01-01",
+        "end_date": "2025-08-27",
+        "hourly": "temperature_2m,relative_humidity_2m,dew_point_2m,precipitation,surface_pressure,vapour_pressure_deficit,wind_speed_10m,wind_speed_100m,wind_gusts_10m,weather_code,cloud_cover_low",
+        "timezone": "America/Los_Angeles"
+      },
+      "http_status": null,
+      "rows": 400224,
+      "sha256": "f9fb83fb682ddcc6785e046277740195a00c5ad0770eba1efe2adc43b8dc4c99",
+      "sha256_scope": "saved normalized CSV",
+      "saved_file": "data/location_7_era5_archive.csv"
+    },
+    {
+      "kind": "era5_archive_training_cache_from_interrupted_run",
+      "site": "location_8",
+      "url": "https://archive-api.open-meteo.com/v1/archive",
+      "params": {
+        "latitude": 36.322528,
+        "longitude": -119.394712,
+        "start_date": "1980-01-01",
+        "end_date": "2025-08-27",
+        "hourly": "temperature_2m,relative_humidity_2m,dew_point_2m,precipitation,surface_pressure,vapour_pressure_deficit,wind_speed_10m,wind_speed_100m,wind_gusts_10m,weather_code,cloud_cover_low",
+        "timezone": "America/Los_Angeles"
+      },
+      "http_status": null,
+      "rows": 400224,
+      "sha256": "d755bb9d072205733d6969235d8d8ea9947d4b398bdb198e3688d223a6706fe1",
+      "sha256_scope": "saved normalized CSV",
+      "saved_file": "data/location_8_era5_archive.csv"
+    },
+    {
+      "kind": "era5_archive_training_refetch",
+      "site": "location_9",
+      "url": "https://archive-api.open-meteo.com/v1/archive",
+      "params": {
+        "latitude": 36.313201,
+        "longitude": -119.626015,
+        "start_date": "1980-01-01",
+        "end_date": "2025-08-27",
+        "hourly": "temperature_2m,relative_humidity_2m,dew_point_2m,precipitation,surface_pressure,vapour_pressure_deficit,wind_speed_10m,wind_speed_100m,wind_gusts_10m,weather_code,cloud_cover_low",
+        "timezone": "America/Los_Angeles"
+      },
+      "resolved_url": "https://archive-api.open-meteo.com/v1/archive?latitude=36.313201&longitude=-119.626015&start_date=1980-01-01&end_date=2025-08-27&hourly=temperature_2m%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Csurface_pressure%2Cvapour_pressure_deficit%2Cwind_speed_10m%2Cwind_speed_100m%2Cwind_gusts_10m%2Cweather_code%2Ccloud_cover_low&timezone=America%2FLos_Angeles",
+      "http_status": 200,
+      "rows": 400224,
+      "sha256": "e557d70c726e9ff81ad705ac29ee2963c6f451886962c3477d06bf87c7cdf22c",
+      "sha256_scope": "raw HTTP response",
+      "saved_file": "data/location_9_era5_archive.csv"
+    },
+    {
+      "kind": "era5_archive_training_refetch",
+      "site": "location_10",
+      "url": "https://archive-api.open-meteo.com/v1/archive",
+      "params": {
+        "latitude": 35.328506,
+        "longitude": -118.997813,
+        "start_date": "1980-01-01",
+        "end_date": "2025-08-27",
+        "hourly": "temperature_2m,relative_humidity_2m,dew_point_2m,precipitation,surface_pressure,vapour_pressure_deficit,wind_speed_10m,wind_speed_100m,wind_gusts_10m,weather_code,cloud_cover_low",
+        "timezone": "America/Los_Angeles"
+      },
+      "resolved_url": "https://archive-api.open-meteo.com/v1/archive?latitude=35.328506&longitude=-118.997813&start_date=1980-01-01&end_date=2025-08-27&hourly=temperature_2m%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Csurface_pressure%2Cvapour_pressure_deficit%2Cwind_speed_10m%2Cwind_speed_100m%2Cwind_gusts_10m%2Cweather_code%2Ccloud_cover_low&timezone=America%2FLos_Angeles",
+      "http_status": 200,
+      "rows": 400224,
+      "sha256": "03273039367f960a44c7a4ac3273937042b427a5d962b52d6fb66d9c55e4bd65",
+      "sha256_scope": "raw HTTP response",
+      "saved_file": "data/location_10_era5_archive.csv"
+    },
+    {
+      "kind": "production_forecast_probe",
+      "round": "serving_verification",
+      "site": "location_6",
+      "url": "https://api.open-meteo.com/v1/forecast",
+      "params": {
+        "latitude": 36.989159,
+        "longitude": -120.11103,
+        "hourly": "temperature_2m,relative_humidity_2m,dew_point_2m,precipitation,surface_pressure,vapour_pressure_deficit,wind_speed_10m,wind_speed_100m,wind_gusts_10m,weather_code,cloud_cover_low,soil_temperature_0cm,soil_temperature_6cm,soil_temperature_0_to_7cm",
+        "timezone": "America/Los_Angeles",
+        "past_days": 7,
+        "forecast_days": 1
+      },
+      "resolved_url": "https://api.open-meteo.com/v1/forecast?latitude=36.989159&longitude=-120.11103&hourly=temperature_2m%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Csurface_pressure%2Cvapour_pressure_deficit%2Cwind_speed_10m%2Cwind_speed_100m%2Cwind_gusts_10m%2Cweather_code%2Ccloud_cover_low%2Csoil_temperature_0cm%2Csoil_temperature_6cm%2Csoil_temperature_0_to_7cm&timezone=America%2FLos_Angeles&past_days=7&forecast_days=1",
+      "http_status": 200,
+      "rows": 192,
+      "sha256": "594218fbb5c490234e07dc5db9d449b5c814b528245b85e81ec7062fbbe673b0"
+    },
+    {
+      "kind": "production_forecast_probe",
+      "round": "serving_verification",
+      "site": "location_7",
+      "url": "https://api.open-meteo.com/v1/forecast",
+      "params": {
+        "latitude": 36.777045,
+        "longitude": -119.716862,
+        "hourly": "temperature_2m,relative_humidity_2m,dew_point_2m,precipitation,surface_pressure,vapour_pressure_deficit,wind_speed_10m,wind_speed_100m,wind_gusts_10m,weather_code,cloud_cover_low,soil_temperature_0cm,soil_temperature_6cm,soil_temperature_0_to_7cm",
+        "timezone": "America/Los_Angeles",
+        "past_days": 7,
+        "forecast_days": 1
+      },
+      "resolved_url": "https://api.open-meteo.com/v1/forecast?latitude=36.777045&longitude=-119.716862&hourly=temperature_2m%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Csurface_pressure%2Cvapour_pressure_deficit%2Cwind_speed_10m%2Cwind_speed_100m%2Cwind_gusts_10m%2Cweather_code%2Ccloud_cover_low%2Csoil_temperature_0cm%2Csoil_temperature_6cm%2Csoil_temperature_0_to_7cm&timezone=America%2FLos_Angeles&past_days=7&forecast_days=1",
+      "http_status": 200,
+      "rows": 192,
+      "sha256": "d2b7e8c2806a07971708a44183998fe65a850eee96eea5f2f4e0b4391fa36fbb"
+    },
+    {
+      "kind": "production_forecast_probe",
+      "round": "serving_verification",
+      "site": "location_8",
+      "url": "https://api.open-meteo.com/v1/forecast",
+      "params": {
+        "latitude": 36.322528,
+        "longitude": -119.394712,
+        "hourly": "temperature_2m,relative_humidity_2m,dew_point_2m,precipitation,surface_pressure,vapour_pressure_deficit,wind_speed_10m,wind_speed_100m,wind_gusts_10m,weather_code,cloud_cover_low,soil_temperature_0cm,soil_temperature_6cm,soil_temperature_0_to_7cm",
+        "timezone": "America/Los_Angeles",
+        "past_days": 7,
+        "forecast_days": 1
+      },
+      "resolved_url": "https://api.open-meteo.com/v1/forecast?latitude=36.322528&longitude=-119.394712&hourly=temperature_2m%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Csurface_pressure%2Cvapour_pressure_deficit%2Cwind_speed_10m%2Cwind_speed_100m%2Cwind_gusts_10m%2Cweather_code%2Ccloud_cover_low%2Csoil_temperature_0cm%2Csoil_temperature_6cm%2Csoil_temperature_0_to_7cm&timezone=America%2FLos_Angeles&past_days=7&forecast_days=1",
+      "http_status": 200,
+      "rows": 192,
+      "sha256": "cc2c011cd5ef4e139e3c0acf214000adc8018b9c1574d183fa78082a461d3f9d"
+    },
+    {
+      "kind": "production_forecast_probe",
+      "round": "serving_verification",
+      "site": "location_9",
+      "url": "https://api.open-meteo.com/v1/forecast",
+      "params": {
+        "latitude": 36.313201,
+        "longitude": -119.626015,
+        "hourly": "temperature_2m,relative_humidity_2m,dew_point_2m,precipitation,surface_pressure,vapour_pressure_deficit,wind_speed_10m,wind_speed_100m,wind_gusts_10m,weather_code,cloud_cover_low,soil_temperature_0cm,soil_temperature_6cm,soil_temperature_0_to_7cm",
+        "timezone": "America/Los_Angeles",
+        "past_days": 7,
+        "forecast_days": 1
+      },
+      "resolved_url": "https://api.open-meteo.com/v1/forecast?latitude=36.313201&longitude=-119.626015&hourly=temperature_2m%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Csurface_pressure%2Cvapour_pressure_deficit%2Cwind_speed_10m%2Cwind_speed_100m%2Cwind_gusts_10m%2Cweather_code%2Ccloud_cover_low%2Csoil_temperature_0cm%2Csoil_temperature_6cm%2Csoil_temperature_0_to_7cm&timezone=America%2FLos_Angeles&past_days=7&forecast_days=1",
+      "http_status": 200,
+      "rows": 192,
+      "sha256": "788140b48d9b165bd88dea66dbde95d82dd24e2b6d611e7128ad883b52055872"
+    },
+    {
+      "kind": "production_forecast_probe",
+      "round": "serving_verification",
+      "site": "location_10",
+      "url": "https://api.open-meteo.com/v1/forecast",
+      "params": {
+        "latitude": 35.328506,
+        "longitude": -118.997813,
+        "hourly": "temperature_2m,relative_humidity_2m,dew_point_2m,precipitation,surface_pressure,vapour_pressure_deficit,wind_speed_10m,wind_speed_100m,wind_gusts_10m,weather_code,cloud_cover_low,soil_temperature_0cm,soil_temperature_6cm,soil_temperature_0_to_7cm",
+        "timezone": "America/Los_Angeles",
+        "past_days": 7,
+        "forecast_days": 1
+      },
+      "resolved_url": "https://api.open-meteo.com/v1/forecast?latitude=35.328506&longitude=-118.997813&hourly=temperature_2m%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Csurface_pressure%2Cvapour_pressure_deficit%2Cwind_speed_10m%2Cwind_speed_100m%2Cwind_gusts_10m%2Cweather_code%2Ccloud_cover_low%2Csoil_temperature_0cm%2Csoil_temperature_6cm%2Csoil_temperature_0_to_7cm&timezone=America%2FLos_Angeles&past_days=7&forecast_days=1",
+      "http_status": 200,
+      "rows": 192,
+      "sha256": "9000d87e9a9154079e6c4ebf3352500c953bc9e1ba8a4961c9885ec2ed5111f3"
+    },
+    {
+      "kind": "historical_forecast_proxy_cache_from_interrupted_run",
+      "site": "location_6",
+      "url": "https://historical-forecast-api.open-meteo.com/v1/forecast",
+      "params": {
+        "latitude": 36.989159,
+        "longitude": -120.11103,
+        "start_date": "2025-11-29",
+        "end_date": "2026-02-28",
+        "hourly": "temperature_2m,relative_humidity_2m,dew_point_2m,precipitation,surface_pressure,vapour_pressure_deficit,wind_speed_10m,wind_speed_100m,wind_gusts_10m,weather_code,cloud_cover_low",
+        "timezone": "America/Los_Angeles"
+      },
+      "http_status": null,
+      "rows": 2160,
+      "sha256": "2458a648ed8f43930a8c740674cb8cdeabe994e9781a00350b45d0272347c166",
+      "sha256_scope": "saved normalized CSV",
+      "saved_file": "data/location_6_historical_forecast_proxy.csv"
+    },
+    {
+      "kind": "archival_metar_labels_cache",
+      "site": "location_6",
+      "url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py",
+      "params": {
+        "station": "MAE",
+        "data": "vsby",
+        "year1": 2025,
+        "month1": 12,
+        "day1": 1,
+        "year2": 2026,
+        "month2": 3,
+        "day2": 1,
+        "tz": "Etc/UTC",
+        "format": "comma",
+        "latlon": "no",
+        "elev": "no",
+        "missing": "empty",
+        "trace": "empty",
+        "direct": "no"
+      },
+      "http_status": null,
+      "rows": 2152,
+      "sha256": "d2c58255c04aa36b54d07784fc5467968d64bc3a61d0eb9b98a18059ffbbb3fa",
+      "sha256_scope": "saved normalized CSV",
+      "saved_file": "data/location_6_fog_season_iem_metar.csv"
+    },
+    {
+      "kind": "historical_forecast_proxy_cache_from_interrupted_run",
+      "site": "location_7",
+      "url": "https://historical-forecast-api.open-meteo.com/v1/forecast",
+      "params": {
+        "latitude": 36.777045,
+        "longitude": -119.716862,
+        "start_date": "2025-11-29",
+        "end_date": "2026-02-28",
+        "hourly": "temperature_2m,relative_humidity_2m,dew_point_2m,precipitation,surface_pressure,vapour_pressure_deficit,wind_speed_10m,wind_speed_100m,wind_gusts_10m,weather_code,cloud_cover_low",
+        "timezone": "America/Los_Angeles"
+      },
+      "http_status": null,
+      "rows": 2208,
+      "sha256": "86f9207be6d86ce0b100fac0e0d9f49dd5fbf89b8de7439cdeff9156f9f1f4db",
+      "sha256_scope": "saved normalized CSV",
+      "saved_file": "data/location_7_historical_forecast_proxy.csv"
+    },
+    {
+      "kind": "archival_metar_labels_cache",
+      "site": "location_7",
+      "url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py",
+      "params": {
+        "station": "FAT",
+        "data": "vsby",
+        "year1": 2025,
+        "month1": 12,
+        "day1": 1,
+        "year2": 2026,
+        "month2": 3,
+        "day2": 1,
+        "tz": "Etc/UTC",
+        "format": "comma",
+        "latlon": "no",
+        "elev": "no",
+        "missing": "empty",
+        "trace": "empty",
+        "direct": "no"
+      },
+      "http_status": null,
+      "rows": 2160,
+      "sha256": "bf7db8835dca46b948bc1b7e03261692f8085f0da9732405c6ca9240f149e8f6",
+      "sha256_scope": "saved normalized CSV",
+      "saved_file": "data/location_7_fog_season_iem_metar.csv"
+    },
+    {
+      "kind": "historical_forecast_proxy_cache_from_interrupted_run",
+      "site": "location_8",
+      "url": "https://historical-forecast-api.open-meteo.com/v1/forecast",
+      "params": {
+        "latitude": 36.322528,
+        "longitude": -119.394712,
+        "start_date": "2025-11-29",
+        "end_date": "2026-02-28",
+        "hourly": "temperature_2m,relative_humidity_2m,dew_point_2m,precipitation,surface_pressure,vapour_pressure_deficit,wind_speed_10m,wind_speed_100m,wind_gusts_10m,weather_code,cloud_cover_low",
+        "timezone": "America/Los_Angeles"
+      },
+      "http_status": null,
+      "rows": 2208,
+      "sha256": "84cebddb90464f940d526e9f834ebf1556145ea6b63d5fcc068c90232b747987",
+      "sha256_scope": "saved normalized CSV",
+      "saved_file": "data/location_8_historical_forecast_proxy.csv"
+    },
+    {
+      "kind": "archival_metar_labels_cache",
+      "site": "location_8",
+      "url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py",
+      "params": {
+        "station": "VIS",
+        "data": "vsby",
+        "year1": 2025,
+        "month1": 12,
+        "day1": 1,
+        "year2": 2026,
+        "month2": 3,
+        "day2": 1,
+        "tz": "Etc/UTC",
+        "format": "comma",
+        "latlon": "no",
+        "elev": "no",
+        "missing": "empty",
+        "trace": "empty",
+        "direct": "no"
+      },
+      "http_status": null,
+      "rows": 2160,
+      "sha256": "364ba85d8b16c45967ed58ed4e74e8686ea3f41bffe9c88aa6470f2a69455f0f",
+      "sha256_scope": "saved normalized CSV",
+      "saved_file": "data/location_8_fog_season_iem_metar.csv"
+    },
+    {
+      "kind": "historical_forecast_proxy_cache_from_interrupted_run",
+      "site": "location_9",
+      "url": "https://historical-forecast-api.open-meteo.com/v1/forecast",
+      "params": {
+        "latitude": 36.313201,
+        "longitude": -119.626015,
+        "start_date": "2025-11-29",
+        "end_date": "2026-02-28",
+        "hourly": "temperature_2m,relative_humidity_2m,dew_point_2m,precipitation,surface_pressure,vapour_pressure_deficit,wind_speed_10m,wind_speed_100m,wind_gusts_10m,weather_code,cloud_cover_low",
+        "timezone": "America/Los_Angeles"
+      },
+      "http_status": null,
+      "rows": 2208,
+      "sha256": "8fe977254b08c90d9faabb1d85434141e9c3419e4095536ca50eb75520838f91",
+      "sha256_scope": "saved normalized CSV",
+      "saved_file": "data/location_9_historical_forecast_proxy.csv"
+    },
+    {
+      "kind": "archival_metar_labels_cache",
+      "site": "location_9",
+      "url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py",
+      "params": {
+        "station": "HJO",
+        "data": "vsby",
+        "year1": 2025,
+        "month1": 12,
+        "day1": 1,
+        "year2": 2026,
+        "month2": 3,
+        "day2": 1,
+        "tz": "Etc/UTC",
+        "format": "comma",
+        "latlon": "no",
+        "elev": "no",
+        "missing": "empty",
+        "trace": "empty",
+        "direct": "no"
+      },
+      "http_status": null,
+      "rows": 2072,
+      "sha256": "0ba6a6b21c73d1110f4afb6d431be4d5f79ee3e8c958f8d29f295f0eff1e6db3",
+      "sha256_scope": "saved normalized CSV",
+      "saved_file": "data/location_9_fog_season_iem_metar.csv"
+    },
+    {
+      "kind": "historical_forecast_proxy_cache_from_interrupted_run",
+      "site": "location_10",
+      "url": "https://historical-forecast-api.open-meteo.com/v1/forecast",
+      "params": {
+        "latitude": 35.328506,
+        "longitude": -118.997813,
+        "start_date": "2025-11-29",
+        "end_date": "2026-02-28",
+        "hourly": "temperature_2m,relative_humidity_2m,dew_point_2m,precipitation,surface_pressure,vapour_pressure_deficit,wind_speed_10m,wind_speed_100m,wind_gusts_10m,weather_code,cloud_cover_low",
+        "timezone": "America/Los_Angeles"
+      },
+      "http_status": null,
+      "rows": 2208,
+      "sha256": "56a0d8de64700ac10b0b3014fe6e51d5ff952ff0961cfbdf9243fec7105cce61",
+      "sha256_scope": "saved normalized CSV",
+      "saved_file": "data/location_10_historical_forecast_proxy.csv"
+    },
+    {
+      "kind": "archival_metar_labels_cache",
+      "site": "location_10",
+      "url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py",
+      "params": {
+        "station": "BFL",
+        "data": "vsby",
+        "year1": 2025,
+        "month1": 12,
+        "day1": 1,
+        "year2": 2026,
+        "month2": 3,
+        "day2": 1,
+        "tz": "Etc/UTC",
+        "format": "comma",
+        "latlon": "no",
+        "elev": "no",
+        "missing": "empty",
+        "trace": "empty",
+        "direct": "no"
+      },
+      "http_status": null,
+      "rows": 2160,
+      "sha256": "7a1de752548c62d54f79341ecfe29fde44653c28e8646e0fb49a26c833502da3",
+      "sha256_scope": "saved normalized CSV",
+      "saved_file": "data/location_10_fog_season_iem_metar.csv"
+    }
+  ]
+}

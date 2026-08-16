@@ -1,0 +1,4628 @@
+{
+  "fetches": [
+    {
+      "kind": "historical_forecast",
+      "site": "location_6",
+      "source_url": "https://historical-forecast-api.open-meteo.com/v1/forecast",
+      "params": {
+        "latitude": 36.989159,
+        "longitude": -120.11103,
+        "start_date": "2025-11-29",
+        "end_date": "2026-01-02",
+        "hourly": "temperature_2m,relative_humidity_2m,dew_point_2m,precipitation,surface_pressure,vapour_pressure_deficit,wind_speed_10m,wind_speed_100m,wind_gusts_10m,soil_temperature_0_to_7cm,weather_code,cloud_cover_low",
+        "timezone": "UTC",
+        "models": "best_match",
+        "temperature_unit": "celsius",
+        "wind_speed_unit": "kmh",
+        "precipitation_unit": "mm"
+      },
+      "resolved_url": "https://historical-forecast-api.open-meteo.com/v1/forecast?latitude=36.989159&longitude=-120.11103&start_date=2025-11-29&end_date=2026-01-02&hourly=temperature_2m%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Csurface_pressure%2Cvapour_pressure_deficit%2Cwind_speed_10m%2Cwind_speed_100m%2Cwind_gusts_10m%2Csoil_temperature_0_to_7cm%2Cweather_code%2Ccloud_cover_low&timezone=UTC&models=best_match&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "retrieved_utc": "2026-08-16T06:02:01.539659Z",
+      "http_status": 200,
+      "rows": 840,
+      "sha256": "366e262ef86bb7538665f2f5a5fb3ae7e66a60b6a07a2955b38b177d2cb5d9ae",
+      "raw_path": "raw_snapshots/historical_forecast/location_6_1_2025-11-29_2026-01-02_attempt1_366e262ef86b.json",
+      "attempt": 1
+    },
+    {
+      "kind": "historical_forecast",
+      "site": "location_6",
+      "source_url": "https://historical-forecast-api.open-meteo.com/v1/forecast",
+      "params": {
+        "latitude": 36.989159,
+        "longitude": -120.11103,
+        "start_date": "2025-12-30",
+        "end_date": "2026-02-02",
+        "hourly": "temperature_2m,relative_humidity_2m,dew_point_2m,precipitation,surface_pressure,vapour_pressure_deficit,wind_speed_10m,wind_speed_100m,wind_gusts_10m,soil_temperature_0_to_7cm,weather_code,cloud_cover_low",
+        "timezone": "UTC",
+        "models": "best_match",
+        "temperature_unit": "celsius",
+        "wind_speed_unit": "kmh",
+        "precipitation_unit": "mm"
+      },
+      "resolved_url": "https://historical-forecast-api.open-meteo.com/v1/forecast?latitude=36.989159&longitude=-120.11103&start_date=2025-12-30&end_date=2026-02-02&hourly=temperature_2m%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Csurface_pressure%2Cvapour_pressure_deficit%2Cwind_speed_10m%2Cwind_speed_100m%2Cwind_gusts_10m%2Csoil_temperature_0_to_7cm%2Cweather_code%2Ccloud_cover_low&timezone=UTC&models=best_match&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "retrieved_utc": "2026-08-16T06:02:07.587910Z",
+      "http_status": 200,
+      "rows": 840,
+      "sha256": "f7f1e502f38990e7f0bfedad6eed5301903b584e26120479781b8f13a8d39737",
+      "raw_path": "raw_snapshots/historical_forecast/location_6_2_2025-12-30_2026-02-02_attempt1_f7f1e502f389.json",
+      "attempt": 1
+    },
+    {
+      "kind": "historical_forecast",
+      "site": "location_6",
+      "source_url": "https://historical-forecast-api.open-meteo.com/v1/forecast",
+      "params": {
+        "latitude": 36.989159,
+        "longitude": -120.11103,
+        "start_date": "2026-01-30",
+        "end_date": "2026-03-02",
+        "hourly": "temperature_2m,relative_humidity_2m,dew_point_2m,precipitation,surface_pressure,vapour_pressure_deficit,wind_speed_10m,wind_speed_100m,wind_gusts_10m,soil_temperature_0_to_7cm,weather_code,cloud_cover_low",
+        "timezone": "UTC",
+        "models": "best_match",
+        "temperature_unit": "celsius",
+        "wind_speed_unit": "kmh",
+        "precipitation_unit": "mm"
+      },
+      "resolved_url": "https://historical-forecast-api.open-meteo.com/v1/forecast?latitude=36.989159&longitude=-120.11103&start_date=2026-01-30&end_date=2026-03-02&hourly=temperature_2m%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Csurface_pressure%2Cvapour_pressure_deficit%2Cwind_speed_10m%2Cwind_speed_100m%2Cwind_gusts_10m%2Csoil_temperature_0_to_7cm%2Cweather_code%2Ccloud_cover_low&timezone=UTC&models=best_match&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "retrieved_utc": "2026-08-16T06:02:09.044458Z",
+      "http_status": 200,
+      "rows": 768,
+      "sha256": "918b77e8f8f7b5c8d91ceae0de64477844cab174f07784e3f76603b739401af2",
+      "raw_path": "raw_snapshots/historical_forecast/location_6_3_2026-01-30_2026-03-02_attempt1_918b77e8f8f7.json",
+      "attempt": 1
+    },
+    {
+      "kind": "iem_metar",
+      "site": "location_6",
+      "source_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py",
+      "params": [
+        [
+          "station",
+          "MAE"
+        ],
+        [
+          "data",
+          "vsby"
+        ],
+        [
+          "year1",
+          2025
+        ],
+        [
+          "month1",
+          11
+        ],
+        [
+          "day1",
+          30
+        ],
+        [
+          "year2",
+          2025
+        ],
+        [
+          "month2",
+          12
+        ],
+        [
+          "day2",
+          10
+        ],
+        [
+          "tz",
+          "UTC"
+        ],
+        [
+          "format",
+          "onlycomma"
+        ],
+        [
+          "latlon",
+          "no"
+        ],
+        [
+          "elev",
+          "no"
+        ],
+        [
+          "missing",
+          "empty"
+        ],
+        [
+          "trace",
+          "empty"
+        ],
+        [
+          "direct",
+          "no"
+        ],
+        [
+          "report_type",
+          "3"
+        ],
+        [
+          "report_type",
+          "4"
+        ]
+      ],
+      "resolved_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py?station=MAE&data=vsby&year1=2025&month1=11&day1=30&year2=2025&month2=12&day2=10&tz=UTC&format=onlycomma&latlon=no&elev=no&missing=empty&trace=empty&direct=no&report_type=3&report_type=4",
+      "retrieved_utc": "2026-08-16T06:02:10.321796Z",
+      "http_status": 200,
+      "rows": 343,
+      "sha256": "73d557629344a0f7e6213f989a369fa808dca2bd1acfb8dce83251349d0cc15a",
+      "raw_path": "raw_snapshots/iem_metar/location_6_1_20251130_20251210_attempt1_73d557629344.csv",
+      "attempt": 1
+    },
+    {
+      "kind": "iem_metar",
+      "site": "location_6",
+      "source_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py",
+      "params": [
+        [
+          "station",
+          "MAE"
+        ],
+        [
+          "data",
+          "vsby"
+        ],
+        [
+          "year1",
+          2025
+        ],
+        [
+          "month1",
+          12
+        ],
+        [
+          "day1",
+          10
+        ],
+        [
+          "year2",
+          2025
+        ],
+        [
+          "month2",
+          12
+        ],
+        [
+          "day2",
+          20
+        ],
+        [
+          "tz",
+          "UTC"
+        ],
+        [
+          "format",
+          "onlycomma"
+        ],
+        [
+          "latlon",
+          "no"
+        ],
+        [
+          "elev",
+          "no"
+        ],
+        [
+          "missing",
+          "empty"
+        ],
+        [
+          "trace",
+          "empty"
+        ],
+        [
+          "direct",
+          "no"
+        ],
+        [
+          "report_type",
+          "3"
+        ],
+        [
+          "report_type",
+          "4"
+        ]
+      ],
+      "resolved_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py?station=MAE&data=vsby&year1=2025&month1=12&day1=10&year2=2025&month2=12&day2=20&tz=UTC&format=onlycomma&latlon=no&elev=no&missing=empty&trace=empty&direct=no&report_type=3&report_type=4",
+      "retrieved_utc": "2026-08-16T06:02:14.734347Z",
+      "http_status": 503,
+      "rows": 0,
+      "sha256": "0b2ba24c1e6e18c02f080d137fab4602350593d20fd2adb97c705f2c5a82767d",
+      "raw_path": "raw_snapshots/iem_metar/location_6_2_20251210_20251220_attempt1_0b2ba24c1e6e.csv",
+      "attempt": 1
+    },
+    {
+      "kind": "iem_metar",
+      "site": "location_6",
+      "source_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py",
+      "params": [
+        [
+          "station",
+          "MAE"
+        ],
+        [
+          "data",
+          "vsby"
+        ],
+        [
+          "year1",
+          2025
+        ],
+        [
+          "month1",
+          12
+        ],
+        [
+          "day1",
+          10
+        ],
+        [
+          "year2",
+          2025
+        ],
+        [
+          "month2",
+          12
+        ],
+        [
+          "day2",
+          20
+        ],
+        [
+          "tz",
+          "UTC"
+        ],
+        [
+          "format",
+          "onlycomma"
+        ],
+        [
+          "latlon",
+          "no"
+        ],
+        [
+          "elev",
+          "no"
+        ],
+        [
+          "missing",
+          "empty"
+        ],
+        [
+          "trace",
+          "empty"
+        ],
+        [
+          "direct",
+          "no"
+        ],
+        [
+          "report_type",
+          "3"
+        ],
+        [
+          "report_type",
+          "4"
+        ]
+      ],
+      "resolved_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py?station=MAE&data=vsby&year1=2025&month1=12&day1=10&year2=2025&month2=12&day2=20&tz=UTC&format=onlycomma&latlon=no&elev=no&missing=empty&trace=empty&direct=no&report_type=3&report_type=4",
+      "retrieved_utc": "2026-08-16T06:02:18.812130Z",
+      "http_status": 200,
+      "rows": 432,
+      "sha256": "79e5ab43a5283c098a3c78c3528b8707d1dab9174d0e41e641c8d315489692a8",
+      "raw_path": "raw_snapshots/iem_metar/location_6_2_20251210_20251220_attempt2_79e5ab43a528.csv",
+      "attempt": 2
+    },
+    {
+      "kind": "iem_metar",
+      "site": "location_6",
+      "source_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py",
+      "params": [
+        [
+          "station",
+          "MAE"
+        ],
+        [
+          "data",
+          "vsby"
+        ],
+        [
+          "year1",
+          2025
+        ],
+        [
+          "month1",
+          12
+        ],
+        [
+          "day1",
+          20
+        ],
+        [
+          "year2",
+          2025
+        ],
+        [
+          "month2",
+          12
+        ],
+        [
+          "day2",
+          30
+        ],
+        [
+          "tz",
+          "UTC"
+        ],
+        [
+          "format",
+          "onlycomma"
+        ],
+        [
+          "latlon",
+          "no"
+        ],
+        [
+          "elev",
+          "no"
+        ],
+        [
+          "missing",
+          "empty"
+        ],
+        [
+          "trace",
+          "empty"
+        ],
+        [
+          "direct",
+          "no"
+        ],
+        [
+          "report_type",
+          "3"
+        ],
+        [
+          "report_type",
+          "4"
+        ]
+      ],
+      "resolved_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py?station=MAE&data=vsby&year1=2025&month1=12&day1=20&year2=2025&month2=12&day2=30&tz=UTC&format=onlycomma&latlon=no&elev=no&missing=empty&trace=empty&direct=no&report_type=3&report_type=4",
+      "retrieved_utc": "2026-08-16T06:02:25.264289Z",
+      "http_status": 503,
+      "rows": 0,
+      "sha256": "0b2ba24c1e6e18c02f080d137fab4602350593d20fd2adb97c705f2c5a82767d",
+      "raw_path": "raw_snapshots/iem_metar/location_6_3_20251220_20251230_attempt1_0b2ba24c1e6e.csv",
+      "attempt": 1
+    },
+    {
+      "kind": "iem_metar",
+      "site": "location_6",
+      "source_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py",
+      "params": [
+        [
+          "station",
+          "MAE"
+        ],
+        [
+          "data",
+          "vsby"
+        ],
+        [
+          "year1",
+          2025
+        ],
+        [
+          "month1",
+          12
+        ],
+        [
+          "day1",
+          20
+        ],
+        [
+          "year2",
+          2025
+        ],
+        [
+          "month2",
+          12
+        ],
+        [
+          "day2",
+          30
+        ],
+        [
+          "tz",
+          "UTC"
+        ],
+        [
+          "format",
+          "onlycomma"
+        ],
+        [
+          "latlon",
+          "no"
+        ],
+        [
+          "elev",
+          "no"
+        ],
+        [
+          "missing",
+          "empty"
+        ],
+        [
+          "trace",
+          "empty"
+        ],
+        [
+          "direct",
+          "no"
+        ],
+        [
+          "report_type",
+          "3"
+        ],
+        [
+          "report_type",
+          "4"
+        ]
+      ],
+      "resolved_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py?station=MAE&data=vsby&year1=2025&month1=12&day1=20&year2=2025&month2=12&day2=30&tz=UTC&format=onlycomma&latlon=no&elev=no&missing=empty&trace=empty&direct=no&report_type=3&report_type=4",
+      "retrieved_utc": "2026-08-16T06:02:29.345583Z",
+      "http_status": 200,
+      "rows": 306,
+      "sha256": "a8c7261063a6c8ee3ffc419b2bf1b69323dc114c560f82a3a81109fba1b3a182",
+      "raw_path": "raw_snapshots/iem_metar/location_6_3_20251220_20251230_attempt2_a8c7261063a6.csv",
+      "attempt": 2
+    },
+    {
+      "kind": "iem_metar",
+      "site": "location_6",
+      "source_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py",
+      "params": [
+        [
+          "station",
+          "MAE"
+        ],
+        [
+          "data",
+          "vsby"
+        ],
+        [
+          "year1",
+          2025
+        ],
+        [
+          "month1",
+          12
+        ],
+        [
+          "day1",
+          30
+        ],
+        [
+          "year2",
+          2026
+        ],
+        [
+          "month2",
+          1
+        ],
+        [
+          "day2",
+          9
+        ],
+        [
+          "tz",
+          "UTC"
+        ],
+        [
+          "format",
+          "onlycomma"
+        ],
+        [
+          "latlon",
+          "no"
+        ],
+        [
+          "elev",
+          "no"
+        ],
+        [
+          "missing",
+          "empty"
+        ],
+        [
+          "trace",
+          "empty"
+        ],
+        [
+          "direct",
+          "no"
+        ],
+        [
+          "report_type",
+          "3"
+        ],
+        [
+          "report_type",
+          "4"
+        ]
+      ],
+      "resolved_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py?station=MAE&data=vsby&year1=2025&month1=12&day1=30&year2=2026&month2=1&day2=9&tz=UTC&format=onlycomma&latlon=no&elev=no&missing=empty&trace=empty&direct=no&report_type=3&report_type=4",
+      "retrieved_utc": "2026-08-16T06:02:35.736572Z",
+      "http_status": 200,
+      "rows": 316,
+      "sha256": "2786a1dbf751ed999cab42b18d1302b9d79f8337829a32590ead9ed7d9e0a263",
+      "raw_path": "raw_snapshots/iem_metar/location_6_4_20251230_20260109_attempt1_2786a1dbf751.csv",
+      "attempt": 1
+    },
+    {
+      "kind": "iem_metar",
+      "site": "location_6",
+      "source_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py",
+      "params": [
+        [
+          "station",
+          "MAE"
+        ],
+        [
+          "data",
+          "vsby"
+        ],
+        [
+          "year1",
+          2026
+        ],
+        [
+          "month1",
+          1
+        ],
+        [
+          "day1",
+          9
+        ],
+        [
+          "year2",
+          2026
+        ],
+        [
+          "month2",
+          1
+        ],
+        [
+          "day2",
+          19
+        ],
+        [
+          "tz",
+          "UTC"
+        ],
+        [
+          "format",
+          "onlycomma"
+        ],
+        [
+          "latlon",
+          "no"
+        ],
+        [
+          "elev",
+          "no"
+        ],
+        [
+          "missing",
+          "empty"
+        ],
+        [
+          "trace",
+          "empty"
+        ],
+        [
+          "direct",
+          "no"
+        ],
+        [
+          "report_type",
+          "3"
+        ],
+        [
+          "report_type",
+          "4"
+        ]
+      ],
+      "resolved_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py?station=MAE&data=vsby&year1=2026&month1=1&day1=9&year2=2026&month2=1&day2=19&tz=UTC&format=onlycomma&latlon=no&elev=no&missing=empty&trace=empty&direct=no&report_type=3&report_type=4",
+      "retrieved_utc": "2026-08-16T06:02:39.617636Z",
+      "http_status": 200,
+      "rows": 378,
+      "sha256": "954356908dd0bcef94109345d1c9f0432892645aa7af5246127303133c3a4fab",
+      "raw_path": "raw_snapshots/iem_metar/location_6_5_20260109_20260119_attempt1_954356908dd0.csv",
+      "attempt": 1
+    },
+    {
+      "kind": "iem_metar",
+      "site": "location_6",
+      "source_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py",
+      "params": [
+        [
+          "station",
+          "MAE"
+        ],
+        [
+          "data",
+          "vsby"
+        ],
+        [
+          "year1",
+          2026
+        ],
+        [
+          "month1",
+          1
+        ],
+        [
+          "day1",
+          19
+        ],
+        [
+          "year2",
+          2026
+        ],
+        [
+          "month2",
+          1
+        ],
+        [
+          "day2",
+          29
+        ],
+        [
+          "tz",
+          "UTC"
+        ],
+        [
+          "format",
+          "onlycomma"
+        ],
+        [
+          "latlon",
+          "no"
+        ],
+        [
+          "elev",
+          "no"
+        ],
+        [
+          "missing",
+          "empty"
+        ],
+        [
+          "trace",
+          "empty"
+        ],
+        [
+          "direct",
+          "no"
+        ],
+        [
+          "report_type",
+          "3"
+        ],
+        [
+          "report_type",
+          "4"
+        ]
+      ],
+      "resolved_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py?station=MAE&data=vsby&year1=2026&month1=1&day1=19&year2=2026&month2=1&day2=29&tz=UTC&format=onlycomma&latlon=no&elev=no&missing=empty&trace=empty&direct=no&report_type=3&report_type=4",
+      "retrieved_utc": "2026-08-16T06:02:43.666069Z",
+      "http_status": 200,
+      "rows": 469,
+      "sha256": "e39b538388de8b78138868a0c415584fa9d8f9b5266e1060cc0bce1abd5915ba",
+      "raw_path": "raw_snapshots/iem_metar/location_6_6_20260119_20260129_attempt1_e39b538388de.csv",
+      "attempt": 1
+    },
+    {
+      "kind": "iem_metar",
+      "site": "location_6",
+      "source_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py",
+      "params": [
+        [
+          "station",
+          "MAE"
+        ],
+        [
+          "data",
+          "vsby"
+        ],
+        [
+          "year1",
+          2026
+        ],
+        [
+          "month1",
+          1
+        ],
+        [
+          "day1",
+          29
+        ],
+        [
+          "year2",
+          2026
+        ],
+        [
+          "month2",
+          2
+        ],
+        [
+          "day2",
+          8
+        ],
+        [
+          "tz",
+          "UTC"
+        ],
+        [
+          "format",
+          "onlycomma"
+        ],
+        [
+          "latlon",
+          "no"
+        ],
+        [
+          "elev",
+          "no"
+        ],
+        [
+          "missing",
+          "empty"
+        ],
+        [
+          "trace",
+          "empty"
+        ],
+        [
+          "direct",
+          "no"
+        ],
+        [
+          "report_type",
+          "3"
+        ],
+        [
+          "report_type",
+          "4"
+        ]
+      ],
+      "resolved_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py?station=MAE&data=vsby&year1=2026&month1=1&day1=29&year2=2026&month2=2&day2=8&tz=UTC&format=onlycomma&latlon=no&elev=no&missing=empty&trace=empty&direct=no&report_type=3&report_type=4",
+      "retrieved_utc": "2026-08-16T06:02:48.105858Z",
+      "http_status": 200,
+      "rows": 520,
+      "sha256": "6ef525fdb35cc13c80a8ff9adfef8aafe90968b58b48c29ac38539c21e12cd26",
+      "raw_path": "raw_snapshots/iem_metar/location_6_7_20260129_20260208_attempt1_6ef525fdb35c.csv",
+      "attempt": 1
+    },
+    {
+      "kind": "iem_metar",
+      "site": "location_6",
+      "source_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py",
+      "params": [
+        [
+          "station",
+          "MAE"
+        ],
+        [
+          "data",
+          "vsby"
+        ],
+        [
+          "year1",
+          2026
+        ],
+        [
+          "month1",
+          2
+        ],
+        [
+          "day1",
+          8
+        ],
+        [
+          "year2",
+          2026
+        ],
+        [
+          "month2",
+          2
+        ],
+        [
+          "day2",
+          18
+        ],
+        [
+          "tz",
+          "UTC"
+        ],
+        [
+          "format",
+          "onlycomma"
+        ],
+        [
+          "latlon",
+          "no"
+        ],
+        [
+          "elev",
+          "no"
+        ],
+        [
+          "missing",
+          "empty"
+        ],
+        [
+          "trace",
+          "empty"
+        ],
+        [
+          "direct",
+          "no"
+        ],
+        [
+          "report_type",
+          "3"
+        ],
+        [
+          "report_type",
+          "4"
+        ]
+      ],
+      "resolved_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py?station=MAE&data=vsby&year1=2026&month1=2&day1=8&year2=2026&month2=2&day2=18&tz=UTC&format=onlycomma&latlon=no&elev=no&missing=empty&trace=empty&direct=no&report_type=3&report_type=4",
+      "retrieved_utc": "2026-08-16T06:02:52.890123Z",
+      "http_status": 200,
+      "rows": 326,
+      "sha256": "9cea414f326face3882f0b0e210819f8ea6410b2657dbf4bfb644aaff3cda041",
+      "raw_path": "raw_snapshots/iem_metar/location_6_8_20260208_20260218_attempt1_9cea414f326f.csv",
+      "attempt": 1
+    },
+    {
+      "kind": "iem_metar",
+      "site": "location_6",
+      "source_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py",
+      "params": [
+        [
+          "station",
+          "MAE"
+        ],
+        [
+          "data",
+          "vsby"
+        ],
+        [
+          "year1",
+          2026
+        ],
+        [
+          "month1",
+          2
+        ],
+        [
+          "day1",
+          18
+        ],
+        [
+          "year2",
+          2026
+        ],
+        [
+          "month2",
+          2
+        ],
+        [
+          "day2",
+          28
+        ],
+        [
+          "tz",
+          "UTC"
+        ],
+        [
+          "format",
+          "onlycomma"
+        ],
+        [
+          "latlon",
+          "no"
+        ],
+        [
+          "elev",
+          "no"
+        ],
+        [
+          "missing",
+          "empty"
+        ],
+        [
+          "trace",
+          "empty"
+        ],
+        [
+          "direct",
+          "no"
+        ],
+        [
+          "report_type",
+          "3"
+        ],
+        [
+          "report_type",
+          "4"
+        ]
+      ],
+      "resolved_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py?station=MAE&data=vsby&year1=2026&month1=2&day1=18&year2=2026&month2=2&day2=28&tz=UTC&format=onlycomma&latlon=no&elev=no&missing=empty&trace=empty&direct=no&report_type=3&report_type=4",
+      "retrieved_utc": "2026-08-16T06:02:56.920133Z",
+      "http_status": 200,
+      "rows": 265,
+      "sha256": "2177b369dd43f19f97c64322c4d5e18fe9b512582397feebc6245f23b7f05094",
+      "raw_path": "raw_snapshots/iem_metar/location_6_9_20260218_20260228_attempt1_2177b369dd43.csv",
+      "attempt": 1
+    },
+    {
+      "kind": "iem_metar",
+      "site": "location_6",
+      "source_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py",
+      "params": [
+        [
+          "station",
+          "MAE"
+        ],
+        [
+          "data",
+          "vsby"
+        ],
+        [
+          "year1",
+          2026
+        ],
+        [
+          "month1",
+          2
+        ],
+        [
+          "day1",
+          28
+        ],
+        [
+          "year2",
+          2026
+        ],
+        [
+          "month2",
+          3
+        ],
+        [
+          "day2",
+          2
+        ],
+        [
+          "tz",
+          "UTC"
+        ],
+        [
+          "format",
+          "onlycomma"
+        ],
+        [
+          "latlon",
+          "no"
+        ],
+        [
+          "elev",
+          "no"
+        ],
+        [
+          "missing",
+          "empty"
+        ],
+        [
+          "trace",
+          "empty"
+        ],
+        [
+          "direct",
+          "no"
+        ],
+        [
+          "report_type",
+          "3"
+        ],
+        [
+          "report_type",
+          "4"
+        ]
+      ],
+      "resolved_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py?station=MAE&data=vsby&year1=2026&month1=2&day1=28&year2=2026&month2=3&day2=2&tz=UTC&format=onlycomma&latlon=no&elev=no&missing=empty&trace=empty&direct=no&report_type=3&report_type=4",
+      "retrieved_utc": "2026-08-16T06:03:01.171799Z",
+      "http_status": 200,
+      "rows": 55,
+      "sha256": "78354dd1461daedd5559d35c974dc63f155526dd8229ebbb413bf21c0fd226a7",
+      "raw_path": "raw_snapshots/iem_metar/location_6_10_20260228_20260302_attempt1_78354dd1461d.csv",
+      "attempt": 1
+    },
+    {
+      "kind": "historical_forecast",
+      "site": "location_7",
+      "source_url": "https://historical-forecast-api.open-meteo.com/v1/forecast",
+      "params": {
+        "latitude": 36.777045,
+        "longitude": -119.716862,
+        "start_date": "2025-11-29",
+        "end_date": "2026-01-02",
+        "hourly": "temperature_2m,relative_humidity_2m,dew_point_2m,precipitation,surface_pressure,vapour_pressure_deficit,wind_speed_10m,wind_speed_100m,wind_gusts_10m,soil_temperature_0_to_7cm,weather_code,cloud_cover_low",
+        "timezone": "UTC",
+        "models": "best_match",
+        "temperature_unit": "celsius",
+        "wind_speed_unit": "kmh",
+        "precipitation_unit": "mm"
+      },
+      "resolved_url": "https://historical-forecast-api.open-meteo.com/v1/forecast?latitude=36.777045&longitude=-119.716862&start_date=2025-11-29&end_date=2026-01-02&hourly=temperature_2m%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Csurface_pressure%2Cvapour_pressure_deficit%2Cwind_speed_10m%2Cwind_speed_100m%2Cwind_gusts_10m%2Csoil_temperature_0_to_7cm%2Cweather_code%2Ccloud_cover_low&timezone=UTC&models=best_match&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "retrieved_utc": "2026-08-16T06:03:07.503282Z",
+      "http_status": 200,
+      "rows": 840,
+      "sha256": "f05953614313a6455aacbb07bb458981a34f063bb7c264891d5de31869463268",
+      "raw_path": "raw_snapshots/historical_forecast/location_7_1_2025-11-29_2026-01-02_attempt1_f05953614313.json",
+      "attempt": 1
+    },
+    {
+      "kind": "historical_forecast",
+      "site": "location_7",
+      "source_url": "https://historical-forecast-api.open-meteo.com/v1/forecast",
+      "params": {
+        "latitude": 36.777045,
+        "longitude": -119.716862,
+        "start_date": "2025-12-30",
+        "end_date": "2026-02-02",
+        "hourly": "temperature_2m,relative_humidity_2m,dew_point_2m,precipitation,surface_pressure,vapour_pressure_deficit,wind_speed_10m,wind_speed_100m,wind_gusts_10m,soil_temperature_0_to_7cm,weather_code,cloud_cover_low",
+        "timezone": "UTC",
+        "models": "best_match",
+        "temperature_unit": "celsius",
+        "wind_speed_unit": "kmh",
+        "precipitation_unit": "mm"
+      },
+      "resolved_url": "https://historical-forecast-api.open-meteo.com/v1/forecast?latitude=36.777045&longitude=-119.716862&start_date=2025-12-30&end_date=2026-02-02&hourly=temperature_2m%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Csurface_pressure%2Cvapour_pressure_deficit%2Cwind_speed_10m%2Cwind_speed_100m%2Cwind_gusts_10m%2Csoil_temperature_0_to_7cm%2Cweather_code%2Ccloud_cover_low&timezone=UTC&models=best_match&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "retrieved_utc": "2026-08-16T06:03:12.893786Z",
+      "http_status": 200,
+      "rows": 840,
+      "sha256": "233ce6755029453411d0a7ecb5d937802367fb3e2f302d94651697daa7339788",
+      "raw_path": "raw_snapshots/historical_forecast/location_7_2_2025-12-30_2026-02-02_attempt1_233ce6755029.json",
+      "attempt": 1
+    },
+    {
+      "kind": "historical_forecast",
+      "site": "location_7",
+      "source_url": "https://historical-forecast-api.open-meteo.com/v1/forecast",
+      "params": {
+        "latitude": 36.777045,
+        "longitude": -119.716862,
+        "start_date": "2026-01-30",
+        "end_date": "2026-03-02",
+        "hourly": "temperature_2m,relative_humidity_2m,dew_point_2m,precipitation,surface_pressure,vapour_pressure_deficit,wind_speed_10m,wind_speed_100m,wind_gusts_10m,soil_temperature_0_to_7cm,weather_code,cloud_cover_low",
+        "timezone": "UTC",
+        "models": "best_match",
+        "temperature_unit": "celsius",
+        "wind_speed_unit": "kmh",
+        "precipitation_unit": "mm"
+      },
+      "resolved_url": "https://historical-forecast-api.open-meteo.com/v1/forecast?latitude=36.777045&longitude=-119.716862&start_date=2026-01-30&end_date=2026-03-02&hourly=temperature_2m%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Csurface_pressure%2Cvapour_pressure_deficit%2Cwind_speed_10m%2Cwind_speed_100m%2Cwind_gusts_10m%2Csoil_temperature_0_to_7cm%2Cweather_code%2Ccloud_cover_low&timezone=UTC&models=best_match&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "retrieved_utc": "2026-08-16T06:03:18.298657Z",
+      "http_status": 200,
+      "rows": 768,
+      "sha256": "b72bd08a4f300427febc3fb9d463d0235964ea08238c061b074352330bb4844e",
+      "raw_path": "raw_snapshots/historical_forecast/location_7_3_2026-01-30_2026-03-02_attempt1_b72bd08a4f30.json",
+      "attempt": 1
+    },
+    {
+      "kind": "iem_metar",
+      "site": "location_7",
+      "source_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py",
+      "params": [
+        [
+          "station",
+          "FAT"
+        ],
+        [
+          "data",
+          "vsby"
+        ],
+        [
+          "year1",
+          2025
+        ],
+        [
+          "month1",
+          11
+        ],
+        [
+          "day1",
+          30
+        ],
+        [
+          "year2",
+          2025
+        ],
+        [
+          "month2",
+          12
+        ],
+        [
+          "day2",
+          10
+        ],
+        [
+          "tz",
+          "UTC"
+        ],
+        [
+          "format",
+          "onlycomma"
+        ],
+        [
+          "latlon",
+          "no"
+        ],
+        [
+          "elev",
+          "no"
+        ],
+        [
+          "missing",
+          "empty"
+        ],
+        [
+          "trace",
+          "empty"
+        ],
+        [
+          "direct",
+          "no"
+        ],
+        [
+          "report_type",
+          "3"
+        ],
+        [
+          "report_type",
+          "4"
+        ]
+      ],
+      "resolved_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py?station=FAT&data=vsby&year1=2025&month1=11&day1=30&year2=2025&month2=12&day2=10&tz=UTC&format=onlycomma&latlon=no&elev=no&missing=empty&trace=empty&direct=no&report_type=3&report_type=4",
+      "retrieved_utc": "2026-08-16T06:03:19.511760Z",
+      "http_status": 200,
+      "rows": 283,
+      "sha256": "e0e01b7646ba608f844ab1c004a29e4f12d7b2cd11aec9f196bef0b643b22eee",
+      "raw_path": "raw_snapshots/iem_metar/location_7_1_20251130_20251210_attempt1_e0e01b7646ba.csv",
+      "attempt": 1
+    },
+    {
+      "kind": "iem_metar",
+      "site": "location_7",
+      "source_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py",
+      "params": [
+        [
+          "station",
+          "FAT"
+        ],
+        [
+          "data",
+          "vsby"
+        ],
+        [
+          "year1",
+          2025
+        ],
+        [
+          "month1",
+          12
+        ],
+        [
+          "day1",
+          10
+        ],
+        [
+          "year2",
+          2025
+        ],
+        [
+          "month2",
+          12
+        ],
+        [
+          "day2",
+          20
+        ],
+        [
+          "tz",
+          "UTC"
+        ],
+        [
+          "format",
+          "onlycomma"
+        ],
+        [
+          "latlon",
+          "no"
+        ],
+        [
+          "elev",
+          "no"
+        ],
+        [
+          "missing",
+          "empty"
+        ],
+        [
+          "trace",
+          "empty"
+        ],
+        [
+          "direct",
+          "no"
+        ],
+        [
+          "report_type",
+          "3"
+        ],
+        [
+          "report_type",
+          "4"
+        ]
+      ],
+      "resolved_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py?station=FAT&data=vsby&year1=2025&month1=12&day1=10&year2=2025&month2=12&day2=20&tz=UTC&format=onlycomma&latlon=no&elev=no&missing=empty&trace=empty&direct=no&report_type=3&report_type=4",
+      "retrieved_utc": "2026-08-16T06:03:23.518258Z",
+      "http_status": 200,
+      "rows": 308,
+      "sha256": "c99c2392c7a30361c5c38d773ac87b6b1b6bdf5140088fd9796e3c5ab68e9550",
+      "raw_path": "raw_snapshots/iem_metar/location_7_2_20251210_20251220_attempt1_c99c2392c7a3.csv",
+      "attempt": 1
+    },
+    {
+      "kind": "iem_metar",
+      "site": "location_7",
+      "source_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py",
+      "params": [
+        [
+          "station",
+          "FAT"
+        ],
+        [
+          "data",
+          "vsby"
+        ],
+        [
+          "year1",
+          2025
+        ],
+        [
+          "month1",
+          12
+        ],
+        [
+          "day1",
+          20
+        ],
+        [
+          "year2",
+          2025
+        ],
+        [
+          "month2",
+          12
+        ],
+        [
+          "day2",
+          30
+        ],
+        [
+          "tz",
+          "UTC"
+        ],
+        [
+          "format",
+          "onlycomma"
+        ],
+        [
+          "latlon",
+          "no"
+        ],
+        [
+          "elev",
+          "no"
+        ],
+        [
+          "missing",
+          "empty"
+        ],
+        [
+          "trace",
+          "empty"
+        ],
+        [
+          "direct",
+          "no"
+        ],
+        [
+          "report_type",
+          "3"
+        ],
+        [
+          "report_type",
+          "4"
+        ]
+      ],
+      "resolved_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py?station=FAT&data=vsby&year1=2025&month1=12&day1=20&year2=2025&month2=12&day2=30&tz=UTC&format=onlycomma&latlon=no&elev=no&missing=empty&trace=empty&direct=no&report_type=3&report_type=4",
+      "retrieved_utc": "2026-08-16T06:03:27.413027Z",
+      "http_status": 200,
+      "rows": 265,
+      "sha256": "7115d8ce1aee156a102278578eedf7f014cdf84ae3141901671d9be8b441f1bf",
+      "raw_path": "raw_snapshots/iem_metar/location_7_3_20251220_20251230_attempt1_7115d8ce1aee.csv",
+      "attempt": 1
+    },
+    {
+      "kind": "iem_metar",
+      "site": "location_7",
+      "source_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py",
+      "params": [
+        [
+          "station",
+          "FAT"
+        ],
+        [
+          "data",
+          "vsby"
+        ],
+        [
+          "year1",
+          2025
+        ],
+        [
+          "month1",
+          12
+        ],
+        [
+          "day1",
+          30
+        ],
+        [
+          "year2",
+          2026
+        ],
+        [
+          "month2",
+          1
+        ],
+        [
+          "day2",
+          9
+        ],
+        [
+          "tz",
+          "UTC"
+        ],
+        [
+          "format",
+          "onlycomma"
+        ],
+        [
+          "latlon",
+          "no"
+        ],
+        [
+          "elev",
+          "no"
+        ],
+        [
+          "missing",
+          "empty"
+        ],
+        [
+          "trace",
+          "empty"
+        ],
+        [
+          "direct",
+          "no"
+        ],
+        [
+          "report_type",
+          "3"
+        ],
+        [
+          "report_type",
+          "4"
+        ]
+      ],
+      "resolved_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py?station=FAT&data=vsby&year1=2025&month1=12&day1=30&year2=2026&month2=1&day2=9&tz=UTC&format=onlycomma&latlon=no&elev=no&missing=empty&trace=empty&direct=no&report_type=3&report_type=4",
+      "retrieved_utc": "2026-08-16T06:03:31.733068Z",
+      "http_status": 200,
+      "rows": 294,
+      "sha256": "26695ec00fc069e54077bb0989df29b7f8c4f71bcc98e79206b236852765c212",
+      "raw_path": "raw_snapshots/iem_metar/location_7_4_20251230_20260109_attempt1_26695ec00fc0.csv",
+      "attempt": 1
+    },
+    {
+      "kind": "iem_metar",
+      "site": "location_7",
+      "source_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py",
+      "params": [
+        [
+          "station",
+          "FAT"
+        ],
+        [
+          "data",
+          "vsby"
+        ],
+        [
+          "year1",
+          2026
+        ],
+        [
+          "month1",
+          1
+        ],
+        [
+          "day1",
+          9
+        ],
+        [
+          "year2",
+          2026
+        ],
+        [
+          "month2",
+          1
+        ],
+        [
+          "day2",
+          19
+        ],
+        [
+          "tz",
+          "UTC"
+        ],
+        [
+          "format",
+          "onlycomma"
+        ],
+        [
+          "latlon",
+          "no"
+        ],
+        [
+          "elev",
+          "no"
+        ],
+        [
+          "missing",
+          "empty"
+        ],
+        [
+          "trace",
+          "empty"
+        ],
+        [
+          "direct",
+          "no"
+        ],
+        [
+          "report_type",
+          "3"
+        ],
+        [
+          "report_type",
+          "4"
+        ]
+      ],
+      "resolved_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py?station=FAT&data=vsby&year1=2026&month1=1&day1=9&year2=2026&month2=1&day2=19&tz=UTC&format=onlycomma&latlon=no&elev=no&missing=empty&trace=empty&direct=no&report_type=3&report_type=4",
+      "retrieved_utc": "2026-08-16T06:03:35.553944Z",
+      "http_status": 200,
+      "rows": 310,
+      "sha256": "89a9d4858e240b23a5aef751d4d064230ce584adeb24d4e5d54a306844fec69b",
+      "raw_path": "raw_snapshots/iem_metar/location_7_5_20260109_20260119_attempt1_89a9d4858e24.csv",
+      "attempt": 1
+    },
+    {
+      "kind": "iem_metar",
+      "site": "location_7",
+      "source_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py",
+      "params": [
+        [
+          "station",
+          "FAT"
+        ],
+        [
+          "data",
+          "vsby"
+        ],
+        [
+          "year1",
+          2026
+        ],
+        [
+          "month1",
+          1
+        ],
+        [
+          "day1",
+          19
+        ],
+        [
+          "year2",
+          2026
+        ],
+        [
+          "month2",
+          1
+        ],
+        [
+          "day2",
+          29
+        ],
+        [
+          "tz",
+          "UTC"
+        ],
+        [
+          "format",
+          "onlycomma"
+        ],
+        [
+          "latlon",
+          "no"
+        ],
+        [
+          "elev",
+          "no"
+        ],
+        [
+          "missing",
+          "empty"
+        ],
+        [
+          "trace",
+          "empty"
+        ],
+        [
+          "direct",
+          "no"
+        ],
+        [
+          "report_type",
+          "3"
+        ],
+        [
+          "report_type",
+          "4"
+        ]
+      ],
+      "resolved_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py?station=FAT&data=vsby&year1=2026&month1=1&day1=19&year2=2026&month2=1&day2=29&tz=UTC&format=onlycomma&latlon=no&elev=no&missing=empty&trace=empty&direct=no&report_type=3&report_type=4",
+      "retrieved_utc": "2026-08-16T06:03:39.248941Z",
+      "http_status": 200,
+      "rows": 344,
+      "sha256": "bf3009d22d1f240800b36b891f11a58eb06ec3d43a6dbc57a87a572550c2471d",
+      "raw_path": "raw_snapshots/iem_metar/location_7_6_20260119_20260129_attempt1_bf3009d22d1f.csv",
+      "attempt": 1
+    },
+    {
+      "kind": "iem_metar",
+      "site": "location_7",
+      "source_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py",
+      "params": [
+        [
+          "station",
+          "FAT"
+        ],
+        [
+          "data",
+          "vsby"
+        ],
+        [
+          "year1",
+          2026
+        ],
+        [
+          "month1",
+          1
+        ],
+        [
+          "day1",
+          29
+        ],
+        [
+          "year2",
+          2026
+        ],
+        [
+          "month2",
+          2
+        ],
+        [
+          "day2",
+          8
+        ],
+        [
+          "tz",
+          "UTC"
+        ],
+        [
+          "format",
+          "onlycomma"
+        ],
+        [
+          "latlon",
+          "no"
+        ],
+        [
+          "elev",
+          "no"
+        ],
+        [
+          "missing",
+          "empty"
+        ],
+        [
+          "trace",
+          "empty"
+        ],
+        [
+          "direct",
+          "no"
+        ],
+        [
+          "report_type",
+          "3"
+        ],
+        [
+          "report_type",
+          "4"
+        ]
+      ],
+      "resolved_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py?station=FAT&data=vsby&year1=2026&month1=1&day1=29&year2=2026&month2=2&day2=8&tz=UTC&format=onlycomma&latlon=no&elev=no&missing=empty&trace=empty&direct=no&report_type=3&report_type=4",
+      "retrieved_utc": "2026-08-16T06:03:43.221845Z",
+      "http_status": 200,
+      "rows": 342,
+      "sha256": "c0f5aded8c810cdf3596126ee846ee5eab224ad6327f057f39c9d8b1d09f48ed",
+      "raw_path": "raw_snapshots/iem_metar/location_7_7_20260129_20260208_attempt1_c0f5aded8c81.csv",
+      "attempt": 1
+    },
+    {
+      "kind": "iem_metar",
+      "site": "location_7",
+      "source_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py",
+      "params": [
+        [
+          "station",
+          "FAT"
+        ],
+        [
+          "data",
+          "vsby"
+        ],
+        [
+          "year1",
+          2026
+        ],
+        [
+          "month1",
+          2
+        ],
+        [
+          "day1",
+          8
+        ],
+        [
+          "year2",
+          2026
+        ],
+        [
+          "month2",
+          2
+        ],
+        [
+          "day2",
+          18
+        ],
+        [
+          "tz",
+          "UTC"
+        ],
+        [
+          "format",
+          "onlycomma"
+        ],
+        [
+          "latlon",
+          "no"
+        ],
+        [
+          "elev",
+          "no"
+        ],
+        [
+          "missing",
+          "empty"
+        ],
+        [
+          "trace",
+          "empty"
+        ],
+        [
+          "direct",
+          "no"
+        ],
+        [
+          "report_type",
+          "3"
+        ],
+        [
+          "report_type",
+          "4"
+        ]
+      ],
+      "resolved_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py?station=FAT&data=vsby&year1=2026&month1=2&day1=8&year2=2026&month2=2&day2=18&tz=UTC&format=onlycomma&latlon=no&elev=no&missing=empty&trace=empty&direct=no&report_type=3&report_type=4",
+      "retrieved_utc": "2026-08-16T06:03:47.106416Z",
+      "http_status": 200,
+      "rows": 275,
+      "sha256": "c19d5008d350f7dd311f34f7721ba85447ef61a1be96aff4b169f3f0ecbedbb2",
+      "raw_path": "raw_snapshots/iem_metar/location_7_8_20260208_20260218_attempt1_c19d5008d350.csv",
+      "attempt": 1
+    },
+    {
+      "kind": "iem_metar",
+      "site": "location_7",
+      "source_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py",
+      "params": [
+        [
+          "station",
+          "FAT"
+        ],
+        [
+          "data",
+          "vsby"
+        ],
+        [
+          "year1",
+          2026
+        ],
+        [
+          "month1",
+          2
+        ],
+        [
+          "day1",
+          18
+        ],
+        [
+          "year2",
+          2026
+        ],
+        [
+          "month2",
+          2
+        ],
+        [
+          "day2",
+          28
+        ],
+        [
+          "tz",
+          "UTC"
+        ],
+        [
+          "format",
+          "onlycomma"
+        ],
+        [
+          "latlon",
+          "no"
+        ],
+        [
+          "elev",
+          "no"
+        ],
+        [
+          "missing",
+          "empty"
+        ],
+        [
+          "trace",
+          "empty"
+        ],
+        [
+          "direct",
+          "no"
+        ],
+        [
+          "report_type",
+          "3"
+        ],
+        [
+          "report_type",
+          "4"
+        ]
+      ],
+      "resolved_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py?station=FAT&data=vsby&year1=2026&month1=2&day1=18&year2=2026&month2=2&day2=28&tz=UTC&format=onlycomma&latlon=no&elev=no&missing=empty&trace=empty&direct=no&report_type=3&report_type=4",
+      "retrieved_utc": "2026-08-16T06:03:51.139399Z",
+      "http_status": 200,
+      "rows": 253,
+      "sha256": "54b646cc06e29068cc00e7c410f8a75c536e52cac2452992f29b7e5c602e4fb2",
+      "raw_path": "raw_snapshots/iem_metar/location_7_9_20260218_20260228_attempt1_54b646cc06e2.csv",
+      "attempt": 1
+    },
+    {
+      "kind": "iem_metar",
+      "site": "location_7",
+      "source_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py",
+      "params": [
+        [
+          "station",
+          "FAT"
+        ],
+        [
+          "data",
+          "vsby"
+        ],
+        [
+          "year1",
+          2026
+        ],
+        [
+          "month1",
+          2
+        ],
+        [
+          "day1",
+          28
+        ],
+        [
+          "year2",
+          2026
+        ],
+        [
+          "month2",
+          3
+        ],
+        [
+          "day2",
+          2
+        ],
+        [
+          "tz",
+          "UTC"
+        ],
+        [
+          "format",
+          "onlycomma"
+        ],
+        [
+          "latlon",
+          "no"
+        ],
+        [
+          "elev",
+          "no"
+        ],
+        [
+          "missing",
+          "empty"
+        ],
+        [
+          "trace",
+          "empty"
+        ],
+        [
+          "direct",
+          "no"
+        ],
+        [
+          "report_type",
+          "3"
+        ],
+        [
+          "report_type",
+          "4"
+        ]
+      ],
+      "resolved_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py?station=FAT&data=vsby&year1=2026&month1=2&day1=28&year2=2026&month2=3&day2=2&tz=UTC&format=onlycomma&latlon=no&elev=no&missing=empty&trace=empty&direct=no&report_type=3&report_type=4",
+      "retrieved_utc": "2026-08-16T06:03:55.195250Z",
+      "http_status": 200,
+      "rows": 49,
+      "sha256": "4e110cdbcd4ed826b0fd98a9e31307f6a3bba2d1420c04ad289a30ec24198b0f",
+      "raw_path": "raw_snapshots/iem_metar/location_7_10_20260228_20260302_attempt1_4e110cdbcd4e.csv",
+      "attempt": 1
+    },
+    {
+      "kind": "historical_forecast",
+      "site": "location_8",
+      "source_url": "https://historical-forecast-api.open-meteo.com/v1/forecast",
+      "params": {
+        "latitude": 36.322528,
+        "longitude": -119.394712,
+        "start_date": "2025-11-29",
+        "end_date": "2026-01-02",
+        "hourly": "temperature_2m,relative_humidity_2m,dew_point_2m,precipitation,surface_pressure,vapour_pressure_deficit,wind_speed_10m,wind_speed_100m,wind_gusts_10m,soil_temperature_0_to_7cm,weather_code,cloud_cover_low",
+        "timezone": "UTC",
+        "models": "best_match",
+        "temperature_unit": "celsius",
+        "wind_speed_unit": "kmh",
+        "precipitation_unit": "mm"
+      },
+      "resolved_url": "https://historical-forecast-api.open-meteo.com/v1/forecast?latitude=36.322528&longitude=-119.394712&start_date=2025-11-29&end_date=2026-01-02&hourly=temperature_2m%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Csurface_pressure%2Cvapour_pressure_deficit%2Cwind_speed_10m%2Cwind_speed_100m%2Cwind_gusts_10m%2Csoil_temperature_0_to_7cm%2Cweather_code%2Ccloud_cover_low&timezone=UTC&models=best_match&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "retrieved_utc": "2026-08-16T06:04:01.285331Z",
+      "http_status": 200,
+      "rows": 840,
+      "sha256": "85b05fa121ee8de6adce0f41bcd1b2db7ca51ad2138f87c291b916675444cc28",
+      "raw_path": "raw_snapshots/historical_forecast/location_8_1_2025-11-29_2026-01-02_attempt1_85b05fa121ee.json",
+      "attempt": 1
+    },
+    {
+      "kind": "historical_forecast",
+      "site": "location_8",
+      "source_url": "https://historical-forecast-api.open-meteo.com/v1/forecast",
+      "params": {
+        "latitude": 36.322528,
+        "longitude": -119.394712,
+        "start_date": "2025-12-30",
+        "end_date": "2026-02-02",
+        "hourly": "temperature_2m,relative_humidity_2m,dew_point_2m,precipitation,surface_pressure,vapour_pressure_deficit,wind_speed_10m,wind_speed_100m,wind_gusts_10m,soil_temperature_0_to_7cm,weather_code,cloud_cover_low",
+        "timezone": "UTC",
+        "models": "best_match",
+        "temperature_unit": "celsius",
+        "wind_speed_unit": "kmh",
+        "precipitation_unit": "mm"
+      },
+      "resolved_url": "https://historical-forecast-api.open-meteo.com/v1/forecast?latitude=36.322528&longitude=-119.394712&start_date=2025-12-30&end_date=2026-02-02&hourly=temperature_2m%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Csurface_pressure%2Cvapour_pressure_deficit%2Cwind_speed_10m%2Cwind_speed_100m%2Cwind_gusts_10m%2Csoil_temperature_0_to_7cm%2Cweather_code%2Ccloud_cover_low&timezone=UTC&models=best_match&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "retrieved_utc": "2026-08-16T06:04:08.441188Z",
+      "http_status": 200,
+      "rows": 840,
+      "sha256": "187c42fe06af4707b8ceac4a1b0506f1474356a0ea5e4788808fcd10e35b18f0",
+      "raw_path": "raw_snapshots/historical_forecast/location_8_2_2025-12-30_2026-02-02_attempt1_187c42fe06af.json",
+      "attempt": 1
+    },
+    {
+      "kind": "historical_forecast",
+      "site": "location_8",
+      "source_url": "https://historical-forecast-api.open-meteo.com/v1/forecast",
+      "params": {
+        "latitude": 36.322528,
+        "longitude": -119.394712,
+        "start_date": "2026-01-30",
+        "end_date": "2026-03-02",
+        "hourly": "temperature_2m,relative_humidity_2m,dew_point_2m,precipitation,surface_pressure,vapour_pressure_deficit,wind_speed_10m,wind_speed_100m,wind_gusts_10m,soil_temperature_0_to_7cm,weather_code,cloud_cover_low",
+        "timezone": "UTC",
+        "models": "best_match",
+        "temperature_unit": "celsius",
+        "wind_speed_unit": "kmh",
+        "precipitation_unit": "mm"
+      },
+      "resolved_url": "https://historical-forecast-api.open-meteo.com/v1/forecast?latitude=36.322528&longitude=-119.394712&start_date=2026-01-30&end_date=2026-03-02&hourly=temperature_2m%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Csurface_pressure%2Cvapour_pressure_deficit%2Cwind_speed_10m%2Cwind_speed_100m%2Cwind_gusts_10m%2Csoil_temperature_0_to_7cm%2Cweather_code%2Ccloud_cover_low&timezone=UTC&models=best_match&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "retrieved_utc": "2026-08-16T06:04:13.855119Z",
+      "http_status": 200,
+      "rows": 768,
+      "sha256": "8485725183634f2dd8adae4c50d214404743972c2ae95e5257947cd7a7d4a957",
+      "raw_path": "raw_snapshots/historical_forecast/location_8_3_2026-01-30_2026-03-02_attempt1_848572518363.json",
+      "attempt": 1
+    },
+    {
+      "kind": "iem_metar",
+      "site": "location_8",
+      "source_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py",
+      "params": [
+        [
+          "station",
+          "VIS"
+        ],
+        [
+          "data",
+          "vsby"
+        ],
+        [
+          "year1",
+          2025
+        ],
+        [
+          "month1",
+          11
+        ],
+        [
+          "day1",
+          30
+        ],
+        [
+          "year2",
+          2025
+        ],
+        [
+          "month2",
+          12
+        ],
+        [
+          "day2",
+          10
+        ],
+        [
+          "tz",
+          "UTC"
+        ],
+        [
+          "format",
+          "onlycomma"
+        ],
+        [
+          "latlon",
+          "no"
+        ],
+        [
+          "elev",
+          "no"
+        ],
+        [
+          "missing",
+          "empty"
+        ],
+        [
+          "trace",
+          "empty"
+        ],
+        [
+          "direct",
+          "no"
+        ],
+        [
+          "report_type",
+          "3"
+        ],
+        [
+          "report_type",
+          "4"
+        ]
+      ],
+      "resolved_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py?station=VIS&data=vsby&year1=2025&month1=11&day1=30&year2=2025&month2=12&day2=10&tz=UTC&format=onlycomma&latlon=no&elev=no&missing=empty&trace=empty&direct=no&report_type=3&report_type=4",
+      "retrieved_utc": "2026-08-16T06:04:18.780063Z",
+      "http_status": 200,
+      "rows": 350,
+      "sha256": "b0a867b28ceb1b7058b6acd9dc7948e6e35be35c12586bb7bc0d3fa194e1fc68",
+      "raw_path": "raw_snapshots/iem_metar/location_8_1_20251130_20251210_attempt1_b0a867b28ceb.csv",
+      "attempt": 1
+    },
+    {
+      "kind": "iem_metar",
+      "site": "location_8",
+      "source_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py",
+      "params": [
+        [
+          "station",
+          "VIS"
+        ],
+        [
+          "data",
+          "vsby"
+        ],
+        [
+          "year1",
+          2025
+        ],
+        [
+          "month1",
+          12
+        ],
+        [
+          "day1",
+          10
+        ],
+        [
+          "year2",
+          2025
+        ],
+        [
+          "month2",
+          12
+        ],
+        [
+          "day2",
+          20
+        ],
+        [
+          "tz",
+          "UTC"
+        ],
+        [
+          "format",
+          "onlycomma"
+        ],
+        [
+          "latlon",
+          "no"
+        ],
+        [
+          "elev",
+          "no"
+        ],
+        [
+          "missing",
+          "empty"
+        ],
+        [
+          "trace",
+          "empty"
+        ],
+        [
+          "direct",
+          "no"
+        ],
+        [
+          "report_type",
+          "3"
+        ],
+        [
+          "report_type",
+          "4"
+        ]
+      ],
+      "resolved_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py?station=VIS&data=vsby&year1=2025&month1=12&day1=10&year2=2025&month2=12&day2=20&tz=UTC&format=onlycomma&latlon=no&elev=no&missing=empty&trace=empty&direct=no&report_type=3&report_type=4",
+      "retrieved_utc": "2026-08-16T06:04:22.806902Z",
+      "http_status": 200,
+      "rows": 387,
+      "sha256": "cccc8e0623858ba86d229e338fba048797de2bc0ea325454963f31d5bb1022d4",
+      "raw_path": "raw_snapshots/iem_metar/location_8_2_20251210_20251220_attempt1_cccc8e062385.csv",
+      "attempt": 1
+    },
+    {
+      "kind": "iem_metar",
+      "site": "location_8",
+      "source_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py",
+      "params": [
+        [
+          "station",
+          "VIS"
+        ],
+        [
+          "data",
+          "vsby"
+        ],
+        [
+          "year1",
+          2025
+        ],
+        [
+          "month1",
+          12
+        ],
+        [
+          "day1",
+          20
+        ],
+        [
+          "year2",
+          2025
+        ],
+        [
+          "month2",
+          12
+        ],
+        [
+          "day2",
+          30
+        ],
+        [
+          "tz",
+          "UTC"
+        ],
+        [
+          "format",
+          "onlycomma"
+        ],
+        [
+          "latlon",
+          "no"
+        ],
+        [
+          "elev",
+          "no"
+        ],
+        [
+          "missing",
+          "empty"
+        ],
+        [
+          "trace",
+          "empty"
+        ],
+        [
+          "direct",
+          "no"
+        ],
+        [
+          "report_type",
+          "3"
+        ],
+        [
+          "report_type",
+          "4"
+        ]
+      ],
+      "resolved_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py?station=VIS&data=vsby&year1=2025&month1=12&day1=20&year2=2025&month2=12&day2=30&tz=UTC&format=onlycomma&latlon=no&elev=no&missing=empty&trace=empty&direct=no&report_type=3&report_type=4",
+      "retrieved_utc": "2026-08-16T06:04:26.761431Z",
+      "http_status": 200,
+      "rows": 311,
+      "sha256": "11cbb1138d11eaba1d2d4494375785c97cb0c9fd62d9bbdf5c68354d229f31f6",
+      "raw_path": "raw_snapshots/iem_metar/location_8_3_20251220_20251230_attempt1_11cbb1138d11.csv",
+      "attempt": 1
+    },
+    {
+      "kind": "iem_metar",
+      "site": "location_8",
+      "source_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py",
+      "params": [
+        [
+          "station",
+          "VIS"
+        ],
+        [
+          "data",
+          "vsby"
+        ],
+        [
+          "year1",
+          2025
+        ],
+        [
+          "month1",
+          12
+        ],
+        [
+          "day1",
+          30
+        ],
+        [
+          "year2",
+          2026
+        ],
+        [
+          "month2",
+          1
+        ],
+        [
+          "day2",
+          9
+        ],
+        [
+          "tz",
+          "UTC"
+        ],
+        [
+          "format",
+          "onlycomma"
+        ],
+        [
+          "latlon",
+          "no"
+        ],
+        [
+          "elev",
+          "no"
+        ],
+        [
+          "missing",
+          "empty"
+        ],
+        [
+          "trace",
+          "empty"
+        ],
+        [
+          "direct",
+          "no"
+        ],
+        [
+          "report_type",
+          "3"
+        ],
+        [
+          "report_type",
+          "4"
+        ]
+      ],
+      "resolved_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py?station=VIS&data=vsby&year1=2025&month1=12&day1=30&year2=2026&month2=1&day2=9&tz=UTC&format=onlycomma&latlon=no&elev=no&missing=empty&trace=empty&direct=no&report_type=3&report_type=4",
+      "retrieved_utc": "2026-08-16T06:04:30.690916Z",
+      "http_status": 200,
+      "rows": 334,
+      "sha256": "9b8d6bee58ba4db57bfef54b7757812444ce282a44759459074112b3dba45502",
+      "raw_path": "raw_snapshots/iem_metar/location_8_4_20251230_20260109_attempt1_9b8d6bee58ba.csv",
+      "attempt": 1
+    },
+    {
+      "kind": "iem_metar",
+      "site": "location_8",
+      "source_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py",
+      "params": [
+        [
+          "station",
+          "VIS"
+        ],
+        [
+          "data",
+          "vsby"
+        ],
+        [
+          "year1",
+          2026
+        ],
+        [
+          "month1",
+          1
+        ],
+        [
+          "day1",
+          9
+        ],
+        [
+          "year2",
+          2026
+        ],
+        [
+          "month2",
+          1
+        ],
+        [
+          "day2",
+          19
+        ],
+        [
+          "tz",
+          "UTC"
+        ],
+        [
+          "format",
+          "onlycomma"
+        ],
+        [
+          "latlon",
+          "no"
+        ],
+        [
+          "elev",
+          "no"
+        ],
+        [
+          "missing",
+          "empty"
+        ],
+        [
+          "trace",
+          "empty"
+        ],
+        [
+          "direct",
+          "no"
+        ],
+        [
+          "report_type",
+          "3"
+        ],
+        [
+          "report_type",
+          "4"
+        ]
+      ],
+      "resolved_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py?station=VIS&data=vsby&year1=2026&month1=1&day1=9&year2=2026&month2=1&day2=19&tz=UTC&format=onlycomma&latlon=no&elev=no&missing=empty&trace=empty&direct=no&report_type=3&report_type=4",
+      "retrieved_utc": "2026-08-16T06:04:34.434806Z",
+      "http_status": 200,
+      "rows": 427,
+      "sha256": "33d217b86fa51179b5627a27390b16cb4d035e3b3a6db759721eced75f3f65bc",
+      "raw_path": "raw_snapshots/iem_metar/location_8_5_20260109_20260119_attempt1_33d217b86fa5.csv",
+      "attempt": 1
+    },
+    {
+      "kind": "iem_metar",
+      "site": "location_8",
+      "source_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py",
+      "params": [
+        [
+          "station",
+          "VIS"
+        ],
+        [
+          "data",
+          "vsby"
+        ],
+        [
+          "year1",
+          2026
+        ],
+        [
+          "month1",
+          1
+        ],
+        [
+          "day1",
+          19
+        ],
+        [
+          "year2",
+          2026
+        ],
+        [
+          "month2",
+          1
+        ],
+        [
+          "day2",
+          29
+        ],
+        [
+          "tz",
+          "UTC"
+        ],
+        [
+          "format",
+          "onlycomma"
+        ],
+        [
+          "latlon",
+          "no"
+        ],
+        [
+          "elev",
+          "no"
+        ],
+        [
+          "missing",
+          "empty"
+        ],
+        [
+          "trace",
+          "empty"
+        ],
+        [
+          "direct",
+          "no"
+        ],
+        [
+          "report_type",
+          "3"
+        ],
+        [
+          "report_type",
+          "4"
+        ]
+      ],
+      "resolved_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py?station=VIS&data=vsby&year1=2026&month1=1&day1=19&year2=2026&month2=1&day2=29&tz=UTC&format=onlycomma&latlon=no&elev=no&missing=empty&trace=empty&direct=no&report_type=3&report_type=4",
+      "retrieved_utc": "2026-08-16T06:04:38.224442Z",
+      "http_status": 200,
+      "rows": 420,
+      "sha256": "d05d87ac66d69be57e8c7da2237de01266f85c13e2af14bee009571ec243f3bc",
+      "raw_path": "raw_snapshots/iem_metar/location_8_6_20260119_20260129_attempt1_d05d87ac66d6.csv",
+      "attempt": 1
+    },
+    {
+      "kind": "iem_metar",
+      "site": "location_8",
+      "source_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py",
+      "params": [
+        [
+          "station",
+          "VIS"
+        ],
+        [
+          "data",
+          "vsby"
+        ],
+        [
+          "year1",
+          2026
+        ],
+        [
+          "month1",
+          1
+        ],
+        [
+          "day1",
+          29
+        ],
+        [
+          "year2",
+          2026
+        ],
+        [
+          "month2",
+          2
+        ],
+        [
+          "day2",
+          8
+        ],
+        [
+          "tz",
+          "UTC"
+        ],
+        [
+          "format",
+          "onlycomma"
+        ],
+        [
+          "latlon",
+          "no"
+        ],
+        [
+          "elev",
+          "no"
+        ],
+        [
+          "missing",
+          "empty"
+        ],
+        [
+          "trace",
+          "empty"
+        ],
+        [
+          "direct",
+          "no"
+        ],
+        [
+          "report_type",
+          "3"
+        ],
+        [
+          "report_type",
+          "4"
+        ]
+      ],
+      "resolved_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py?station=VIS&data=vsby&year1=2026&month1=1&day1=29&year2=2026&month2=2&day2=8&tz=UTC&format=onlycomma&latlon=no&elev=no&missing=empty&trace=empty&direct=no&report_type=3&report_type=4",
+      "retrieved_utc": "2026-08-16T06:04:41.990449Z",
+      "http_status": 200,
+      "rows": 484,
+      "sha256": "80df098a7f6db78670eb95f0b1d2a6cc741c7bac1fb47acd8e9b5e90acbbc2ca",
+      "raw_path": "raw_snapshots/iem_metar/location_8_7_20260129_20260208_attempt1_80df098a7f6d.csv",
+      "attempt": 1
+    },
+    {
+      "kind": "iem_metar",
+      "site": "location_8",
+      "source_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py",
+      "params": [
+        [
+          "station",
+          "VIS"
+        ],
+        [
+          "data",
+          "vsby"
+        ],
+        [
+          "year1",
+          2026
+        ],
+        [
+          "month1",
+          2
+        ],
+        [
+          "day1",
+          8
+        ],
+        [
+          "year2",
+          2026
+        ],
+        [
+          "month2",
+          2
+        ],
+        [
+          "day2",
+          18
+        ],
+        [
+          "tz",
+          "UTC"
+        ],
+        [
+          "format",
+          "onlycomma"
+        ],
+        [
+          "latlon",
+          "no"
+        ],
+        [
+          "elev",
+          "no"
+        ],
+        [
+          "missing",
+          "empty"
+        ],
+        [
+          "trace",
+          "empty"
+        ],
+        [
+          "direct",
+          "no"
+        ],
+        [
+          "report_type",
+          "3"
+        ],
+        [
+          "report_type",
+          "4"
+        ]
+      ],
+      "resolved_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py?station=VIS&data=vsby&year1=2026&month1=2&day1=8&year2=2026&month2=2&day2=18&tz=UTC&format=onlycomma&latlon=no&elev=no&missing=empty&trace=empty&direct=no&report_type=3&report_type=4",
+      "retrieved_utc": "2026-08-16T06:04:45.947467Z",
+      "http_status": 200,
+      "rows": 299,
+      "sha256": "efde7a485c8d00115b9f0d323f64f15c4c8dbb098d811901a10d2270b7d049f8",
+      "raw_path": "raw_snapshots/iem_metar/location_8_8_20260208_20260218_attempt1_efde7a485c8d.csv",
+      "attempt": 1
+    },
+    {
+      "kind": "iem_metar",
+      "site": "location_8",
+      "source_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py",
+      "params": [
+        [
+          "station",
+          "VIS"
+        ],
+        [
+          "data",
+          "vsby"
+        ],
+        [
+          "year1",
+          2026
+        ],
+        [
+          "month1",
+          2
+        ],
+        [
+          "day1",
+          18
+        ],
+        [
+          "year2",
+          2026
+        ],
+        [
+          "month2",
+          2
+        ],
+        [
+          "day2",
+          28
+        ],
+        [
+          "tz",
+          "UTC"
+        ],
+        [
+          "format",
+          "onlycomma"
+        ],
+        [
+          "latlon",
+          "no"
+        ],
+        [
+          "elev",
+          "no"
+        ],
+        [
+          "missing",
+          "empty"
+        ],
+        [
+          "trace",
+          "empty"
+        ],
+        [
+          "direct",
+          "no"
+        ],
+        [
+          "report_type",
+          "3"
+        ],
+        [
+          "report_type",
+          "4"
+        ]
+      ],
+      "resolved_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py?station=VIS&data=vsby&year1=2026&month1=2&day1=18&year2=2026&month2=2&day2=28&tz=UTC&format=onlycomma&latlon=no&elev=no&missing=empty&trace=empty&direct=no&report_type=3&report_type=4",
+      "retrieved_utc": "2026-08-16T06:04:50.046515Z",
+      "http_status": 200,
+      "rows": 292,
+      "sha256": "630fbcffb328ebc75ee55d5085a5adabab4883535ab08e56fd4c17c15142f3e6",
+      "raw_path": "raw_snapshots/iem_metar/location_8_9_20260218_20260228_attempt1_630fbcffb328.csv",
+      "attempt": 1
+    },
+    {
+      "kind": "iem_metar",
+      "site": "location_8",
+      "source_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py",
+      "params": [
+        [
+          "station",
+          "VIS"
+        ],
+        [
+          "data",
+          "vsby"
+        ],
+        [
+          "year1",
+          2026
+        ],
+        [
+          "month1",
+          2
+        ],
+        [
+          "day1",
+          28
+        ],
+        [
+          "year2",
+          2026
+        ],
+        [
+          "month2",
+          3
+        ],
+        [
+          "day2",
+          2
+        ],
+        [
+          "tz",
+          "UTC"
+        ],
+        [
+          "format",
+          "onlycomma"
+        ],
+        [
+          "latlon",
+          "no"
+        ],
+        [
+          "elev",
+          "no"
+        ],
+        [
+          "missing",
+          "empty"
+        ],
+        [
+          "trace",
+          "empty"
+        ],
+        [
+          "direct",
+          "no"
+        ],
+        [
+          "report_type",
+          "3"
+        ],
+        [
+          "report_type",
+          "4"
+        ]
+      ],
+      "resolved_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py?station=VIS&data=vsby&year1=2026&month1=2&day1=28&year2=2026&month2=3&day2=2&tz=UTC&format=onlycomma&latlon=no&elev=no&missing=empty&trace=empty&direct=no&report_type=3&report_type=4",
+      "retrieved_utc": "2026-08-16T06:04:54.078650Z",
+      "http_status": 200,
+      "rows": 53,
+      "sha256": "f39303d638129b205bf0577f5b5c42239e15259da15ffc945eb1565a74b22f2e",
+      "raw_path": "raw_snapshots/iem_metar/location_8_10_20260228_20260302_attempt1_f39303d63812.csv",
+      "attempt": 1
+    },
+    {
+      "kind": "historical_forecast",
+      "site": "location_9",
+      "source_url": "https://historical-forecast-api.open-meteo.com/v1/forecast",
+      "params": {
+        "latitude": 36.313201,
+        "longitude": -119.626015,
+        "start_date": "2025-11-29",
+        "end_date": "2026-01-02",
+        "hourly": "temperature_2m,relative_humidity_2m,dew_point_2m,precipitation,surface_pressure,vapour_pressure_deficit,wind_speed_10m,wind_speed_100m,wind_gusts_10m,soil_temperature_0_to_7cm,weather_code,cloud_cover_low",
+        "timezone": "UTC",
+        "models": "best_match",
+        "temperature_unit": "celsius",
+        "wind_speed_unit": "kmh",
+        "precipitation_unit": "mm"
+      },
+      "resolved_url": "https://historical-forecast-api.open-meteo.com/v1/forecast?latitude=36.313201&longitude=-119.626015&start_date=2025-11-29&end_date=2026-01-02&hourly=temperature_2m%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Csurface_pressure%2Cvapour_pressure_deficit%2Cwind_speed_10m%2Cwind_speed_100m%2Cwind_gusts_10m%2Csoil_temperature_0_to_7cm%2Cweather_code%2Ccloud_cover_low&timezone=UTC&models=best_match&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "retrieved_utc": "2026-08-16T06:05:00.181484Z",
+      "http_status": 200,
+      "rows": 840,
+      "sha256": "4c132e317ac436a0cf142f1345104a6ff1c1b278e414790c299c58a484e51a22",
+      "raw_path": "raw_snapshots/historical_forecast/location_9_1_2025-11-29_2026-01-02_attempt1_4c132e317ac4.json",
+      "attempt": 1
+    },
+    {
+      "kind": "historical_forecast",
+      "site": "location_9",
+      "source_url": "https://historical-forecast-api.open-meteo.com/v1/forecast",
+      "params": {
+        "latitude": 36.313201,
+        "longitude": -119.626015,
+        "start_date": "2025-12-30",
+        "end_date": "2026-02-02",
+        "hourly": "temperature_2m,relative_humidity_2m,dew_point_2m,precipitation,surface_pressure,vapour_pressure_deficit,wind_speed_10m,wind_speed_100m,wind_gusts_10m,soil_temperature_0_to_7cm,weather_code,cloud_cover_low",
+        "timezone": "UTC",
+        "models": "best_match",
+        "temperature_unit": "celsius",
+        "wind_speed_unit": "kmh",
+        "precipitation_unit": "mm"
+      },
+      "resolved_url": "https://historical-forecast-api.open-meteo.com/v1/forecast?latitude=36.313201&longitude=-119.626015&start_date=2025-12-30&end_date=2026-02-02&hourly=temperature_2m%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Csurface_pressure%2Cvapour_pressure_deficit%2Cwind_speed_10m%2Cwind_speed_100m%2Cwind_gusts_10m%2Csoil_temperature_0_to_7cm%2Cweather_code%2Ccloud_cover_low&timezone=UTC&models=best_match&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "retrieved_utc": "2026-08-16T06:05:08.461232Z",
+      "http_status": 200,
+      "rows": 840,
+      "sha256": "5eff672478a776b3b4833c98bfcf28dbefcc6bd011b4b1f445c807184a263c33",
+      "raw_path": "raw_snapshots/historical_forecast/location_9_2_2025-12-30_2026-02-02_attempt1_5eff672478a7.json",
+      "attempt": 1
+    },
+    {
+      "kind": "historical_forecast",
+      "site": "location_9",
+      "source_url": "https://historical-forecast-api.open-meteo.com/v1/forecast",
+      "params": {
+        "latitude": 36.313201,
+        "longitude": -119.626015,
+        "start_date": "2026-01-30",
+        "end_date": "2026-03-02",
+        "hourly": "temperature_2m,relative_humidity_2m,dew_point_2m,precipitation,surface_pressure,vapour_pressure_deficit,wind_speed_10m,wind_speed_100m,wind_gusts_10m,soil_temperature_0_to_7cm,weather_code,cloud_cover_low",
+        "timezone": "UTC",
+        "models": "best_match",
+        "temperature_unit": "celsius",
+        "wind_speed_unit": "kmh",
+        "precipitation_unit": "mm"
+      },
+      "resolved_url": "https://historical-forecast-api.open-meteo.com/v1/forecast?latitude=36.313201&longitude=-119.626015&start_date=2026-01-30&end_date=2026-03-02&hourly=temperature_2m%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Csurface_pressure%2Cvapour_pressure_deficit%2Cwind_speed_10m%2Cwind_speed_100m%2Cwind_gusts_10m%2Csoil_temperature_0_to_7cm%2Cweather_code%2Ccloud_cover_low&timezone=UTC&models=best_match&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "retrieved_utc": "2026-08-16T06:05:11.073539Z",
+      "http_status": 200,
+      "rows": 768,
+      "sha256": "bbaccc3052661201d33ee3f77a2962f5e3e2b471711af54bd85314063a9d77f1",
+      "raw_path": "raw_snapshots/historical_forecast/location_9_3_2026-01-30_2026-03-02_attempt1_bbaccc305266.json",
+      "attempt": 1
+    },
+    {
+      "kind": "iem_metar",
+      "site": "location_9",
+      "source_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py",
+      "params": [
+        [
+          "station",
+          "HJO"
+        ],
+        [
+          "data",
+          "vsby"
+        ],
+        [
+          "year1",
+          2025
+        ],
+        [
+          "month1",
+          11
+        ],
+        [
+          "day1",
+          30
+        ],
+        [
+          "year2",
+          2025
+        ],
+        [
+          "month2",
+          12
+        ],
+        [
+          "day2",
+          10
+        ],
+        [
+          "tz",
+          "UTC"
+        ],
+        [
+          "format",
+          "onlycomma"
+        ],
+        [
+          "latlon",
+          "no"
+        ],
+        [
+          "elev",
+          "no"
+        ],
+        [
+          "missing",
+          "empty"
+        ],
+        [
+          "trace",
+          "empty"
+        ],
+        [
+          "direct",
+          "no"
+        ],
+        [
+          "report_type",
+          "3"
+        ],
+        [
+          "report_type",
+          "4"
+        ]
+      ],
+      "resolved_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py?station=HJO&data=vsby&year1=2025&month1=11&day1=30&year2=2025&month2=12&day2=10&tz=UTC&format=onlycomma&latlon=no&elev=no&missing=empty&trace=empty&direct=no&report_type=3&report_type=4",
+      "retrieved_utc": "2026-08-16T06:05:18.503197Z",
+      "http_status": 200,
+      "rows": 335,
+      "sha256": "e0bc7263089bc0ebb547655dca03a74560a01bc1cf215bdd5ee134004f286199",
+      "raw_path": "raw_snapshots/iem_metar/location_9_1_20251130_20251210_attempt1_e0bc7263089b.csv",
+      "attempt": 1
+    },
+    {
+      "kind": "iem_metar",
+      "site": "location_9",
+      "source_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py",
+      "params": [
+        [
+          "station",
+          "HJO"
+        ],
+        [
+          "data",
+          "vsby"
+        ],
+        [
+          "year1",
+          2025
+        ],
+        [
+          "month1",
+          12
+        ],
+        [
+          "day1",
+          10
+        ],
+        [
+          "year2",
+          2025
+        ],
+        [
+          "month2",
+          12
+        ],
+        [
+          "day2",
+          20
+        ],
+        [
+          "tz",
+          "UTC"
+        ],
+        [
+          "format",
+          "onlycomma"
+        ],
+        [
+          "latlon",
+          "no"
+        ],
+        [
+          "elev",
+          "no"
+        ],
+        [
+          "missing",
+          "empty"
+        ],
+        [
+          "trace",
+          "empty"
+        ],
+        [
+          "direct",
+          "no"
+        ],
+        [
+          "report_type",
+          "3"
+        ],
+        [
+          "report_type",
+          "4"
+        ]
+      ],
+      "resolved_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py?station=HJO&data=vsby&year1=2025&month1=12&day1=10&year2=2025&month2=12&day2=20&tz=UTC&format=onlycomma&latlon=no&elev=no&missing=empty&trace=empty&direct=no&report_type=3&report_type=4",
+      "retrieved_utc": "2026-08-16T06:05:22.552993Z",
+      "http_status": 200,
+      "rows": 427,
+      "sha256": "48b55a7a2797075ae54f940c541f7db855ae519b294c105012141a60427d1803",
+      "raw_path": "raw_snapshots/iem_metar/location_9_2_20251210_20251220_attempt1_48b55a7a2797.csv",
+      "attempt": 1
+    },
+    {
+      "kind": "iem_metar",
+      "site": "location_9",
+      "source_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py",
+      "params": [
+        [
+          "station",
+          "HJO"
+        ],
+        [
+          "data",
+          "vsby"
+        ],
+        [
+          "year1",
+          2025
+        ],
+        [
+          "month1",
+          12
+        ],
+        [
+          "day1",
+          20
+        ],
+        [
+          "year2",
+          2025
+        ],
+        [
+          "month2",
+          12
+        ],
+        [
+          "day2",
+          30
+        ],
+        [
+          "tz",
+          "UTC"
+        ],
+        [
+          "format",
+          "onlycomma"
+        ],
+        [
+          "latlon",
+          "no"
+        ],
+        [
+          "elev",
+          "no"
+        ],
+        [
+          "missing",
+          "empty"
+        ],
+        [
+          "trace",
+          "empty"
+        ],
+        [
+          "direct",
+          "no"
+        ],
+        [
+          "report_type",
+          "3"
+        ],
+        [
+          "report_type",
+          "4"
+        ]
+      ],
+      "resolved_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py?station=HJO&data=vsby&year1=2025&month1=12&day1=20&year2=2025&month2=12&day2=30&tz=UTC&format=onlycomma&latlon=no&elev=no&missing=empty&trace=empty&direct=no&report_type=3&report_type=4",
+      "retrieved_utc": "2026-08-16T06:05:26.620305Z",
+      "http_status": 200,
+      "rows": 300,
+      "sha256": "329cdd2243a26457be9cd6a7c62f70ad2804d61d9d0dfdfd4fb7deddfe6aec96",
+      "raw_path": "raw_snapshots/iem_metar/location_9_3_20251220_20251230_attempt1_329cdd2243a2.csv",
+      "attempt": 1
+    },
+    {
+      "kind": "iem_metar",
+      "site": "location_9",
+      "source_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py",
+      "params": [
+        [
+          "station",
+          "HJO"
+        ],
+        [
+          "data",
+          "vsby"
+        ],
+        [
+          "year1",
+          2025
+        ],
+        [
+          "month1",
+          12
+        ],
+        [
+          "day1",
+          30
+        ],
+        [
+          "year2",
+          2026
+        ],
+        [
+          "month2",
+          1
+        ],
+        [
+          "day2",
+          9
+        ],
+        [
+          "tz",
+          "UTC"
+        ],
+        [
+          "format",
+          "onlycomma"
+        ],
+        [
+          "latlon",
+          "no"
+        ],
+        [
+          "elev",
+          "no"
+        ],
+        [
+          "missing",
+          "empty"
+        ],
+        [
+          "trace",
+          "empty"
+        ],
+        [
+          "direct",
+          "no"
+        ],
+        [
+          "report_type",
+          "3"
+        ],
+        [
+          "report_type",
+          "4"
+        ]
+      ],
+      "resolved_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py?station=HJO&data=vsby&year1=2025&month1=12&day1=30&year2=2026&month2=1&day2=9&tz=UTC&format=onlycomma&latlon=no&elev=no&missing=empty&trace=empty&direct=no&report_type=3&report_type=4",
+      "retrieved_utc": "2026-08-16T06:05:30.808031Z",
+      "http_status": 200,
+      "rows": 361,
+      "sha256": "bab57475d82950fe7c1b10e2f9394612086659c03bd52d45cb59038cfd7c1ce2",
+      "raw_path": "raw_snapshots/iem_metar/location_9_4_20251230_20260109_attempt1_bab57475d829.csv",
+      "attempt": 1
+    },
+    {
+      "kind": "iem_metar",
+      "site": "location_9",
+      "source_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py",
+      "params": [
+        [
+          "station",
+          "HJO"
+        ],
+        [
+          "data",
+          "vsby"
+        ],
+        [
+          "year1",
+          2026
+        ],
+        [
+          "month1",
+          1
+        ],
+        [
+          "day1",
+          9
+        ],
+        [
+          "year2",
+          2026
+        ],
+        [
+          "month2",
+          1
+        ],
+        [
+          "day2",
+          19
+        ],
+        [
+          "tz",
+          "UTC"
+        ],
+        [
+          "format",
+          "onlycomma"
+        ],
+        [
+          "latlon",
+          "no"
+        ],
+        [
+          "elev",
+          "no"
+        ],
+        [
+          "missing",
+          "empty"
+        ],
+        [
+          "trace",
+          "empty"
+        ],
+        [
+          "direct",
+          "no"
+        ],
+        [
+          "report_type",
+          "3"
+        ],
+        [
+          "report_type",
+          "4"
+        ]
+      ],
+      "resolved_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py?station=HJO&data=vsby&year1=2026&month1=1&day1=9&year2=2026&month2=1&day2=19&tz=UTC&format=onlycomma&latlon=no&elev=no&missing=empty&trace=empty&direct=no&report_type=3&report_type=4",
+      "retrieved_utc": "2026-08-16T06:05:34.250005Z",
+      "http_status": 200,
+      "rows": 430,
+      "sha256": "d3e47c5d05a39e4fbf07f62551e3b2f5aa129841efd53fbb5e1d464843deadab",
+      "raw_path": "raw_snapshots/iem_metar/location_9_5_20260109_20260119_attempt1_d3e47c5d05a3.csv",
+      "attempt": 1
+    },
+    {
+      "kind": "iem_metar",
+      "site": "location_9",
+      "source_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py",
+      "params": [
+        [
+          "station",
+          "HJO"
+        ],
+        [
+          "data",
+          "vsby"
+        ],
+        [
+          "year1",
+          2026
+        ],
+        [
+          "month1",
+          1
+        ],
+        [
+          "day1",
+          19
+        ],
+        [
+          "year2",
+          2026
+        ],
+        [
+          "month2",
+          1
+        ],
+        [
+          "day2",
+          29
+        ],
+        [
+          "tz",
+          "UTC"
+        ],
+        [
+          "format",
+          "onlycomma"
+        ],
+        [
+          "latlon",
+          "no"
+        ],
+        [
+          "elev",
+          "no"
+        ],
+        [
+          "missing",
+          "empty"
+        ],
+        [
+          "trace",
+          "empty"
+        ],
+        [
+          "direct",
+          "no"
+        ],
+        [
+          "report_type",
+          "3"
+        ],
+        [
+          "report_type",
+          "4"
+        ]
+      ],
+      "resolved_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py?station=HJO&data=vsby&year1=2026&month1=1&day1=19&year2=2026&month2=1&day2=29&tz=UTC&format=onlycomma&latlon=no&elev=no&missing=empty&trace=empty&direct=no&report_type=3&report_type=4",
+      "retrieved_utc": "2026-08-16T06:05:37.955293Z",
+      "http_status": 200,
+      "rows": 443,
+      "sha256": "6bb6fe05d7f11771edb2ffa09183a8f9de3bff6c05364eb43490fd90b8fc77a6",
+      "raw_path": "raw_snapshots/iem_metar/location_9_6_20260119_20260129_attempt1_6bb6fe05d7f1.csv",
+      "attempt": 1
+    },
+    {
+      "kind": "iem_metar",
+      "site": "location_9",
+      "source_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py",
+      "params": [
+        [
+          "station",
+          "HJO"
+        ],
+        [
+          "data",
+          "vsby"
+        ],
+        [
+          "year1",
+          2026
+        ],
+        [
+          "month1",
+          1
+        ],
+        [
+          "day1",
+          29
+        ],
+        [
+          "year2",
+          2026
+        ],
+        [
+          "month2",
+          2
+        ],
+        [
+          "day2",
+          8
+        ],
+        [
+          "tz",
+          "UTC"
+        ],
+        [
+          "format",
+          "onlycomma"
+        ],
+        [
+          "latlon",
+          "no"
+        ],
+        [
+          "elev",
+          "no"
+        ],
+        [
+          "missing",
+          "empty"
+        ],
+        [
+          "trace",
+          "empty"
+        ],
+        [
+          "direct",
+          "no"
+        ],
+        [
+          "report_type",
+          "3"
+        ],
+        [
+          "report_type",
+          "4"
+        ]
+      ],
+      "resolved_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py?station=HJO&data=vsby&year1=2026&month1=1&day1=29&year2=2026&month2=2&day2=8&tz=UTC&format=onlycomma&latlon=no&elev=no&missing=empty&trace=empty&direct=no&report_type=3&report_type=4",
+      "retrieved_utc": "2026-08-16T06:05:41.717565Z",
+      "http_status": 200,
+      "rows": 484,
+      "sha256": "5640b01602f6e6a74f697fe87ba30f54eb0f546dd95e7239fe08e2ee2046df2c",
+      "raw_path": "raw_snapshots/iem_metar/location_9_7_20260129_20260208_attempt1_5640b01602f6.csv",
+      "attempt": 1
+    },
+    {
+      "kind": "iem_metar",
+      "site": "location_9",
+      "source_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py",
+      "params": [
+        [
+          "station",
+          "HJO"
+        ],
+        [
+          "data",
+          "vsby"
+        ],
+        [
+          "year1",
+          2026
+        ],
+        [
+          "month1",
+          2
+        ],
+        [
+          "day1",
+          8
+        ],
+        [
+          "year2",
+          2026
+        ],
+        [
+          "month2",
+          2
+        ],
+        [
+          "day2",
+          18
+        ],
+        [
+          "tz",
+          "UTC"
+        ],
+        [
+          "format",
+          "onlycomma"
+        ],
+        [
+          "latlon",
+          "no"
+        ],
+        [
+          "elev",
+          "no"
+        ],
+        [
+          "missing",
+          "empty"
+        ],
+        [
+          "trace",
+          "empty"
+        ],
+        [
+          "direct",
+          "no"
+        ],
+        [
+          "report_type",
+          "3"
+        ],
+        [
+          "report_type",
+          "4"
+        ]
+      ],
+      "resolved_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py?station=HJO&data=vsby&year1=2026&month1=2&day1=8&year2=2026&month2=2&day2=18&tz=UTC&format=onlycomma&latlon=no&elev=no&missing=empty&trace=empty&direct=no&report_type=3&report_type=4",
+      "retrieved_utc": "2026-08-16T06:05:45.586228Z",
+      "http_status": 200,
+      "rows": 328,
+      "sha256": "6bac67b347addc710a1d50eee35d34cc7e8d59245baebf22cc859dc584238cde",
+      "raw_path": "raw_snapshots/iem_metar/location_9_8_20260208_20260218_attempt1_6bac67b347ad.csv",
+      "attempt": 1
+    },
+    {
+      "kind": "iem_metar",
+      "site": "location_9",
+      "source_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py",
+      "params": [
+        [
+          "station",
+          "HJO"
+        ],
+        [
+          "data",
+          "vsby"
+        ],
+        [
+          "year1",
+          2026
+        ],
+        [
+          "month1",
+          2
+        ],
+        [
+          "day1",
+          18
+        ],
+        [
+          "year2",
+          2026
+        ],
+        [
+          "month2",
+          2
+        ],
+        [
+          "day2",
+          28
+        ],
+        [
+          "tz",
+          "UTC"
+        ],
+        [
+          "format",
+          "onlycomma"
+        ],
+        [
+          "latlon",
+          "no"
+        ],
+        [
+          "elev",
+          "no"
+        ],
+        [
+          "missing",
+          "empty"
+        ],
+        [
+          "trace",
+          "empty"
+        ],
+        [
+          "direct",
+          "no"
+        ],
+        [
+          "report_type",
+          "3"
+        ],
+        [
+          "report_type",
+          "4"
+        ]
+      ],
+      "resolved_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py?station=HJO&data=vsby&year1=2026&month1=2&day1=18&year2=2026&month2=2&day2=28&tz=UTC&format=onlycomma&latlon=no&elev=no&missing=empty&trace=empty&direct=no&report_type=3&report_type=4",
+      "retrieved_utc": "2026-08-16T06:05:49.479825Z",
+      "http_status": 200,
+      "rows": 279,
+      "sha256": "a019afad797ab8746e7ee7e0db18433badf84c90524540adac37c3c943b55cdb",
+      "raw_path": "raw_snapshots/iem_metar/location_9_9_20260218_20260228_attempt1_a019afad797a.csv",
+      "attempt": 1
+    },
+    {
+      "kind": "iem_metar",
+      "site": "location_9",
+      "source_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py",
+      "params": [
+        [
+          "station",
+          "HJO"
+        ],
+        [
+          "data",
+          "vsby"
+        ],
+        [
+          "year1",
+          2026
+        ],
+        [
+          "month1",
+          2
+        ],
+        [
+          "day1",
+          28
+        ],
+        [
+          "year2",
+          2026
+        ],
+        [
+          "month2",
+          3
+        ],
+        [
+          "day2",
+          2
+        ],
+        [
+          "tz",
+          "UTC"
+        ],
+        [
+          "format",
+          "onlycomma"
+        ],
+        [
+          "latlon",
+          "no"
+        ],
+        [
+          "elev",
+          "no"
+        ],
+        [
+          "missing",
+          "empty"
+        ],
+        [
+          "trace",
+          "empty"
+        ],
+        [
+          "direct",
+          "no"
+        ],
+        [
+          "report_type",
+          "3"
+        ],
+        [
+          "report_type",
+          "4"
+        ]
+      ],
+      "resolved_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py?station=HJO&data=vsby&year1=2026&month1=2&day1=28&year2=2026&month2=3&day2=2&tz=UTC&format=onlycomma&latlon=no&elev=no&missing=empty&trace=empty&direct=no&report_type=3&report_type=4",
+      "retrieved_utc": "2026-08-16T06:05:53.329128Z",
+      "http_status": 200,
+      "rows": 72,
+      "sha256": "3272299b8f10c9930af21537419aeaa7c1eb5e5419a1ec227ebb322fd882bb08",
+      "raw_path": "raw_snapshots/iem_metar/location_9_10_20260228_20260302_attempt1_3272299b8f10.csv",
+      "attempt": 1
+    },
+    {
+      "kind": "historical_forecast",
+      "site": "location_10",
+      "source_url": "https://historical-forecast-api.open-meteo.com/v1/forecast",
+      "params": {
+        "latitude": 35.328506,
+        "longitude": -118.997813,
+        "start_date": "2025-11-29",
+        "end_date": "2026-01-02",
+        "hourly": "temperature_2m,relative_humidity_2m,dew_point_2m,precipitation,surface_pressure,vapour_pressure_deficit,wind_speed_10m,wind_speed_100m,wind_gusts_10m,soil_temperature_0_to_7cm,weather_code,cloud_cover_low",
+        "timezone": "UTC",
+        "models": "best_match",
+        "temperature_unit": "celsius",
+        "wind_speed_unit": "kmh",
+        "precipitation_unit": "mm"
+      },
+      "resolved_url": "https://historical-forecast-api.open-meteo.com/v1/forecast?latitude=35.328506&longitude=-118.997813&start_date=2025-11-29&end_date=2026-01-02&hourly=temperature_2m%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Csurface_pressure%2Cvapour_pressure_deficit%2Cwind_speed_10m%2Cwind_speed_100m%2Cwind_gusts_10m%2Csoil_temperature_0_to_7cm%2Cweather_code%2Ccloud_cover_low&timezone=UTC&models=best_match&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "retrieved_utc": "2026-08-16T06:05:59.384884Z",
+      "http_status": 200,
+      "rows": 840,
+      "sha256": "497a3e348d6ce97bd6065c361665a04c6fe908a88fae03a2dc94a151773e65dc",
+      "raw_path": "raw_snapshots/historical_forecast/location_10_1_2025-11-29_2026-01-02_attempt1_497a3e348d6c.json",
+      "attempt": 1
+    },
+    {
+      "kind": "historical_forecast",
+      "site": "location_10",
+      "source_url": "https://historical-forecast-api.open-meteo.com/v1/forecast",
+      "params": {
+        "latitude": 35.328506,
+        "longitude": -118.997813,
+        "start_date": "2025-12-30",
+        "end_date": "2026-02-02",
+        "hourly": "temperature_2m,relative_humidity_2m,dew_point_2m,precipitation,surface_pressure,vapour_pressure_deficit,wind_speed_10m,wind_speed_100m,wind_gusts_10m,soil_temperature_0_to_7cm,weather_code,cloud_cover_low",
+        "timezone": "UTC",
+        "models": "best_match",
+        "temperature_unit": "celsius",
+        "wind_speed_unit": "kmh",
+        "precipitation_unit": "mm"
+      },
+      "resolved_url": "https://historical-forecast-api.open-meteo.com/v1/forecast?latitude=35.328506&longitude=-118.997813&start_date=2025-12-30&end_date=2026-02-02&hourly=temperature_2m%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Csurface_pressure%2Cvapour_pressure_deficit%2Cwind_speed_10m%2Cwind_speed_100m%2Cwind_gusts_10m%2Csoil_temperature_0_to_7cm%2Cweather_code%2Ccloud_cover_low&timezone=UTC&models=best_match&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "retrieved_utc": "2026-08-16T06:06:11.569835Z",
+      "http_status": 200,
+      "rows": 840,
+      "sha256": "d7282783412a1d1c97333faf977167eb81ccee255d4390d8ace4509adca7dcc8",
+      "raw_path": "raw_snapshots/historical_forecast/location_10_2_2025-12-30_2026-02-02_attempt1_d7282783412a.json",
+      "attempt": 1
+    },
+    {
+      "kind": "historical_forecast",
+      "site": "location_10",
+      "source_url": "https://historical-forecast-api.open-meteo.com/v1/forecast",
+      "params": {
+        "latitude": 35.328506,
+        "longitude": -118.997813,
+        "start_date": "2026-01-30",
+        "end_date": "2026-03-02",
+        "hourly": "temperature_2m,relative_humidity_2m,dew_point_2m,precipitation,surface_pressure,vapour_pressure_deficit,wind_speed_10m,wind_speed_100m,wind_gusts_10m,soil_temperature_0_to_7cm,weather_code,cloud_cover_low",
+        "timezone": "UTC",
+        "models": "best_match",
+        "temperature_unit": "celsius",
+        "wind_speed_unit": "kmh",
+        "precipitation_unit": "mm"
+      },
+      "resolved_url": "https://historical-forecast-api.open-meteo.com/v1/forecast?latitude=35.328506&longitude=-118.997813&start_date=2026-01-30&end_date=2026-03-02&hourly=temperature_2m%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Csurface_pressure%2Cvapour_pressure_deficit%2Cwind_speed_10m%2Cwind_speed_100m%2Cwind_gusts_10m%2Csoil_temperature_0_to_7cm%2Cweather_code%2Ccloud_cover_low&timezone=UTC&models=best_match&temperature_unit=celsius&wind_speed_unit=kmh&precipitation_unit=mm",
+      "retrieved_utc": "2026-08-16T06:06:15.148410Z",
+      "http_status": 200,
+      "rows": 768,
+      "sha256": "044993d07623215313fefb54e5e38385cf5be5cad760547006ad652014ce37c2",
+      "raw_path": "raw_snapshots/historical_forecast/location_10_3_2026-01-30_2026-03-02_attempt1_044993d07623.json",
+      "attempt": 1
+    },
+    {
+      "kind": "iem_metar",
+      "site": "location_10",
+      "source_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py",
+      "params": [
+        [
+          "station",
+          "BFL"
+        ],
+        [
+          "data",
+          "vsby"
+        ],
+        [
+          "year1",
+          2025
+        ],
+        [
+          "month1",
+          11
+        ],
+        [
+          "day1",
+          30
+        ],
+        [
+          "year2",
+          2025
+        ],
+        [
+          "month2",
+          12
+        ],
+        [
+          "day2",
+          10
+        ],
+        [
+          "tz",
+          "UTC"
+        ],
+        [
+          "format",
+          "onlycomma"
+        ],
+        [
+          "latlon",
+          "no"
+        ],
+        [
+          "elev",
+          "no"
+        ],
+        [
+          "missing",
+          "empty"
+        ],
+        [
+          "trace",
+          "empty"
+        ],
+        [
+          "direct",
+          "no"
+        ],
+        [
+          "report_type",
+          "3"
+        ],
+        [
+          "report_type",
+          "4"
+        ]
+      ],
+      "resolved_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py?station=BFL&data=vsby&year1=2025&month1=11&day1=30&year2=2025&month2=12&day2=10&tz=UTC&format=onlycomma&latlon=no&elev=no&missing=empty&trace=empty&direct=no&report_type=3&report_type=4",
+      "retrieved_utc": "2026-08-16T06:06:17.371863Z",
+      "http_status": 200,
+      "rows": 357,
+      "sha256": "88638c09860f20c6479013fdde05989120af7991e418bec40c65b027669dac1d",
+      "raw_path": "raw_snapshots/iem_metar/location_10_1_20251130_20251210_attempt1_88638c09860f.csv",
+      "attempt": 1
+    },
+    {
+      "kind": "iem_metar",
+      "site": "location_10",
+      "source_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py",
+      "params": [
+        [
+          "station",
+          "BFL"
+        ],
+        [
+          "data",
+          "vsby"
+        ],
+        [
+          "year1",
+          2025
+        ],
+        [
+          "month1",
+          12
+        ],
+        [
+          "day1",
+          10
+        ],
+        [
+          "year2",
+          2025
+        ],
+        [
+          "month2",
+          12
+        ],
+        [
+          "day2",
+          20
+        ],
+        [
+          "tz",
+          "UTC"
+        ],
+        [
+          "format",
+          "onlycomma"
+        ],
+        [
+          "latlon",
+          "no"
+        ],
+        [
+          "elev",
+          "no"
+        ],
+        [
+          "missing",
+          "empty"
+        ],
+        [
+          "trace",
+          "empty"
+        ],
+        [
+          "direct",
+          "no"
+        ],
+        [
+          "report_type",
+          "3"
+        ],
+        [
+          "report_type",
+          "4"
+        ]
+      ],
+      "resolved_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py?station=BFL&data=vsby&year1=2025&month1=12&day1=10&year2=2025&month2=12&day2=20&tz=UTC&format=onlycomma&latlon=no&elev=no&missing=empty&trace=empty&direct=no&report_type=3&report_type=4",
+      "retrieved_utc": "2026-08-16T06:06:21.498654Z",
+      "http_status": 200,
+      "rows": 427,
+      "sha256": "0f2fbac18ed8e66077793b6b05c3a9c5671f664c37220d43620b483e99d1c6fa",
+      "raw_path": "raw_snapshots/iem_metar/location_10_2_20251210_20251220_attempt1_0f2fbac18ed8.csv",
+      "attempt": 1
+    },
+    {
+      "kind": "iem_metar",
+      "site": "location_10",
+      "source_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py",
+      "params": [
+        [
+          "station",
+          "BFL"
+        ],
+        [
+          "data",
+          "vsby"
+        ],
+        [
+          "year1",
+          2025
+        ],
+        [
+          "month1",
+          12
+        ],
+        [
+          "day1",
+          20
+        ],
+        [
+          "year2",
+          2025
+        ],
+        [
+          "month2",
+          12
+        ],
+        [
+          "day2",
+          30
+        ],
+        [
+          "tz",
+          "UTC"
+        ],
+        [
+          "format",
+          "onlycomma"
+        ],
+        [
+          "latlon",
+          "no"
+        ],
+        [
+          "elev",
+          "no"
+        ],
+        [
+          "missing",
+          "empty"
+        ],
+        [
+          "trace",
+          "empty"
+        ],
+        [
+          "direct",
+          "no"
+        ],
+        [
+          "report_type",
+          "3"
+        ],
+        [
+          "report_type",
+          "4"
+        ]
+      ],
+      "resolved_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py?station=BFL&data=vsby&year1=2025&month1=12&day1=20&year2=2025&month2=12&day2=30&tz=UTC&format=onlycomma&latlon=no&elev=no&missing=empty&trace=empty&direct=no&report_type=3&report_type=4",
+      "retrieved_utc": "2026-08-16T06:06:25.335535Z",
+      "http_status": 200,
+      "rows": 317,
+      "sha256": "c93e7f5d11e4db81b71283aac58bf92b4e8718cc7eabf5d9e76d8ed70061189d",
+      "raw_path": "raw_snapshots/iem_metar/location_10_3_20251220_20251230_attempt1_c93e7f5d11e4.csv",
+      "attempt": 1
+    },
+    {
+      "kind": "iem_metar",
+      "site": "location_10",
+      "source_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py",
+      "params": [
+        [
+          "station",
+          "BFL"
+        ],
+        [
+          "data",
+          "vsby"
+        ],
+        [
+          "year1",
+          2025
+        ],
+        [
+          "month1",
+          12
+        ],
+        [
+          "day1",
+          30
+        ],
+        [
+          "year2",
+          2026
+        ],
+        [
+          "month2",
+          1
+        ],
+        [
+          "day2",
+          9
+        ],
+        [
+          "tz",
+          "UTC"
+        ],
+        [
+          "format",
+          "onlycomma"
+        ],
+        [
+          "latlon",
+          "no"
+        ],
+        [
+          "elev",
+          "no"
+        ],
+        [
+          "missing",
+          "empty"
+        ],
+        [
+          "trace",
+          "empty"
+        ],
+        [
+          "direct",
+          "no"
+        ],
+        [
+          "report_type",
+          "3"
+        ],
+        [
+          "report_type",
+          "4"
+        ]
+      ],
+      "resolved_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py?station=BFL&data=vsby&year1=2025&month1=12&day1=30&year2=2026&month2=1&day2=9&tz=UTC&format=onlycomma&latlon=no&elev=no&missing=empty&trace=empty&direct=no&report_type=3&report_type=4",
+      "retrieved_utc": "2026-08-16T06:06:29.468234Z",
+      "http_status": 200,
+      "rows": 362,
+      "sha256": "35b33e81fdfbece320669e9b9692ae923b14ac09cc9143a0bc0986319d845b7e",
+      "raw_path": "raw_snapshots/iem_metar/location_10_4_20251230_20260109_attempt1_35b33e81fdfb.csv",
+      "attempt": 1
+    },
+    {
+      "kind": "iem_metar",
+      "site": "location_10",
+      "source_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py",
+      "params": [
+        [
+          "station",
+          "BFL"
+        ],
+        [
+          "data",
+          "vsby"
+        ],
+        [
+          "year1",
+          2026
+        ],
+        [
+          "month1",
+          1
+        ],
+        [
+          "day1",
+          9
+        ],
+        [
+          "year2",
+          2026
+        ],
+        [
+          "month2",
+          1
+        ],
+        [
+          "day2",
+          19
+        ],
+        [
+          "tz",
+          "UTC"
+        ],
+        [
+          "format",
+          "onlycomma"
+        ],
+        [
+          "latlon",
+          "no"
+        ],
+        [
+          "elev",
+          "no"
+        ],
+        [
+          "missing",
+          "empty"
+        ],
+        [
+          "trace",
+          "empty"
+        ],
+        [
+          "direct",
+          "no"
+        ],
+        [
+          "report_type",
+          "3"
+        ],
+        [
+          "report_type",
+          "4"
+        ]
+      ],
+      "resolved_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py?station=BFL&data=vsby&year1=2026&month1=1&day1=9&year2=2026&month2=1&day2=19&tz=UTC&format=onlycomma&latlon=no&elev=no&missing=empty&trace=empty&direct=no&report_type=3&report_type=4",
+      "retrieved_utc": "2026-08-16T06:06:33.240619Z",
+      "http_status": 200,
+      "rows": 392,
+      "sha256": "2a92344a9fa541c5683ffbc9b45bba4d10e490416aa6352e2984bf250cd1296e",
+      "raw_path": "raw_snapshots/iem_metar/location_10_5_20260109_20260119_attempt1_2a92344a9fa5.csv",
+      "attempt": 1
+    },
+    {
+      "kind": "iem_metar",
+      "site": "location_10",
+      "source_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py",
+      "params": [
+        [
+          "station",
+          "BFL"
+        ],
+        [
+          "data",
+          "vsby"
+        ],
+        [
+          "year1",
+          2026
+        ],
+        [
+          "month1",
+          1
+        ],
+        [
+          "day1",
+          19
+        ],
+        [
+          "year2",
+          2026
+        ],
+        [
+          "month2",
+          1
+        ],
+        [
+          "day2",
+          29
+        ],
+        [
+          "tz",
+          "UTC"
+        ],
+        [
+          "format",
+          "onlycomma"
+        ],
+        [
+          "latlon",
+          "no"
+        ],
+        [
+          "elev",
+          "no"
+        ],
+        [
+          "missing",
+          "empty"
+        ],
+        [
+          "trace",
+          "empty"
+        ],
+        [
+          "direct",
+          "no"
+        ],
+        [
+          "report_type",
+          "3"
+        ],
+        [
+          "report_type",
+          "4"
+        ]
+      ],
+      "resolved_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py?station=BFL&data=vsby&year1=2026&month1=1&day1=19&year2=2026&month2=1&day2=29&tz=UTC&format=onlycomma&latlon=no&elev=no&missing=empty&trace=empty&direct=no&report_type=3&report_type=4",
+      "retrieved_utc": "2026-08-16T06:06:37.051523Z",
+      "http_status": 200,
+      "rows": 412,
+      "sha256": "59fcf6eb7699ee3a809cb0846029d7a473983392f927779c3f796bfb253cc132",
+      "raw_path": "raw_snapshots/iem_metar/location_10_6_20260119_20260129_attempt1_59fcf6eb7699.csv",
+      "attempt": 1
+    },
+    {
+      "kind": "iem_metar",
+      "site": "location_10",
+      "source_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py",
+      "params": [
+        [
+          "station",
+          "BFL"
+        ],
+        [
+          "data",
+          "vsby"
+        ],
+        [
+          "year1",
+          2026
+        ],
+        [
+          "month1",
+          1
+        ],
+        [
+          "day1",
+          29
+        ],
+        [
+          "year2",
+          2026
+        ],
+        [
+          "month2",
+          2
+        ],
+        [
+          "day2",
+          8
+        ],
+        [
+          "tz",
+          "UTC"
+        ],
+        [
+          "format",
+          "onlycomma"
+        ],
+        [
+          "latlon",
+          "no"
+        ],
+        [
+          "elev",
+          "no"
+        ],
+        [
+          "missing",
+          "empty"
+        ],
+        [
+          "trace",
+          "empty"
+        ],
+        [
+          "direct",
+          "no"
+        ],
+        [
+          "report_type",
+          "3"
+        ],
+        [
+          "report_type",
+          "4"
+        ]
+      ],
+      "resolved_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py?station=BFL&data=vsby&year1=2026&month1=1&day1=29&year2=2026&month2=2&day2=8&tz=UTC&format=onlycomma&latlon=no&elev=no&missing=empty&trace=empty&direct=no&report_type=3&report_type=4",
+      "retrieved_utc": "2026-08-16T06:06:40.895467Z",
+      "http_status": 200,
+      "rows": 381,
+      "sha256": "39bdb52bc49d0f695edc60a1d6c9a0bc71bcad533b60ea4d538883648cf70d62",
+      "raw_path": "raw_snapshots/iem_metar/location_10_7_20260129_20260208_attempt1_39bdb52bc49d.csv",
+      "attempt": 1
+    },
+    {
+      "kind": "iem_metar",
+      "site": "location_10",
+      "source_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py",
+      "params": [
+        [
+          "station",
+          "BFL"
+        ],
+        [
+          "data",
+          "vsby"
+        ],
+        [
+          "year1",
+          2026
+        ],
+        [
+          "month1",
+          2
+        ],
+        [
+          "day1",
+          8
+        ],
+        [
+          "year2",
+          2026
+        ],
+        [
+          "month2",
+          2
+        ],
+        [
+          "day2",
+          18
+        ],
+        [
+          "tz",
+          "UTC"
+        ],
+        [
+          "format",
+          "onlycomma"
+        ],
+        [
+          "latlon",
+          "no"
+        ],
+        [
+          "elev",
+          "no"
+        ],
+        [
+          "missing",
+          "empty"
+        ],
+        [
+          "trace",
+          "empty"
+        ],
+        [
+          "direct",
+          "no"
+        ],
+        [
+          "report_type",
+          "3"
+        ],
+        [
+          "report_type",
+          "4"
+        ]
+      ],
+      "resolved_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py?station=BFL&data=vsby&year1=2026&month1=2&day1=8&year2=2026&month2=2&day2=18&tz=UTC&format=onlycomma&latlon=no&elev=no&missing=empty&trace=empty&direct=no&report_type=3&report_type=4",
+      "retrieved_utc": "2026-08-16T06:06:44.861636Z",
+      "http_status": 200,
+      "rows": 257,
+      "sha256": "9205d9c33d31c454fb72221d2196df59d59e64c2e245e1cb139938d2bce3bc62",
+      "raw_path": "raw_snapshots/iem_metar/location_10_8_20260208_20260218_attempt1_9205d9c33d31.csv",
+      "attempt": 1
+    },
+    {
+      "kind": "iem_metar",
+      "site": "location_10",
+      "source_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py",
+      "params": [
+        [
+          "station",
+          "BFL"
+        ],
+        [
+          "data",
+          "vsby"
+        ],
+        [
+          "year1",
+          2026
+        ],
+        [
+          "month1",
+          2
+        ],
+        [
+          "day1",
+          18
+        ],
+        [
+          "year2",
+          2026
+        ],
+        [
+          "month2",
+          2
+        ],
+        [
+          "day2",
+          28
+        ],
+        [
+          "tz",
+          "UTC"
+        ],
+        [
+          "format",
+          "onlycomma"
+        ],
+        [
+          "latlon",
+          "no"
+        ],
+        [
+          "elev",
+          "no"
+        ],
+        [
+          "missing",
+          "empty"
+        ],
+        [
+          "trace",
+          "empty"
+        ],
+        [
+          "direct",
+          "no"
+        ],
+        [
+          "report_type",
+          "3"
+        ],
+        [
+          "report_type",
+          "4"
+        ]
+      ],
+      "resolved_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py?station=BFL&data=vsby&year1=2026&month1=2&day1=18&year2=2026&month2=2&day2=28&tz=UTC&format=onlycomma&latlon=no&elev=no&missing=empty&trace=empty&direct=no&report_type=3&report_type=4",
+      "retrieved_utc": "2026-08-16T06:06:48.590725Z",
+      "http_status": 200,
+      "rows": 254,
+      "sha256": "e75e63944b07956d154a34d8398c5ab9605254f7ce66646ee46cb0693daebaaa",
+      "raw_path": "raw_snapshots/iem_metar/location_10_9_20260218_20260228_attempt1_e75e63944b07.csv",
+      "attempt": 1
+    },
+    {
+      "kind": "iem_metar",
+      "site": "location_10",
+      "source_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py",
+      "params": [
+        [
+          "station",
+          "BFL"
+        ],
+        [
+          "data",
+          "vsby"
+        ],
+        [
+          "year1",
+          2026
+        ],
+        [
+          "month1",
+          2
+        ],
+        [
+          "day1",
+          28
+        ],
+        [
+          "year2",
+          2026
+        ],
+        [
+          "month2",
+          3
+        ],
+        [
+          "day2",
+          2
+        ],
+        [
+          "tz",
+          "UTC"
+        ],
+        [
+          "format",
+          "onlycomma"
+        ],
+        [
+          "latlon",
+          "no"
+        ],
+        [
+          "elev",
+          "no"
+        ],
+        [
+          "missing",
+          "empty"
+        ],
+        [
+          "trace",
+          "empty"
+        ],
+        [
+          "direct",
+          "no"
+        ],
+        [
+          "report_type",
+          "3"
+        ],
+        [
+          "report_type",
+          "4"
+        ]
+      ],
+      "resolved_url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py?station=BFL&data=vsby&year1=2026&month1=2&day1=28&year2=2026&month2=3&day2=2&tz=UTC&format=onlycomma&latlon=no&elev=no&missing=empty&trace=empty&direct=no&report_type=3&report_type=4",
+      "retrieved_utc": "2026-08-16T06:06:52.405600Z",
+      "http_status": 200,
+      "rows": 48,
+      "sha256": "17b6672e9e65621c98e191dc300a80f7000f79288ca1680cab3dbdb4c521af61",
+      "raw_path": "raw_snapshots/iem_metar/location_10_10_20260228_20260302_attempt1_17b6672e9e65.csv",
+      "attempt": 1
+    }
+  ]
+}

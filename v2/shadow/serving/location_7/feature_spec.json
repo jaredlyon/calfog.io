@@ -1,0 +1,37 @@
+{
+  "feature_order": [
+    "temperature_2m",
+    "relative_humidity_2m",
+    "dew_point_2m",
+    "precipitation",
+    "surface_pressure",
+    "vapour_pressure_deficit",
+    "wind_speed_10m",
+    "wind_speed_100m",
+    "wind_gusts_10m",
+    "soil_temperature_0_to_7cm",
+    "weather_code",
+    "cloud_cover_low",
+    "hour_sin",
+    "hour_cos",
+    "doy_sin",
+    "doy_cos"
+  ],
+  "window_hours": 24,
+  "oldest_to_newest": true,
+  "window_end_inclusive": true,
+  "issue_time_contract": {
+    "nowcast": "trailing 24 hourly values ending at t predict fog at t",
+    "lead_time": "trailing 24 hourly values ending 18:00 America/Los_Angeles D predict any fog D+1 00:00-09:00"
+  },
+  "trained_engineered_feature_finding": "The approved v2/full checkpoint feature_names contain none of dewpoint_depression/cooling_rate_6h/cooling_rate_12h/previous_night_low. They are reconstructed as audit diagnostics but MUST NOT be inserted into these weights.",
+  "diagnostics_not_model_inputs": [
+    "dewpoint_depression",
+    "cooling_rate_6h",
+    "cooling_rate_12h",
+    "previous_night_low"
+  ],
+  "preprocessing": "per-feature median imputer then StandardScaler, fitted on all labeled history for final refit",
+  "feature_end_rule": "feature_end_time_utc <= issue_time_utc",
+  "timezone": "America/Los_Angeles issue clock; logs UTC"
+}
