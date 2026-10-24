@@ -1,0 +1,701 @@
+{
+  "started_utc": "2026-10-24T02:19:52.687439+00:00",
+  "device": "NVIDIA GeForce RTX 5070",
+  "cuda": true,
+  "seed": 20260228,
+  "ray_tune_trials": 80,
+  "per_site": {
+    "location_6": {
+      "tasks": {
+        "nowcast": {
+          "tuning_trials": 8,
+          "best_config": {
+            "channels": 32,
+            "kernel": 5,
+            "dropout": 0.3,
+            "lr": 0.0007220829094028524,
+            "weight_decay": 1e-05,
+            "batch_size": 256,
+            "max_neg": 25000
+          },
+          "family_info": {
+            "climatology": {
+              "folds": [
+                {},
+                {},
+                {}
+              ]
+            },
+            "xgboost": {
+              "folds": [
+                {
+                  "best_iteration": 216
+                },
+                {
+                  "best_iteration": 187
+                },
+                {
+                  "best_iteration": 73
+                }
+              ]
+            },
+            "random_forest": {
+              "folds": [
+                {},
+                {},
+                {}
+              ]
+            },
+            "temporal_cnn": {
+              "folds": [
+                {
+                  "cnn_best_val_nll": 0.9030714631080627,
+                  "cnn_best_val_ap": 0.26644252071255703,
+                  "cnn_epochs": 6
+                },
+                {
+                  "cnn_best_val_nll": 0.9822658896446228,
+                  "cnn_best_val_ap": 0.3086057940140671,
+                  "cnn_epochs": 6
+                },
+                {
+                  "cnn_best_val_nll": 1.1095830202102661,
+                  "cnn_best_val_ap": 0.3347659359453215,
+                  "cnn_epochs": 6
+                }
+              ]
+            }
+          },
+          "serving_refit": {
+            "cnn_best_val_nll": 1.1333160400390625,
+            "cnn_best_val_ap": 0.2884373182327579,
+            "cnn_epochs": 3,
+            "training_rows": 159535,
+            "validation_rows": 34167
+          }
+        },
+        "lead_time": {
+          "tuning_trials": 8,
+          "best_config": {
+            "channels": 32,
+            "kernel": 5,
+            "dropout": 0.3,
+            "lr": 0.0007220829094028524,
+            "weight_decay": 1e-05,
+            "batch_size": 256,
+            "max_neg": 25000
+          },
+          "family_info": {
+            "climatology": {
+              "folds": [
+                {},
+                {},
+                {}
+              ]
+            },
+            "xgboost": {
+              "folds": [
+                {
+                  "best_iteration": 94
+                },
+                {
+                  "best_iteration": 91
+                },
+                {
+                  "best_iteration": 83
+                }
+              ]
+            },
+            "random_forest": {
+              "folds": [
+                {},
+                {},
+                {}
+              ]
+            },
+            "temporal_cnn": {
+              "folds": [
+                {
+                  "cnn_best_val_nll": 1.932427167892456,
+                  "cnn_best_val_ap": 0.5190236940193603,
+                  "cnn_epochs": 6
+                },
+                {
+                  "cnn_best_val_nll": 1.959435224533081,
+                  "cnn_best_val_ap": 0.4751188411354444,
+                  "cnn_epochs": 6
+                },
+                {
+                  "cnn_best_val_nll": 1.9047131538391113,
+                  "cnn_best_val_ap": 0.5427606337902287,
+                  "cnn_epochs": 6
+                }
+              ]
+            }
+          },
+          "serving_refit": {
+            "cnn_best_val_nll": 1.901985764503479,
+            "cnn_best_val_ap": 0.5363306312528211,
+            "cnn_epochs": 6,
+            "training_rows": 6334,
+            "validation_rows": 1357
+          }
+        }
+      }
+    },
+    "location_7": {
+      "tasks": {
+        "nowcast": {
+          "tuning_trials": 8,
+          "best_config": {
+            "channels": 32,
+            "kernel": 5,
+            "dropout": 0.3,
+            "lr": 0.0007220829094028524,
+            "weight_decay": 1e-05,
+            "batch_size": 256,
+            "max_neg": 25000
+          },
+          "family_info": {
+            "climatology": {
+              "folds": [
+                {},
+                {},
+                {}
+              ]
+            },
+            "xgboost": {
+              "folds": [
+                {
+                  "best_iteration": 301
+                },
+                {
+                  "best_iteration": 347
+                },
+                {
+                  "best_iteration": 313
+                }
+              ]
+            },
+            "random_forest": {
+              "folds": [
+                {},
+                {},
+                {}
+              ]
+            },
+            "temporal_cnn": {
+              "folds": [
+                {
+                  "cnn_best_val_nll": 1.1792336702346802,
+                  "cnn_best_val_ap": 0.38599367117291616,
+                  "cnn_epochs": 6
+                },
+                {
+                  "cnn_best_val_nll": 1.0609445571899414,
+                  "cnn_best_val_ap": 0.308115968540259,
+                  "cnn_epochs": 6
+                },
+                {
+                  "cnn_best_val_nll": 0.9969223737716675,
+                  "cnn_best_val_ap": 0.16903143635397644,
+                  "cnn_epochs": 4
+                }
+              ]
+            }
+          },
+          "serving_refit": {
+            "cnn_best_val_nll": 0.9914458394050598,
+            "cnn_best_val_ap": 0.16735240013920813,
+            "cnn_epochs": 5,
+            "training_rows": 278934,
+            "validation_rows": 59758
+          }
+        },
+        "lead_time": {
+          "tuning_trials": 8,
+          "best_config": {
+            "channels": 16,
+            "kernel": 3,
+            "dropout": 0.3,
+            "lr": 0.0010064733403965373,
+            "weight_decay": 1e-05,
+            "batch_size": 256,
+            "max_neg": 25000
+          },
+          "family_info": {
+            "climatology": {
+              "folds": [
+                {},
+                {},
+                {}
+              ]
+            },
+            "xgboost": {
+              "folds": [
+                {
+                  "best_iteration": 80
+                },
+                {
+                  "best_iteration": 129
+                },
+                {
+                  "best_iteration": 137
+                }
+              ]
+            },
+            "random_forest": {
+              "folds": [
+                {},
+                {},
+                {}
+              ]
+            },
+            "temporal_cnn": {
+              "folds": [
+                {
+                  "cnn_best_val_nll": 1.8557167053222656,
+                  "cnn_best_val_ap": 0.2845122499996248,
+                  "cnn_epochs": 6
+                },
+                {
+                  "cnn_best_val_nll": 1.8863469362258911,
+                  "cnn_best_val_ap": 0.4470466548861575,
+                  "cnn_epochs": 6
+                },
+                {
+                  "cnn_best_val_nll": 1.7373604774475098,
+                  "cnn_best_val_ap": 0.3128285663383377,
+                  "cnn_epochs": 6
+                }
+              ]
+            }
+          },
+          "serving_refit": {
+            "cnn_best_val_nll": 1.7345354557037354,
+            "cnn_best_val_ap": 0.29466044149300924,
+            "cnn_epochs": 6,
+            "training_rows": 11193,
+            "validation_rows": 2398
+          }
+        }
+      }
+    },
+    "location_8": {
+      "tasks": {
+        "nowcast": {
+          "tuning_trials": 8,
+          "best_config": {
+            "channels": 48,
+            "kernel": 3,
+            "dropout": 0.15,
+            "lr": 0.00032290842664051985,
+            "weight_decay": 0.0001,
+            "batch_size": 256,
+            "max_neg": 25000
+          },
+          "family_info": {
+            "climatology": {
+              "folds": [
+                {},
+                {},
+                {}
+              ]
+            },
+            "xgboost": {
+              "folds": [
+                {
+                  "best_iteration": 130
+                },
+                {
+                  "best_iteration": 318
+                },
+                {
+                  "best_iteration": 174
+                }
+              ]
+            },
+            "random_forest": {
+              "folds": [
+                {},
+                {},
+                {}
+              ]
+            },
+            "temporal_cnn": {
+              "folds": [
+                {
+                  "cnn_best_val_nll": 1.2452924251556396,
+                  "cnn_best_val_ap": 0.47345940666323033,
+                  "cnn_epochs": 6
+                },
+                {
+                  "cnn_best_val_nll": 1.118334174156189,
+                  "cnn_best_val_ap": 0.4024576605883302,
+                  "cnn_epochs": 6
+                },
+                {
+                  "cnn_best_val_nll": 1.1877385377883911,
+                  "cnn_best_val_ap": 0.4114615040655506,
+                  "cnn_epochs": 5
+                }
+              ]
+            }
+          },
+          "serving_refit": {
+            "cnn_best_val_nll": 1.1618006229400635,
+            "cnn_best_val_ap": 0.39839142077441353,
+            "cnn_epochs": 6,
+            "training_rows": 220924,
+            "validation_rows": 47322
+          }
+        },
+        "lead_time": {
+          "tuning_trials": 8,
+          "best_config": {
+            "channels": 32,
+            "kernel": 5,
+            "dropout": 0.3,
+            "lr": 0.0007220829094028524,
+            "weight_decay": 1e-05,
+            "batch_size": 256,
+            "max_neg": 25000
+          },
+          "family_info": {
+            "climatology": {
+              "folds": [
+                {},
+                {},
+                {}
+              ]
+            },
+            "xgboost": {
+              "folds": [
+                {
+                  "best_iteration": 102
+                },
+                {
+                  "best_iteration": 93
+                },
+                {
+                  "best_iteration": 81
+                }
+              ]
+            },
+            "random_forest": {
+              "folds": [
+                {},
+                {},
+                {}
+              ]
+            },
+            "temporal_cnn": {
+              "folds": [
+                {
+                  "cnn_best_val_nll": 2.234492778778076,
+                  "cnn_best_val_ap": 0.5922619171501656,
+                  "cnn_epochs": 6
+                },
+                {
+                  "cnn_best_val_nll": 2.1480579376220703,
+                  "cnn_best_val_ap": 0.6266591884278543,
+                  "cnn_epochs": 6
+                },
+                {
+                  "cnn_best_val_nll": 2.1238887310028076,
+                  "cnn_best_val_ap": 0.558472910152997,
+                  "cnn_epochs": 5
+                }
+              ]
+            }
+          },
+          "serving_refit": {
+            "cnn_best_val_nll": 2.1230080127716064,
+            "cnn_best_val_ap": 0.5756284515207521,
+            "cnn_epochs": 6,
+            "training_rows": 6581,
+            "validation_rows": 1409
+          }
+        }
+      }
+    },
+    "location_9": {
+      "tasks": {
+        "nowcast": {
+          "tuning_trials": 8,
+          "best_config": {
+            "channels": 48,
+            "kernel": 3,
+            "dropout": 0.15,
+            "lr": 0.00032290842664051985,
+            "weight_decay": 0.0001,
+            "batch_size": 256,
+            "max_neg": 25000
+          },
+          "family_info": {
+            "climatology": {
+              "folds": [
+                {},
+                {},
+                {}
+              ]
+            },
+            "xgboost": {
+              "folds": [
+                {
+                  "best_iteration": 446
+                },
+                {
+                  "best_iteration": 370
+                },
+                {
+                  "best_iteration": 253
+                }
+              ]
+            },
+            "random_forest": {
+              "folds": [
+                {},
+                {},
+                {}
+              ]
+            },
+            "temporal_cnn": {
+              "folds": [
+                {
+                  "cnn_best_val_nll": 1.1015925407409668,
+                  "cnn_best_val_ap": 0.6403662568933852,
+                  "cnn_epochs": 6
+                },
+                {
+                  "cnn_best_val_nll": 1.358566164970398,
+                  "cnn_best_val_ap": 0.6061106663255925,
+                  "cnn_epochs": 6
+                },
+                {
+                  "cnn_best_val_nll": 1.360099196434021,
+                  "cnn_best_val_ap": 0.5803111110632697,
+                  "cnn_epochs": 6
+                }
+              ]
+            }
+          },
+          "serving_refit": {
+            "cnn_best_val_nll": 1.33894944190979,
+            "cnn_best_val_ap": 0.5548185360130499,
+            "cnn_epochs": 6,
+            "training_rows": 161690,
+            "validation_rows": 34629
+          }
+        },
+        "lead_time": {
+          "tuning_trials": 8,
+          "best_config": {
+            "channels": 32,
+            "kernel": 5,
+            "dropout": 0.3,
+            "lr": 0.0007220829094028524,
+            "weight_decay": 1e-05,
+            "batch_size": 256,
+            "max_neg": 25000
+          },
+          "family_info": {
+            "climatology": {
+              "folds": [
+                {},
+                {},
+                {}
+              ]
+            },
+            "xgboost": {
+              "folds": [
+                {
+                  "best_iteration": 91
+                },
+                {
+                  "best_iteration": 113
+                },
+                {
+                  "best_iteration": 98
+                }
+              ]
+            },
+            "random_forest": {
+              "folds": [
+                {},
+                {},
+                {}
+              ]
+            },
+            "temporal_cnn": {
+              "folds": [
+                {
+                  "cnn_best_val_nll": 2.246208667755127,
+                  "cnn_best_val_ap": 0.7722959311985252,
+                  "cnn_epochs": 6
+                },
+                {
+                  "cnn_best_val_nll": 2.211239814758301,
+                  "cnn_best_val_ap": 0.7297275177963588,
+                  "cnn_epochs": 6
+                },
+                {
+                  "cnn_best_val_nll": 2.0999317169189453,
+                  "cnn_best_val_ap": 0.6966841511368377,
+                  "cnn_epochs": 6
+                }
+              ]
+            }
+          },
+          "serving_refit": {
+            "cnn_best_val_nll": 2.0919392108917236,
+            "cnn_best_val_ap": 0.6896957610906541,
+            "cnn_epochs": 5,
+            "training_rows": 6358,
+            "validation_rows": 1362
+          }
+        }
+      }
+    },
+    "location_10": {
+      "tasks": {
+        "nowcast": {
+          "tuning_trials": 8,
+          "best_config": {
+            "channels": 48,
+            "kernel": 3,
+            "dropout": 0.15,
+            "lr": 0.00032290842664051985,
+            "weight_decay": 0.0001,
+            "batch_size": 256,
+            "max_neg": 25000
+          },
+          "family_info": {
+            "climatology": {
+              "folds": [
+                {},
+                {},
+                {}
+              ]
+            },
+            "xgboost": {
+              "folds": [
+                {
+                  "best_iteration": 285
+                },
+                {
+                  "best_iteration": 432
+                },
+                {
+                  "best_iteration": 276
+                }
+              ]
+            },
+            "random_forest": {
+              "folds": [
+                {},
+                {},
+                {}
+              ]
+            },
+            "temporal_cnn": {
+              "folds": [
+                {
+                  "cnn_best_val_nll": 1.163729190826416,
+                  "cnn_best_val_ap": 0.27623694175833063,
+                  "cnn_epochs": 6
+                },
+                {
+                  "cnn_best_val_nll": 0.9854447841644287,
+                  "cnn_best_val_ap": 0.19558307524220908,
+                  "cnn_epochs": 6
+                },
+                {
+                  "cnn_best_val_nll": 0.859768271446228,
+                  "cnn_best_val_ap": 0.08773811486018977,
+                  "cnn_epochs": 6
+                }
+              ]
+            }
+          },
+          "serving_refit": {
+            "cnn_best_val_nll": 0.8692594766616821,
+            "cnn_best_val_ap": 0.09976473436773696,
+            "cnn_epochs": 6,
+            "training_rows": 276547,
+            "validation_rows": 59246
+          }
+        },
+        "lead_time": {
+          "tuning_trials": 8,
+          "best_config": {
+            "channels": 32,
+            "kernel": 5,
+            "dropout": 0.3,
+            "lr": 0.0007220829094028524,
+            "weight_decay": 1e-05,
+            "batch_size": 256,
+            "max_neg": 25000
+          },
+          "family_info": {
+            "climatology": {
+              "folds": [
+                {},
+                {},
+                {}
+              ]
+            },
+            "xgboost": {
+              "folds": [
+                {
+                  "best_iteration": 96
+                },
+                {
+                  "best_iteration": 92
+                },
+                {
+                  "best_iteration": 132
+                }
+              ]
+            },
+            "random_forest": {
+              "folds": [
+                {},
+                {},
+                {}
+              ]
+            },
+            "temporal_cnn": {
+              "folds": [
+                {
+                  "cnn_best_val_nll": 1.708935260772705,
+                  "cnn_best_val_ap": 0.2617780267899199,
+                  "cnn_epochs": 5
+                },
+                {
+                  "cnn_best_val_nll": 1.6618618965148926,
+                  "cnn_best_val_ap": 0.29635713721408513,
+                  "cnn_epochs": 6
+                },
+                {
+                  "cnn_best_val_nll": 1.5375601053237915,
+                  "cnn_best_val_ap": 0.19259859789883885,
+                  "cnn_epochs": 6
+                }
+              ]
+            }
+          },
+          "serving_refit": {
+            "cnn_best_val_nll": 1.539207935333252,
+            "cnn_best_val_ap": 0.16316569482772494,
+            "cnn_epochs": 5,
+            "training_rows": 10543,
+            "validation_rows": 2259
+          }
+        }
+      }
+    }
+  },
+  "completed_utc": "2026-10-24T03:10:09.334588+00:00",
+  "elapsed_seconds": 3016.647149
+}

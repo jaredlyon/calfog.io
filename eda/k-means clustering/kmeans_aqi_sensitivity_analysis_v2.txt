@@ -1,0 +1,562 @@
+Selected k: 5 (V1 elbow rule; first site's full weather cohort)
+
+V1 elbow rule is kept as-is, including its +2 offset.
+
+LOCATION 10
+--------------------------------------------------------------------------------
+WITHOUT AQI (all rows, no AQI features):
+  Records: 410328
+  Inertia: 2215297.31
+  Silhouette Score: 0.2422
+  Davies-Bouldin Index: 1.2531
+
+  Feature Variance Across Clusters (sorted, 12 features):
+    weather_code: 30.10%
+    precipitation: 12.21%
+    vapour_pressure_deficit: 8.01%
+    relative_humidity_2m: 7.74%
+    soil_temperature_0_to_7cm: 7.60%
+    temperature_2m: 7.47%
+    wind_speed_100m: 5.89%
+    wind_speed_10m: 5.85%
+    cloud_cover_low: 5.47%
+    wind_gusts_10m: 5.38%
+    surface_pressure: 2.73%
+    dew_point_2m: 1.56%
+
+  Descriptive cluster fog rates (hourly GHCNh category <=4; not fitting inputs):
+    Cluster  Records  Labeled records  Fog rate
+    0  73468  72952  0.0004
+    1  41657  41409  0.0034
+    2  143418  141504  0.0565
+    3  21000  20740  0.0293
+    4  130785  128532  0.0028
+
+WITH AQI (filtered rows, with AQI features):
+  Records: 36992
+  Inertia: 348512.30
+  Silhouette Score: 0.1703
+  Davies-Bouldin Index: 1.5338
+
+  Feature Variance Across Clusters (sorted, 17 features):
+    weather_code: 23.70%
+    pm10: 15.52%
+    dust: 14.49%
+    precipitation: 7.69%
+    pm2_5: 7.33%
+    relative_humidity_2m: 4.73%
+    soil_temperature_0_to_7cm: 4.42%
+    temperature_2m: 4.26%
+    vapour_pressure_deficit: 4.00%
+    cloud_cover_low: 3.06%
+    wind_gusts_10m: 2.41%
+    surface_pressure: 2.37%
+    wind_speed_10m: 1.91%
+    wind_speed_100m: 1.66%
+    nitrogen_dioxide: 1.05%
+    aerosol_optical_depth: 0.84%
+    dew_point_2m: 0.57%
+
+  Descriptive cluster fog rates (hourly GHCNh category <=4; not fitting inputs):
+    Cluster  Records  Labeled records  Fog rate
+    0  13007  12925  0.0333
+    1  12890  12852  0.0003
+    2  1595  1592  0.0000
+    3  7931  7914  0.0003
+    4  1569  1540  0.0130
+
+WITHOUT AQI REDUCED (filtered rows, no AQI features):
+  Records: 36992
+  Inertia: 202238.44
+  Silhouette Score: 0.2364
+  Davies-Bouldin Index: 1.2315
+
+  Feature Variance Across Clusters (sorted, 12 features):
+    weather_code: 34.65%
+    precipitation: 11.75%
+    vapour_pressure_deficit: 7.65%
+    relative_humidity_2m: 7.24%
+    soil_temperature_0_to_7cm: 7.15%
+    temperature_2m: 7.13%
+    wind_speed_10m: 5.47%
+    wind_speed_100m: 5.19%
+    wind_gusts_10m: 5.11%
+    cloud_cover_low: 4.39%
+    surface_pressure: 3.37%
+    dew_point_2m: 0.90%
+
+  Descriptive cluster fog rates (hourly GHCNh category <=4; not fitting inputs):
+    Cluster  Records  Labeled records  Fog rate
+    0  1529  1500  0.0133
+    1  4139  4131  0.0007
+    2  12114  12072  0.0002
+    3  6817  6808  0.0000
+    4  12393  12312  0.0351
+
+MATCHED METRIC DELTAS (with-AQI minus without-AQI reduced):
+  Inertia: +146273.8597
+  Silhouette Score: -0.0661
+  Davies-Bouldin Index: +0.3023
+
+================================================================================
+
+LOCATION 6
+--------------------------------------------------------------------------------
+WITHOUT AQI (all rows, no AQI features):
+  Records: 410328
+  Inertia: 2135246.53
+  Silhouette Score: 0.2315
+  Davies-Bouldin Index: 1.2467
+
+  Feature Variance Across Clusters (sorted, 12 features):
+    weather_code: 28.92%
+    precipitation: 13.93%
+    vapour_pressure_deficit: 8.25%
+    soil_temperature_0_to_7cm: 7.75%
+    temperature_2m: 7.56%
+    relative_humidity_2m: 7.55%
+    cloud_cover_low: 5.98%
+    wind_gusts_10m: 5.29%
+    wind_speed_10m: 5.09%
+    wind_speed_100m: 4.59%
+    surface_pressure: 3.42%
+    dew_point_2m: 1.69%
+
+  Descriptive cluster fog rates (hourly GHCNh category <=4; not fitting inputs):
+    Cluster  Records  Labeled records  Fog rate
+    0  74589  44603  0.0017
+    1  127110  72966  0.0908
+    2  108395  58109  0.0034
+    3  22611  11920  0.0172
+    4  77623  49883  0.0004
+
+WITH AQI (filtered rows, with AQI features):
+  Records: 36992
+  Inertia: 347376.06
+  Silhouette Score: 0.1887
+  Davies-Bouldin Index: 1.4737
+
+  Feature Variance Across Clusters (sorted, 17 features):
+    weather_code: 25.07%
+    dust: 15.54%
+    pm10: 10.62%
+    precipitation: 9.63%
+    soil_temperature_0_to_7cm: 5.21%
+    relative_humidity_2m: 5.17%
+    vapour_pressure_deficit: 5.13%
+    temperature_2m: 5.04%
+    wind_gusts_10m: 3.03%
+    surface_pressure: 2.67%
+    wind_speed_10m: 2.67%
+    cloud_cover_low: 2.63%
+    wind_speed_100m: 2.62%
+    nitrogen_dioxide: 2.01%
+    pm2_5: 1.54%
+    dew_point_2m: 0.85%
+    aerosol_optical_depth: 0.56%
+
+  Descriptive cluster fog rates (hourly GHCNh category <=4; not fitting inputs):
+    Cluster  Records  Labeled records  Fog rate
+    0  12870  12572  0.0042
+    1  11158  11011  0.0967
+    2  1847  1809  0.0077
+    3  9070  8911  0.0002
+    4  2047  1909  0.0005
+
+WITHOUT AQI REDUCED (filtered rows, no AQI features):
+  Records: 36992
+  Inertia: 193168.58
+  Silhouette Score: 0.2694
+  Davies-Bouldin Index: 1.1802
+
+  Feature Variance Across Clusters (sorted, 12 features):
+    weather_code: 26.57%
+    cloud_cover_low: 18.08%
+    precipitation: 10.50%
+    relative_humidity_2m: 7.12%
+    soil_temperature_0_to_7cm: 6.84%
+    temperature_2m: 6.70%
+    vapour_pressure_deficit: 6.07%
+    surface_pressure: 4.81%
+    wind_gusts_10m: 4.19%
+    wind_speed_10m: 4.09%
+    wind_speed_100m: 4.00%
+    dew_point_2m: 1.02%
+
+  Descriptive cluster fog rates (hourly GHCNh category <=4; not fitting inputs):
+    Cluster  Records  Labeled records  Fog rate
+    0  2094  2068  0.2848
+    1  9285  9107  0.0001
+    2  11749  11571  0.0440
+    3  12020  11662  0.0018
+    4  1844  1804  0.0083
+
+MATCHED METRIC DELTAS (with-AQI minus without-AQI reduced):
+  Inertia: +154207.4738
+  Silhouette Score: -0.0807
+  Davies-Bouldin Index: +0.2936
+
+================================================================================
+
+LOCATION 7
+--------------------------------------------------------------------------------
+WITHOUT AQI (all rows, no AQI features):
+  Records: 410328
+  Inertia: 2112368.06
+  Silhouette Score: 0.2399
+  Davies-Bouldin Index: 1.2240
+
+  Feature Variance Across Clusters (sorted, 12 features):
+    weather_code: 28.15%
+    precipitation: 13.86%
+    vapour_pressure_deficit: 8.15%
+    soil_temperature_0_to_7cm: 7.70%
+    relative_humidity_2m: 7.63%
+    temperature_2m: 7.54%
+    cloud_cover_low: 6.14%
+    wind_speed_10m: 5.31%
+    wind_gusts_10m: 5.30%
+    wind_speed_100m: 4.94%
+    surface_pressure: 3.34%
+    dew_point_2m: 1.93%
+
+  Descriptive cluster fog rates (hourly GHCNh category <=4; not fitting inputs):
+    Cluster  Records  Labeled records  Fog rate
+    0  78815  78618  0.0005
+    1  66375  66221  0.0029
+    2  129700  128741  0.1043
+    3  111968  111596  0.0039
+    4  23470  23380  0.0186
+
+WITH AQI (filtered rows, with AQI features):
+  Records: 36992
+  Inertia: 354398.70
+  Silhouette Score: 0.1952
+  Davies-Bouldin Index: 1.4911
+
+  Feature Variance Across Clusters (sorted, 17 features):
+    weather_code: 27.46%
+    precipitation: 11.57%
+    dust: 10.42%
+    pm10: 8.71%
+    relative_humidity_2m: 5.20%
+    soil_temperature_0_to_7cm: 4.82%
+    temperature_2m: 4.65%
+    vapour_pressure_deficit: 4.44%
+    cloud_cover_low: 3.90%
+    pm2_5: 3.20%
+    wind_speed_100m: 3.01%
+    wind_speed_10m: 2.86%
+    wind_gusts_10m: 2.78%
+    aerosol_optical_depth: 2.52%
+    surface_pressure: 2.33%
+    nitrogen_dioxide: 1.50%
+    dew_point_2m: 0.65%
+
+  Descriptive cluster fog rates (hourly GHCNh category <=4; not fitting inputs):
+    Cluster  Records  Labeled records  Fog rate
+    0  10523  10514  0.0001
+    1  13627  13566  0.0568
+    2  2444  2432  0.0004
+    3  8609  8595  0.0020
+    4  1789  1760  0.0102
+
+WITHOUT AQI REDUCED (filtered rows, no AQI features):
+  Records: 36992
+  Inertia: 188903.26
+  Silhouette Score: 0.2497
+  Davies-Bouldin Index: 1.1789
+
+  Feature Variance Across Clusters (sorted, 12 features):
+    weather_code: 31.72%
+    precipitation: 13.12%
+    vapour_pressure_deficit: 7.78%
+    soil_temperature_0_to_7cm: 7.49%
+    relative_humidity_2m: 7.38%
+    temperature_2m: 7.34%
+    wind_speed_10m: 5.11%
+    wind_speed_100m: 4.91%
+    wind_gusts_10m: 4.90%
+    cloud_cover_low: 4.52%
+    surface_pressure: 3.85%
+    dew_point_2m: 1.88%
+
+  Descriptive cluster fog rates (hourly GHCNh category <=4; not fitting inputs):
+    Cluster  Records  Labeled records  Fog rate
+    0  9570  9542  0.0002
+    1  11283  11228  0.0690
+    2  7063  7055  0.0017
+    3  7261  7258  0.0001
+    4  1815  1784  0.0101
+
+MATCHED METRIC DELTAS (with-AQI minus without-AQI reduced):
+  Inertia: +165495.4412
+  Silhouette Score: -0.0545
+  Davies-Bouldin Index: +0.3122
+
+================================================================================
+
+LOCATION 8
+--------------------------------------------------------------------------------
+WITHOUT AQI (all rows, no AQI features):
+  Records: 410328
+  Inertia: 2186764.30
+  Silhouette Score: 0.2286
+  Davies-Bouldin Index: 1.2657
+
+  Feature Variance Across Clusters (sorted, 12 features):
+    weather_code: 29.36%
+    precipitation: 13.60%
+    vapour_pressure_deficit: 8.17%
+    relative_humidity_2m: 7.91%
+    temperature_2m: 7.63%
+    soil_temperature_0_to_7cm: 7.62%
+    wind_speed_10m: 5.56%
+    wind_speed_100m: 5.21%
+    wind_gusts_10m: 5.17%
+    cloud_cover_low: 4.78%
+    surface_pressure: 3.40%
+    dew_point_2m: 1.59%
+
+  Descriptive cluster fog rates (hourly GHCNh category <=4; not fitting inputs):
+    Cluster  Records  Labeled records  Fog rate
+    0  78104  65974  0.0005
+    1  118393  91856  0.0059
+    2  133535  104718  0.1295
+    3  57755  45683  0.0032
+    4  22541  17355  0.0150
+
+WITH AQI (filtered rows, with AQI features):
+  Records: 36992
+  Inertia: 359700.79
+  Silhouette Score: 0.1759
+  Davies-Bouldin Index: 1.5815
+
+  Feature Variance Across Clusters (sorted, 17 features):
+    weather_code: 25.81%
+    pm10: 12.26%
+    dust: 11.98%
+    precipitation: 9.53%
+    relative_humidity_2m: 5.59%
+    soil_temperature_0_to_7cm: 5.32%
+    vapour_pressure_deficit: 5.16%
+    temperature_2m: 5.07%
+    pm2_5: 3.96%
+    cloud_cover_low: 3.02%
+    surface_pressure: 2.63%
+    wind_gusts_10m: 2.10%
+    aerosol_optical_depth: 1.97%
+    wind_speed_100m: 1.74%
+    wind_speed_10m: 1.61%
+    nitrogen_dioxide: 1.27%
+    dew_point_2m: 0.98%
+
+  Descriptive cluster fog rates (hourly GHCNh category <=4; not fitting inputs):
+    Cluster  Records  Labeled records  Fog rate
+    0  1782  1731  0.0040
+    1  11736  11519  0.0043
+    2  12632  12538  0.1019
+    3  8720  8545  0.0009
+    4  2122  2090  0.0038
+
+WITHOUT AQI REDUCED (filtered rows, no AQI features):
+  Records: 36992
+  Inertia: 195548.90
+  Silhouette Score: 0.2371
+  Davies-Bouldin Index: 1.2250
+
+  Feature Variance Across Clusters (sorted, 12 features):
+    weather_code: 33.12%
+    precipitation: 12.14%
+    vapour_pressure_deficit: 7.87%
+    relative_humidity_2m: 7.59%
+    soil_temperature_0_to_7cm: 7.47%
+    temperature_2m: 7.38%
+    wind_speed_100m: 5.17%
+    wind_speed_10m: 5.02%
+    wind_gusts_10m: 4.51%
+    cloud_cover_low: 3.93%
+    surface_pressure: 3.84%
+    dew_point_2m: 1.97%
+
+  Descriptive cluster fog rates (hourly GHCNh category <=4; not fitting inputs):
+    Cluster  Records  Labeled records  Fog rate
+    0  6393  6277  0.0033
+    1  10158  9974  0.0058
+    2  11372  11301  0.1115
+    3  7277  7131  0.0003
+    4  1792  1740  0.0046
+
+MATCHED METRIC DELTAS (with-AQI minus without-AQI reduced):
+  Inertia: +164151.8949
+  Silhouette Score: -0.0612
+  Davies-Bouldin Index: +0.3565
+
+================================================================================
+
+LOCATION 9
+--------------------------------------------------------------------------------
+WITHOUT AQI (all rows, no AQI features):
+  Records: 410328
+  Inertia: 2202514.32
+  Silhouette Score: 0.2274
+  Davies-Bouldin Index: 1.2677
+
+  Feature Variance Across Clusters (sorted, 12 features):
+    weather_code: 32.52%
+    precipitation: 14.43%
+    vapour_pressure_deficit: 7.75%
+    relative_humidity_2m: 7.18%
+    soil_temperature_0_to_7cm: 7.18%
+    temperature_2m: 7.09%
+    wind_speed_10m: 5.06%
+    wind_gusts_10m: 4.95%
+    wind_speed_100m: 4.62%
+    cloud_cover_low: 4.60%
+    surface_pressure: 3.21%
+    dew_point_2m: 1.40%
+
+  Descriptive cluster fog rates (hourly GHCNh category <=4; not fitting inputs):
+    Cluster  Records  Labeled records  Fog rate
+    0  76522  49178  0.0008
+    1  19127  10400  0.0144
+    2  117360  64036  0.0041
+    3  133894  78795  0.1507
+    4  63425  38380  0.0019
+
+WITH AQI (filtered rows, with AQI features):
+  Records: 36992
+  Inertia: 349692.42
+  Silhouette Score: 0.1765
+  Davies-Bouldin Index: 1.5483
+
+  Feature Variance Across Clusters (sorted, 17 features):
+    weather_code: 26.76%
+    dust: 11.59%
+    pm10: 10.45%
+    precipitation: 9.31%
+    relative_humidity_2m: 5.83%
+    soil_temperature_0_to_7cm: 5.58%
+    temperature_2m: 5.36%
+    vapour_pressure_deficit: 5.29%
+    wind_speed_100m: 3.62%
+    wind_speed_10m: 3.50%
+    wind_gusts_10m: 3.35%
+    surface_pressure: 2.98%
+    cloud_cover_low: 2.43%
+    pm2_5: 1.43%
+    nitrogen_dioxide: 1.38%
+    dew_point_2m: 0.92%
+    aerosol_optical_depth: 0.23%
+
+  Descriptive cluster fog rates (hourly GHCNh category <=4; not fitting inputs):
+    Cluster  Records  Labeled records  Fog rate
+    0  8983  8917  0.0011
+    1  11053  10844  0.1312
+    2  2780  2742  0.0000
+    3  12398  12320  0.0019
+    4  1778  1754  0.0068
+
+WITHOUT AQI REDUCED (filtered rows, no AQI features):
+  Records: 36992
+  Inertia: 198084.62
+  Silhouette Score: 0.2303
+  Davies-Bouldin Index: 1.2599
+
+  Feature Variance Across Clusters (sorted, 12 features):
+    weather_code: 33.68%
+    precipitation: 11.77%
+    vapour_pressure_deficit: 7.48%
+    relative_humidity_2m: 7.46%
+    soil_temperature_0_to_7cm: 7.38%
+    temperature_2m: 7.22%
+    wind_speed_10m: 5.55%
+    wind_speed_100m: 5.22%
+    wind_gusts_10m: 5.10%
+    surface_pressure: 4.06%
+    cloud_cover_low: 3.10%
+    dew_point_2m: 1.98%
+
+  Descriptive cluster fog rates (hourly GHCNh category <=4; not fitting inputs):
+    Cluster  Records  Labeled records  Fog rate
+    0  11030  10829  0.1315
+    1  1773  1747  0.0069
+    2  10666  10576  0.0019
+    3  5712  5662  0.0009
+    4  7811  7763  0.0010
+
+MATCHED METRIC DELTAS (with-AQI minus without-AQI reduced):
+  Inertia: +151607.8025
+  Silhouette Score: -0.0539
+  Davies-Bouldin Index: +0.2884
+
+================================================================================
+
+AVERAGE METRICS
+--------------------------------------------------------------------------------
+WITHOUT AQI (all rows, no AQI features) - Average across 5 locations:
+  Inertia: 2170438.10
+  Silhouette Score: 0.2339
+  Davies-Bouldin Index: 1.2515
+
+AVERAGE FEATURE VARIANCE WITHOUT AQI (across 5 locations):
+  weather_code: 29.81%
+  precipitation: 13.60%
+  vapour_pressure_deficit: 8.06%
+  relative_humidity_2m: 7.60%
+  soil_temperature_0_to_7cm: 7.57%
+  temperature_2m: 7.46%
+  cloud_cover_low: 5.39%
+  wind_speed_10m: 5.38%
+  wind_gusts_10m: 5.22%
+  wind_speed_100m: 5.05%
+  surface_pressure: 3.22%
+  dew_point_2m: 1.63%
+
+WITH AQI (filtered rows, with AQI features) - Average across 5 locations:
+  Inertia: 351936.06
+  Silhouette Score: 0.1813
+  Davies-Bouldin Index: 1.5257
+
+AVERAGE FEATURE VARIANCE WITH AQI (across 5 locations):
+  weather_code: 25.76%
+  dust: 12.80%
+  pm10: 11.51%
+  precipitation: 9.55%
+  relative_humidity_2m: 5.30%
+  soil_temperature_0_to_7cm: 5.07%
+  temperature_2m: 4.88%
+  vapour_pressure_deficit: 4.80%
+  pm2_5: 3.49%
+  cloud_cover_low: 3.01%
+  wind_gusts_10m: 2.73%
+  surface_pressure: 2.59%
+  wind_speed_100m: 2.53%
+  wind_speed_10m: 2.51%
+  nitrogen_dioxide: 1.44%
+  aerosol_optical_depth: 1.22%
+  dew_point_2m: 0.79%
+
+WITHOUT AQI REDUCED (filtered rows, no AQI features) - Average across 5 locations:
+  Inertia: 195588.76
+  Silhouette Score: 0.2446
+  Davies-Bouldin Index: 1.2151
+
+AVERAGE FEATURE VARIANCE WITHOUT AQI REDUCED (across 5 locations):
+  weather_code: 31.95%
+  precipitation: 11.86%
+  vapour_pressure_deficit: 7.37%
+  relative_humidity_2m: 7.36%
+  soil_temperature_0_to_7cm: 7.27%
+  temperature_2m: 7.15%
+  cloud_cover_low: 6.81%
+  wind_speed_10m: 5.05%
+  wind_speed_100m: 4.90%
+  wind_gusts_10m: 4.76%
+  surface_pressure: 3.99%
+  dew_point_2m: 1.55%
+
+AVERAGE MATCHED METRIC DELTAS (with-AQI minus without-AQI reduced):
+  Inertia: +156347.2944
+  Silhouette Score: -0.0633
+  Davies-Bouldin Index: +0.3106

@@ -1,6 +1,6 @@
 import requests
 import pandas as pd
-from datetime import datetime
+from datetime import datetime, timedelta
 import time
 import os
 
@@ -17,7 +17,7 @@ import os
 # 36.777045, -119.716862 : location_7 / fresno airport
 # 36.322528, -119.394712 : location_8 / visalia airport
 # 36.313201, -119.626015 : location_9 / hanford airport
-# 35.328506, -118.997813 : location_10 / bakersfield airport
+# 35.4342, -119.0553 : location_10 / bakersfield meadows field (KBFL; was 35.328506, -118.997813 = Bakersfield Municipal L45)
 
 COORDINATES = [
     # {"lat": 37.056698, "lon": -120.970441, "name": "location_1"},
@@ -25,20 +25,28 @@ COORDINATES = [
     # {"lat": 36.211872, "lon": -120.217350, "name": "location_3"},
     # {"lat": 35.732028, "lon": -119.739409, "name": "location_4"},
     # {"lat": 35.208969, "lon": -119.163142, "name": "location_5"},
-    # {"lat": 36.989159, "lon": -120.111030, "name": "location_6"},
-    # {"lat": 36.777045, "lon": -119.716862, "name": "location_7"},
-    # {"lat": 36.322528, "lon": -119.394712, "name": "location_8"},
-    # {"lat": 36.313201, "lon": -119.626015, "name": "location_9"},
-    # {"lat": 35.328506, "lon": -118.997813, "name": "location_10"}
+    {"lat": 36.989159, "lon": -120.111030, "name": "location_6"},
+    {"lat": 36.777045, "lon": -119.716862, "name": "location_7"},
+    {"lat": 36.322528, "lon": -119.394712, "name": "location_8"},
+    {"lat": 36.313201, "lon": -119.626015, "name": "location_9"},
+    {"lat": 35.4342, "lon": -119.0553, "name": "location_10"}
 ]
 
 # data point intervals
-# every day, 1980 through 2025, inclusive ----> AQI DATASET ONLY STARTS AT 2022-08-03 18:00:00
+# every day, 1980 through yesterday, inclusive ----> AQI DATASET ONLY STARTS AT 2022-08-03 18:00:00
 # at ALL hours: 0:00 1:00 2:00 3:00 4:00 5:00 6:00 7:00 8:00 9:00 10:00 11:00 12:00 13:00 14:00 15:00 16:00 17:00 18:00 19:00 20:00 21:00 22:00 23:00
 # fog usually peaks 3-10am
 
+# Incremental: each location resumes from the last day already in datasets/{weather,aqi}/ (re-fetching that
+# day to fill any missing hours), so a re-run only pulls new data. A full 1980->now pull of 5 sites costs
+# ~13k weighted calls (> 10k/day free cap); an incremental year is ~250.
 START_DATE = "1980-01-01"
-END_DATE = "2025-12-31"
+END_DATE = (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d")
+
+# Fixed UTC-8 (PST) all year. Open-Meteo applies the offset in effect at REQUEST time to the whole
+# response (no historical DST), and the existing CSVs were pulled in winter, so they are fixed UTC-8.
+# "America/Los_Angeles" would shift rows pulled during daylight time by 1 h.
+TIMEZONE = "Etc/GMT+8"
 HOURS = list(range(24))  # All 24 hours
 
 # feature variables from open-meteo.com - INCLUDED VIA API
@@ -119,6 +127,18 @@ AIR_QUALITY_VARS = [
 #   all other codes are not fog, so this would be negative binary classification
 # Cloud Cover Low
 
+def get_json(url, params, retries=5):
+    # back off on HTTP 429; a daily-quota 429 still fails after retries, so re-run tomorrow to resume
+    for attempt in range(retries):
+        response = requests.get(url, params=params, timeout=120)
+        if response.status_code != 429:
+            break
+        wait = 60 * (attempt + 1)
+        print(f"  Rate limited (429), sleeping {wait}s...")
+        time.sleep(wait)
+    response.raise_for_status()
+    return response.json()
+
 def fetch_weather_data(lat, lon, start_date, end_date):
     url = "https://archive-api.open-meteo.com/v1/archive"
     params = {
@@ -127,15 +147,13 @@ def fetch_weather_data(lat, lon, start_date, end_date):
         "start_date": start_date,
         "end_date": end_date,
         "hourly": ",".join(WEATHER_VARS),
-        "timezone": "America/Los_Angeles"
+        "timezone": TIMEZONE
     }
     
     print(f"  Fetching weather data for {start_date} to {end_date}...")
     
     try:
-        response = requests.get(url, params=params, timeout=120)
-        response.raise_for_status()
-        data = response.json()
+        data = get_json(url, params)
         
         hourly = data.get("hourly", {})
         times = hourly.get("time", [])
@@ -161,15 +179,13 @@ def fetch_air_quality_data(lat, lon, start_date, end_date):
         "start_date": start_date,
         "end_date": end_date,
         "hourly": ",".join(AIR_QUALITY_VARS),
-        "timezone": "America/Los_Angeles"
+        "timezone": TIMEZONE
     }
     
     print(f"  Fetching air quality data for {start_date} to {end_date}...")
     
     try:
-        response = requests.get(url, params=params, timeout=120)
-        response.raise_for_status()
-        data = response.json()
+        data = get_json(url, params)
         
         hourly = data.get("hourly", {})
         times = hourly.get("time", [])
@@ -190,78 +206,54 @@ def fetch_air_quality_data(lat, lon, start_date, end_date):
         print(f"Air quality data: {len(df)} records")
         return df
     except requests.exceptions.RequestException as e:
-        print(f"Air quality data not available: {e}")
-        # Return empty DataFrame with proper columns
-        return pd.DataFrame(columns=["time"] + AIR_QUALITY_VARS)
+        print(f"Error fetching air quality data: {e}")
+        return None
 
 
 
-def generate_dataset_for_location(coord, output_dir="dataset"):
+def pull(fetch, path, coord, first_date=START_DATE):
+    # Append rows after the last timestamp on disk, through END_DATE. Existing rows are never rewritten, and
+    # nothing is written if any request fails, so a re-run resumes cleanly.
+    last = pd.read_csv(path, usecols=["time"], parse_dates=["time"])["time"].max() if os.path.exists(path) else None
+    start = last.normalize() if last is not None else pd.Timestamp(first_date)  # re-fetch last day to finish it
+    end = pd.Timestamp(END_DATE)
+    if start > end:
+        print(f"  {path} already up to date")
+        return True
+
+    frames = []
+    for year in range(start.year, end.year + 1):
+        chunk_start = max(start, pd.Timestamp(year, 1, 1)).strftime("%Y-%m-%d")
+        chunk_end = min(end, pd.Timestamp(year, 12, 31)).strftime("%Y-%m-%d")
+        df = fetch(coord["lat"], coord["lon"], chunk_start, chunk_end)
+        if df is None:
+            print(f"  Failed {chunk_start}..{chunk_end}; nothing written for {path}")
+            return False
+        if not df.empty:
+            frames.append(df)
+        time.sleep(5)  # stay under the per-minute limit
+
+    new = pd.concat(frames, ignore_index=True).sort_values("time") if frames else pd.DataFrame()
+    if last is not None and not new.empty:
+        new = new[new["time"] > last][pd.read_csv(path, nrows=0).columns]  # keep on-disk column order
+    if new.empty:
+        print(f"  No new data for {path}")
+        return True
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    new.to_csv(path, mode="a" if last is not None else "w", header=last is None, index=False)
+    print(f"  Wrote {len(new)} rows to {path}: {new['time'].min()} to {new['time'].max()}")
+    return True
+
+
+def generate_dataset_for_location(coord):
+    # run from the repository root, like the other datasets/ and eda/ scripts
     print(f"Generating datasets for {coord['name']}")
     print(f"Coordinates: Lat {coord['lat']}, Lon {coord['lon']}")
-    
-    weather_datasets = []
-    aqi_datasets = []
-    start_year = 1980
-    end_year = 2025
-    
-    for year in range(start_year, end_year + 1):
-        print(f"\nProcessing year {year}...")
-        
-        year_start = f"{year}-01-01"
-        year_end = f"{year}-12-31"
-        
-        # Fetch weather data for this year
-        weather_df = fetch_weather_data(coord["lat"], coord["lon"], year_start, year_end)
-        if weather_df is not None and not weather_df.empty:
-            weather_datasets.append(weather_df)
-        else:
-            print(f"Failed to fetch weather data for {year}")
-        
-        # Wait a bit to avoid hitting rate limits
-        time.sleep(4)
-        
-        # Fetch air quality data for this year (may be empty for years before 2013)
-        aqi_df = fetch_air_quality_data(coord["lat"], coord["lon"], year_start, year_end)
-        if aqi_df is not None and not aqi_df.empty:
-            aqi_datasets.append(aqi_df)
-        
-        time.sleep(5)
-    
-    os.makedirs(output_dir, exist_ok=True)
-    
-    if weather_datasets:
-        print(f"\nCombining {len(weather_datasets)} weather datasets...")
-        weather_combined = pd.concat(weather_datasets, ignore_index=True)
-        weather_combined = weather_combined.sort_values("time").reset_index(drop=True)
-        
-        weather_file = os.path.join(output_dir, f"{coord['name']}_weather.csv")
-        weather_combined.to_csv(weather_file, index=False)
-        
-        print(f"Weather dataset saved to: {weather_file}")
-        print(f"  Total records: {len(weather_combined)}")
-        print(f"  Date range: {weather_combined['time'].min()} to {weather_combined['time'].max()}")
-        print(f"  Columns: {list(weather_combined.columns)}")
-    else:
-        print(f"\no weather data collected for {coord['name']}")
-        return False
-    
-    if aqi_datasets:
-        print(f"\nCombining {len(aqi_datasets)} AQI datasets...")
-        aqi_combined = pd.concat(aqi_datasets, ignore_index=True)
-        aqi_combined = aqi_combined.sort_values("time").reset_index(drop=True)
-        
-        aqi_file = os.path.join(output_dir, f"{coord['name']}_aqi.csv")
-        aqi_combined.to_csv(aqi_file, index=False)
-        
-        print(f"AQI dataset saved to: {aqi_file}")
-        print(f"  Total records: {len(aqi_combined)}")
-        print(f"  Date range: {aqi_combined['time'].min()} to {aqi_combined['time'].max()}")
-        print(f"  Columns: {list(aqi_combined.columns)}")
-    else:
-        print(f"\nNo AQI data collected for {coord['name']} (expected for early years)")
-    
-    return True
+    weather_ok = pull(fetch_weather_data, os.path.join("datasets", "weather", f"{coord['name']}_weather.csv"), coord)
+    # the air-quality API rejects dates before 2013 (CAMS coverage for California starts 2022-08)
+    aqi_ok = pull(fetch_air_quality_data, os.path.join("datasets", "aqi", f"{coord['name']}_aqi.csv"), coord,
+                  first_date="2013-01-01")
+    return weather_ok and aqi_ok
 
 def main():
     print(f"Time range: {START_DATE} to {END_DATE}")

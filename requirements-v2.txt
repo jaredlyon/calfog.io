@@ -1,0 +1,14 @@
+# V2 reference interpreter: CPython / Python 3.12.3 (Linux x86_64).
+# CUDA training reference: torch cu128; use a compatible NVIDIA driver.
+# The extra index supplies the exact CUDA wheel, not the legacy TF environment.
+--extra-index-url https://download.pytorch.org/whl/cu128
+torch==2.11.0+cu128
+ray[tune]==2.57.0
+xgboost==3.4.1
+scikit-learn==1.9.0
+numpy==2.5.2
+pandas==3.0.5
+joblib==1.5.3
+requests==2.34.2
+matplotlib==3.11.1
+pytest==9.1.1
