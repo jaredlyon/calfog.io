@@ -29,7 +29,7 @@ def test_forest_pads_absent_nonconsecutive_categories():
     X = np.linspace(-1, 1, 48)[:, None]
     c = np.where(X[:, 0] < 0, 2, 15)
     model = random_forest.fit_model(X, c, X[:8], c[:8], seed=42)
-    pmf = model.predict_proba(X)
+    pmf = model.predict_proba_raw(X)
     absent = np.setdiff1d(np.arange(N_CATEGORIES), [2, 15])
     assert pmf.shape == (len(X), N_CATEGORIES)
     np.testing.assert_array_equal(pmf[:, absent], 0)

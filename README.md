@@ -50,7 +50,9 @@ observations retain the full record, and hourly model labels start at 1980-01-01
 ## Repository layout (V2)
 
 - `models/<family>/*_v2.py`: reworked model scripts alongside the unchanged originals, including
-  logistic regression, random forest, XGBoost, focal-loss XGBoost, temporal CNN and ensemble.
+  logistic regression, calibrated random forest, XGBoost, focal-loss XGBoost, temporal CNN, ensemble,
+  persistence/Markov, analog ensemble, threshold-ordinal XGBoost, interval-censored XGBoost AFT,
+  Explainable Boosting Machine and pooled five-airport XGBoost.
 - `models/_shared/`: sectioned data, labels, splits, windows, evaluation, tuning, family, study and
   reporting modules, with shared tests in `models/_shared/tests/`.
 - `models/run_all_v2.py`: runs all model families with shared CNN tuning and writes comparisons to
@@ -58,6 +60,19 @@ observations retain the full record, and hourly model labels start at 1980-01-01
 - `eda/k-means clustering/*_v2.py`: reworked k-means analysis alongside its original.
 - `ops/`: retraining, serving bundles and passive shadow evaluation.
 - `report_files/v2_prefix/`: superseded pre-fix PoC/full-study outputs and handoff, retained for provenance.
+
+Predictor sets are recorded in metrics and displayed in family reports and comparisons:
+- **weather:** logistic regression, random forest, XGBoost, focal-loss XGBoost, temporal CNN, ensemble,
+  analog ensemble, threshold-ordinal XGBoost, XGBoost AFT and EBM retain the existing weather/calendar channels.
+- **observed visibility history:** persistence/Markov uses the latest known category from issue−3h
+  through issue−1h; the issue hour is never available as a predictor.
+- **weather + observed visibility (own + 4 neighbors), pooled sites:** pooled XGBoost uses weather,
+  airport identity and causal own/neighbor category lags; preprocessing is fitted once on pooled training
+  windows, all sites obey the target site's 24-hour fold embargo, and test rows are target-site only.
+  Its per-site matched AQI ablation is not applicable.
+
+Random forest fits temperature/prior-mixture category calibration on validation rows only; fits without
+validation retain the raw PMF. The ensemble stacks raw RF cumulative PMFs but blends calibrated RF predictions.
 
 Run from the repository root using the environment in `requirements-v2.txt` (the root
 `requirements.txt` remains the historical V1 environment):

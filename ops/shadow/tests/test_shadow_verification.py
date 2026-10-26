@@ -6,6 +6,7 @@ from pathlib import Path
 
 import pandas as pd
 import pytest
+from models._shared.visibility import FOG_MAX_CATEGORY, N_CATEGORIES
 from ops.shadow import shadow_common as common, shadow_score as score
 from ops.shadow import fetch_forward_labels as labels, forward_logger as logger
 from ops.shadow.spark_deploy import calfog_snapshot as snapshot
@@ -100,12 +101,29 @@ def test_shadow2_explicit_cohort_and_separate_output(tmp_path, monkeypatch):
         '2026-01-01T00:00:00Z', '--end', '2026-02-01T00:00:00Z'])
     score.main()
     result_path = tmp_path / 'shadow_metrics_forward.json'
-    result = json.loads((result_path if result_path.exists() else tmp_path / 'shadow_metrics.json').read_text())
+    result = json.loads(result_path.read_text())
     group = result['per_site']['location_6']['tasks']['nowcast']['xgboost']
     assert group['n_issues'] == 1
     assert group['feed_source'] == FORWARD
     assert result_path.exists()
     assert not (tmp_path / 'shadow_metrics.json').exists()
+
+
+def test_shadow_historical_report_uses_ordinal18_metrics():
+    shadow = Path(__file__).resolve().parents[1]
+    metrics_path = shadow / 'shadow_metrics_historical.json'
+    assert metrics_path.exists()
+    metrics = json.loads(metrics_path.read_text())
+    assert N_CATEGORIES == 18
+    assert FOG_MAX_CATEGORY == 4
+    assert metrics['cohort']['feed'] == 'historical'
+    assert metrics['label_contract'] == (
+        'decoded ordinal hourly minimum; fog category <=4; '
+        'lead all ten fixed-PST hours 00-09; forward finalization lag 1h')
+    report = (shadow / 'report_shadow.md').read_text(encoding='utf-8')
+    assert metrics_path.name in report
+    assert 'ordinal-18' in report
+    assert not (shadow / 'shadow_metrics.json').exists()
 
 
 def test_shadow7_empty_group_is_no_evidence(tmp_path, monkeypatch):
@@ -219,7 +237,7 @@ def test_shadow5_scorer_excludes_legacy_provisional_outcomes(tmp_path, monkeypat
         '2026-01-01T00:00:00Z', '--end', '2026-02-01T00:00:00Z'])
     score.main()
     path = tmp_path / 'shadow_metrics_forward.json'
-    result = json.loads((path if path.exists() else tmp_path / 'shadow_metrics.json').read_text())
+    result = json.loads(path.read_text())
     assert result['per_site']['location_6']['tasks']['nowcast']['xgboost']['n_issues'] == 0
 
 def test_forward_labels_snap_fraction_and_preserve_category(tmp_path,monkeypatch):

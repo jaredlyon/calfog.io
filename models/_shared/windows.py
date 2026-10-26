@@ -81,5 +81,21 @@ def prepare(weather,parts,with_aqi=False,require_aqi=False, *, weather_cols: lis
     Xtr,Xv,Xt=arrays
     return Prepared(Xtr,ctr,Xv,cv,Xt,ct,{"train":mtr,"val":mv,"test":mt},cols)
 
+def prepare_pooled(sources: dict[str, pd.DataFrame], parts: dict[str, dict[str, pd.DataFrame]], *,
+                   weather_cols: list[str] = WEATHER_COLS) -> Prepared:
+    arrays, categories, metas = {}, {}, {}
+    for split in ('train', 'val', 'test'):
+        built = [build_windows(sources[site], site_parts[split], weather_cols=weather_cols)
+                 for site, site_parts in parts.items()]
+        meta = pd.concat([row[2] for row in built], ignore_index=True)
+        order = meta.sort_values(['issue_time', 'site'], kind='stable').index.to_numpy()
+        arrays[split] = np.concatenate([row[0] for row in built])[order]
+        categories[split] = np.concatenate([row[1] for row in built])[order]
+        metas[split] = meta.iloc[order].reset_index(drop=True)
+    (Xtr, Xv, Xt), _, _ = fit_preprocess(arrays['train'], arrays['val'], arrays['test'])
+    return Prepared(Xtr, categories['train'], Xv, categories['val'], Xt, categories['test'],
+                    metas, built[0][3])
+
+
 def tree_feature_names(cols: list[str]) -> list[str]:
     return [f"{stat}_{col}" for stat in ("latest", "mean", "std", "min", "max") for col in cols]

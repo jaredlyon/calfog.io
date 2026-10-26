@@ -12,11 +12,15 @@ from models._shared.visibility import N_CATEGORIES
 
 def test_registry_contract():
     assert set(FAMILIES) == {'climatology', 'logistic_regression', 'random_forest', 'xgboost',
-                             'xgboost_focal_loss', 'temporal_cnn', 'ensemble'}
+                             'xgboost_focal_loss', 'temporal_cnn', 'ensemble', 'persistence', 'analog',
+                             'xgboost_ordinal', 'xgboost_aft', 'ebm', 'xgboost_pooled'}
     for module in FAMILIES.values():
         assert isinstance(module.NEEDS_CNN_CFG, bool)
         assert callable(module.fit_predict)
     assert set(study.FAMILY_DIRS) == set(FAMILIES) - {'climatology'}
+    assert study.PREDICTOR_SETS['xgboost'] == 'weather'
+    assert study.PREDICTOR_SETS['persistence'] == 'observed visibility history'
+    assert study.PREDICTOR_SETS['xgboost_pooled'] == 'weather + observed visibility (own + 4 neighbors), pooled sites'
     parts = ('xgboost', 'location_10', 'nowcast', 2)
     assert seed_for(*parts) == int(hashlib.sha256('|'.join(map(str, parts)).encode()).hexdigest()[:8], 16)
 
@@ -70,6 +74,7 @@ def test_run_family_routes_one_family_and_baseline_without_tuning(monkeypatch, t
     metrics = study.run_family('xgboost', sites=('location_10',), weather_cols=['custom'], out_dir=tmp_path, n_boot=8)
     assert metrics['n_boot'] == 8
     assert metrics['weather_cols'] == ['custom']
+    assert metrics['predictor_set'] == 'weather'
     assert len(calls) == 18  # 2 tasks x (3 full-history folds + 2 matched arms x 3 folds)
     sd = metrics['per_site']['location_10']
     for task in ('nowcast', 'lead_time'):
@@ -91,10 +96,12 @@ def test_run_family_routes_one_family_and_baseline_without_tuning(monkeypatch, t
     text = (tmp_path / 'xgboost_results_v2.txt').read_text(encoding='utf-8')
     assert 'RPS:' in text and 'NLL:' in text and 'Within one category:' in text
     assert 'Median-meters log10 MAE' in text
+    assert 'Predictor set: weather' in text
     comparison = report.write_comparison({'xgboost': metrics}, tmp_path / 'comparison')
     assert comparison['aggregate']['nowcast']['xgboost']['mean_rps'] >= 0
     markdown = (tmp_path / 'comparison' / 'model_comparison_v2.md').read_text(encoding='utf-8')
     assert '| RPS (95% CI) |' in markdown and 'Paired delta RPS' in markdown
+    assert '| Predictor set |' in markdown
 
 
 def test_reuse_rejects_binary_only_metrics(monkeypatch, tmp_path):

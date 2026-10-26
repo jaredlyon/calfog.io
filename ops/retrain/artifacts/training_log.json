@@ -1,5 +1,5 @@
 {
-  "started_utc": "2026-10-24T02:19:52.687439+00:00",
+  "started_utc": "2026-10-26T01:34:41.493502+00:00",
   "device": "NVIDIA GeForce RTX 5070",
   "cuda": true,
   "seed": 20260228,
@@ -41,9 +41,18 @@
             },
             "random_forest": {
               "folds": [
-                {},
-                {},
-                {}
+                {
+                  "temperature": 0.38133889197013937,
+                  "prior_weight": 0.35322391690537785
+                },
+                {
+                  "temperature": 0.41170998724118424,
+                  "prior_weight": 0.4298498982530744
+                },
+                {
+                  "temperature": 0.4392232943912685,
+                  "prior_weight": 0.5
+                }
               ]
             },
             "temporal_cnn": {
@@ -108,9 +117,18 @@
             },
             "random_forest": {
               "folds": [
-                {},
-                {},
-                {}
+                {
+                  "temperature": 0.5178876344830802,
+                  "prior_weight": 0.49437176890528356
+                },
+                {
+                  "temperature": 0.5328890696461741,
+                  "prior_weight": 0.37849495056452653
+                },
+                {
+                  "temperature": 0.48414971059504486,
+                  "prior_weight": 0.4909836499756744
+                }
               ]
             },
             "temporal_cnn": {
@@ -179,9 +197,18 @@
             },
             "random_forest": {
               "folds": [
-                {},
-                {},
-                {}
+                {
+                  "temperature": 0.6791276324773466,
+                  "prior_weight": 0.26969823986467767
+                },
+                {
+                  "temperature": 0.5963298927111887,
+                  "prior_weight": 0.28267477403585106
+                },
+                {
+                  "temperature": 0.5108130335459012,
+                  "prior_weight": 0.3679260468736858
+                }
               ]
             },
             "temporal_cnn": {
@@ -246,9 +273,18 @@
             },
             "random_forest": {
               "folds": [
-                {},
-                {},
-                {}
+                {
+                  "temperature": 1.10229593800293,
+                  "prior_weight": 0.13632024704678883
+                },
+                {
+                  "temperature": 0.8811107572350103,
+                  "prior_weight": 0.19581508443553458
+                },
+                {
+                  "temperature": 0.7391799345975976,
+                  "prior_weight": 0.20837824756154943
+                }
               ]
             },
             "temporal_cnn": {
@@ -317,9 +353,18 @@
             },
             "random_forest": {
               "folds": [
-                {},
-                {},
-                {}
+                {
+                  "temperature": 0.6801121933502555,
+                  "prior_weight": 0.37174364176798785
+                },
+                {
+                  "temperature": 0.4687815144572988,
+                  "prior_weight": 0.3032507035940929
+                },
+                {
+                  "temperature": 0.4299938063760746,
+                  "prior_weight": 0.4876551767471476
+                }
               ]
             },
             "temporal_cnn": {
@@ -384,9 +429,18 @@
             },
             "random_forest": {
               "folds": [
-                {},
-                {},
-                {}
+                {
+                  "temperature": 0.8161953986358492,
+                  "prior_weight": 0.2132706002026908
+                },
+                {
+                  "temperature": 0.7645473446992661,
+                  "prior_weight": 0.28471014673190254
+                },
+                {
+                  "temperature": 0.638593900348734,
+                  "prior_weight": 0.483471561444779
+                }
               ]
             },
             "temporal_cnn": {
@@ -455,9 +509,18 @@
             },
             "random_forest": {
               "folds": [
-                {},
-                {},
-                {}
+                {
+                  "temperature": 0.5187439060635135,
+                  "prior_weight": 0.10757271758388362
+                },
+                {
+                  "temperature": 0.6311524198938121,
+                  "prior_weight": 0.1145685444976448
+                },
+                {
+                  "temperature": 0.48996486679890927,
+                  "prior_weight": 0.2799342919408901
+                }
               ]
             },
             "temporal_cnn": {
@@ -522,9 +585,18 @@
             },
             "random_forest": {
               "folds": [
-                {},
-                {},
-                {}
+                {
+                  "temperature": 0.7966322720675428,
+                  "prior_weight": 0.09015500318030419
+                },
+                {
+                  "temperature": 0.754454508553776,
+                  "prior_weight": 0.10554610654775354
+                },
+                {
+                  "temperature": 0.5900532195631738,
+                  "prior_weight": 0.32586632707887697
+                }
               ]
             },
             "temporal_cnn": {
@@ -593,9 +665,18 @@
             },
             "random_forest": {
               "folds": [
-                {},
-                {},
-                {}
+                {
+                  "temperature": 0.574868151194251,
+                  "prior_weight": 0.28147348642165326
+                },
+                {
+                  "temperature": 0.4487623630594325,
+                  "prior_weight": 0.3318954127040045
+                },
+                {
+                  "temperature": 0.3979161893538889,
+                  "prior_weight": 0.3622023213827446
+                }
               ]
             },
             "temporal_cnn": {
@@ -660,9 +741,18 @@
             },
             "random_forest": {
               "folds": [
-                {},
-                {},
-                {}
+                {
+                  "temperature": 0.886941150898165,
+                  "prior_weight": 0.2247440492450112
+                },
+                {
+                  "temperature": 0.6784208252763909,
+                  "prior_weight": 0.30269629789206437
+                },
+                {
+                  "temperature": 0.5631051360652175,
+                  "prior_weight": 0.3046968459957951
+                }
               ]
             },
             "temporal_cnn": {
@@ -696,6 +786,6 @@
       }
     }
   },
-  "completed_utc": "2026-10-24T03:10:09.334588+00:00",
-  "elapsed_seconds": 3016.647149
+  "completed_utc": "2026-10-26T02:13:47.616050+00:00",
+  "elapsed_seconds": 2346.122548
 }

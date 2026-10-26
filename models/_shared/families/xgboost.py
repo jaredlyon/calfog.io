@@ -10,6 +10,13 @@ from . import FamilyOutput
 
 NEEDS_CNN_CFG = False
 
+BASE_PARAMS = {
+    "max_depth": 5, "learning_rate": 0.04, "min_child_weight": 3,
+    "subsample": 0.8, "colsample_bytree": 0.8,
+    "reg_lambda": 2.0, "reg_alpha": 0.2,
+    "nthread": 8, "tree_method": "hist", "device": "cpu",
+}
+
 
 class BoosterPMF:
     def __init__(self, booster, n_features):
@@ -30,10 +37,7 @@ class BoosterPMF:
 def fit_model(Xtr, ctr, Xv, cv, *, seed: int):
     params = {
         "objective": "multi:softprob", "num_class": N_CATEGORIES,
-        "max_depth": 5, "learning_rate": 0.04, "min_child_weight": 3,
-        "subsample": 0.8, "colsample_bytree": 0.8,
-        "reg_lambda": 2.0, "reg_alpha": 0.2,
-        "seed": seed, "nthread": 8, "tree_method": "hist", "device": "cpu",
+        **BASE_PARAMS, "seed": seed,
         "eval_metric": "mlogloss",
     }
     booster = xgb.train(

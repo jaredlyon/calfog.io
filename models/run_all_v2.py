@@ -27,6 +27,11 @@ def main():
                    for results in sd['tasks'].values() for result in results.values()):
                 raise ValueError(f"{saved}: binary-only metrics cannot be reused; rerun without --reuse")
             runs[family] = metrics
+            # reuse the tuned CNN configs so later CNN-bearing families (ensemble) don't re-tune
+            for site, sd in metrics['per_site'].items():
+                for task, cfg in sd.get('cnn_cfg', {}).items():
+                    if cfg is not None:
+                        cache.setdefault((site, task), cfg)
         else:
             runs[family] = run_family(family, sites=args.sites, cnn_cache=cache)
     write_comparison(runs, ROOT / "models" / "comparison_v2")

@@ -10,7 +10,7 @@ from .evaluation import COST_GRID
 
 def aggregate(metrics):
     sites = metrics['per_site']
-    out = {'aqi_not_estimable': []}
+    out = {'aqi_not_estimable': [], 'aqi_not_applicable': []}
     notes, resolved = [], []
     for task in ('nowcast', 'lead_time'):
         families = sorted(set().union(*(sd['tasks'][task] for sd in sites.values())))
@@ -31,7 +31,7 @@ def aggregate(metrics):
                                                    for family, result in results.items()}
             out['aqi_site_summary'][site][task] = {family: {key: result[key] for key in ('delta_ap', 'delta_ap_ci', 'delta_rps', 'delta_rps_ci', 'pos_count')}
                                                    for family, result in sd['aqi_ablation'][task].items()
-                                                   if result.get('status') != 'not_estimable'}
+                                                   if result.get('status') not in ('not_estimable', 'not_applicable')}
             learned = [family for family in results if family != 'climatology']
             if learned:
                 best = max(learned, key=lambda family: results[family]['ap'])
@@ -39,8 +39,8 @@ def aggregate(metrics):
                 strength = 'interval-separated from climatology' if result['ap_ci'][0] > baseline['ap_ci'][1] else 'not interval-separated from climatology'
                 notes.append(f'{site} {task}: strongest {best} AP={result["ap"]:.3f} ({strength})')
             for family, result in sd['aqi_ablation'][task].items():
-                if result.get('status') == 'not_estimable':
-                    out['aqi_not_estimable'].append({'site': site, 'task': task, 'family': family, 'reason': result['reason']})
+                if result.get('status') in ('not_estimable', 'not_applicable'):
+                    out['aqi_' + result['status']].append({'site': site, 'task': task, 'family': family, 'reason': result['reason']})
                     continue
                 lo, hi = result['delta_ap_ci']
                 if lo > 0 or hi < 0:
@@ -50,6 +50,8 @@ def aggregate(metrics):
                           'Directionally resolved paired intervals: ' + ', '.join(resolved) + '. These are individual comparisons, not multiplicity-adjusted evidence of a general AQI contribution.')
     if out['aqi_not_estimable']:
         out['aqi_verdict'] += f" {len(out['aqi_not_estimable'])} AQI comparisons were not estimable and excluded."
+    if out['aqi_not_applicable']:
+        out['aqi_verdict'] += f" {len(out['aqi_not_applicable'])} AQI comparisons were not applicable and excluded."
     return out
 
 
@@ -87,6 +89,7 @@ def _cohort_lines(title, result, climatology_ap):
 def write_family_report(metrics, path):
     family = metrics['family']
     lines = [f'{family.upper()} FOG PREDICTION V2',
+             f'Predictor set: {metrics.get("predictor_set", "weather")}',
              'Clock: fixed PST (UTC-8). Hourly label: minimum known GHCNh visibility category; fog = reported <=1 SM.',
              'AP/AUC/RPS intervals are marginal whole-day block intervals, not paired-model comparisons.',
              'Thresholds and isotonic calibration fit validation only; each held-out fold is evaluated once.', '']
@@ -97,14 +100,15 @@ def write_family_report(metrics, path):
             lines += [task.upper(), '']
             ablation = sd['aqi_ablation'][task][family]
             blocks = [('WITHOUT AQI (full history)', sd['tasks'][task][family], sd['tasks'][task]['climatology']['ap'])]
-            if ablation.get('status') != 'not_estimable':
+            if ablation.get('status') not in ('not_estimable', 'not_applicable'):
                 blocks += [('WITH AQI (matched rows)', ablation['with'], ablation['with']['climatology_ap']),
                            ('WITHOUT AQI (matched rows)', ablation['without'], ablation['without']['climatology_ap'])]
             for title, result, baseline in blocks:
                 lines += _cohort_lines(title, result, baseline)
                 grouped.setdefault((task, title), []).append((result, baseline))
-            if ablation.get('status') == 'not_estimable':
-                lines += [f'AQI ablation: not estimable — {ablation["reason"]}', '']
+            if ablation.get('status') in ('not_estimable', 'not_applicable'):
+                status = ablation['status'].replace('_', ' ')
+                lines += [f'AQI ablation: {status} — {ablation["reason"]}', '']
             else:
                 lines += [f'Paired AQI delta AP: {_interval(ablation["delta_ap"], ablation["delta_ap_ci"])}',
                           f'Paired AQI delta RPS (with minus without; negative favors AQI): {_interval(ablation["delta_rps"], ablation["delta_rps_ci"])}', '']
@@ -138,7 +142,7 @@ def write_plots(metrics, *, art_dir):
         folder.mkdir(parents=True, exist_ok=True)
         for task in ('nowcast', 'lead_time'):
             results = {family: result for family, result in sd['tasks'][task].items()
-                       if result.get('status') != 'not_estimable'}
+                       if result.get('status') not in ('not_estimable', 'not_applicable')}
             if not results:
                 continue
             fig, axes = plt.subplots(1, 2, figsize=(10, 4), sharex=True, sharey=True)
@@ -174,7 +178,10 @@ def write_plots(metrics, *, art_dir):
 def write_comparison(runs, out_dir):
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
-    combined = {'families': list(runs), 'per_site': {}}
+    combined = {'families': list(runs),
+                'predictor_sets': {'climatology': 'weather',
+                                   **{family: metrics.get('predictor_set', 'weather') for family, metrics in runs.items()}},
+                'per_site': {}}
     for family, metrics in runs.items():
         for site, sd in metrics['per_site'].items():
             target = combined['per_site'].setdefault(site, {'cohort': sd['cohort'], 'tasks': {}, 'aqi_ablation': {}, 'fold_audit': {}})
@@ -187,14 +194,14 @@ def write_comparison(runs, out_dir):
              'Fixed PST; hourly minimum GHCNh category; fog = reported <=1 SM. Retrospective expanding-origin evaluation.',
              'AP/AUC/RPS confidence intervals are marginal per-model whole-day block intervals; only AQI deltas use paired draws.',
              'Median-meters log10 error excludes rows where either the observed or median category is censored (0 or 17).', '',
-             '| Site | Task | Family | AP (95% CI) | RPS (95% CI) | NLL | Within one | Median-meters log10 MAE (n) | ROC-AUC (95% CI) | Calibrated Brier / ECE |',
-             '|---|---|---|---|---|---|---|---|---|---|']
+             '| Site | Task | Family | Predictor set | AP (95% CI) | RPS (95% CI) | NLL | Within one | Median-meters log10 MAE (n) | ROC-AUC (95% CI) | Calibrated Brier / ECE |',
+             '|---|---|---|---|---|---|---|---|---|---|---|']
     for site, sd in combined['per_site'].items():
         for task, results in sd['tasks'].items():
             for family, result in results.items():
                 cal = result['calibration']
                 ordinal = result['ordinal']
-                lines.append(f'| {site} | {task} | {family} | {_interval(result["ap"], result["ap_ci"])} | {_interval(ordinal["rps"], ordinal["rps_ci"])} | {ordinal["nll"]:.6f} | {ordinal["within_one"]:.6f} | {_meters_error(ordinal)} | {_interval(result["roc_auc"], result["roc_auc_ci"])} | {cal["brier_after"]:.6f} / {cal["ece_after"]:.6f} |')
+                lines.append(f'| {site} | {task} | {family} | {combined["predictor_sets"][family]} | {_interval(result["ap"], result["ap_ci"])} | {_interval(ordinal["rps"], ordinal["rps_ci"])} | {ordinal["nll"]:.6f} | {ordinal["within_one"]:.6f} | {_meters_error(ordinal)} | {_interval(result["roc_auc"], result["roc_auc_ci"])} | {cal["brier_after"]:.6f} / {cal["ece_after"]:.6f} |')
     lines += ['', '## Validation-selected operating points', '',
               '| Site | Task | Family | FN:FP | Mean threshold | Precision | Recall | F1 | Alert rate | Cost/issue |',
               '|---|---|---|---|---|---|---|---|---|---|']
@@ -211,9 +218,12 @@ def write_comparison(runs, out_dir):
     for site, sd in combined['per_site'].items():
         for task, results in sd['aqi_ablation'].items():
             for family, result in results.items():
-                if result.get('status') == 'not_estimable':
+                if result.get('status') in ('not_estimable', 'not_applicable'):
                     continue
                 lines.append(f'| {site} | {task} | {family} | {_interval(result["delta_ap"], result["delta_ap_ci"])} | {_interval(result["delta_rps"], result["delta_rps_ci"])} | {result["pos_count"]} |')
+    for status in ('not_estimable', 'not_applicable'):
+        for row in combined['aggregate']['aqi_' + status]:
+            lines.append(f'- AQI {status.replace("_", " ")}: {row["site"]}/{row["task"]}/{row["family"]} — {row["reason"]}')
     lines += ['', '## Operational verdict', '', combined['aggregate']['predictability_verdict'], '', combined['aggregate']['aqi_verdict']]
     (out_dir / 'model_comparison_v2.json').write_text(json.dumps(combined, indent=2, allow_nan=False), encoding='utf-8')
     (out_dir / 'model_comparison_v2.md').write_text('\n'.join(lines) + '\n', encoding='utf-8')

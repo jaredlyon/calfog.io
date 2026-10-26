@@ -72,6 +72,8 @@ def stage_spies(monkeypatch, prep):
             ids = check_upstream(Xtr, stage)
             np.testing.assert_array_equal(ctr, _categories(ids))
             val_ids = Xv[:, 0].astype(int)
+            if len(Xv):
+                check_upstream(Xv, stage)
             np.testing.assert_array_equal(cv, _categories(val_ids))
             assert set(ids).isdisjoint(val_ids)
             fits.append((stage, ids.copy(), val_ids.copy()))
@@ -87,8 +89,16 @@ def stage_spies(monkeypatch, prep):
                     predictions[stage, row] = set(ids)
                 return _pmf(stage, row_ids)
 
-            return SimpleNamespace(predict_proba=predict_proba, feature_importances_=importance,
-                                   coef_=importance)
+            def calibrated(X):
+                assert len(cv), "OOF RF stacking must call predict_proba_raw"
+                predict_proba(X)
+                return _pmf(stage + 4, X[:, 0].astype(int))
+
+            return SimpleNamespace(
+                predict_proba=calibrated if stage == 1 else predict_proba,
+                predict_proba_raw=predict_proba, feature_importances_=importance,
+                coef_=importance,
+            )
         return fit_model
 
     for stage, name in enumerate(("fit_lr", "fit_rf", "fit_xgb")):
@@ -97,6 +107,7 @@ def stage_spies(monkeypatch, prep):
     def train_cnn(Xtr, ctr, Xv, cv, config, *, device, seed):
         ids = check_upstream(Xtr, 3, cnn=True)
         np.testing.assert_array_equal(ctr, _categories(ids))
+        check_upstream(Xv, 3, cnn=True)
         cnn_calls.append(ids.copy())
         assert Xtr.shape[1:] == (24, prep.Xtr.shape[2] + 3 * n_cumulative)
         assert device == "cpu"
@@ -104,6 +115,7 @@ def stage_spies(monkeypatch, prep):
                 {"cnn_best_val_nll": 0.75, "cnn_best_val_ap": 0.5, "cnn_epochs": 4})
 
     def predict_cnn(model, X, device):
+        check_upstream(X, 3, cnn=True)
         return _pmf(3, np.zeros(len(X)))
 
     monkeypatch.setattr(ensemble, "train_cnn", train_cnn)
@@ -133,7 +145,8 @@ def test_exact_pmf_blend_and_family_output(prep, stage_spies):
     assert ensemble.NEEDS_CNN_CFG is True
     for actual, ids in ((result.pmf_val, np.arange(100, 110)),
                         (result.pmf_test, np.arange(110, 120))):
-        expected = sum(weight * _pmf(stage, ids) for stage, weight in enumerate((0.1, 0.2, 0.3)))
+        expected = sum(weight * _pmf(stage + 4 if stage == 1 else stage, ids)
+                       for stage, weight in enumerate((0.1, 0.2, 0.3)))
         expected += 0.4 * _pmf(3, np.zeros(len(ids)))
         np.testing.assert_allclose(actual, expected, rtol=1e-7)
         assert actual.shape == (10, N_CATEGORIES)

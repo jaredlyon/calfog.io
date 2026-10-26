@@ -2,6 +2,7 @@
 
 Five contiguous blocks generate strictly earlier-prefix upstream predictions.
 Each stage appends 17 cumulative probabilities, never in-sample features.
+RF stacking features stay raw; only its final blend contribution is calibrated.
 OOF XGB early stopping uses the prefix's final 15%, not the predicted block.
 Final refits use available OOF rows; final XGB/CNN use outer validation.
 """
@@ -96,7 +97,8 @@ def fit_predict(prep, *, cnn_cfg: dict | None, seed: int) -> FamilyOutput:
                 Xv, cv = Xtr[:0], ctr[:0]
             model = fit_model(Xtr, ctr, Xv, cv, seed=seed_for(seed, name, "oof", block))
             rows = slice(bounds[block], bounds[block + 1])
-            pmf = model.predict_proba(train[rows, :width])
+            predict = model.predict_proba_raw if stage == 1 else model.predict_proba
+            pmf = predict(train[rows, :width])
             train[rows, width:width + n_cumulative] = pmf.cumsum(axis=1)[:, :-1]
 
     models, pmf_val, pmf_test = [], [], []
@@ -109,6 +111,8 @@ def fit_predict(prep, *, cnn_cfg: dict | None, seed: int) -> FamilyOutput:
         pv, pt = model.predict_proba(val[:, :width]), model.predict_proba(test[:, :width])
         pmf_val.append(pv)
         pmf_test.append(pt)
+        if stage == 1:
+            pv, pt = model.predict_proba_raw(val[:, :width]), model.predict_proba_raw(test[:, :width])
         val[:, width:width + n_cumulative] = pv.cumsum(axis=1)[:, :-1]
         test[:, width:width + n_cumulative] = pt.cumsum(axis=1)[:, :-1]
 

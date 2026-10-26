@@ -81,7 +81,7 @@ def test_fit_predict_never_reads_test_or_binary_labels(prep, family, monkeypatch
         np.testing.assert_array_equal(Xv, tree_view(prep.Xv))
         return SimpleNamespace(
             coef_=np.ones(n_features), feature_importances_=np.full(n_features, 1 / n_features),
-            best_iteration=7,
+            best_iteration=7, temperature_=1.0, prior_weight_=0.0,
             predict_proba=lambda X: np.full((len(X), N_CATEGORIES), 1 / N_CATEGORIES),
         )
 

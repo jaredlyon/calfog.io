@@ -1,6 +1,6 @@
 {
   "contract_version": 1,
-  "generated_utc": "2026-10-24T03:09:39.644322+00:00",
+  "generated_utc": "2026-10-26T01:34:39.286609+00:00",
   "endpoint": "https://api.open-meteo.com/v1/forecast",
   "approval_rule": "all rows non-null at every site in initial and verification probes",
   "approved": [
@@ -46,8 +46,8 @@
       "initial_probe": {
         "round": "initial",
         "rows": 192,
-        "time_start": "2026-10-16T00:00",
-        "time_end": "2026-10-23T23:00",
+        "time_start": "2026-10-18T00:00",
+        "time_end": "2026-10-25T23:00",
         "variables": {
           "temperature_2m": {
             "rows": 192,
@@ -138,8 +138,8 @@
       "serving_verification_probe": {
         "round": "serving_verification",
         "rows": 192,
-        "time_start": "2026-10-16T00:00",
-        "time_end": "2026-10-23T23:00",
+        "time_start": "2026-10-18T00:00",
+        "time_end": "2026-10-25T23:00",
         "variables": {
           "temperature_2m": {
             "rows": 192,
@@ -219,8 +219,8 @@
       "initial_probe": {
         "round": "initial",
         "rows": 192,
-        "time_start": "2026-10-16T00:00",
-        "time_end": "2026-10-23T23:00",
+        "time_start": "2026-10-18T00:00",
+        "time_end": "2026-10-25T23:00",
         "variables": {
           "temperature_2m": {
             "rows": 192,
@@ -311,8 +311,8 @@
       "serving_verification_probe": {
         "round": "serving_verification",
         "rows": 192,
-        "time_start": "2026-10-16T00:00",
-        "time_end": "2026-10-23T23:00",
+        "time_start": "2026-10-18T00:00",
+        "time_end": "2026-10-25T23:00",
         "variables": {
           "temperature_2m": {
             "rows": 192,
@@ -392,8 +392,8 @@
       "initial_probe": {
         "round": "initial",
         "rows": 192,
-        "time_start": "2026-10-16T00:00",
-        "time_end": "2026-10-23T23:00",
+        "time_start": "2026-10-18T00:00",
+        "time_end": "2026-10-25T23:00",
         "variables": {
           "temperature_2m": {
             "rows": 192,
@@ -484,8 +484,8 @@
       "serving_verification_probe": {
         "round": "serving_verification",
         "rows": 192,
-        "time_start": "2026-10-16T00:00",
-        "time_end": "2026-10-23T23:00",
+        "time_start": "2026-10-18T00:00",
+        "time_end": "2026-10-25T23:00",
         "variables": {
           "temperature_2m": {
             "rows": 192,
@@ -565,8 +565,8 @@
       "initial_probe": {
         "round": "initial",
         "rows": 192,
-        "time_start": "2026-10-16T00:00",
-        "time_end": "2026-10-23T23:00",
+        "time_start": "2026-10-18T00:00",
+        "time_end": "2026-10-25T23:00",
         "variables": {
           "temperature_2m": {
             "rows": 192,
@@ -657,8 +657,8 @@
       "serving_verification_probe": {
         "round": "serving_verification",
         "rows": 192,
-        "time_start": "2026-10-16T00:00",
-        "time_end": "2026-10-23T23:00",
+        "time_start": "2026-10-18T00:00",
+        "time_end": "2026-10-25T23:00",
         "variables": {
           "temperature_2m": {
             "rows": 192,
@@ -738,8 +738,8 @@
       "initial_probe": {
         "round": "initial",
         "rows": 192,
-        "time_start": "2026-10-16T00:00",
-        "time_end": "2026-10-23T23:00",
+        "time_start": "2026-10-18T00:00",
+        "time_end": "2026-10-25T23:00",
         "variables": {
           "temperature_2m": {
             "rows": 192,
@@ -830,8 +830,8 @@
       "serving_verification_probe": {
         "round": "serving_verification",
         "rows": 192,
-        "time_start": "2026-10-16T00:00",
-        "time_end": "2026-10-23T23:00",
+        "time_start": "2026-10-18T00:00",
+        "time_end": "2026-10-25T23:00",
         "variables": {
           "temperature_2m": {
             "rows": 192,

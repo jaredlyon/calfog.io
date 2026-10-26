@@ -1,0 +1,1889 @@
+{
+  "generated_utc": "2026-10-24T21:02:10.373325+00:00",
+  "cohort": {
+    "feed": "historical",
+    "feed_source": "Open-Meteo Historical-Forecast best-match (non-vintage approximate proxy)",
+    "issue_start_inclusive_utc": "2025-12-01T08:00:00+00:00",
+    "issue_end_exclusive_utc": "2026-03-01T08:00:00+00:00",
+    "timezone": "Etc/GMT+8",
+    "duplicate_policy": "first eligible append per site/task/issue/model/feed"
+  },
+  "label_contract": "decoded ordinal hourly minimum; fog category <=4; lead all ten fixed-PST hours 00-09; forward finalization lag 1h",
+  "bootstrap": {
+    "resamples": 1000,
+    "unit": "Etc/GMT+8 issue day",
+    "method": "shared whole-day block bootstrap; point-centered 95% absolute-deviation interval"
+  },
+  "per_site": {
+    "location_6": {
+      "tasks": {
+        "nowcast": {
+          "feed_source": "Open-Meteo Historical-Forecast best-match (non-vintage approximate proxy)",
+          "xgboost": {
+            "status": "scored",
+            "n_issues": 2150,
+            "n_pos": 375,
+            "live_ap": 0.5816912318839196,
+            "roc_auc": 0.8825757746478873,
+            "brier": 0.10659136159657275,
+            "ece": 0.05558978043210914,
+            "rps": 0.10905581749749578,
+            "n_ordinal": 2033,
+            "live_ap_ci": [
+              0.47072389510443036,
+              0.6926585686634088
+            ],
+            "live_roc_auc_ci": [
+              0.853561727223143,
+              0.9115898220726315
+            ],
+            "bootstrap_resamples": 1000,
+            "valid_ap_resamples": 1000,
+            "retrospective_ap": 0.3166051582746056,
+            "delta_ap": 0.26508607360931397,
+            "feed_source": "Open-Meteo Historical-Forecast best-match (non-vintage approximate proxy)",
+            "faithful": false,
+            "nonfaithful_features": [
+              "soil_temperature_0_to_7cm"
+            ],
+            "vintage_faithful": false,
+            "cost_operating_points": {
+              "1": {
+                "fn_fp": "1:1",
+                "precision": 0.7063492063492064,
+                "recall": 0.23733333333333334,
+                "f1": 0.35528942115768464,
+                "alert_rate": 0.0586046511627907,
+                "expected_cost_per_issue": 0.15023255813953487,
+                "tp": 89,
+                "fp": 37,
+                "fn": 286,
+                "tn": 1738
+              },
+              "3": {
+                "fn_fp": "3:1",
+                "precision": 0.5672043010752689,
+                "recall": 0.5626666666666666,
+                "f1": 0.5649263721552878,
+                "alert_rate": 0.17302325581395347,
+                "expected_cost_per_issue": 0.30372093023255814,
+                "tp": 211,
+                "fp": 161,
+                "fn": 164,
+                "tn": 1614
+              },
+              "5": {
+                "fn_fp": "5:1",
+                "precision": 0.47580645161290325,
+                "recall": 0.7866666666666666,
+                "f1": 0.592964824120603,
+                "alert_rate": 0.28837209302325584,
+                "expected_cost_per_issue": 0.3372093023255814,
+                "tp": 295,
+                "fp": 325,
+                "fn": 80,
+                "tn": 1450
+              },
+              "10": {
+                "fn_fp": "10:1",
+                "precision": 0.35054617676266137,
+                "recall": 0.9413333333333334,
+                "f1": 0.5108538350217077,
+                "alert_rate": 0.46837209302325583,
+                "expected_cost_per_issue": 0.40651162790697676,
+                "tp": 353,
+                "fp": 654,
+                "fn": 22,
+                "tn": 1121
+              },
+              "20": {
+                "fn_fp": "20:1",
+                "precision": 0.3076278290025147,
+                "recall": 0.9786666666666667,
+                "f1": 0.46811224489795916,
+                "alert_rate": 0.5548837209302325,
+                "expected_cost_per_issue": 0.4586046511627907,
+                "tp": 367,
+                "fp": 826,
+                "fn": 8,
+                "tn": 949
+              }
+            }
+          },
+          "temporal_cnn": {
+            "status": "scored",
+            "n_issues": 2150,
+            "n_pos": 375,
+            "live_ap": 0.41529005357635207,
+            "roc_auc": 0.8225772769953053,
+            "brier": 0.15239459996280874,
+            "ece": 0.13571141748661605,
+            "rps": 0.12080238361309426,
+            "n_ordinal": 2033,
+            "live_ap_ci": [
+              0.30849858969856103,
+              0.5220815174541431
+            ],
+            "live_roc_auc_ci": [
+              0.7786319450026818,
+              0.8665226089879287
+            ],
+            "bootstrap_resamples": 1000,
+            "valid_ap_resamples": 1000,
+            "retrospective_ap": 0.35107704119859195,
+            "delta_ap": 0.06421301237776011,
+            "feed_source": "Open-Meteo Historical-Forecast best-match (non-vintage approximate proxy)",
+            "faithful": false,
+            "nonfaithful_features": [
+              "soil_temperature_0_to_7cm"
+            ],
+            "vintage_faithful": false,
+            "cost_operating_points": {
+              "1": {
+                "fn_fp": "1:1",
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0,
+                "alert_rate": 0.0,
+                "expected_cost_per_issue": 0.1744186046511628,
+                "tp": 0,
+                "fp": 0,
+                "fn": 375,
+                "tn": 1775
+              },
+              "3": {
+                "fn_fp": "3:1",
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0,
+                "alert_rate": 0.0,
+                "expected_cost_per_issue": 0.5232558139534884,
+                "tp": 0,
+                "fp": 0,
+                "fn": 375,
+                "tn": 1775
+              },
+              "5": {
+                "fn_fp": "5:1",
+                "precision": 1.0,
+                "recall": 0.024,
+                "f1": 0.046875,
+                "alert_rate": 0.004186046511627907,
+                "expected_cost_per_issue": 0.8511627906976744,
+                "tp": 9,
+                "fp": 0,
+                "fn": 366,
+                "tn": 1775
+              },
+              "10": {
+                "fn_fp": "10:1",
+                "precision": 0.41002277904328016,
+                "recall": 0.48,
+                "f1": 0.44226044226044225,
+                "alert_rate": 0.20418604651162792,
+                "expected_cost_per_issue": 1.0274418604651163,
+                "tp": 180,
+                "fp": 259,
+                "fn": 195,
+                "tn": 1516
+              },
+              "20": {
+                "fn_fp": "20:1",
+                "precision": 0.37834549878345497,
+                "recall": 0.8293333333333334,
+                "f1": 0.5196324143692564,
+                "alert_rate": 0.38232558139534883,
+                "expected_cost_per_issue": 0.8330232558139535,
+                "tp": 311,
+                "fp": 511,
+                "fn": 64,
+                "tn": 1264
+              }
+            }
+          }
+        },
+        "lead_time": {
+          "feed_source": "Open-Meteo Historical-Forecast best-match (non-vintage approximate proxy)",
+          "xgboost": {
+            "status": "scored",
+            "n_issues": 89,
+            "n_pos": 46,
+            "live_ap": 0.8490483330613592,
+            "roc_auc": 0.8809403437815976,
+            "brier": 0.17085381160006693,
+            "ece": 0.16805852267758772,
+            "rps": 0.15344906113603052,
+            "n_ordinal": 66,
+            "live_ap_ci": [
+              0.7575883299362548,
+              0.9405083361864636
+            ],
+            "live_roc_auc_ci": [
+              0.8124476438971097,
+              0.9494330436660855
+            ],
+            "bootstrap_resamples": 1000,
+            "valid_ap_resamples": 1000,
+            "retrospective_ap": 0.5233397003263379,
+            "delta_ap": 0.32570863273502126,
+            "feed_source": "Open-Meteo Historical-Forecast best-match (non-vintage approximate proxy)",
+            "faithful": false,
+            "nonfaithful_features": [
+              "soil_temperature_0_to_7cm"
+            ],
+            "vintage_faithful": false,
+            "cost_operating_points": {
+              "1": {
+                "fn_fp": "1:1",
+                "precision": 0.8666666666666667,
+                "recall": 0.5652173913043478,
+                "f1": 0.6842105263157895,
+                "alert_rate": 0.33707865168539325,
+                "expected_cost_per_issue": 0.2696629213483146,
+                "tp": 26,
+                "fp": 4,
+                "fn": 20,
+                "tn": 39
+              },
+              "3": {
+                "fn_fp": "3:1",
+                "precision": 0.6666666666666666,
+                "recall": 1.0,
+                "f1": 0.8,
+                "alert_rate": 0.7752808988764045,
+                "expected_cost_per_issue": 0.25842696629213485,
+                "tp": 46,
+                "fp": 23,
+                "fn": 0,
+                "tn": 20
+              },
+              "5": {
+                "fn_fp": "5:1",
+                "precision": 0.6052631578947368,
+                "recall": 1.0,
+                "f1": 0.7540983606557377,
+                "alert_rate": 0.8539325842696629,
+                "expected_cost_per_issue": 0.33707865168539325,
+                "tp": 46,
+                "fp": 30,
+                "fn": 0,
+                "tn": 13
+              },
+              "10": {
+                "fn_fp": "10:1",
+                "precision": 0.5287356321839081,
+                "recall": 1.0,
+                "f1": 0.6917293233082706,
+                "alert_rate": 0.9775280898876404,
+                "expected_cost_per_issue": 0.4606741573033708,
+                "tp": 46,
+                "fp": 41,
+                "fn": 0,
+                "tn": 2
+              },
+              "20": {
+                "fn_fp": "20:1",
+                "precision": 0.5227272727272727,
+                "recall": 1.0,
+                "f1": 0.6865671641791045,
+                "alert_rate": 0.9887640449438202,
+                "expected_cost_per_issue": 0.47191011235955055,
+                "tp": 46,
+                "fp": 42,
+                "fn": 0,
+                "tn": 1
+              }
+            }
+          },
+          "temporal_cnn": {
+            "status": "scored",
+            "n_issues": 89,
+            "n_pos": 46,
+            "live_ap": 0.6931328489415319,
+            "roc_auc": 0.7527805864509606,
+            "brier": 0.21225123999488935,
+            "ece": 0.18856645207787429,
+            "rps": 0.17768318272879804,
+            "n_ordinal": 66,
+            "live_ap_ci": [
+              0.5699226029678655,
+              0.8163430949151984
+            ],
+            "live_roc_auc_ci": [
+              0.6517819846835966,
+              0.8537791882183245
+            ],
+            "bootstrap_resamples": 1000,
+            "valid_ap_resamples": 1000,
+            "retrospective_ap": 0.5193536785434628,
+            "delta_ap": 0.17377917039806912,
+            "feed_source": "Open-Meteo Historical-Forecast best-match (non-vintage approximate proxy)",
+            "faithful": false,
+            "nonfaithful_features": [
+              "soil_temperature_0_to_7cm"
+            ],
+            "vintage_faithful": false,
+            "cost_operating_points": {
+              "1": {
+                "fn_fp": "1:1",
+                "precision": 0.6808510638297872,
+                "recall": 0.6956521739130435,
+                "f1": 0.6881720430107527,
+                "alert_rate": 0.5280898876404494,
+                "expected_cost_per_issue": 0.3258426966292135,
+                "tp": 32,
+                "fp": 15,
+                "fn": 14,
+                "tn": 28
+              },
+              "3": {
+                "fn_fp": "3:1",
+                "precision": 0.5844155844155844,
+                "recall": 0.9782608695652174,
+                "f1": 0.7317073170731707,
+                "alert_rate": 0.8651685393258427,
+                "expected_cost_per_issue": 0.39325842696629215,
+                "tp": 45,
+                "fp": 32,
+                "fn": 1,
+                "tn": 11
+              },
+              "5": {
+                "fn_fp": "5:1",
+                "precision": 0.5897435897435898,
+                "recall": 1.0,
+                "f1": 0.7419354838709677,
+                "alert_rate": 0.8764044943820225,
+                "expected_cost_per_issue": 0.3595505617977528,
+                "tp": 46,
+                "fp": 32,
+                "fn": 0,
+                "tn": 11
+              },
+              "10": {
+                "fn_fp": "10:1",
+                "precision": 0.575,
+                "recall": 1.0,
+                "f1": 0.7301587301587301,
+                "alert_rate": 0.898876404494382,
+                "expected_cost_per_issue": 0.38202247191011235,
+                "tp": 46,
+                "fp": 34,
+                "fn": 0,
+                "tn": 9
+              },
+              "20": {
+                "fn_fp": "20:1",
+                "precision": 0.5411764705882353,
+                "recall": 1.0,
+                "f1": 0.7022900763358778,
+                "alert_rate": 0.9550561797752809,
+                "expected_cost_per_issue": 0.43820224719101125,
+                "tp": 46,
+                "fp": 39,
+                "fn": 0,
+                "tn": 4
+              }
+            }
+          }
+        }
+      }
+    },
+    "location_7": {
+      "tasks": {
+        "nowcast": {
+          "feed_source": "Open-Meteo Historical-Forecast best-match (non-vintage approximate proxy)",
+          "xgboost": {
+            "status": "scored",
+            "n_issues": 2160,
+            "n_pos": 347,
+            "live_ap": 0.5459083635152268,
+            "roc_auc": 0.8738219487499026,
+            "brier": 0.10487942119031009,
+            "ece": 0.06100078877462098,
+            "rps": 0.12169014454670808,
+            "n_ordinal": 2159,
+            "live_ap_ci": [
+              0.4439284639960977,
+              0.6478882630343559
+            ],
+            "live_roc_auc_ci": [
+              0.8427699505845648,
+              0.9048739469152404
+            ],
+            "bootstrap_resamples": 1000,
+            "valid_ap_resamples": 1000,
+            "retrospective_ap": 0.28494687817302733,
+            "delta_ap": 0.26096148534219943,
+            "feed_source": "Open-Meteo Historical-Forecast best-match (non-vintage approximate proxy)",
+            "faithful": false,
+            "nonfaithful_features": [
+              "soil_temperature_0_to_7cm"
+            ],
+            "vintage_faithful": false,
+            "cost_operating_points": {
+              "1": {
+                "fn_fp": "1:1",
+                "precision": 0.7894736842105263,
+                "recall": 0.1729106628242075,
+                "f1": 0.28368794326241137,
+                "alert_rate": 0.03518518518518519,
+                "expected_cost_per_issue": 0.14027777777777778,
+                "tp": 60,
+                "fp": 16,
+                "fn": 287,
+                "tn": 1797
+              },
+              "3": {
+                "fn_fp": "3:1",
+                "precision": 0.5274390243902439,
+                "recall": 0.49855907780979825,
+                "f1": 0.5125925925925926,
+                "alert_rate": 0.15185185185185185,
+                "expected_cost_per_issue": 0.31342592592592594,
+                "tp": 173,
+                "fp": 155,
+                "fn": 174,
+                "tn": 1658
+              },
+              "5": {
+                "fn_fp": "5:1",
+                "precision": 0.4547069271758437,
+                "recall": 0.7377521613832853,
+                "f1": 0.5626373626373626,
+                "alert_rate": 0.26064814814814813,
+                "expected_cost_per_issue": 0.3527777777777778,
+                "tp": 256,
+                "fp": 307,
+                "fn": 91,
+                "tn": 1506
+              },
+              "10": {
+                "fn_fp": "10:1",
+                "precision": 0.3969359331476323,
+                "recall": 0.8213256484149856,
+                "f1": 0.5352112676056338,
+                "alert_rate": 0.33240740740740743,
+                "expected_cost_per_issue": 0.4875,
+                "tp": 285,
+                "fp": 433,
+                "fn": 62,
+                "tn": 1380
+              },
+              "20": {
+                "fn_fp": "20:1",
+                "precision": 0.32663316582914576,
+                "recall": 0.9365994236311239,
+                "f1": 0.4843517138599106,
+                "alert_rate": 0.46064814814814814,
+                "expected_cost_per_issue": 0.5138888888888888,
+                "tp": 325,
+                "fp": 670,
+                "fn": 22,
+                "tn": 1143
+              }
+            }
+          },
+          "temporal_cnn": {
+            "status": "scored",
+            "n_issues": 2160,
+            "n_pos": 347,
+            "live_ap": 0.35823275791500825,
+            "roc_auc": 0.8130218673652185,
+            "brier": 0.14136209730056656,
+            "ece": 0.12344090025340948,
+            "rps": 0.1489286461633807,
+            "n_ordinal": 2159,
+            "live_ap_ci": [
+              0.25757914138043914,
+              0.45888637444957736
+            ],
+            "live_roc_auc_ci": [
+              0.7710480624408951,
+              0.854995672289542
+            ],
+            "bootstrap_resamples": 1000,
+            "valid_ap_resamples": 1000,
+            "retrospective_ap": 0.2620430140236082,
+            "delta_ap": 0.09618974389140006,
+            "feed_source": "Open-Meteo Historical-Forecast best-match (non-vintage approximate proxy)",
+            "faithful": false,
+            "nonfaithful_features": [
+              "soil_temperature_0_to_7cm"
+            ],
+            "vintage_faithful": false,
+            "cost_operating_points": {
+              "1": {
+                "fn_fp": "1:1",
+                "precision": 0.3333333333333333,
+                "recall": 0.01729106628242075,
+                "f1": 0.03287671232876712,
+                "alert_rate": 0.008333333333333333,
+                "expected_cost_per_issue": 0.16342592592592592,
+                "tp": 6,
+                "fp": 12,
+                "fn": 341,
+                "tn": 1801
+              },
+              "3": {
+                "fn_fp": "3:1",
+                "precision": 0.4225352112676056,
+                "recall": 0.08645533141210375,
+                "f1": 0.14354066985645933,
+                "alert_rate": 0.03287037037037037,
+                "expected_cost_per_issue": 0.45925925925925926,
+                "tp": 30,
+                "fp": 41,
+                "fn": 317,
+                "tn": 1772
+              },
+              "5": {
+                "fn_fp": "5:1",
+                "precision": 0.36,
+                "recall": 0.12968299711815562,
+                "f1": 0.1906779661016949,
+                "alert_rate": 0.05787037037037037,
+                "expected_cost_per_issue": 0.7361111111111112,
+                "tp": 45,
+                "fp": 80,
+                "fn": 302,
+                "tn": 1733
+              },
+              "10": {
+                "fn_fp": "10:1",
+                "precision": 0.30120481927710846,
+                "recall": 0.1440922190201729,
+                "f1": 0.1949317738791423,
+                "alert_rate": 0.07685185185185185,
+                "expected_cost_per_issue": 1.4287037037037038,
+                "tp": 50,
+                "fp": 116,
+                "fn": 297,
+                "tn": 1697
+              },
+              "20": {
+                "fn_fp": "20:1",
+                "precision": 0.38688524590163936,
+                "recall": 0.6801152737752162,
+                "f1": 0.49320794148380354,
+                "alert_rate": 0.2824074074074074,
+                "expected_cost_per_issue": 1.200925925925926,
+                "tp": 236,
+                "fp": 374,
+                "fn": 111,
+                "tn": 1439
+              }
+            }
+          }
+        },
+        "lead_time": {
+          "feed_source": "Open-Meteo Historical-Forecast best-match (non-vintage approximate proxy)",
+          "xgboost": {
+            "status": "scored",
+            "n_issues": 90,
+            "n_pos": 39,
+            "live_ap": 0.7029196034521319,
+            "roc_auc": 0.8255404725992961,
+            "brier": 0.18851400322135636,
+            "ece": 0.14858920931519873,
+            "rps": 0.17562357954397728,
+            "n_ordinal": 90,
+            "live_ap_ci": [
+              0.5519582913133604,
+              0.8538809155909034
+            ],
+            "live_roc_auc_ci": [
+              0.7331046200531495,
+              0.9179763251454427
+            ],
+            "bootstrap_resamples": 1000,
+            "valid_ap_resamples": 1000,
+            "retrospective_ap": 0.3833276294241807,
+            "delta_ap": 0.3195919740279512,
+            "feed_source": "Open-Meteo Historical-Forecast best-match (non-vintage approximate proxy)",
+            "faithful": false,
+            "nonfaithful_features": [
+              "soil_temperature_0_to_7cm"
+            ],
+            "vintage_faithful": false,
+            "cost_operating_points": {
+              "1": {
+                "fn_fp": "1:1",
+                "precision": 0.75,
+                "recall": 0.7692307692307693,
+                "f1": 0.759493670886076,
+                "alert_rate": 0.4444444444444444,
+                "expected_cost_per_issue": 0.2111111111111111,
+                "tp": 30,
+                "fp": 10,
+                "fn": 9,
+                "tn": 41
+              },
+              "3": {
+                "fn_fp": "3:1",
+                "precision": 0.6875,
+                "recall": 0.8461538461538461,
+                "f1": 0.7586206896551724,
+                "alert_rate": 0.5333333333333333,
+                "expected_cost_per_issue": 0.36666666666666664,
+                "tp": 33,
+                "fp": 15,
+                "fn": 6,
+                "tn": 36
+              },
+              "5": {
+                "fn_fp": "5:1",
+                "precision": 0.6206896551724138,
+                "recall": 0.9230769230769231,
+                "f1": 0.7422680412371134,
+                "alert_rate": 0.6444444444444445,
+                "expected_cost_per_issue": 0.4111111111111111,
+                "tp": 36,
+                "fp": 22,
+                "fn": 3,
+                "tn": 29
+              },
+              "10": {
+                "fn_fp": "10:1",
+                "precision": 0.5507246376811594,
+                "recall": 0.9743589743589743,
+                "f1": 0.7037037037037037,
+                "alert_rate": 0.7666666666666667,
+                "expected_cost_per_issue": 0.45555555555555555,
+                "tp": 38,
+                "fp": 31,
+                "fn": 1,
+                "tn": 20
+              },
+              "20": {
+                "fn_fp": "20:1",
+                "precision": 0.4431818181818182,
+                "recall": 1.0,
+                "f1": 0.6141732283464567,
+                "alert_rate": 0.9777777777777777,
+                "expected_cost_per_issue": 0.5444444444444444,
+                "tp": 39,
+                "fp": 49,
+                "fn": 0,
+                "tn": 2
+              }
+            }
+          },
+          "temporal_cnn": {
+            "status": "scored",
+            "n_issues": 90,
+            "n_pos": 39,
+            "live_ap": 0.6613355206378463,
+            "roc_auc": 0.801659125188537,
+            "brier": 0.18563461631017147,
+            "ece": 0.11298214303226753,
+            "rps": 0.17843869996224795,
+            "n_ordinal": 90,
+            "live_ap_ci": [
+              0.5150412961045837,
+              0.8076297451711089
+            ],
+            "live_roc_auc_ci": [
+              0.7077814087464823,
+              0.8955368416305917
+            ],
+            "bootstrap_resamples": 1000,
+            "valid_ap_resamples": 1000,
+            "retrospective_ap": 0.37161610173035087,
+            "delta_ap": 0.2897194189074954,
+            "feed_source": "Open-Meteo Historical-Forecast best-match (non-vintage approximate proxy)",
+            "faithful": false,
+            "nonfaithful_features": [
+              "soil_temperature_0_to_7cm"
+            ],
+            "vintage_faithful": false,
+            "cost_operating_points": {
+              "1": {
+                "fn_fp": "1:1",
+                "precision": 0.696969696969697,
+                "recall": 0.5897435897435898,
+                "f1": 0.6388888888888888,
+                "alert_rate": 0.36666666666666664,
+                "expected_cost_per_issue": 0.28888888888888886,
+                "tp": 23,
+                "fp": 10,
+                "fn": 16,
+                "tn": 41
+              },
+              "3": {
+                "fn_fp": "3:1",
+                "precision": 0.6666666666666666,
+                "recall": 0.8717948717948718,
+                "f1": 0.7555555555555555,
+                "alert_rate": 0.5666666666666667,
+                "expected_cost_per_issue": 0.35555555555555557,
+                "tp": 34,
+                "fp": 17,
+                "fn": 5,
+                "tn": 34
+              },
+              "5": {
+                "fn_fp": "5:1",
+                "precision": 0.5507246376811594,
+                "recall": 0.9743589743589743,
+                "f1": 0.7037037037037037,
+                "alert_rate": 0.7666666666666667,
+                "expected_cost_per_issue": 0.4,
+                "tp": 38,
+                "fp": 31,
+                "fn": 1,
+                "tn": 20
+              },
+              "10": {
+                "fn_fp": "10:1",
+                "precision": 0.5,
+                "recall": 1.0,
+                "f1": 0.6666666666666666,
+                "alert_rate": 0.8666666666666667,
+                "expected_cost_per_issue": 0.43333333333333335,
+                "tp": 39,
+                "fp": 39,
+                "fn": 0,
+                "tn": 12
+              },
+              "20": {
+                "fn_fp": "20:1",
+                "precision": 0.47560975609756095,
+                "recall": 1.0,
+                "f1": 0.6446280991735537,
+                "alert_rate": 0.9111111111111111,
+                "expected_cost_per_issue": 0.4777777777777778,
+                "tp": 39,
+                "fp": 43,
+                "fn": 0,
+                "tn": 8
+              }
+            }
+          }
+        }
+      }
+    },
+    "location_8": {
+      "tasks": {
+        "nowcast": {
+          "feed_source": "Open-Meteo Historical-Forecast best-match (non-vintage approximate proxy)",
+          "xgboost": {
+            "status": "scored",
+            "n_issues": 2160,
+            "n_pos": 442,
+            "live_ap": 0.584681953429725,
+            "roc_auc": 0.8550699540136641,
+            "brier": 0.11656510928792004,
+            "ece": 0.027416421095097683,
+            "rps": 0.13312003907143857,
+            "n_ordinal": 2032,
+            "live_ap_ci": [
+              0.4692240710189858,
+              0.7001398358404641
+            ],
+            "live_roc_auc_ci": [
+              0.8213978340790351,
+              0.8887420739482932
+            ],
+            "bootstrap_resamples": 1000,
+            "valid_ap_resamples": 1000,
+            "retrospective_ap": 0.4494139052075266,
+            "delta_ap": 0.13526804822219834,
+            "feed_source": "Open-Meteo Historical-Forecast best-match (non-vintage approximate proxy)",
+            "faithful": false,
+            "nonfaithful_features": [
+              "soil_temperature_0_to_7cm"
+            ],
+            "vintage_faithful": false,
+            "cost_operating_points": {
+              "1": {
+                "fn_fp": "1:1",
+                "precision": 0.5736263736263736,
+                "recall": 0.5904977375565611,
+                "f1": 0.5819397993311036,
+                "alert_rate": 0.21064814814814814,
+                "expected_cost_per_issue": 0.1736111111111111,
+                "tp": 261,
+                "fp": 194,
+                "fn": 181,
+                "tn": 1524
+              },
+              "3": {
+                "fn_fp": "3:1",
+                "precision": 0.40668824163969797,
+                "recall": 0.8529411764705882,
+                "f1": 0.5507669831994156,
+                "alert_rate": 0.42916666666666664,
+                "expected_cost_per_issue": 0.3449074074074074,
+                "tp": 377,
+                "fp": 550,
+                "fn": 65,
+                "tn": 1168
+              },
+              "5": {
+                "fn_fp": "5:1",
+                "precision": 0.385929648241206,
+                "recall": 0.8687782805429864,
+                "f1": 0.534446764091858,
+                "alert_rate": 0.46064814814814814,
+                "expected_cost_per_issue": 0.41712962962962963,
+                "tp": 384,
+                "fp": 611,
+                "fn": 58,
+                "tn": 1107
+              },
+              "10": {
+                "fn_fp": "10:1",
+                "precision": 0.33849918433931486,
+                "recall": 0.9389140271493213,
+                "f1": 0.49760191846522783,
+                "alert_rate": 0.5675925925925925,
+                "expected_cost_per_issue": 0.500462962962963,
+                "tp": 415,
+                "fp": 811,
+                "fn": 27,
+                "tn": 907
+              },
+              "20": {
+                "fn_fp": "20:1",
+                "precision": 0.28980679546968685,
+                "recall": 0.9841628959276018,
+                "f1": 0.44776119402985076,
+                "alert_rate": 0.6949074074074074,
+                "expected_cost_per_issue": 0.5583333333333333,
+                "tp": 435,
+                "fp": 1066,
+                "fn": 7,
+                "tn": 652
+              }
+            }
+          },
+          "temporal_cnn": {
+            "status": "scored",
+            "n_issues": 2160,
+            "n_pos": 442,
+            "live_ap": 0.29781866972077686,
+            "roc_auc": 0.6885815085414483,
+            "brier": 0.1708343909502247,
+            "ece": 0.11762769640080994,
+            "rps": 0.16550936780418699,
+            "n_ordinal": 2032,
+            "live_ap_ci": [
+              0.21236859655897256,
+              0.38326874288258117
+            ],
+            "live_roc_auc_ci": [
+              0.6234329476873683,
+              0.7537300693955282
+            ],
+            "bootstrap_resamples": 1000,
+            "valid_ap_resamples": 1000,
+            "retrospective_ap": 0.4473562816765473,
+            "delta_ap": -0.14953761195577042,
+            "feed_source": "Open-Meteo Historical-Forecast best-match (non-vintage approximate proxy)",
+            "faithful": false,
+            "nonfaithful_features": [
+              "soil_temperature_0_to_7cm"
+            ],
+            "vintage_faithful": false,
+            "cost_operating_points": {
+              "1": {
+                "fn_fp": "1:1",
+                "precision": 0.275,
+                "recall": 0.049773755656108594,
+                "f1": 0.0842911877394636,
+                "alert_rate": 0.037037037037037035,
+                "expected_cost_per_issue": 0.2212962962962963,
+                "tp": 22,
+                "fp": 58,
+                "fn": 420,
+                "tn": 1660
+              },
+              "3": {
+                "fn_fp": "3:1",
+                "precision": 0.3048780487804878,
+                "recall": 0.2828054298642534,
+                "f1": 0.2934272300469484,
+                "alert_rate": 0.18981481481481483,
+                "expected_cost_per_issue": 0.5722222222222222,
+                "tp": 125,
+                "fp": 285,
+                "fn": 317,
+                "tn": 1433
+              },
+              "5": {
+                "fn_fp": "5:1",
+                "precision": 0.31230283911671924,
+                "recall": 0.4479638009049774,
+                "f1": 0.3680297397769517,
+                "alert_rate": 0.2935185185185185,
+                "expected_cost_per_issue": 0.7666666666666667,
+                "tp": 198,
+                "fp": 436,
+                "fn": 244,
+                "tn": 1282
+              },
+              "10": {
+                "fn_fp": "10:1",
+                "precision": 0.31935176358436607,
+                "recall": 0.7579185520361991,
+                "f1": 0.4493628437290409,
+                "alert_rate": 0.48564814814814816,
+                "expected_cost_per_issue": 0.825925925925926,
+                "tp": 335,
+                "fp": 714,
+                "fn": 107,
+                "tn": 1004
+              },
+              "20": {
+                "fn_fp": "20:1",
+                "precision": 0.2969502407704655,
+                "recall": 0.8371040723981901,
+                "f1": 0.43838862559241704,
+                "alert_rate": 0.5768518518518518,
+                "expected_cost_per_issue": 1.0722222222222222,
+                "tp": 370,
+                "fp": 876,
+                "fn": 72,
+                "tn": 842
+              }
+            }
+          }
+        },
+        "lead_time": {
+          "feed_source": "Open-Meteo Historical-Forecast best-match (non-vintage approximate proxy)",
+          "xgboost": {
+            "status": "scored",
+            "n_issues": 90,
+            "n_pos": 49,
+            "live_ap": 0.7915655495314361,
+            "roc_auc": 0.767297162767546,
+            "brier": 0.19752410491128305,
+            "ece": 0.10095204542482208,
+            "rps": 0.17693611607853765,
+            "n_ordinal": 68,
+            "live_ap_ci": [
+              0.6976900945389821,
+              0.8854410045238901
+            ],
+            "live_roc_auc_ci": [
+              0.6780282019316932,
+              0.8565661236033988
+            ],
+            "bootstrap_resamples": 1000,
+            "valid_ap_resamples": 1000,
+            "retrospective_ap": 0.5752872359809375,
+            "delta_ap": 0.21627831355049865,
+            "feed_source": "Open-Meteo Historical-Forecast best-match (non-vintage approximate proxy)",
+            "faithful": false,
+            "nonfaithful_features": [
+              "soil_temperature_0_to_7cm"
+            ],
+            "vintage_faithful": false,
+            "cost_operating_points": {
+              "1": {
+                "fn_fp": "1:1",
+                "precision": 0.6615384615384615,
+                "recall": 0.8775510204081632,
+                "f1": 0.7543859649122807,
+                "alert_rate": 0.7222222222222222,
+                "expected_cost_per_issue": 0.3111111111111111,
+                "tp": 43,
+                "fp": 22,
+                "fn": 6,
+                "tn": 19
+              },
+              "3": {
+                "fn_fp": "3:1",
+                "precision": 0.6,
+                "recall": 0.9795918367346939,
+                "f1": 0.7441860465116279,
+                "alert_rate": 0.8888888888888888,
+                "expected_cost_per_issue": 0.3888888888888889,
+                "tp": 48,
+                "fp": 32,
+                "fn": 1,
+                "tn": 9
+              },
+              "5": {
+                "fn_fp": "5:1",
+                "precision": 0.5714285714285714,
+                "recall": 0.9795918367346939,
+                "f1": 0.7218045112781954,
+                "alert_rate": 0.9333333333333333,
+                "expected_cost_per_issue": 0.45555555555555555,
+                "tp": 48,
+                "fp": 36,
+                "fn": 1,
+                "tn": 5
+              },
+              "10": {
+                "fn_fp": "10:1",
+                "precision": 0.5444444444444444,
+                "recall": 1.0,
+                "f1": 0.7050359712230215,
+                "alert_rate": 1.0,
+                "expected_cost_per_issue": 0.45555555555555555,
+                "tp": 49,
+                "fp": 41,
+                "fn": 0,
+                "tn": 0
+              },
+              "20": {
+                "fn_fp": "20:1",
+                "precision": 0.5444444444444444,
+                "recall": 1.0,
+                "f1": 0.7050359712230215,
+                "alert_rate": 1.0,
+                "expected_cost_per_issue": 0.45555555555555555,
+                "tp": 49,
+                "fp": 41,
+                "fn": 0,
+                "tn": 0
+              }
+            }
+          },
+          "temporal_cnn": {
+            "status": "scored",
+            "n_issues": 90,
+            "n_pos": 49,
+            "live_ap": 0.6573026848343023,
+            "roc_auc": 0.6595321055251367,
+            "brier": 0.2118759819966339,
+            "ece": 0.07001130168139434,
+            "rps": 0.19638411289983587,
+            "n_ordinal": 68,
+            "live_ap_ci": [
+              0.5349232982370362,
+              0.7796820714315684
+            ],
+            "live_roc_auc_ci": [
+              0.5437167319689854,
+              0.7753474790812881
+            ],
+            "bootstrap_resamples": 1000,
+            "valid_ap_resamples": 1000,
+            "retrospective_ap": 0.57974946198648,
+            "delta_ap": 0.07755322284782229,
+            "feed_source": "Open-Meteo Historical-Forecast best-match (non-vintage approximate proxy)",
+            "faithful": false,
+            "nonfaithful_features": [
+              "soil_temperature_0_to_7cm"
+            ],
+            "vintage_faithful": false,
+            "cost_operating_points": {
+              "1": {
+                "fn_fp": "1:1",
+                "precision": 0.6774193548387096,
+                "recall": 0.8571428571428571,
+                "f1": 0.7567567567567568,
+                "alert_rate": 0.6888888888888889,
+                "expected_cost_per_issue": 0.3,
+                "tp": 42,
+                "fp": 20,
+                "fn": 7,
+                "tn": 21
+              },
+              "3": {
+                "fn_fp": "3:1",
+                "precision": 0.6075949367088608,
+                "recall": 0.9795918367346939,
+                "f1": 0.75,
+                "alert_rate": 0.8777777777777778,
+                "expected_cost_per_issue": 0.37777777777777777,
+                "tp": 48,
+                "fp": 31,
+                "fn": 1,
+                "tn": 10
+              },
+              "5": {
+                "fn_fp": "5:1",
+                "precision": 0.5714285714285714,
+                "recall": 0.9795918367346939,
+                "f1": 0.7218045112781954,
+                "alert_rate": 0.9333333333333333,
+                "expected_cost_per_issue": 0.45555555555555555,
+                "tp": 48,
+                "fp": 36,
+                "fn": 1,
+                "tn": 5
+              },
+              "10": {
+                "fn_fp": "10:1",
+                "precision": 0.5647058823529412,
+                "recall": 0.9795918367346939,
+                "f1": 0.7164179104477612,
+                "alert_rate": 0.9444444444444444,
+                "expected_cost_per_issue": 0.5222222222222223,
+                "tp": 48,
+                "fp": 37,
+                "fn": 1,
+                "tn": 4
+              },
+              "20": {
+                "fn_fp": "20:1",
+                "precision": 0.5632183908045977,
+                "recall": 1.0,
+                "f1": 0.7205882352941176,
+                "alert_rate": 0.9666666666666667,
+                "expected_cost_per_issue": 0.4222222222222222,
+                "tp": 49,
+                "fp": 38,
+                "fn": 0,
+                "tn": 3
+              }
+            }
+          }
+        }
+      }
+    },
+    "location_9": {
+      "tasks": {
+        "nowcast": {
+          "feed_source": "Open-Meteo Historical-Forecast best-match (non-vintage approximate proxy)",
+          "xgboost": {
+            "status": "scored",
+            "n_issues": 2080,
+            "n_pos": 439,
+            "live_ap": 0.6159195682213106,
+            "roc_auc": 0.8803697673095049,
+            "brier": 0.12862358423944306,
+            "ece": 0.0828829407119242,
+            "rps": 0.12198034322040745,
+            "n_ordinal": 1926,
+            "live_ap_ci": [
+              0.5103882075137425,
+              0.7214509289288786
+            ],
+            "live_roc_auc_ci": [
+              0.8495295080163763,
+              0.9112100266026335
+            ],
+            "bootstrap_resamples": 1000,
+            "valid_ap_resamples": 1000,
+            "retrospective_ap": 0.5278930664062877,
+            "delta_ap": 0.0880265018150228,
+            "feed_source": "Open-Meteo Historical-Forecast best-match (non-vintage approximate proxy)",
+            "faithful": false,
+            "nonfaithful_features": [
+              "soil_temperature_0_to_7cm"
+            ],
+            "vintage_faithful": false,
+            "cost_operating_points": {
+              "1": {
+                "fn_fp": "1:1",
+                "precision": 0.7567567567567568,
+                "recall": 0.1275626423690205,
+                "f1": 0.21832358674463936,
+                "alert_rate": 0.035576923076923075,
+                "expected_cost_per_issue": 0.19278846153846155,
+                "tp": 56,
+                "fp": 18,
+                "fn": 383,
+                "tn": 1623
+              },
+              "3": {
+                "fn_fp": "3:1",
+                "precision": 0.6065217391304348,
+                "recall": 0.6355353075170843,
+                "f1": 0.6206896551724138,
+                "alert_rate": 0.22115384615384615,
+                "expected_cost_per_issue": 0.3177884615384615,
+                "tp": 279,
+                "fp": 181,
+                "fn": 160,
+                "tn": 1460
+              },
+              "5": {
+                "fn_fp": "5:1",
+                "precision": 0.45357142857142857,
+                "recall": 0.8678815489749431,
+                "f1": 0.5957779515246286,
+                "alert_rate": 0.40384615384615385,
+                "expected_cost_per_issue": 0.36009615384615384,
+                "tp": 381,
+                "fp": 459,
+                "fn": 58,
+                "tn": 1182
+              },
+              "10": {
+                "fn_fp": "10:1",
+                "precision": 0.3900375939849624,
+                "recall": 0.9453302961275627,
+                "f1": 0.552228875582169,
+                "alert_rate": 0.5115384615384615,
+                "expected_cost_per_issue": 0.42740384615384613,
+                "tp": 415,
+                "fp": 649,
+                "fn": 24,
+                "tn": 992
+              },
+              "20": {
+                "fn_fp": "20:1",
+                "precision": 0.3478964401294498,
+                "recall": 0.979498861047836,
+                "f1": 0.5134328358208955,
+                "alert_rate": 0.5942307692307692,
+                "expected_cost_per_issue": 0.4740384615384615,
+                "tp": 430,
+                "fp": 806,
+                "fn": 9,
+                "tn": 835
+              }
+            }
+          },
+          "temporal_cnn": {
+            "status": "scored",
+            "n_issues": 2080,
+            "n_pos": 439,
+            "live_ap": 0.4098332400179531,
+            "roc_auc": 0.7668673887665031,
+            "brier": 0.1750335172545258,
+            "ece": 0.15385957155026472,
+            "rps": 0.14794185049025874,
+            "n_ordinal": 1926,
+            "live_ap_ci": [
+              0.3125765910993977,
+              0.5070898889365085
+            ],
+            "live_roc_auc_ci": [
+              0.7165016017633438,
+              0.8172331757696624
+            ],
+            "bootstrap_resamples": 1000,
+            "valid_ap_resamples": 1000,
+            "retrospective_ap": 0.5367647628441129,
+            "delta_ap": -0.12693152282615977,
+            "feed_source": "Open-Meteo Historical-Forecast best-match (non-vintage approximate proxy)",
+            "faithful": false,
+            "nonfaithful_features": [
+              "soil_temperature_0_to_7cm"
+            ],
+            "vintage_faithful": false,
+            "cost_operating_points": {
+              "1": {
+                "fn_fp": "1:1",
+                "precision": 0.3333333333333333,
+                "recall": 0.004555808656036446,
+                "f1": 0.008988764044943821,
+                "alert_rate": 0.0028846153846153848,
+                "expected_cost_per_issue": 0.21201923076923077,
+                "tp": 2,
+                "fp": 4,
+                "fn": 437,
+                "tn": 1637
+              },
+              "3": {
+                "fn_fp": "3:1",
+                "precision": 0.5084745762711864,
+                "recall": 0.0683371298405467,
+                "f1": 0.12048192771084337,
+                "alert_rate": 0.028365384615384615,
+                "expected_cost_per_issue": 0.6038461538461538,
+                "tp": 30,
+                "fp": 29,
+                "fn": 409,
+                "tn": 1612
+              },
+              "5": {
+                "fn_fp": "5:1",
+                "precision": 0.4859437751004016,
+                "recall": 0.275626423690205,
+                "f1": 0.35174418604651164,
+                "alert_rate": 0.11971153846153847,
+                "expected_cost_per_issue": 0.8259615384615384,
+                "tp": 121,
+                "fp": 128,
+                "fn": 318,
+                "tn": 1513
+              },
+              "10": {
+                "fn_fp": "10:1",
+                "precision": 0.4219858156028369,
+                "recall": 0.5421412300683371,
+                "f1": 0.4745762711864407,
+                "alert_rate": 0.27115384615384613,
+                "expected_cost_per_issue": 1.123076923076923,
+                "tp": 238,
+                "fp": 326,
+                "fn": 201,
+                "tn": 1315
+              },
+              "20": {
+                "fn_fp": "20:1",
+                "precision": 0.38434579439252337,
+                "recall": 0.7494305239179955,
+                "f1": 0.5081081081081081,
+                "alert_rate": 0.4115384615384615,
+                "expected_cost_per_issue": 1.3110576923076922,
+                "tp": 329,
+                "fp": 527,
+                "fn": 110,
+                "tn": 1114
+              }
+            }
+          }
+        },
+        "lead_time": {
+          "feed_source": "Open-Meteo Historical-Forecast best-match (non-vintage approximate proxy)",
+          "xgboost": {
+            "status": "scored",
+            "n_issues": 87,
+            "n_pos": 45,
+            "live_ap": 0.7548906216157678,
+            "roc_auc": 0.7828042328042327,
+            "brier": 0.19462790713369532,
+            "ece": 0.10397829666545944,
+            "rps": 0.15745028528108126,
+            "n_ordinal": 61,
+            "live_ap_ci": [
+              0.6389221333424692,
+              0.8708591098890665
+            ],
+            "live_roc_auc_ci": [
+              0.6888095452296343,
+              0.8767989203788311
+            ],
+            "bootstrap_resamples": 1000,
+            "valid_ap_resamples": 1000,
+            "retrospective_ap": 0.6862111581289666,
+            "delta_ap": 0.0686794634868012,
+            "feed_source": "Open-Meteo Historical-Forecast best-match (non-vintage approximate proxy)",
+            "faithful": false,
+            "nonfaithful_features": [
+              "soil_temperature_0_to_7cm"
+            ],
+            "vintage_faithful": false,
+            "cost_operating_points": {
+              "1": {
+                "fn_fp": "1:1",
+                "precision": 0.7,
+                "recall": 0.7777777777777778,
+                "f1": 0.7368421052631579,
+                "alert_rate": 0.5747126436781609,
+                "expected_cost_per_issue": 0.28735632183908044,
+                "tp": 35,
+                "fp": 15,
+                "fn": 10,
+                "tn": 27
+              },
+              "3": {
+                "fn_fp": "3:1",
+                "precision": 0.5769230769230769,
+                "recall": 1.0,
+                "f1": 0.7317073170731707,
+                "alert_rate": 0.896551724137931,
+                "expected_cost_per_issue": 0.3793103448275862,
+                "tp": 45,
+                "fp": 33,
+                "fn": 0,
+                "tn": 9
+              },
+              "5": {
+                "fn_fp": "5:1",
+                "precision": 0.5769230769230769,
+                "recall": 1.0,
+                "f1": 0.7317073170731707,
+                "alert_rate": 0.896551724137931,
+                "expected_cost_per_issue": 0.3793103448275862,
+                "tp": 45,
+                "fp": 33,
+                "fn": 0,
+                "tn": 9
+              },
+              "10": {
+                "fn_fp": "10:1",
+                "precision": 0.5232558139534884,
+                "recall": 1.0,
+                "f1": 0.6870229007633588,
+                "alert_rate": 0.9885057471264368,
+                "expected_cost_per_issue": 0.47126436781609193,
+                "tp": 45,
+                "fp": 41,
+                "fn": 0,
+                "tn": 1
+              },
+              "20": {
+                "fn_fp": "20:1",
+                "precision": 0.5232558139534884,
+                "recall": 1.0,
+                "f1": 0.6870229007633588,
+                "alert_rate": 0.9885057471264368,
+                "expected_cost_per_issue": 0.47126436781609193,
+                "tp": 45,
+                "fp": 41,
+                "fn": 0,
+                "tn": 1
+              }
+            }
+          },
+          "temporal_cnn": {
+            "status": "scored",
+            "n_issues": 87,
+            "n_pos": 45,
+            "live_ap": 0.7656950905779896,
+            "roc_auc": 0.7465608465608465,
+            "brier": 0.19709486452793928,
+            "ece": 0.12152231833324348,
+            "rps": 0.16885710258558062,
+            "n_ordinal": 61,
+            "live_ap_ci": [
+              0.6618000048907702,
+              0.869590176265209
+            ],
+            "live_roc_auc_ci": [
+              0.6422444587968782,
+              0.8508772343248149
+            ],
+            "bootstrap_resamples": 1000,
+            "valid_ap_resamples": 1000,
+            "retrospective_ap": 0.6832139004490652,
+            "delta_ap": 0.08248119012892441,
+            "feed_source": "Open-Meteo Historical-Forecast best-match (non-vintage approximate proxy)",
+            "faithful": false,
+            "nonfaithful_features": [
+              "soil_temperature_0_to_7cm"
+            ],
+            "vintage_faithful": false,
+            "cost_operating_points": {
+              "1": {
+                "fn_fp": "1:1",
+                "precision": 0.625,
+                "recall": 0.6666666666666666,
+                "f1": 0.6451612903225806,
+                "alert_rate": 0.5517241379310345,
+                "expected_cost_per_issue": 0.3793103448275862,
+                "tp": 30,
+                "fp": 18,
+                "fn": 15,
+                "tn": 24
+              },
+              "3": {
+                "fn_fp": "3:1",
+                "precision": 0.5769230769230769,
+                "recall": 1.0,
+                "f1": 0.7317073170731707,
+                "alert_rate": 0.896551724137931,
+                "expected_cost_per_issue": 0.3793103448275862,
+                "tp": 45,
+                "fp": 33,
+                "fn": 0,
+                "tn": 9
+              },
+              "5": {
+                "fn_fp": "5:1",
+                "precision": 0.5769230769230769,
+                "recall": 1.0,
+                "f1": 0.7317073170731707,
+                "alert_rate": 0.896551724137931,
+                "expected_cost_per_issue": 0.3793103448275862,
+                "tp": 45,
+                "fp": 33,
+                "fn": 0,
+                "tn": 9
+              },
+              "10": {
+                "fn_fp": "10:1",
+                "precision": 0.5555555555555556,
+                "recall": 1.0,
+                "f1": 0.7142857142857143,
+                "alert_rate": 0.9310344827586207,
+                "expected_cost_per_issue": 0.41379310344827586,
+                "tp": 45,
+                "fp": 36,
+                "fn": 0,
+                "tn": 6
+              },
+              "20": {
+                "fn_fp": "20:1",
+                "precision": 0.5172413793103449,
+                "recall": 1.0,
+                "f1": 0.6818181818181818,
+                "alert_rate": 1.0,
+                "expected_cost_per_issue": 0.4827586206896552,
+                "tp": 45,
+                "fp": 42,
+                "fn": 0,
+                "tn": 0
+              }
+            }
+          }
+        }
+      }
+    },
+    "location_10": {
+      "tasks": {
+        "nowcast": {
+          "feed_source": "Open-Meteo Historical-Forecast best-match (non-vintage approximate proxy)",
+          "xgboost": {
+            "status": "scored",
+            "n_issues": 2158,
+            "n_pos": 246,
+            "live_ap": 0.36043494696701117,
+            "roc_auc": 0.8549054750484744,
+            "brier": 0.0878554166794256,
+            "ece": 0.04833045468334804,
+            "rps": 0.1424451205875,
+            "n_ordinal": 2083,
+            "live_ap_ci": [
+              0.24708811828080302,
+              0.47378177565321933
+            ],
+            "live_roc_auc_ci": [
+              0.8178453390314201,
+              0.8919656110655286
+            ],
+            "bootstrap_resamples": 1000,
+            "valid_ap_resamples": 1000,
+            "retrospective_ap": 0.18375935207261082,
+            "delta_ap": 0.17667559489440035,
+            "feed_source": "Open-Meteo Historical-Forecast best-match (non-vintage approximate proxy)",
+            "faithful": false,
+            "nonfaithful_features": [
+              "soil_temperature_0_to_7cm"
+            ],
+            "vintage_faithful": false,
+            "cost_operating_points": {
+              "1": {
+                "fn_fp": "1:1",
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0,
+                "alert_rate": 0.0,
+                "expected_cost_per_issue": 0.11399443929564411,
+                "tp": 0,
+                "fp": 0,
+                "fn": 246,
+                "tn": 1912
+              },
+              "3": {
+                "fn_fp": "3:1",
+                "precision": 0.423728813559322,
+                "recall": 0.3048780487804878,
+                "f1": 0.3546099290780142,
+                "alert_rate": 0.08202038924930491,
+                "expected_cost_per_issue": 0.2849860982391103,
+                "tp": 75,
+                "fp": 102,
+                "fn": 171,
+                "tn": 1810
+              },
+              "5": {
+                "fn_fp": "5:1",
+                "precision": 0.35294117647058826,
+                "recall": 0.6341463414634146,
+                "f1": 0.45348837209302323,
+                "alert_rate": 0.20481927710843373,
+                "expected_cost_per_issue": 0.3410565338276182,
+                "tp": 156,
+                "fp": 286,
+                "fn": 90,
+                "tn": 1626
+              },
+              "10": {
+                "fn_fp": "10:1",
+                "precision": 0.2837653478854025,
+                "recall": 0.8455284552845529,
+                "f1": 0.424923391215526,
+                "alert_rate": 0.3396663577386469,
+                "expected_cost_per_issue": 0.41936978683966636,
+                "tp": 208,
+                "fp": 525,
+                "fn": 38,
+                "tn": 1387
+              },
+              "20": {
+                "fn_fp": "20:1",
+                "precision": 0.24498886414253898,
+                "recall": 0.8943089430894309,
+                "f1": 0.38461538461538464,
+                "alert_rate": 0.4161260426320667,
+                "expected_cost_per_issue": 0.5551436515291936,
+                "tp": 220,
+                "fp": 678,
+                "fn": 26,
+                "tn": 1234
+              }
+            }
+          },
+          "temporal_cnn": {
+            "status": "scored",
+            "n_issues": 2158,
+            "n_pos": 246,
+            "live_ap": 0.37568484768961014,
+            "roc_auc": 0.8551861159301969,
+            "brier": 0.09581233005836545,
+            "ece": 0.07847522815335611,
+            "rps": 0.11091860039590597,
+            "n_ordinal": 2083,
+            "live_ap_ci": [
+              0.25866909659254544,
+              0.4927005987866748
+            ],
+            "live_roc_auc_ci": [
+              0.813238222586743,
+              0.8971340092736507
+            ],
+            "bootstrap_resamples": 1000,
+            "valid_ap_resamples": 1000,
+            "retrospective_ap": 0.11651090957829303,
+            "delta_ap": 0.2591739381113171,
+            "feed_source": "Open-Meteo Historical-Forecast best-match (non-vintage approximate proxy)",
+            "faithful": false,
+            "nonfaithful_features": [
+              "soil_temperature_0_to_7cm"
+            ],
+            "vintage_faithful": false,
+            "cost_operating_points": {
+              "1": {
+                "fn_fp": "1:1",
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0,
+                "alert_rate": 0.0,
+                "expected_cost_per_issue": 0.11399443929564411,
+                "tp": 0,
+                "fp": 0,
+                "fn": 246,
+                "tn": 1912
+              },
+              "3": {
+                "fn_fp": "3:1",
+                "precision": 0.496,
+                "recall": 0.25203252032520324,
+                "f1": 0.33423180592991913,
+                "alert_rate": 0.05792400370713624,
+                "expected_cost_per_issue": 0.2849860982391103,
+                "tp": 62,
+                "fp": 63,
+                "fn": 184,
+                "tn": 1849
+              },
+              "5": {
+                "fn_fp": "5:1",
+                "precision": 0.496,
+                "recall": 0.25203252032520324,
+                "f1": 0.33423180592991913,
+                "alert_rate": 0.05792400370713624,
+                "expected_cost_per_issue": 0.4555143651529194,
+                "tp": 62,
+                "fp": 63,
+                "fn": 184,
+                "tn": 1849
+              },
+              "10": {
+                "fn_fp": "10:1",
+                "precision": 0.40894568690095845,
+                "recall": 0.5203252032520326,
+                "f1": 0.45796064400715564,
+                "alert_rate": 0.14504170528266913,
+                "expected_cost_per_issue": 0.6325301204819277,
+                "tp": 128,
+                "fp": 185,
+                "fn": 118,
+                "tn": 1727
+              },
+              "20": {
+                "fn_fp": "20:1",
+                "precision": 0.3623529411764706,
+                "recall": 0.6260162601626016,
+                "f1": 0.45901639344262296,
+                "alert_rate": 0.1969416126042632,
+                "expected_cost_per_issue": 0.9782205746061168,
+                "tp": 154,
+                "fp": 271,
+                "fn": 92,
+                "tn": 1641
+              }
+            }
+          }
+        },
+        "lead_time": {
+          "feed_source": "Open-Meteo Historical-Forecast best-match (non-vintage approximate proxy)",
+          "xgboost": {
+            "status": "scored",
+            "n_issues": 90,
+            "n_pos": 34,
+            "live_ap": 0.6269519361563821,
+            "roc_auc": 0.7857142857142857,
+            "brier": 0.21695057201634807,
+            "ece": 0.20902012932957575,
+            "rps": 0.18470318868722202,
+            "n_ordinal": 72,
+            "live_ap_ci": [
+              0.4758965259575694,
+              0.7780073463551949
+            ],
+            "live_roc_auc_ci": [
+              0.7013799092218903,
+              0.8700486622066811
+            ],
+            "bootstrap_resamples": 1000,
+            "valid_ap_resamples": 1000,
+            "retrospective_ap": 0.29083454475158044,
+            "delta_ap": 0.3361173914048017,
+            "feed_source": "Open-Meteo Historical-Forecast best-match (non-vintage approximate proxy)",
+            "faithful": false,
+            "nonfaithful_features": [
+              "soil_temperature_0_to_7cm"
+            ],
+            "vintage_faithful": false,
+            "cost_operating_points": {
+              "1": {
+                "fn_fp": "1:1",
+                "precision": 0.7058823529411765,
+                "recall": 0.35294117647058826,
+                "f1": 0.47058823529411764,
+                "alert_rate": 0.18888888888888888,
+                "expected_cost_per_issue": 0.3,
+                "tp": 12,
+                "fp": 5,
+                "fn": 22,
+                "tn": 51
+              },
+              "3": {
+                "fn_fp": "3:1",
+                "precision": 0.54,
+                "recall": 0.7941176470588235,
+                "f1": 0.6428571428571429,
+                "alert_rate": 0.5555555555555556,
+                "expected_cost_per_issue": 0.4888888888888889,
+                "tp": 27,
+                "fp": 23,
+                "fn": 7,
+                "tn": 33
+              },
+              "5": {
+                "fn_fp": "5:1",
+                "precision": 0.54,
+                "recall": 0.7941176470588235,
+                "f1": 0.6428571428571429,
+                "alert_rate": 0.5555555555555556,
+                "expected_cost_per_issue": 0.6444444444444445,
+                "tp": 27,
+                "fp": 23,
+                "fn": 7,
+                "tn": 33
+              },
+              "10": {
+                "fn_fp": "10:1",
+                "precision": 0.4857142857142857,
+                "recall": 1.0,
+                "f1": 0.6538461538461539,
+                "alert_rate": 0.7777777777777778,
+                "expected_cost_per_issue": 0.4,
+                "tp": 34,
+                "fp": 36,
+                "fn": 0,
+                "tn": 20
+              },
+              "20": {
+                "fn_fp": "20:1",
+                "precision": 0.4146341463414634,
+                "recall": 1.0,
+                "f1": 0.5862068965517241,
+                "alert_rate": 0.9111111111111111,
+                "expected_cost_per_issue": 0.5333333333333333,
+                "tp": 34,
+                "fp": 48,
+                "fn": 0,
+                "tn": 8
+              }
+            }
+          },
+          "temporal_cnn": {
+            "status": "scored",
+            "n_issues": 90,
+            "n_pos": 34,
+            "live_ap": 0.5105096038191129,
+            "roc_auc": 0.7163865546218487,
+            "brier": 0.23451907899833688,
+            "ece": 0.17839238572295196,
+            "rps": 0.16735117202082833,
+            "n_ordinal": 72,
+            "live_ap_ci": [
+              0.3623761052944561,
+              0.6586431023437698
+            ],
+            "live_roc_auc_ci": [
+              0.6178898340587788,
+              0.8148832751849187
+            ],
+            "bootstrap_resamples": 1000,
+            "valid_ap_resamples": 1000,
+            "retrospective_ap": 0.2505478815157969,
+            "delta_ap": 0.25996172230331605,
+            "feed_source": "Open-Meteo Historical-Forecast best-match (non-vintage approximate proxy)",
+            "faithful": false,
+            "nonfaithful_features": [
+              "soil_temperature_0_to_7cm"
+            ],
+            "vintage_faithful": false,
+            "cost_operating_points": {
+              "1": {
+                "fn_fp": "1:1",
+                "precision": 0.5,
+                "recall": 0.4411764705882353,
+                "f1": 0.46875,
+                "alert_rate": 0.3333333333333333,
+                "expected_cost_per_issue": 0.37777777777777777,
+                "tp": 15,
+                "fp": 15,
+                "fn": 19,
+                "tn": 41
+              },
+              "3": {
+                "fn_fp": "3:1",
+                "precision": 0.5116279069767442,
+                "recall": 0.6470588235294118,
+                "f1": 0.5714285714285714,
+                "alert_rate": 0.4777777777777778,
+                "expected_cost_per_issue": 0.6333333333333333,
+                "tp": 22,
+                "fp": 21,
+                "fn": 12,
+                "tn": 35
+              },
+              "5": {
+                "fn_fp": "5:1",
+                "precision": 0.5333333333333333,
+                "recall": 0.7058823529411765,
+                "f1": 0.6075949367088608,
+                "alert_rate": 0.5,
+                "expected_cost_per_issue": 0.7888888888888889,
+                "tp": 24,
+                "fp": 21,
+                "fn": 10,
+                "tn": 35
+              },
+              "10": {
+                "fn_fp": "10:1",
+                "precision": 0.4657534246575342,
+                "recall": 1.0,
+                "f1": 0.6355140186915887,
+                "alert_rate": 0.8111111111111111,
+                "expected_cost_per_issue": 0.43333333333333335,
+                "tp": 34,
+                "fp": 39,
+                "fn": 0,
+                "tn": 17
+              },
+              "20": {
+                "fn_fp": "20:1",
+                "precision": 0.4533333333333333,
+                "recall": 1.0,
+                "f1": 0.6238532110091743,
+                "alert_rate": 0.8333333333333334,
+                "expected_cost_per_issue": 0.45555555555555555,
+                "tp": 34,
+                "fp": 41,
+                "fn": 0,
+                "tn": 15
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -6,9 +6,9 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 from .data import ROOT, SITES, WEATHER_COLS, AQI_COLS, SEED, N_BOOT, load_sources
-from .labels import label_tables
+from .labels import label_tables, add_neighbor_lags
 from .splits import rolling_origin_folds
-from .windows import prepare, build_windows
+from .windows import prepare, prepare_pooled, build_windows
 from .evaluation import (fit_calibrator, calibrate, finalize_model, paired_delta_bootstrap, safe_ap,
                          pmf_to_fog, ordinal_bootstrap, paired_rps_delta_bootstrap)
 from .families import FAMILIES, seed_for
@@ -17,7 +17,15 @@ from .tuning import tune_cnn
 FAMILY_DIRS: dict[str, Path] = {family: ROOT / 'models' / folder for family, folder in {
     'logistic_regression': 'logistic regression', 'random_forest': 'random forest',
     'xgboost': 'xgboost', 'xgboost_focal_loss': 'xgboost',
-    'temporal_cnn': 'temporal_cnn', 'ensemble': 'ensemble'}.items()}
+    'temporal_cnn': 'temporal_cnn', 'ensemble': 'ensemble',
+    'persistence': 'persistence', 'analog': 'analog', 'xgboost_ordinal': 'xgboost',
+    'xgboost_aft': 'xgboost', 'ebm': 'ebm', 'xgboost_pooled': 'pooled'}.items()}
+
+PREDICTOR_SETS: dict[str, str] = {family: 'weather' for family in FAMILIES}
+PREDICTOR_SETS.update({
+    'persistence': 'observed visibility history',
+    'xgboost_pooled': 'weather + observed visibility (own + 4 neighbors), pooled sites',
+})
 
 
 class NotEstimable(ValueError):
@@ -83,6 +91,30 @@ def evaluate_family(weather, labels, site, task, family, *, cnn_cfg, weather_col
     return _finalize(records, family, seed, n_boot), audits, {'folds': info}
 
 
+def evaluate_pooled(sources, labels_by_site, target_site, task, family, *, weather_cols, seed,
+                    n_boot: int = N_BOOT) -> tuple[dict, list, dict]:
+    records, audits, info = [], [], []
+    for fi, fold in enumerate(rolling_origin_folds(labels_by_site[target_site]), 1):
+        V, T = fold['val'].issue_time.min(), fold['test'].issue_time.min()
+        parts = {}
+        for site, labels in labels_by_site.items():
+            parts[site] = {
+                'train': labels.loc[labels.issue_time < V - pd.Timedelta(hours=24)],
+                'val': labels.loc[(labels.issue_time >= V) & (labels.issue_time < T - pd.Timedelta(hours=24))],
+                'test': fold['test'] if site == target_site else labels.iloc[:0],
+            }
+        prep = prepare_pooled(sources, parts, weather_cols=weather_cols)
+        output = FAMILIES[family].fit_predict(
+            prep, cnn_cfg=None, seed=seed_for(family, target_site, task, fi))
+        records.append(_record(prep, output, fi, family))
+        audit = _audit(prep, fi)
+        audit['pooled_sites'] = {site: int(prep.metas['train'].site.eq(site).sum())
+                                 for site in labels_by_site}
+        audits.append(audit)
+        info.append(output.info)
+    return _finalize(records, family, seed, n_boot), audits, {'folds': info}
+
+
 def evaluate_ablation(weather, matched, site, task, family, *, cnn_cfg, weather_cols, seed,
                       n_boot: int = N_BOOT) -> dict:
     records = {'with': [], 'without': []}
@@ -141,10 +173,25 @@ def run_family(family: str, *, sites=tuple(SITES), weather_cols=WEATHER_COLS, cn
     out_dir.mkdir(parents=True, exist_ok=True)
     art_dir = out_dir / f'{family}_artifacts_v2'
     cache = cnn_cache if cnn_cache is not None else {}
-    metrics = {'family': family, 'seed': SEED, 'n_boot': n_boot, 'weather_cols': list(weather_cols), 'per_site': {}}
+    metrics = {'family': family, 'predictor_set': PREDICTOR_SETS.get(family, 'weather'),
+               'seed': SEED, 'n_boot': n_boot, 'weather_cols': list(weather_cols), 'per_site': {}}
+    pooled = getattr(module, 'POOLED', False)
+    if pooled:
+        loaded = {site: load_sources(site, weather_cols=weather_cols) for site in SITES}
+        sources = {site: source[0] for site, source in loaded.items()}
+        visibility = {site: source[1] for site, source in loaded.items()}
+        tables = {site: label_tables(sources[site], visibility[site], site) for site in SITES}
+        pooled_labels = {
+            task: add_neighbor_lags({site: table[index] for site, table in tables.items()}, visibility)
+            for index, task in enumerate(('nowcast', 'lead_time'))
+        }
     for site in sites:
-        weather, vis = load_sources(site, weather_cols=weather_cols)
-        now, lead = label_tables(weather, vis, site)
+        if pooled:
+            weather = sources[site]
+            now, lead = (pooled_labels[task][site] for task in ('nowcast', 'lead_time'))
+        else:
+            weather, vis = load_sources(site, weather_cols=weather_cols)
+            now, lead = label_tables(weather, vis, site)
         sd = {'cohort': {'nowcast_rows': len(now), 'nowcast_positives': int(now.fog.sum()),
                          'nowcast_fog_rate': float(now.fog.mean()), 'lead_complete_10h_issues': len(lead),
                          'lead_positives': int(lead.fog.sum()), 'aqi_channels': AQI_COLS},
@@ -158,15 +205,25 @@ def run_family(family: str, *, sites=tuple(SITES), weather_cols=WEATHER_COLS, cn
                 prep = prepare(weather, {key: first[key] for key in ('train', 'val', 'test')}, weather_cols=weather_cols)
                 cfg = tuned_cnn_cfg(prep, site, task, art_dir=art_dir, cache=cache)
             sd['cnn_cfg'][task] = cfg
-            result, audit, info = evaluate_family(weather, labels, site, task, family, cnn_cfg=cfg,
-                weather_cols=weather_cols, seed=seed_for(SEED, family, site, task, 'bootstrap'),
-                save_dir=art_dir / site, n_boot=n_boot)
+            if pooled:
+                result, audit, info = evaluate_pooled(sources, pooled_labels[task], site, task, family,
+                    weather_cols=weather_cols, seed=seed_for(SEED, family, site, task, 'bootstrap'),
+                    n_boot=n_boot)
+            else:
+                result, audit, info = evaluate_family(weather, labels, site, task, family, cnn_cfg=cfg,
+                    weather_cols=weather_cols, seed=seed_for(SEED, family, site, task, 'bootstrap'),
+                    save_dir=art_dir / site, n_boot=n_boot)
             baseline, _, _ = evaluate_family(weather, labels, site, task, 'climatology', cnn_cfg=None,
                 weather_cols=weather_cols, seed=seed_for(SEED, 'climatology', site, task, 'bootstrap'),
                 save_dir=None, n_boot=n_boot)
             sd['tasks'][task] = {family: result, 'climatology': baseline}
             sd['fold_audit'][task] = audit
             sd['info'][task] = info
+            if pooled:
+                sd['aqi_ablation'][task] = {family: {
+                    'status': 'not_applicable',
+                    'reason': 'pooled multi-site model; AQI matched cohort is per site'}}
+                continue
             try:
                 ablation = evaluate_ablation(weather, matched, site, task, family, cnn_cfg=cfg,
                     weather_cols=weather_cols, seed=seed_for(SEED, family, site, task, 'aqi_bootstrap'), n_boot=n_boot)

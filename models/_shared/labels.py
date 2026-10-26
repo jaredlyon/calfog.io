@@ -151,6 +151,38 @@ def assert_causal_features(*args, **kwargs) -> None:
     kwargs["raise_on_error"] = True
     audit_causal_features(*args, **kwargs)
 
+def _visibility_lags(issue_times: pd.Series, vis: pd.DataFrame) -> pd.DataFrame:
+    """An hourly observation is available only after its hour has ended."""
+    known = vis.loc[vis.category.notna(), ['time', 'category']].sort_values('time')
+    known = known.rename(columns={'time': 'lag_time', 'category': 'lag_category'})
+    known['lag_time'] = pd.to_datetime(known.lag_time).astype('datetime64[ns]')
+    cutoff = pd.to_datetime(issue_times).astype('datetime64[ns]').reset_index(drop=True) - pd.Timedelta(hours=1)
+    issues = pd.DataFrame({'cutoff': cutoff, '_row': range(len(issue_times))})
+    lag = pd.merge_asof(issues.sort_values('cutoff'), known, left_on='cutoff', right_on='lag_time',
+                        direction='backward', tolerance=pd.Timedelta(hours=2))
+    lag = lag.sort_values('_row').reset_index(drop=True)
+    lag['lag_category'] = lag.lag_category.astype('Int64')
+    assert (lag.loc[lag.lag_time.notna(), 'lag_time'] <= lag.loc[lag.lag_time.notna(), 'cutoff']).all()
+    return lag[['lag_category', 'lag_time']]
+
+
+def add_neighbor_lags(labels_by_site: dict[str, pd.DataFrame],
+                      vis_by_site: dict[str, pd.DataFrame]) -> dict[str, pd.DataFrame]:
+    result = {}
+    for site, labels in labels_by_site.items():
+        neighbors = pd.DataFrame({
+            other: _visibility_lags(labels.issue_time, vis).lag_category.astype(float)
+            for other, vis in vis_by_site.items() if other != site
+        }, index=range(len(labels)))
+        frame = labels.copy()
+        frame['nbr_min_cat'] = neighbors.min(axis=1).to_numpy(dtype=float)
+        frame['nbr_mean_cat'] = neighbors.mean(axis=1).to_numpy(dtype=float)
+        frame['nbr_fog_count'] = neighbors.le(FOG_MAX_CATEGORY).sum(axis=1).to_numpy(dtype=int)
+        frame['nbr_reporting'] = neighbors.notna().sum(axis=1).to_numpy(dtype=int)
+        result[site] = frame
+    return result
+
+
 def label_tables(weather,vis,site):
     known=vis.dropna(subset=['category']).copy()
     known['category']=known.category.astype(int)
@@ -165,5 +197,10 @@ def label_tables(weather,vis,site):
     # Explicit core causal audit: feature window ends at issue, never verification time.
     for z,task in ((now,'nowcast'),(lead,'lead')):
         z['_max_feature_time']=z.issue_time
+        lag = _visibility_lags(z.issue_time, known)
+        z['lag_category'] = pd.array(lag.lag_category, dtype='Int64')
+        z['lag_time'] = lag.lag_time.to_numpy()
+        assert (z.loc[z.lag_time.notna(), 'lag_time'] <=
+                z.loc[z.lag_time.notna(), 'issue_time'] - pd.Timedelta(hours=1)).all()
         audit_causal_features(z,['_max_feature_time'],task=task).raise_for_violations()
     return now.sort_values('issue_time').reset_index(drop=True),lead.sort_values('issue_time').reset_index(drop=True)
