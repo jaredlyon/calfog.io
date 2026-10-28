@@ -134,7 +134,9 @@ def evaluate_pooled(sources, labels_by_site, target_site, task, family, *, weath
 
 
 def evaluate_ablation(weather, matched, site, task, family, *, cnn_cfg, weather_cols, seed,
-                      aq_cols=AQI_COLS, n_boot: int = N_BOOT, prediction_dir=None, aq_set='cams') -> dict:
+                      aq_cols=AQI_COLS, n_boot: int = N_BOOT, prediction_dir=None, aq_set='cams',
+                      replicate: int = 0) -> dict:
+    """Paired with/without-AQ comparison. replicate > 0 changes only the (shared) model seed (D-081)."""
     records = {'with': [], 'without': []}
     audits, info = [], []
     try:
@@ -157,8 +159,8 @@ def evaluate_ablation(weather, matched, site, task, family, *, cnn_cfg, weather_
                     f'fold {fi}, arm {arm}: validation requires both classes; '
                     f'validation positives={int(np.sum(prep.yv))}/{len(prep.yv)}; keep fixed folds')
         for arm, prep in (('without', no), ('with', yes)):
-            output = FAMILIES[family].fit_predict(prep, cnn_cfg=cnn_cfg,
-                                                seed=seed_for(family, site, task, fi))
+            model_seed = seed_for(family, site, task, fi, *(('replicate', replicate) if replicate else ()))
+            output = FAMILIES[family].fit_predict(prep, cnn_cfg=cnn_cfg, seed=model_seed)
             record = _record(prep, output, fi, family)
             baseline = FAMILIES['climatology'].fit_predict(prep, cnn_cfg=None, seed=seed)
             record['baseline'] = pmf_to_fog(baseline.pmf_test)

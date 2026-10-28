@@ -31,9 +31,11 @@ def _family_dirs():
     return FAMILY_DIRS
 
 
-def load_predictions(family, arm) -> pd.DataFrame:
-    """Read compressed, non-pickled prediction arrays across sites and tasks."""
+def load_predictions(family, arm, replicate=0) -> pd.DataFrame:
+    """Read compressed, non-pickled prediction arrays across sites and tasks (replicate > 0: D-081 seed refits)."""
     directory = _family_dirs()[family] / f"{family}_predictions_v2"
+    if replicate:
+        directory = directory / "replicates" / f"r{replicate}"
     frames = []
     for path in sorted(directory.glob(f"*__*__{arm}.npz")):
         site, task, saved_arm = path.stem.split("__")
@@ -243,6 +245,65 @@ def _compare(a, b, n_boot, seed, mask=None):
     return {"status": "ok", **result}
 
 
+def _replicate_ids(family):
+    root = _family_dirs()[family] / f"{family}_predictions_v2" / "replicates"
+    return sorted(int(p.name[1:]) for p in root.glob("r*") if p.name[1:].isdigit() and int(p.name[1:]) > 0)
+
+
+def _seed_summary(results, deterministic):
+    """Spread of one primary AP test over replicates (replicate 0 = the pre-registered main run)."""
+    if any(row["status"] != "ok" for row in results):
+        return {"status": "not_estimable_in_some_replicates"}
+    scores = [row["ap"] for row in results]
+    estimates = np.array([score["estimate"] for score in scores])
+    significant = [score["p_holm"] < .05 for score in scores]
+    rules_out = [score["rules_out_gain_0.02"] for score in scores]
+    return {"status": "ok", "training_seed": "deterministic fit" if deterministic else f"{len(scores)} seeds",
+            "replicates": len(scores), "estimate_r0": scores[0]["estimate"], "ci_bonf_r0": scores[0]["ci_bonf"],
+            "seed_mean": float(estimates.mean()), "seed_sd": float(estimates.std(ddof=1)),
+            "seed_min": float(estimates.min()), "seed_max": float(estimates.max()),
+            "holm_significant_r0": significant[0], "holm_agree": sum(s == significant[0] for s in significant),
+            "rules_out_r0": rules_out[0], "rules_out_agree": sum(r == rules_out[0] for r in rules_out)}
+
+
+def seed_sensitivity(n_boot=1000, seed=SEED):
+    """D-081: the six primary NOx AP tests (all rows; near-saturation) recomputed for every training seed.
+
+    Every replicate reruns the same Holm family on the same day resamples, so only the model seed differs.
+    Families without replicate predictions (logistic regression: no training randomness) keep their single fit.
+    """
+    extra = {family: _replicate_ids(family) for family in PRIMARY_FAMILIES}
+    ids = sorted(set().union(*extra.values()))
+    if not ids:
+        return None
+    for family, found in extra.items():
+        if found and found != ids:
+            raise ValueError(f"{family}: replicates {found} differ from {ids}")
+    cache, per_replicate = {}, []
+    for replicate in [0] + ids:
+        rows = {"all": [], "near_saturation": []}
+        for family in PRIMARY_FAMILIES:
+            key = (family, replicate if extra[family] else 0)
+            if key not in cache:
+                a, b = (load_predictions(family, f"nox_{arm}", key[1]) for arm in ("with", "without"))
+                cache[key] = [(_compare(a[a.task == t], b[b.task == t], n_boot, seed),
+                               _compare(a[a.task == t], b[b.task == t], n_boot, seed, near_saturation))
+                              for t in TASKS]
+            for full, near in cache[key]:
+                # copies: Holm p depends on the replicate's other five tests
+                rows["all"].append({**full, "ap": dict(full["ap"])} if full["status"] == "ok" else full)
+                rows["near_saturation"].append({**near, "ap": dict(near["ap"])} if near["status"] == "ok" else near)
+        for stratum in rows.values():
+            _adjust_tests(stratum, "ap")
+        per_replicate.append(rows)
+    labels = [(family, task) for family in PRIMARY_FAMILIES for task in TASKS]
+    tests = [{"family": family, "task": task, "stratum": stratum,
+              **_seed_summary([rows[stratum][i] for rows in per_replicate], not extra[family])}
+             for i, (family, task) in enumerate(labels) for stratum in ("all", "near_saturation")]
+    return {"replicate_ids": [0] + ids, "verdict_rule": "robust if both verdicts agree in ≥90% of replicates",
+            "tests": tests}
+
+
 def analyze_aqi(n_boot=1000, seed=SEED):
     tests = []
     for family in _family_dirs():
@@ -269,7 +330,7 @@ def analyze_aqi(n_boot=1000, seed=SEED):
         _adjust_tests([row["near_saturation"] for row in primary], metric)
     return {"n_boot": n_boot, "seed": seed, "convention": CI_CONVENTION,
             "holm_family": "six primary NOx tests; near-saturation six tested separately; RPS secondary",
-            "tests": tests}
+            "tests": tests, "seed_sensitivity": seed_sensitivity(n_boot, seed)}
 
 
 def analyze_families(n_boot=1000, seed=SEED):
@@ -344,6 +405,25 @@ def aqi_markdown(result):
             for metric in ("ap", "rps"):
                 for site, score in row[metric]["per_airport"].items():
                     lines.append(f"| {row['family']} / {row['task']} | {site} | {metric.upper()} | {_fmt(score['estimate'])} | {_interval(score['ci95'])} |")
+    seeds = result.get("seed_sensitivity")
+    if seeds:
+        lines += ["", "## Training-seed sensitivity (D-081)", "",
+                  f"Primary NOx AP tests refit under {len(seeds['replicate_ids'])} model seeds (replicate 0 = the "
+                  "result above), each with the same day resamples and its own Holm family. "
+                  f"Agreement counts replicates matching replicate 0's verdict; {seeds['verdict_rule']}.", "",
+                  "| Family / task / stratum | Training | ΔAP (r0) | Bonferroni CI (r0) | Seed mean ± SD | Seed range "
+                  "| Holm-significant (r0): agree | Rules out +0.02 (r0): agree |",
+                  "|---|---|---:|---|---:|---|---|---|"]
+        for row in seeds["tests"]:
+            label = f"{row['family']} / {row['task']} / {row['stratum']}"
+            if row["status"] != "ok":
+                lines.append(f"| {label} | {row['status']} | — | — | — | — | — | — |")
+                continue
+            lines.append(
+                f"| {label} | {row['training_seed']} | {_fmt(row['estimate_r0'])} | {_interval(row['ci_bonf_r0'])} | "
+                f"{_fmt(row['seed_mean'])} ± {_fmt(row['seed_sd'])} | {_interval([row['seed_min'], row['seed_max']])} | "
+                f"{str(row['holm_significant_r0']).lower()}: {row['holm_agree']}/{row['replicates']} | "
+                f"{str(row['rules_out_r0']).lower()}: {row['rules_out_agree']}/{row['replicates']} |")
     return "\n".join(lines) + "\n"
 
 

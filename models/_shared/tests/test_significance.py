@@ -199,3 +199,42 @@ def test_analysis_outputs_and_holm_families(tmp_path, monkeypatch):
     aqi_md = (directory / "aqi_tests_v2.md").read_text(encoding="utf-8")
     assert "5–15" in aqi_md and "α/6" in aqi_md and "near-saturation" in aqi_md
     assert "| Family A" in (directory / "family_significance_v2.md").read_text(encoding="utf-8")
+
+
+def test_seed_sensitivity_keeps_replicate_zero_primary_and_lr_single_fit(tmp_path, monkeypatch):
+    roster = {name: tmp_path / name for name in sig.PRIMARY_FAMILIES}
+    for family in ("xgboost", "ebm"):
+        for r in (1, 2):
+            (roster[family] / f"{family}_predictions_v2" / "replicates" / f"r{r}").mkdir(parents=True)
+    monkeypatch.setattr(sig, "_family_dirs", lambda: roster)
+    a, b = _predictions()
+    calls = []
+
+    def load(family, arm, replicate=0):
+        calls.append((family, replicate))
+        frame = b
+        if arm.endswith("with") and not arm.endswith("without") and replicate:
+            # a replicate refit reorders the informative arm's scores (AP is rank-based)
+            fog = np.clip(np.array([p[0] for p in a.pmf]) + np.random.default_rng(replicate).normal(0, .3, len(a)),
+                          .01, .99)
+            frame = a.assign(pmf=[np.r_[q, np.zeros(16), 1 - q] for q in fog])
+        elif arm.endswith("with") and not arm.endswith("without"):
+            frame = a
+        return pd.concat([frame, frame.assign(task="lead_time")], ignore_index=True)
+
+    monkeypatch.setattr(sig, "load_predictions", load)
+    result = sig.seed_sensitivity(12, 3)
+    assert result["replicate_ids"] == [0, 1, 2]
+    rows = {(row["family"], row["task"], row["stratum"]): row for row in result["tests"]}
+    lr = rows["logistic_regression", "nowcast", "all"]
+    assert lr["training_seed"] == "deterministic fit"
+    assert lr["seed_sd"] == 0 and lr["holm_agree"] == lr["rules_out_agree"] == 3
+    assert {r for f, r in calls if f == "logistic_regression"} == {0}  # LR fit loaded once, never as a replicate
+    xgb = rows["xgboost", "nowcast", "all"]
+    a2, b2 = (load("xgboost", arm) for arm in ("nox_with", "nox_without"))
+    r0 = sig.pooled_delta(a2[a2.task == "nowcast"], b2[b2.task == "nowcast"], "ap", 12, 3)["estimate"]
+    assert xgb["estimate_r0"] == r0 and xgb["seed_min"] <= r0 <= xgb["seed_max"]
+    assert xgb["seed_min"] < xgb["seed_max"] and xgb["seed_sd"] > 0 and xgb["replicates"] == 3
+    (roster["ebm"] / "ebm_predictions_v2" / "replicates" / "r2").rmdir()
+    with pytest.raises(ValueError, match="ebm: replicates"):
+        sig.seed_sensitivity(12, 3)
