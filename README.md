@@ -2,8 +2,9 @@
 
 **V1 is the historical class-project report, not the current validated scientific account. V2 is an
 experimental rebuild under review: NOT publication-ready, NOT production-ready, and NO-GO for autonomous
-public fog alerts.** The V2 code now uses fixed PST (`Etc/GMT+8`) and labels an hour as foggy when any
-valid visibility report in that hour reports fog. Corrected numbers are pending rerun; the archived
+public fog alerts.** The V2 code uses fixed PST (`Etc/GMT+8`), GHCNh visibility labels translated to 18
+ordinal categories, and labels an hour as foggy when any valid visibility report in that hour reports fog.
+Current results are in [models/comparison_v2](models/comparison_v2/model_comparison_v2.md); the archived
 pre-fix V2 numbers are superseded, not validated replacements for V1.
 
 - Historical V1: [class report PDF](report.pdf) and [report source](report.tex).
@@ -11,7 +12,7 @@ pre-fix V2 numbers are superseded, not validated replacements for V1.
   [Bakersfield proof of concept](report_files/v2_prefix/poc/poc_report.md) and
   [five-airport study](report_files/v2_prefix/full/report_full.md).
 - Operational outputs: [schema-compatible retrain](ops/retrain/report_retrain.md) and
-  [shadow evaluation](ops/shadow/report_shadow.md). These retained outputs also await regeneration.
+  [shadow evaluation](ops/shadow/report_shadow.md), regenerated on the ordinal GHCNh target.
 - [Data sources and attribution](#data-sources-and-attribution) apply separately from the software license.
 
 The following V1 claims are superseded as publication conclusions and are **not re-established by V2**:
@@ -19,7 +20,7 @@ The following V1 claims are superseded as publication conclusions and are **not 
 1. AQI universally harms prediction or adds no predictive value. V1 did include a matched-row control;
    evaluation defects and missing uncertainty prevent a robust directional conclusion.
 2. Stacking is the validated best model or best path forward. The archived V2 studies did not evaluate
-   that ensemble; the reworked ensemble has no corrected results until the rerun.
+   that ensemble; the reworked ensemble's current results are point estimates in the V2 comparison.
 3. The reported CNN recall near 97.2% is a validated operational detection rate; V2 uses different tasks,
    cohorts and thresholds, so its scores are not a controlled V1-to-V2 performance delta.
 4. High ROC-AUC establishes good probability calibration. Discrimination and calibration are different.
@@ -94,7 +95,7 @@ not regenerate results, validate retained operational bundles or change the publ
 
 Development will continue as I attempt to create a production-ready predictive model, which will then be linked to https://www.calfog.io for public use.
 
-The report is available as `report.pdf` in the root directory.
+The original (V1) class report is `report.pdf`, kept unchanged as a historical record.
 
 README is WIP.
 
@@ -142,7 +143,7 @@ modification and responsibility notices. Historical observation dates are not da
 
 ### Visibility observations
 
-- **NOAA NCEI ISD / Global Hourly:** the legacy visibility inputs are manual NCEI exports for Madera,
+- **NOAA NCEI ISD / Global Hourly:** the V1 and pre-fix V2 visibility labels are manual NCEI exports for Madera,
   Fresno, Visalia, Hanford and Bakersfield. Source citation: NOAA National Centers for Environmental
   Information (2001), *Global Surface Hourly*, five-airport visibility subset.
   [Product metadata and citation](https://www.ncei.noaa.gov/access/metadata/landing-page/bin/iso?id=gov.noaa.ncdc%3AC00532).
@@ -159,13 +160,13 @@ modification and responsibility notices. Historical observation dates are not da
 - **NOAA/NWS AviationWeather Data API:** [METAR observations](https://aviationweather.gov/data/api/)
   supply recent forward labels and passive snapshots; [NWS reuse policy](https://www.weather.gov/disclaimer).
   These are independent research transformations, not official NOAA/NWS forecasts or endorsed warnings.
-- **Future source only — GHCNh:** Global Historical Climatology Network-Hourly is not the source of the
-  currently saved experiment labels. Its [official metadata](https://www.ncei.noaa.gov/access/metadata/landing-page/bin/iso?id=gov.noaa.ncdc%3AC01688)
+- **NOAA NCEI GHCNh (current V2 label source):** Global Historical Climatology Network-Hourly
+  period-of-record PSV files for stations USW00093242 (KMAE), USW00093193 (KFAT), USW00093144 (KVIS),
+  USW00053119 (KHJO) and USW00023155 (KBFL), retrieved 23 October 2026 and decoded by
+  `datasets/scripts/visibility_ghcnh.py`. Its [official metadata](https://www.ncei.noaa.gov/access/metadata/landing-page/bin/iso?id=gov.noaa.ncdc%3AC01688)
   dedicates the data worldwide under [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/).
-  If the planned new labels use it, cite Menne, M. J., et al. (2023), *Global Historical Climatology
-  Network-Hourly (GHCNh)*, NOAA NCEI, https://doi.org/10.25921/jp3d-3v19, with the actual station/date
-  subset, version and retrieval date in that new release's manifest. Do not substitute the GHCN-Daily
-  citation or relabel the existing ISD experiment as GHCNh.
+  Cite Menne, M. J., et al. (2023), *Global Historical Climatology Network-Hourly (GHCNh)*, NOAA NCEI,
+  https://doi.org/10.25921/jp3d-3v19. Do not substitute the GHCN-Daily citation.
 
 **No EPA AQS/AirData inputs were found in the reviewed acquisition code.** No EPA-derived data or EPA
 endorsement is claimed. If future work adds AQS data, its provenance and citation must be added then.
