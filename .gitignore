@@ -22,3 +22,5 @@ ops/shadow/predictions.jsonl
 **/*.partial.json
 **/*.log
 **/*.exit
+datasets/aq_measured/
+models/**/*_predictions_v2/

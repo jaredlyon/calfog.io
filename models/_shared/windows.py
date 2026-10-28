@@ -3,30 +3,33 @@ from __future__ import annotations
 from dataclasses import dataclass
 import numpy as np
 import pandas as pd
-from .data import WEATHER_COLS, CAL_COLS, AQI_COLS, WINDOW
+from .data import WEATHER_COLS, CAL_COLS, WINDOW
 from .labels import audit_causal_features
 from .visibility import FOG_MAX_CATEGORY
 
-def build_windows(weather, part, with_aqi=False, require_aqi=False, *, weather_cols: list[str] = WEATHER_COLS):
+def build_windows(weather, part, aq_cols=(), aq_min_hours=None, *, weather_cols: list[str] = WEATHER_COLS):
     """Materialize 24 genuine consecutive hourly observations within one site.
 
     The source grid was already asserted exactly hourly. Integer positions therefore
     mean clock hours, not "surviving rows"; this vectorized form avoids a slow
     per-METAR loop while preserving the same cadence assertion.
     """
-    cols = list(weather_cols) + CAL_COLS + (AQI_COLS if with_aqi else [])
+    cols = list(weather_cols) + CAL_COLS + list(aq_cols)
     if weather.time.duplicated().any() or not (weather.time.diff().dropna() == pd.Timedelta(hours=1)).all():
         raise AssertionError("feature source is not a contiguous real-hour sequence")
     meta = part.reset_index(drop=True).copy()
     wi = pd.Index(weather.time).get_indexer(meta.issue_time)
     keep = wi >= WINDOW-1
-    if require_aqi:
-        aqok = weather[AQI_COLS].notna().all(axis=1).to_numpy().astype(np.int8)
-        # A complete feature sample has 24 AQI-complete source hours.
-        roll = np.convolve(aqok, np.ones(WINDOW,dtype=np.int8), mode="full")[:len(aqok)]
-        good = np.zeros(len(wi),dtype=bool)
-        valid = wi >= 0; good[valid] = roll[wi[valid]] == WINDOW
-        keep &= good
+    if aq_min_hours is not None:
+        if not 0 <= aq_min_hours <= WINDOW:
+            raise ValueError(f'aq_min_hours must be between 0 and {WINDOW}')
+        for col in aq_cols:
+            present = weather[col].notna().to_numpy().astype(np.int8)
+            roll = np.convolve(present, np.ones(WINDOW, dtype=np.int8), mode="full")[:len(present)]
+            good = np.zeros(len(wi), dtype=bool)
+            valid = wi >= 0
+            good[valid] = roll[wi[valid]] >= aq_min_hours
+            keep &= good
     meta=meta.loc[keep].reset_index(drop=True); wi=wi[keep]
     offsets=np.arange(WINDOW-1,-1,-1)
     source=weather[cols].to_numpy(dtype=np.float32)
@@ -74,8 +77,8 @@ class Prepared:
     def yt(self):
         return (self.ct <= FOG_MAX_CATEGORY).astype(int)
 
-def prepare(weather,parts,with_aqi=False,require_aqi=False, *, weather_cols: list[str] = WEATHER_COLS):
-    built={k:build_windows(weather,v,with_aqi,require_aqi,weather_cols=weather_cols) for k,v in parts.items()}
+def prepare(weather,parts,aq_cols=(),aq_min_hours=None, *, weather_cols: list[str] = WEATHER_COLS):
+    built={k:build_windows(weather,v,aq_cols,aq_min_hours,weather_cols=weather_cols) for k,v in parts.items()}
     Xtr,ctr,mtr,cols=built["train"];Xv,cv,mv,_=built["val"];Xt,ct,mt,_=built["test"]
     arrays,im,sc=fit_preprocess(Xtr,Xv,Xt)
     Xtr,Xv,Xt=arrays

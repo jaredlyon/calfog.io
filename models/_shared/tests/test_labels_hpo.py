@@ -111,14 +111,14 @@ def test_full_4_nonestimable_comparison_keeps_main_result(monkeypatch, tmp_path,
     from models._shared import report
 
     frame = pd.DataFrame({'fog': [0, 1]})
-    monkeypatch.setattr(study, 'load_sources', lambda *a, **kw: (None, None))
+    monkeypatch.setattr(study, 'load_sources', lambda *a, **kw: (pd.DataFrame(), None))
     monkeypatch.setattr(study, 'label_tables', lambda *a: (frame, frame.copy()))
     monkeypatch.setattr(study, 'build_windows', lambda *a, **kw: (None, None, frame, None))
     monkeypatch.setattr(study, 'rolling_origin_folds', lambda *a: [{key: None for key in ('train', 'val', 'test')}])
     meta = pd.DataFrame({'row_key': ['synthetic']})
 
     def prepare(*args, **kwargs):
-        arm = 'with' if len(args) > 2 and args[2] else 'without'
+        arm = 'with' if kwargs.get('aq_cols') else 'without'
         return SimpleNamespace(yv=yv if arm == bad_arm else np.array([0, 1]),
                                metas={key: meta for key in ('train', 'val', 'test')})
 
@@ -141,17 +141,18 @@ def test_full_4_nonestimable_comparison_keeps_main_result(monkeypatch, tmp_path,
     for task in ('nowcast', 'lead_time'):
         assert sd['tasks'][task]['xgboost'] == main_result
         assert 'climatology' in sd['tasks'][task]
-        ablation = sd['aqi_ablation'][task]['xgboost']
-        assert ablation['status'] == 'not_estimable'
-        assert f'fold 1, arm {bad_arm}' in ablation['reason']
-        assert f'validation positives={int(yv.sum())}/{len(yv)}' in ablation['reason']
-        assert task + '_aqi' not in sd['fold_audit']
-        assert metrics['aggregate']['aqi_site_summary']['location_10'][task] == {}
-    assert len(metrics['aggregate']['aqi_not_estimable']) == 2
+        for aq_set in ('nox', 'pm25', 'cams', 'nox_monitor'):
+            ablation = sd['aqi_ablation'][aq_set][task]['xgboost']
+            assert ablation['status'] == 'not_estimable'
+            assert f'fold 1, arm {bad_arm}' in ablation['reason']
+            assert f'validation positives={int(yv.sum())}/{len(yv)}' in ablation['reason']
+            assert f'{task}_{aq_set}' not in sd['fold_audit']
+            assert metrics['aggregate']['aqi_site_summary']['location_10'][aq_set][task] == {}
+    assert len(metrics['aggregate']['aqi_not_estimable']) == 8
     text = (tmp_path / 'xgboost_results_v2.txt').read_text(encoding='utf-8')
-    assert text.count('AQI ablation: not estimable — ') == 2
+    assert text.count('AQI ablation: not estimable — ') == 8
     comparison = report.write_comparison({'xgboost': metrics}, tmp_path / 'comparison')
-    assert len(comparison['aggregate']['aqi_not_estimable']) == 2
+    assert len(comparison['aggregate']['aqi_not_estimable']) == 8
     assert comparison['per_site']['location_10']['tasks']['nowcast']['xgboost'] == main_result
     monkeypatch.setattr(study, 'evaluate_ablation', Mock(side_effect=ValueError('real failure')))
     with pytest.raises(ValueError, match='real failure'):

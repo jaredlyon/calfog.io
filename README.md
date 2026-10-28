@@ -85,9 +85,20 @@ python models/xgboost/xgboost_fog_prediction_v2.py --sites location_10
 python -m pytest models/_shared/tests ops -q
 ```
 
-Family runs write `<family>_metrics_v2.json`, `<family>_results_v2.txt` and
-`<family>_artifacts_v2/` beside their scripts. **Numbers are pending rerun:** this layout change does
-not regenerate results, validate retained operational bundles or change the public-alert NO-GO.
+Family runs write `<family>_metrics_v2.json`, `<family>_results_v2.txt`,
+`<family>_artifacts_v2/` and git-ignored `<family>_predictions_v2/` beside their scripts.
+Predictions retain issue time, fold, category PMFs and evaluation-only dew-point depression/wind.
+`--reuse` requires the set/task-nested air-quality metrics and the predictions directory.
+**Numbers are pending rerun:** this code does not regenerate results, validate retained operational
+bundles or change the public-alert NO-GO.
+
+The air-quality study uses measured EPA hourly **NOx (primary)** and **PM2.5 (secondary)**;
+CAMS channels remain appendix comparisons. `datasets/scripts/airdata_epa.py` builds fixed-PST
+airport series in `datasets/aq_measured/` using monthly priority-monitor splices and records
+monitor switches and acquisition provenance. Each ablation requires at least 20 of 24
+nonmissing hours per air-quality channel; training medians impute the remainder, and both arms
+use identical rows. Logistic regression, XGBoost and EBM also test NOx with monitor-ID indicators.
+Strata (dew-point depression <4.2 °C and wind <7.2 km/h) are evaluation-only, never features.
 
 ---
 
@@ -101,9 +112,9 @@ README is WIP.
 
 ## Data sources and attribution
 
-The repository's MIT license does not relicense upstream data. Weather and air-quality data by
+The repository's MIT license does not relicense upstream data. Gridded weather and CAMS air-quality data by
 [Open-Meteo](https://open-meteo.com/), under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
-Place this linked credit next to every weather/air-quality data-derived table, figure or released data
+Place this linked credit next to every Open-Meteo-derived table, figure or released data
 supplement, with a link to this section. The historical PDF is retained as an unmodified class artifact;
 its attribution has not been retroactively rewritten. A new manuscript or standalone figure must carry
 its own credits rather than relying on a repository link alone.
@@ -168,8 +179,17 @@ modification and responsibility notices. Historical observation dates are not da
   Cite Menne, M. J., et al. (2023), *Global Historical Climatology Network-Hourly (GHCNh)*, NOAA NCEI,
   https://doi.org/10.25921/jp3d-3v19. Do not substitute the GHCN-Daily citation.
 
-**No EPA AQS/AirData inputs were found in the reviewed acquisition code.** No EPA-derived data or EPA
-endorsement is claimed. If future work adds AQS data, its provenance and citation must be added then.
+### Measured air quality
+
+- **U.S. Environmental Protection Agency (EPA), AirData / Air Quality System (AQS):**
+  [pre-generated hourly data files](https://aqs.epa.gov/aqsweb/airdata/download_files.html)
+  supply NOx (parameter 42603, `NONOxNOy`) and hourly PM2.5 (88101 and 88502) observations
+  for priority monitors near the five airports. Cite U.S. Environmental Protection Agency,
+  *AirData: Air Quality Data Collected at Outdoor Monitors Across the US*,
+  https://www.epa.gov/outdoor-air-quality-data, with the actual retrieval date from
+  `datasets/aq_measured/aq_manifest.json`. The acquisition code excludes superseded PM2.5
+  methods 236/238, converts GMT to fixed PST, and splices monitor-months without adjustment.
+  These transformed observations are not an EPA AQI index or an EPA-endorsed forecast.
 
 ### Modifications and availability
 

@@ -6,7 +6,7 @@ sys.path.insert(0, str(ROOT))
 
 import argparse
 import json
-from models._shared.data import SITES
+from models._shared.data import SITES, AQ_SETS, PRIMARY_FAMILIES
 from models._shared.study import FAMILY_DIRS, run_family
 from models._shared.report import write_comparison
 
@@ -26,6 +26,17 @@ def main():
             if any('ordinal' not in result for sd in metrics['per_site'].values()
                    for results in sd['tasks'].values() for result in results.values()):
                 raise ValueError(f"{saved}: binary-only metrics cannot be reused; rerun without --reuse")
+            expected_sets = set(AQ_SETS) | ({'nox_monitor'} if family in PRIMARY_FAMILIES else set())
+            if not metrics['per_site'] or any(
+                set(sd.get('aqi_ablation', {})) != expected_sets or
+                any(task not in sd['aqi_ablation'][aq_set] or
+                    family not in sd['aqi_ablation'][aq_set][task]
+                    for aq_set in expected_sets for task in ('nowcast', 'lead_time'))
+                for sd in metrics['per_site'].values()
+            ):
+                raise ValueError(f"{saved}: old AQI nesting cannot be reused; rerun without --reuse")
+            if not (out_dir / f"{family}_predictions_v2").is_dir():
+                raise ValueError(f"{saved}: metrics without predictions cannot be reused; rerun without --reuse")
             runs[family] = metrics
             # reuse the tuned CNN configs so later CNN-bearing families (ensemble) don't re-tune
             for site, sd in metrics['per_site'].items():

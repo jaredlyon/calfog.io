@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 import numpy as np
 import pandas as pd
-from .data import ROOT, SITES, WEATHER_COLS, AQI_COLS, SEED, N_BOOT, load_sources
+from .data import ROOT, SITES, WEATHER_COLS, AQ_SETS, AQI_COLS, AQ_MIN_HOURS, PRIMARY_FAMILIES, SEED, N_BOOT, load_sources
 from .labels import label_tables, add_neighbor_lags
 from .splits import rolling_origin_folds
 from .windows import prepare, prepare_pooled, build_windows
@@ -15,11 +15,11 @@ from .families import FAMILIES, seed_for
 from .tuning import tune_cnn
 
 FAMILY_DIRS: dict[str, Path] = {family: ROOT / 'models' / folder for family, folder in {
-    'logistic_regression': 'logistic regression', 'random_forest': 'random forest',
-    'xgboost': 'xgboost', 'xgboost_focal_loss': 'xgboost',
+    'logistic_regression': 'logistic regression', 'xgboost': 'xgboost', 'ebm': 'ebm',
+    'random_forest': 'random forest', 'xgboost_focal_loss': 'xgboost',
     'temporal_cnn': 'temporal_cnn', 'ensemble': 'ensemble',
     'persistence': 'persistence', 'analog': 'analog', 'xgboost_ordinal': 'xgboost',
-    'xgboost_aft': 'xgboost', 'ebm': 'ebm', 'xgboost_pooled': 'pooled'}.items()}
+    'xgboost_aft': 'xgboost', 'xgboost_pooled': 'pooled'}.items()}
 
 PREDICTOR_SETS: dict[str, str] = {family: 'weather' for family in FAMILIES}
 PREDICTOR_SETS.update({
@@ -50,7 +50,7 @@ def _audit(prep, fold):
 def _record(prep, output, fold, family):
     pv, pt = pmf_to_fog(output.pmf_val), pmf_to_fog(output.pmf_test)
     cal = fit_calibrator(prep.yv, pv)
-    meta = prep.metas['test'][['issue_time', 'row_key']].copy()
+    meta = prep.metas['test'].reindex(columns=['issue_time', 'row_key', 'dpd_c', 'wind_kmh']).copy()
     meta['fold'] = fold
     return {'c': prep.ct.copy(), 'pmf': output.pmf_test, 'y': prep.yt.copy(),
             'p': pt, 'pc': calibrate(cal, pt), 'meta': meta,
@@ -73,8 +73,24 @@ def _finalize(records, family, seed, n_boot):
     return result
 
 
+def save_predictions(records, path):
+    """Persist uncalibrated ordinal predictions and evaluation-only strata."""
+    if path is None:
+        return
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    meta = pd.concat([row['meta'] for row in records], ignore_index=True)
+    np.savez_compressed(path,
+        issue_time=meta.issue_time.to_numpy(dtype='datetime64[ns]').astype(np.int64),
+        fold=meta.fold.to_numpy(dtype=np.int8),
+        c=np.concatenate([row['c'] for row in records]).astype(np.int8),
+        pmf=np.concatenate([row['pmf'] for row in records]).astype(np.float16),
+        dpd_c=meta.dpd_c.to_numpy(dtype=np.float32),
+        wind_kmh=meta.wind_kmh.to_numpy(dtype=np.float32))
+
+
 def evaluate_family(weather, labels, site, task, family, *, cnn_cfg, weather_cols, seed,
-                    save_dir: Path | None, n_boot: int = N_BOOT) -> tuple[dict, list, dict]:
+                    save_dir: Path | None, n_boot: int = N_BOOT, prediction_path=None) -> tuple[dict, list, dict]:
     records, audits, info = [], [], []
     folds = rolling_origin_folds(labels)
     for fi, fold in enumerate(folds, 1):
@@ -88,11 +104,12 @@ def evaluate_family(weather, labels, site, task, family, *, cnn_cfg, weather_col
             import torch
             Path(save_dir).mkdir(parents=True, exist_ok=True)
             torch.save(output.state, Path(save_dir) / f'cnn_{task}.pt')
+    save_predictions(records, prediction_path)
     return _finalize(records, family, seed, n_boot), audits, {'folds': info}
 
 
 def evaluate_pooled(sources, labels_by_site, target_site, task, family, *, weather_cols, seed,
-                    n_boot: int = N_BOOT) -> tuple[dict, list, dict]:
+                    n_boot: int = N_BOOT, prediction_path=None) -> tuple[dict, list, dict]:
     records, audits, info = [], [], []
     for fi, fold in enumerate(rolling_origin_folds(labels_by_site[target_site]), 1):
         V, T = fold['val'].issue_time.min(), fold['test'].issue_time.min()
@@ -112,17 +129,25 @@ def evaluate_pooled(sources, labels_by_site, target_site, task, family, *, weath
                                  for site in labels_by_site}
         audits.append(audit)
         info.append(output.info)
+    save_predictions(records, prediction_path)
     return _finalize(records, family, seed, n_boot), audits, {'folds': info}
 
 
 def evaluate_ablation(weather, matched, site, task, family, *, cnn_cfg, weather_cols, seed,
-                      n_boot: int = N_BOOT) -> dict:
+                      aq_cols=AQI_COLS, n_boot: int = N_BOOT, prediction_dir=None, aq_set='cams') -> dict:
     records = {'with': [], 'without': []}
     audits, info = [], []
-    for fi, fold in enumerate(rolling_origin_folds(matched), 1):
+    try:
+        folds = rolling_origin_folds(matched)
+    except ValueError:
+        if len(matched) < 30:
+            raise NotEstimable('at least 30 matched rows are required') from None
+        raise
+    for fi, fold in enumerate(folds, 1):
         parts = {key: fold[key] for key in ('train', 'val', 'test')}
-        no = prepare(weather, parts, weather_cols=weather_cols)
-        yes = prepare(weather, parts, True, True, weather_cols=weather_cols)
+        yes = prepare(weather, parts, aq_cols=aq_cols, aq_min_hours=AQ_MIN_HOURS, weather_cols=weather_cols)
+        matched_parts = {key: yes.metas[key] for key in ('train', 'val', 'test')}
+        no = prepare(weather, matched_parts, weather_cols=weather_cols)
         for split in ('train', 'val', 'test'):
             assert no.metas[split].row_key.tolist() == yes.metas[split].row_key.tolist()
         # FULL-4: do not move folds, fabricate a calibrator or begin any training.
@@ -159,6 +184,8 @@ def evaluate_ablation(weather, matched, site, task, family, *, cnn_cfg, weather_
     for arm in records:
         result[arm] = _finalize(records[arm], family, seed, n_boot)
         result[arm]['climatology_ap'] = safe_ap(y, np.concatenate([row['baseline'] for row in records[arm]]))
+        if prediction_dir is not None:
+            save_predictions(records[arm], Path(prediction_dir) / f'{site}__{task}__{aq_set}_{arm}.npz')
     if y.sum() < 50:
         result['ci_warning'] = 'Fewer than 50 positives: AQI delta interval is sparse and potentially uninformative.'
     return result
@@ -172,6 +199,7 @@ def run_family(family: str, *, sites=tuple(SITES), weather_cols=WEATHER_COLS, cn
     out_dir = Path(out_dir) if out_dir is not None else FAMILY_DIRS[family]
     out_dir.mkdir(parents=True, exist_ok=True)
     art_dir = out_dir / f'{family}_artifacts_v2'
+    prediction_dir = out_dir / f'{family}_predictions_v2'
     cache = cnn_cache if cnn_cache is not None else {}
     metrics = {'family': family, 'predictor_set': PREDICTOR_SETS.get(family, 'weather'),
                'seed': SEED, 'n_boot': n_boot, 'weather_cols': list(weather_cols), 'per_site': {}}
@@ -194,11 +222,9 @@ def run_family(family: str, *, sites=tuple(SITES), weather_cols=WEATHER_COLS, cn
             now, lead = label_tables(weather, vis, site)
         sd = {'cohort': {'nowcast_rows': len(now), 'nowcast_positives': int(now.fog.sum()),
                          'nowcast_fog_rate': float(now.fog.mean()), 'lead_complete_10h_issues': len(lead),
-                         'lead_positives': int(lead.fog.sum()), 'aqi_channels': AQI_COLS},
+                         'lead_positives': int(lead.fog.sum()), 'aqi_channels': AQ_SETS},
               'cnn_cfg': {}, 'tasks': {}, 'aqi_ablation': {}, 'fold_audit': {}, 'info': {}}
         for task, labels in (('nowcast', now), ('lead_time', lead)):
-            _, _, matched, _ = build_windows(weather, labels, True, True, weather_cols=weather_cols)
-            sd['cohort'][f'aqi_matched_{task}_rows'] = len(matched)
             cfg = None
             if module.NEEDS_CNN_CFG:
                 first = rolling_origin_folds(labels)[0]
@@ -208,30 +234,43 @@ def run_family(family: str, *, sites=tuple(SITES), weather_cols=WEATHER_COLS, cn
             if pooled:
                 result, audit, info = evaluate_pooled(sources, pooled_labels[task], site, task, family,
                     weather_cols=weather_cols, seed=seed_for(SEED, family, site, task, 'bootstrap'),
-                    n_boot=n_boot)
+                    n_boot=n_boot, prediction_path=prediction_dir / f'{site}__{task}__main.npz')
             else:
                 result, audit, info = evaluate_family(weather, labels, site, task, family, cnn_cfg=cfg,
                     weather_cols=weather_cols, seed=seed_for(SEED, family, site, task, 'bootstrap'),
-                    save_dir=art_dir / site, n_boot=n_boot)
+                    save_dir=art_dir / site, n_boot=n_boot,
+                    prediction_path=prediction_dir / f'{site}__{task}__main.npz')
             baseline, _, _ = evaluate_family(weather, labels, site, task, 'climatology', cnn_cfg=None,
                 weather_cols=weather_cols, seed=seed_for(SEED, 'climatology', site, task, 'bootstrap'),
-                save_dir=None, n_boot=n_boot)
+                save_dir=None, n_boot=n_boot,
+                prediction_path=prediction_dir / f'{site}__{task}__climatology.npz')
             sd['tasks'][task] = {family: result, 'climatology': baseline}
             sd['fold_audit'][task] = audit
             sd['info'][task] = info
-            if pooled:
-                sd['aqi_ablation'][task] = {family: {
-                    'status': 'not_applicable',
-                    'reason': 'pooled multi-site model; AQI matched cohort is per site'}}
-                continue
-            try:
-                ablation = evaluate_ablation(weather, matched, site, task, family, cnn_cfg=cfg,
-                    weather_cols=weather_cols, seed=seed_for(SEED, family, site, task, 'aqi_bootstrap'), n_boot=n_boot)
-            except NotEstimable as error:
-                sd['aqi_ablation'][task] = {family: {'status': 'not_estimable', 'reason': str(error)}}
-            else:
-                sd['aqi_ablation'][task] = {family: ablation}
-                sd['fold_audit'][task + '_aqi'] = ablation['fold_audit']
+            sets = dict(AQ_SETS)
+            if family in PRIMARY_FAMILIES:
+                sets['nox_monitor'] = ['nox_ppb'] + sorted(
+                    col for col in weather.columns if col.startswith('nox_mon_'))
+            for aq_set, aq_cols in sets.items():
+                results = sd['aqi_ablation'].setdefault(aq_set, {})
+                if pooled:
+                    results[task] = {family: {
+                        'status': 'not_applicable',
+                        'reason': 'pooled multi-site model; AQI matched cohort is per site'}}
+                    continue
+                _, _, matched, _ = build_windows(weather, labels, aq_cols=aq_cols,
+                    aq_min_hours=AQ_MIN_HOURS, weather_cols=weather_cols)
+                sd['cohort'][f'{aq_set}_matched_{task}_rows'] = len(matched)
+                try:
+                    ablation = evaluate_ablation(weather, matched, site, task, family, cnn_cfg=cfg,
+                        weather_cols=weather_cols, aq_cols=aq_cols,
+                        seed=seed_for(SEED, family, site, task, aq_set, 'aqi_bootstrap'),
+                        n_boot=n_boot, prediction_dir=prediction_dir, aq_set=aq_set)
+                except NotEstimable as error:
+                    results[task] = {family: {'status': 'not_estimable', 'reason': str(error)}}
+                else:
+                    results[task] = {family: ablation}
+                    sd['fold_audit'][f'{task}_{aq_set}'] = ablation['fold_audit']
         metrics['per_site'][site] = sd
     metrics['aggregate'] = aggregate(metrics)
     (out_dir / f'{family}_metrics_v2.json').write_text(json.dumps(metrics, indent=2, allow_nan=False), encoding='utf-8')

@@ -180,17 +180,18 @@ def test_run_pooled_loads_all_sites_once_and_reports_not_applicable(monkeypatch,
     assert baseline_sites == [{site}, {site}]
     assert metrics['predictor_set'] == study.PREDICTOR_SETS['xgboost_pooled']
     for task in ('nowcast', 'lead_time'):
-        assert metrics['per_site'][site]['aqi_ablation'][task]['xgboost_pooled'] == {
-            'status': 'not_applicable', 'reason': 'pooled multi-site model; AQI matched cohort is per site'}
-        assert metrics['aggregate']['aqi_site_summary'][site][task] == {}
-    assert len(metrics['aggregate']['aqi_not_applicable']) == 2
+        for aq_set in ('nox', 'pm25', 'cams'):
+            assert metrics['per_site'][site]['aqi_ablation'][aq_set][task]['xgboost_pooled'] == {
+                'status': 'not_applicable', 'reason': 'pooled multi-site model; AQI matched cohort is per site'}
+            assert metrics['aggregate']['aqi_site_summary'][site][aq_set][task] == {}
+    assert len(metrics['aggregate']['aqi_not_applicable']) == 6
     assert metrics['aggregate']['aqi_not_estimable'] == []
     text = (tmp_path / 'xgboost_pooled_results_v2.txt').read_text(encoding='utf-8')
     assert 'AQI ablation: not applicable' in text
     assert study.PREDICTOR_SETS['xgboost_pooled'] in text
     assert 'Paired AQI delta' not in text
     combined = report.write_comparison({'xgboost_pooled': metrics}, tmp_path / 'comparison')
-    assert len(combined['aggregate']['aqi_not_applicable']) == 2
+    assert len(combined['aggregate']['aqi_not_applicable']) == 6
     markdown = (tmp_path / 'comparison' / 'model_comparison_v2.md').read_text(encoding='utf-8')
     assert '| Predictor set |' in markdown
     assert study.PREDICTOR_SETS['xgboost_pooled'] in markdown

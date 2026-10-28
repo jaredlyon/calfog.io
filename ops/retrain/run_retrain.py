@@ -115,7 +115,7 @@ def fetch_archive(site,sd,manifest):
 
 
 def raw_prepared(weather,parts):
-    built={k:windows.build_windows(weather,v,False,False,weather_cols=APPROVED) for k,v in parts.items()}
+    built={k:windows.build_windows(weather,v,weather_cols=APPROVED) for k,v in parts.items()}
     Xtr,ytr,mtr,cols=built['train'];Xv,yv,mv,_=built['val'];Xt,yt,mt,_=built['test']
     arr,im,sc=windows.fit_preprocess(Xtr,Xv,Xt);Xtr,Xv,Xt=arr
     return windows.Prepared(Xtr,ytr,Xv,yv,Xt,yt,{'train':mtr,'val':mv,'test':mt},cols),im,sc
@@ -202,7 +202,7 @@ def fetch_proxy_and_labels(site,sd,manifest):
     return add_calendar(w),labels,sorted(set(missing))
 
 def predict_proxy(weather,part,bundle):
-    X,y,meta,cols=windows.build_windows(weather,part,False,False,weather_cols=APPROVED)
+    X,y,meta,cols=windows.build_windows(weather,part,weather_cols=APPROVED)
     im=bundle['prep']['imputer'];sc=bundle['prep']['scaler'];shape=X.shape
     X=sc.transform(im.transform(X.reshape(-1,shape[-1]))).reshape(shape).astype(np.float32)
     pmfs={'climatology':np.tile(bundle['climatology'],(len(y),1)),
@@ -296,7 +296,7 @@ def main():
         print(f'=== {site} archive/retrain ===',flush=True);weather=fetch_archive(site,sd,manifest);_,vis=load_sources(site,weather_cols=APPROVED);now,lead=label_tables(weather,vis,site)
         siteout={'airport':sd['icao'],'tasks':{},'fold_audit':{}};slog={'tasks':{}};bundles[site]={}
         for task,labels in [('nowcast',now),('lead_time',lead)]:
-            first=rolling_origin_folds(labels)[0];pp=windows.prepare(weather,{k:first[k] for k in ('train','val','test')},False,False,weather_cols=APPROVED)
+            first=rolling_origin_folds(labels)[0];pp=windows.prepare(weather,{k:first[k] for k in ('train','val','test')},weather_cols=APPROVED)
             cfg=tuning.tune_cnn(pp,site,task,art_dir=ART,seed=SEED);del pp;log['ray_tune_trials']+=8
             result={};audits={};info={}
             for family in ('climatology','xgboost','random_forest','temporal_cnn'):

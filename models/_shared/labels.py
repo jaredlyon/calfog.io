@@ -183,6 +183,10 @@ def add_neighbor_lags(labels_by_site: dict[str, pd.DataFrame],
     return result
 
 
+NEAR_SAT_DPD_C = 4.2
+NEAR_SAT_WIND_KMH = 7.2
+
+
 def label_tables(weather,vis,site):
     known=vis.dropna(subset=['category']).copy()
     known['category']=known.category.astype(int)
@@ -194,6 +198,16 @@ def label_tables(weather,vis,site):
     lead['label_time']=lead.verification_start
     lead=lead[lead.issue_time.isin(set(weather.time))].copy(); lead['row_key']=lead.issue_time.dt.strftime('%Y-%m-%dT%H:%M:%S');lead['site']=site
     lead['valid_target_hours']=10
+    strata = weather.set_index('time').reindex(
+        columns=['temperature_2m', 'dew_point_2m', 'wind_speed_10m'])
+    strata = pd.DataFrame({'dpd_c': strata.temperature_2m - strata.dew_point_2m,
+                           'wind_kmh': strata.wind_speed_10m}, index=strata.index)
+    now[['dpd_c', 'wind_kmh']] = strata.reindex(now.issue_time).to_numpy(dtype=float)
+    # min_periods=10 makes an absent hour or measurement invalidate the mean.
+    verification = strata.reindex(pd.date_range(weather.time.min(), weather.time.max(), freq='h'))
+    means = verification.rolling(10, min_periods=10).mean()
+    lead[['dpd_c', 'wind_kmh']] = means.reindex(
+        lead.verification_end - pd.Timedelta(hours=1)).to_numpy(dtype=float)
     # Explicit core causal audit: feature window ends at issue, never verification time.
     for z,task in ((now,'nowcast'),(lead,'lead')):
         z['_max_feature_time']=z.issue_time

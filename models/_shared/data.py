@@ -12,6 +12,10 @@ N_BOOT = 1000
 SITES = {"location_6":"Madera", "location_7":"Fresno", "location_8":"Visalia", "location_9":"Hanford", "location_10":"Bakersfield"}
 WINDOW = 24
 AQI_COLS = ["pm10", "pm2_5", "aerosol_optical_depth", "dust", "nitrogen_dioxide"]
+MEASURED_AQ_COLS = ["nox_ppb", "pm25_ugm3"]
+AQ_SETS: dict[str, list[str]] = {"nox": ["nox_ppb"], "pm25": ["pm25_ugm3"], "cams": AQI_COLS}
+AQ_MIN_HOURS = 20
+PRIMARY_FAMILIES = ("logistic_regression", "xgboost", "ebm")
 # Original hourly observations only. The three supplied rolling/night columns are
 # deliberately excluded and causal calendar terms are recomputed below.
 WEATHER_COLS = [
@@ -57,6 +61,18 @@ def load_sources(site, *, weather_cols=WEATHER_COLS):
     w['doy_sin']=np.sin(2*np.pi*(t.dt.dayofyear-1)/365.25); w['doy_cos']=np.cos(2*np.pi*(t.dt.dayofyear-1)/365.25)
     a=pd.read_csv(ROOT/'datasets'/'aqi'/f'{site}_aqi.csv'); a['time']=pd.to_datetime(a.time)
     a=a.sort_values('time').drop_duplicates('time',keep='last'); w=w.merge(a,on='time',how='left',validate='one_to_one')
+    measured = ROOT/'datasets'/'aq_measured'/f'{site}_aq_measured.csv'
+    if measured.exists():
+        aq = pd.read_csv(measured, parse_dates=['time'],
+                         dtype={'nox_monitor': 'string', 'pm25_monitor': 'string'})
+        w = w.merge(aq, on='time', how='left', validate='one_to_one')
+    else:
+        for col in MEASURED_AQ_COLS:
+            w[col] = np.nan
+        for col in ('nox_monitor', 'pm25_monitor'):
+            w[col] = pd.Series(pd.NA, index=w.index, dtype='string')
+    for monitor in sorted(w.nox_monitor.dropna().unique()):
+        w[f'nox_mon_{monitor}'] = w.nox_monitor.eq(monitor).fillna(False).astype(float)
     v=pd.read_csv(ROOT/'datasets'/'visibility'/f'{site}_visibility_hourly.csv',
                   usecols=['time','cat_lo','cat_hi','category','fog'],
                   dtype={'cat_lo':'Int64','cat_hi':'Int64','category':'Int64','fog':'boolean'},

@@ -4,7 +4,7 @@ import json
 import numpy as np
 import pandas as pd
 from models._shared import study
-from models._shared.data import WEATHER_COLS, CAL_COLS, AQI_COLS
+from models._shared.data import WEATHER_COLS, CAL_COLS, AQI_COLS, MEASURED_AQ_COLS, AQ_SETS, PRIMARY_FAMILIES
 from models._shared.families import FAMILIES, FamilyOutput, seed_for
 from models._shared.windows import build_windows, tree_feature_names, tree_view, fit_preprocess
 from models._shared.visibility import N_CATEGORIES
@@ -18,6 +18,7 @@ def test_registry_contract():
         assert isinstance(module.NEEDS_CNN_CFG, bool)
         assert callable(module.fit_predict)
     assert set(study.FAMILY_DIRS) == set(FAMILIES) - {'climatology'}
+    assert tuple(study.FAMILY_DIRS)[:3] == PRIMARY_FAMILIES
     assert study.PREDICTOR_SETS['xgboost'] == 'weather'
     assert study.PREDICTOR_SETS['persistence'] == 'observed visibility history'
     assert study.PREDICTOR_SETS['xgboost_pooled'] == 'weather + observed visibility (own + 4 neighbors), pooled sites'
@@ -49,10 +50,11 @@ def test_preprocessing_is_fit_only_on_training_timesteps():
 def test_run_family_routes_one_family_and_baseline_without_tuning(monkeypatch, tmp_path):
     times = pd.date_range('2024-01-01', periods=120 * 24, freq='h')
     weather = pd.DataFrame({'time': times, 'custom': np.sin(np.arange(len(times)) / 24),
-                             **{c: np.zeros(len(times)) for c in CAL_COLS + AQI_COLS}})
+                             **{c: np.zeros(len(times)) for c in CAL_COLS + AQI_COLS + MEASURED_AQ_COLS + ['nox_mon_06-019-0001']}})
     labels = pd.DataFrame({'issue_time': times, 'fog': np.arange(len(times)) % 2,
                           'category': np.where(np.arange(len(times)) % 2, 2, 17),
-                          'row_key': times.astype(str), 'site': 'location_10'})
+                          'row_key': times.astype(str), 'site': 'location_10',
+                          'dpd_c': 2., 'wind_kmh': 3.})
     monkeypatch.setattr(study, 'load_sources', lambda site, **kw: (weather, None))
     monkeypatch.setattr(study, 'label_tables', lambda *a: (labels, labels.copy()))
     calls = []
@@ -75,7 +77,7 @@ def test_run_family_routes_one_family_and_baseline_without_tuning(monkeypatch, t
     assert metrics['n_boot'] == 8
     assert metrics['weather_cols'] == ['custom']
     assert metrics['predictor_set'] == 'weather'
-    assert len(calls) == 18  # 2 tasks x (3 full-history folds + 2 matched arms x 3 folds)
+    assert len(calls) == 54  # 2 tasks x (3 main folds + 4 AQ sets x 2 arms x 3 folds)
     sd = metrics['per_site']['location_10']
     for task in ('nowcast', 'lead_time'):
         assert set(sd['tasks'][task]) == {'xgboost', 'climatology'}
@@ -85,11 +87,15 @@ def test_run_family_routes_one_family_and_baseline_without_tuning(monkeypatch, t
         assert result['valid_ap_resamples'] <= 8
         assert np.isclose(sum(result['importance'].values()), 100)
         assert result['ordinal']['rps_ci'][0] <= result['ordinal']['rps'] <= result['ordinal']['rps_ci'][1]
-        ablation = sd['aqi_ablation'][task]['xgboost']
-        assert ablation['bootstrap_resamples'] == 8
-        assert ablation['identical_issue_keys']
-        assert {'with', 'without'} <= ablation.keys()
-        assert ablation['delta_rps_ci'][0] <= ablation['delta_rps'] <= ablation['delta_rps_ci'][1]
+        assert set(sd['aqi_ablation']) == set(AQ_SETS) | {'nox_monitor'}
+        for aq_set in sd['aqi_ablation']:
+            ablation = sd['aqi_ablation'][aq_set][task]['xgboost']
+            assert ablation['bootstrap_resamples'] == 8
+            assert ablation['identical_issue_keys']
+            assert {'with', 'without'} <= ablation.keys()
+            assert ablation['delta_rps_ci'][0] <= ablation['delta_rps'] <= ablation['delta_rps_ci'][1]
+        for arm in ('main', 'climatology', 'nox_with', 'nox_without', 'nox_monitor_with', 'nox_monitor_without'):
+            assert (tmp_path / 'xgboost_predictions_v2' / f'location_10__{task}__{arm}.npz').is_file()
     path = tmp_path / 'xgboost_metrics_v2.json'
     assert json.loads(path.read_text())['family'] == 'xgboost'
     assert (tmp_path / 'xgboost_results_v2.txt').is_file()
@@ -102,6 +108,7 @@ def test_run_family_routes_one_family_and_baseline_without_tuning(monkeypatch, t
     markdown = (tmp_path / 'comparison' / 'model_comparison_v2.md').read_text(encoding='utf-8')
     assert '| RPS (95% CI) |' in markdown and 'Paired delta RPS' in markdown
     assert '| Predictor set |' in markdown
+    assert all(label in markdown for label in ('NOx (primary)', 'PM2.5 (secondary)', 'CAMS (appendix)'))
 
 
 def test_reuse_rejects_binary_only_metrics(monkeypatch, tmp_path):

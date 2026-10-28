@@ -52,7 +52,7 @@ def main():
         (site_dir/'feature_spec.json').write_text(json.dumps(feature_spec,indent=2))
         for ti,(task,labels) in enumerate((('nowcast',now),('lead_time',lead))):
             td=site_dir/task;td.mkdir(parents=True,exist_ok=True)
-            X,c,meta,cols=build_windows(weather,labels,False,False)
+            X,c,meta,cols=build_windows(weather,labels)
             if cols!=FEATURES:raise AssertionError((cols,FEATURES))
             cut=int(len(c)*.85);cal_start=meta.issue_time.iloc[cut]
             base=(meta.issue_time<cal_start-pd.Timedelta(hours=24)).to_numpy();cal=(meta.issue_time>=cal_start).to_numpy()
