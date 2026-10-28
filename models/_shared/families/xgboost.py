@@ -1,6 +1,7 @@
 """Native multiclass XGBoost, including categories absent from training."""
 
 import numpy as np
+import torch
 import xgboost as xgb
 from scipy.special import softmax
 
@@ -10,11 +11,14 @@ from . import FamilyOutput
 
 NEEDS_CNN_CFG = False
 
+# D-079: train on the GPU (same rule as the CNN); GPU and CPU boosters differ slightly (F-078).
+DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+
 BASE_PARAMS = {
     "max_depth": 5, "learning_rate": 0.04, "min_child_weight": 3,
     "subsample": 0.8, "colsample_bytree": 0.8,
     "reg_lambda": 2.0, "reg_alpha": 0.2,
-    "nthread": 8, "tree_method": "hist", "device": "cpu",
+    "nthread": 8, "tree_method": "hist", "device": DEVICE,
 }
 
 

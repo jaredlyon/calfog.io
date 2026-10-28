@@ -5,7 +5,7 @@ import xgboost as xgb
 from scipy.special import logsumexp
 
 from models._shared.families import FamilyOutput
-from models._shared.families.xgboost import BoosterPMF
+from models._shared.families.xgboost import DEVICE, BoosterPMF
 from models._shared.visibility import N_CATEGORIES
 from models._shared.windows import Prepared, tree_feature_names, tree_view
 
@@ -46,7 +46,7 @@ def fit_model(Xtr, ctr, Xv, cv, *, seed: int):
         "max_depth": 5, "learning_rate": 0.05, "min_child_weight": 3,
         "gamma": 0.1, "subsample": 0.7, "colsample_bytree": 0.7,
         "colsample_bylevel": 0.7, "reg_alpha": 1.0, "reg_lambda": 2.0,
-        "tree_method": "hist", "device": "cpu", "nthread": 8, "seed": seed,
+        "tree_method": "hist", "device": DEVICE, "nthread": 8, "seed": seed,
         "disable_default_eval_metric": 1,
     }
     booster = xgb.train(

@@ -115,7 +115,7 @@ def test_booster_validation_labels_and_best_iteration(prep, family, monkeypatch)
         np.testing.assert_allclose(dtrain.get_data().toarray(), tree_view(prep.Xtr))
         assert params["objective"] == "multi:softprob"
         assert params["num_class"] == N_CATEGORIES
-        assert params["device"] == "cpu"
+        assert params["device"] == xgboost.DEVICE
         assert params["seed"] == 42
         assert len(kwargs["evals"]) == 1
         dval, name = kwargs["evals"][0]
