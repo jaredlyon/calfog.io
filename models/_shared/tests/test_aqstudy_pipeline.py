@@ -109,6 +109,35 @@ def test_reuse_only_current_metrics_with_predictions(monkeypatch, tmp_path, old_
     assert compared[0][family] == (saved if reusable else {'fresh': family})
 
 
+def test_parallel_shards_share_tuned_cnn_and_isolate_failures(monkeypatch):
+    from concurrent.futures import ThreadPoolExecutor
+    sites = ['location_6', 'location_10']
+    seen = {}
+
+    def fake_run_family(family, *, sites, cnn_cache, write):
+        (site,) = sites
+        assert write is False
+        if family == 'xgboost' and site == 'location_10':
+            raise ValueError('boom')
+        seen[family, site] = dict(cnn_cache)
+        cfg = {task: cnn_cache.get((site, task), f'{site}-{task}') for task in run_all_v2.TASKS}
+        return {'family': family, 'per_site': {site: {'cnn_cfg': cfg}}}
+
+    written = {}
+    monkeypatch.setattr(run_all_v2, 'ProcessPoolExecutor', lambda jobs, **kw: ThreadPoolExecutor(jobs))
+    monkeypatch.setattr(run_all_v2, 'run_family', fake_run_family)
+    monkeypatch.setattr(run_all_v2, 'write_family', lambda m: written.setdefault(m['family'], m))
+    with pytest.raises(RuntimeError, match="xgboost.*boom"):
+        run_all_v2.run_parallel(['xgboost', 'temporal_cnn', 'ensemble'], sites, {}, jobs=3)
+    # ensemble ran after temporal_cnn tuned each site and received exactly those configs
+    for site in sites:
+        assert {task: seen['ensemble', site].get((site, task)) for task in run_all_v2.TASKS} == {
+            task: f'{site}-{task}' for task in run_all_v2.TASKS}
+    # complete families are written in site order; the failed family is not
+    assert set(written) == {'temporal_cnn', 'ensemble'}
+    assert list(written['ensemble']['per_site']) == sites
+
+
 @pytest.mark.parametrize('family', [f for f in study.FAMILY_DIRS if f != 'xgboost_pooled'])
 def test_monitor_one_hot_arm_only_in_primary_families(monkeypatch, tmp_path, family):
     weather = weather_frame().assign(nox_ppb=10., pm25_ugm3=3.,

@@ -192,8 +192,8 @@ def evaluate_ablation(weather, matched, site, task, family, *, cnn_cfg, weather_
 
 
 def run_family(family: str, *, sites=tuple(SITES), weather_cols=WEATHER_COLS, cnn_cache: dict | None = None,
-               out_dir: Path | None = None, n_boot=N_BOOT) -> dict:
-    from .report import aggregate, write_family_report, write_plots
+               out_dir: Path | None = None, n_boot=N_BOOT, write=True) -> dict:
+    """Run one family; write=False returns per-site results only (for parallel shards, merged by write_family)."""
 
     module = FAMILIES[family]
     out_dir = Path(out_dir) if out_dir is not None else FAMILY_DIRS[family]
@@ -272,8 +272,17 @@ def run_family(family: str, *, sites=tuple(SITES), weather_cols=WEATHER_COLS, cn
                     results[task] = {family: ablation}
                     sd['fold_audit'][f'{task}_{aq_set}'] = ablation['fold_audit']
         metrics['per_site'][site] = sd
+    return write_family(metrics, out_dir) if write else metrics
+
+
+def write_family(metrics: dict, out_dir: Path | None = None) -> dict:
+    """Aggregate a family's per-site results and write its metrics JSON, report and plots."""
+    from .report import aggregate, write_family_report, write_plots
+
+    family = metrics['family']
+    out_dir = Path(out_dir) if out_dir is not None else FAMILY_DIRS[family]
     metrics['aggregate'] = aggregate(metrics)
     (out_dir / f'{family}_metrics_v2.json').write_text(json.dumps(metrics, indent=2, allow_nan=False), encoding='utf-8')
     write_family_report(metrics, out_dir / f'{family}_results_v2.txt')
-    write_plots(metrics, art_dir=art_dir)
+    write_plots(metrics, art_dir=out_dir / f'{family}_artifacts_v2')
     return metrics
