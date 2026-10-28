@@ -111,14 +111,16 @@ def test_run_family_routes_one_family_and_baseline_without_tuning(monkeypatch, t
     assert all(label in markdown for label in ('NOx (primary)', 'PM2.5 (secondary)', 'CAMS (appendix)'))
 
 
-def test_reuse_rejects_binary_only_metrics(monkeypatch, tmp_path):
+def test_reuse_retrains_binary_only_metrics(monkeypatch, tmp_path):
     import sys
-    import pytest
     from models import run_all_v2
     saved = tmp_path / 'xgboost_metrics_v2.json'
     saved.write_text(json.dumps({'per_site': {'location_10': {'tasks': {'nowcast': {
         'xgboost': {'ap': .5}}}}}}), encoding='utf-8')
+    retrained = []
     monkeypatch.setattr(run_all_v2, 'FAMILY_DIRS', {'xgboost': tmp_path})
     monkeypatch.setattr(sys, 'argv', ['run_all_v2.py', '--reuse'])
-    with pytest.raises(ValueError, match='binary-only metrics cannot be reused'):
-        run_all_v2.main()
+    monkeypatch.setattr(run_all_v2, 'run_family', lambda f, **kw: retrained.append(f) or {})
+    monkeypatch.setattr(run_all_v2, 'write_comparison', lambda *a: None)
+    run_all_v2.main()
+    assert retrained == ['xgboost']

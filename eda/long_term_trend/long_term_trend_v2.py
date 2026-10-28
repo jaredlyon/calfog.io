@@ -225,9 +225,12 @@ def fit_panel(panel, predictors=("year",), *, response="y", n_boot=2000, seed=SE
     coefficients = {}
     for index, name in enumerate(names):
         sample = draws[:, index]
+        # D-069: CI and p share one centered convention, so a CI excluding 0 always means p < 0.05
+        deviation = np.abs(sample - coef[index])
+        radius = float(np.quantile(deviation, 0.95)) if len(sample) else None
         coefficients[name] = {"estimate": float(coef[index]),
-                              "ci95": np.quantile(sample, [0.025, 0.975]).tolist() if len(sample) else None,
-                              "p_two_sided": float((1 + np.count_nonzero(np.abs(sample - coef[index]) >= abs(coef[index]))) / (len(sample) + 1)) if len(sample) else None}
+                              "ci95": [float(coef[index]) - radius, float(coef[index]) + radius] if len(sample) else None,
+                              "p_two_sided": float((1 + np.count_nonzero(deviation >= abs(coef[index]))) / (len(sample) + 1)) if len(sample) else None}
     return {**base, "status": "ok", "coefficients": coefficients, "r_squared": r2, "aic": aic,
             "valid_draws": len(draws), "n_boot": n_boot, "omitted_absorbed_steps": omitted}
 
@@ -348,7 +351,7 @@ def write_outputs(result, out_dir):
     lines = ["# Long-term weather-adjusted fog study", "", "Fixed PST; Nov–Mar winter labeled by November year. Fog = any known hour in categories 0–4.",
              "Every month needs 90% known hourly labels. Diagnostic LR/EBM use realized 00–23 weather, calendar phase and site only; leave one whole winter out across all sites.",
              "Expected and observed use the same days with ≥18 known hours. y = log((observed+0.5)/(expected+0.5)).",
-             "Inference: 2,000 joint winter-block draws by default; percentile 95% CIs and centered two-sided bootstrap p. Singular resamples are excluded and valid draw counts are reported.",
+             "Inference: 2,000 joint winter-block draws by default; centered 95% CIs (estimate ± 95th percentile of |draw − estimate|) and the matching two-sided bootstrap p. Singular resamples are excluded and valid draw counts are reported.",
              "NOx requires 65% hourly coverage in each of five months; attribution models share rows. Gaussian OLS AIC counts the variance parameter.",
              "These are diagnostic associations, not causal attribution or operational forecast skill. Gray comparison uses observed−expected fog days per 10 ppb.", ""]
     for family, analysis in result["diagnostics"].items():

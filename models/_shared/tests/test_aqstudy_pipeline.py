@@ -87,22 +87,26 @@ def test_predictions_roundtrip_exact_arrays_and_dtypes(tmp_path):
             np.testing.assert_array_equal(saved[key], value)
 
 
-@pytest.mark.parametrize('old_nesting,predictions', [(True, True), (False, False)])
-def test_reuse_refuses_old_nesting_or_missing_predictions(monkeypatch, tmp_path, old_nesting, predictions):
+@pytest.mark.parametrize('old_nesting,predictions,reusable', [
+    (True, True, False), (False, False, False), (False, True, True)])
+def test_reuse_only_current_metrics_with_predictions(monkeypatch, tmp_path, old_nesting, predictions, reusable):
     family = 'xgboost'
     tasks = {task: {family: {'ordinal': {}}} for task in ('nowcast', 'lead_time')}
     sets = set(AQ_SETS) | {'nox_monitor'}
     ablation = tasks if old_nesting else {aq_set: tasks for aq_set in sets}
-    (tmp_path / f'{family}_metrics_v2.json').write_text(json.dumps({
-        'per_site': {'location_10': {'tasks': tasks, 'aqi_ablation': ablation}}}), encoding='utf-8')
+    saved = {'per_site': {'location_10': {'tasks': tasks, 'aqi_ablation': ablation}}}
+    (tmp_path / f'{family}_metrics_v2.json').write_text(json.dumps(saved), encoding='utf-8')
     if predictions:
         (tmp_path / f'{family}_predictions_v2').mkdir()
+    retrained, compared = [], []
     monkeypatch.setattr(run_all_v2, 'FAMILY_DIRS', {family: tmp_path})
     monkeypatch.setattr(sys, 'argv', ['run_all_v2.py', '--reuse'])
-    monkeypatch.setattr(run_all_v2, 'run_family', lambda *a, **kw: pytest.fail('retrained stale metrics'))
-    monkeypatch.setattr(run_all_v2, 'write_comparison', lambda *a: pytest.fail('accepted stale metrics'))
-    with pytest.raises(ValueError, match='old AQI nesting' if old_nesting else 'without predictions'):
-        run_all_v2.main()
+    monkeypatch.setattr(run_all_v2, 'run_family', lambda f, **kw: retrained.append(f) or {'fresh': f})
+    monkeypatch.setattr(run_all_v2, 'write_comparison', lambda runs, out: compared.append(runs))
+    run_all_v2.main()
+    # stale saved metrics are retrained, never silently accepted
+    assert retrained == ([] if reusable else [family])
+    assert compared[0][family] == (saved if reusable else {'fresh': family})
 
 
 @pytest.mark.parametrize('family', [f for f in study.FAMILY_DIRS if f != 'xgboost_pooled'])
