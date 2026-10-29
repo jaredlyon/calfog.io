@@ -4,8 +4,9 @@
 experimental rebuild under review: NOT publication-ready, NOT production-ready, and NO-GO for autonomous
 public fog alerts.** The V2 code uses fixed PST (`Etc/GMT+8`), GHCNh visibility labels translated to 18
 ordinal categories, and labels an hour as foggy when any valid visibility report in that hour reports fog.
-Current results are in [models/comparison_v2](models/comparison_v2/model_comparison_v2.md); the archived
-pre-fix V2 numbers are superseded, not validated replacements for V1.
+The committed results in [models/comparison_v2](models/comparison_v2/model_comparison_v2.md) predate the measured
+air-quality study design and will be replaced by its combined rerun. The archived pre-fix V2 numbers are superseded,
+not validated replacements for V1.
 
 - Historical V1: [class report PDF](report.pdf) and [report source](report.tex).
 - Pre-fix V2 archive: [handoff](report_files/v2_prefix/HANDOFF.md),
@@ -57,7 +58,12 @@ observations retain the full record, and hourly model labels start at 1980-01-01
 - `models/_shared/`: sectioned data, labels, splits, windows, evaluation, tuning, family, study and
   reporting modules, with shared tests in `models/_shared/tests/`.
 - `models/run_all_v2.py`: runs all model families with shared CNN tuning and writes comparisons to
-  `models/comparison_v2/`.
+  `models/comparison_v2/`. `--jobs N` runs (family, airport) shards in parallel worker processes with the same
+  seeds and outputs as the serial run.
+- `models/seed_replicates_v2.py`: refits the primary NOx ablation for XGBoost and EBM under nine extra model seeds.
+- `models/significance_v2.py`: pooled-airport paired air-quality tests (Holm over six primary NOx tests,
+  a +0.02 AP equivalence margin, training-seed sensitivity) and family-versus-family significance.
+- `eda/long_term_trend/`: weather-adjusted winter fog-day trend, instrument steps, and year-versus-NOx attribution.
 - `eda/k-means clustering/*_v2.py`: reworked k-means analysis alongside its original.
 - `ops/`: retraining, serving bundles and passive shadow evaluation.
 - `report_files/v2_prefix/`: superseded pre-fix PoC/full-study outputs and handoff, retained for provenance.
@@ -80,17 +86,21 @@ Run from the repository root using the environment in `requirements-v2.txt` (the
 
 ```bash
 python -m pip install -r requirements-v2.txt
-python models/run_all_v2.py
+python models/run_all_v2.py --jobs 8
+python models/seed_replicates_v2.py --jobs 8
+python models/significance_v2.py --n-boot 1000
+python eda/long_term_trend/long_term_trend_v2.py
 python models/xgboost/xgboost_fog_prediction_v2.py --sites location_10
-python -m pytest models/_shared/tests ops -q
+python -m pytest models/_shared/tests ops "eda/k-means clustering" eda/long_term_trend datasets/scripts -q
 ```
 
 Family runs write `<family>_metrics_v2.json`, `<family>_results_v2.txt`,
 `<family>_artifacts_v2/` and git-ignored `<family>_predictions_v2/` beside their scripts.
 Predictions retain issue time, fold, category PMFs and evaluation-only dew-point depression/wind.
-`--reuse` requires the set/task-nested air-quality metrics and the predictions directory.
-**Numbers are pending rerun:** this code does not regenerate results, validate retained operational
-bundles or change the public-alert NO-GO.
+`--reuse` keeps only families whose saved metrics have the current air-quality nesting and predictions;
+others are retrained. The temporal CNN and every XGBoost family train on the GPU when CUDA is available;
+GPU and CPU XGBoost boosters differ slightly. **Numbers are pending the combined rerun.** The public-alert
+NO-GO stands regardless.
 
 The air-quality study uses measured EPA hourly **NOx (primary)** and **PM2.5 (secondary)**;
 CAMS channels remain appendix comparisons. `datasets/scripts/airdata_epa.py` builds fixed-PST
@@ -99,6 +109,9 @@ monitor switches and acquisition provenance. Each ablation requires at least 20 
 nonmissing hours per air-quality channel; training medians impute the remainder, and both arms
 use identical rows. Logistic regression, XGBoost and EBM also test NOx with monitor-ID indicators.
 Strata (dew-point depression <4.2 °C and wind <7.2 km/h) are evaluation-only, never features.
+Because training randomness can move these small differences, XGBoost and EBM are refit under ten model seeds
+for the primary NOx tests; the significance report shows the seed spread and how often each verdict repeats.
+Logistic regression is deterministic.
 
 ---
 
