@@ -84,7 +84,8 @@ def save_predictions(records, path):
         issue_time=meta.issue_time.to_numpy(dtype='datetime64[ns]').astype(np.int64),
         fold=meta.fold.to_numpy(dtype=np.int8),
         c=np.concatenate([row['c'] for row in records]).astype(np.int8),
-        pmf=np.concatenate([row['pmf'] for row in records]).astype(np.float16),
+        # full precision: float16 merged near-equal probabilities into ties and shifted AP by up to 0.019
+        pmf=np.concatenate([row['pmf'] for row in records]).astype(np.float64),
         dpd_c=meta.dpd_c.to_numpy(dtype=np.float32),
         wind_kmh=meta.wind_kmh.to_numpy(dtype=np.float32))
 

@@ -66,7 +66,9 @@ def test_strata_use_issue_hour_and_complete_verification_window():
 def test_predictions_roundtrip_exact_arrays_and_dtypes(tmp_path):
     times = pd.date_range('2024-01-01 18:00', periods=3, freq='D')
     categories = np.array([0, 4, 17])
-    pmf = np.eye(18)[categories]
+    # probabilities that differ below half precision must survive the round trip (AP is rank-based)
+    pmf = np.random.default_rng(0).dirichlet(np.ones(18), size=3)
+    pmf[1, :5] = pmf[0, :5] + 1e-6
     records = []
     for fold, indices in ((1, [0, 1]), (2, [2])):
         records.append({'c': categories[indices], 'pmf': pmf[indices],
@@ -77,7 +79,7 @@ def test_predictions_roundtrip_exact_arrays_and_dtypes(tmp_path):
     study.save_predictions(records, path)
     expected = {'issue_time': times.to_numpy(dtype='datetime64[ns]').astype(np.int64),
                 'fold': np.array([1, 1, 2], dtype=np.int8),
-                'c': categories.astype(np.int8), 'pmf': pmf.astype(np.float16),
+                'c': categories.astype(np.int8), 'pmf': pmf,
                 'dpd_c': np.array([1., np.nan, 7.], dtype=np.float32),
                 'wind_kmh': np.array([2., 4., 8.], dtype=np.float32)}
     with np.load(path, allow_pickle=False) as saved:

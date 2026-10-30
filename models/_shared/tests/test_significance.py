@@ -155,7 +155,7 @@ def test_zero_positive_draws_do_not_unpair_airports():
     assert result["valid_draws"] == np.count_nonzero(counts[:, 0])
 
 
-def test_loading_saved_float16_predictions_and_empty_arm(tmp_path, monkeypatch):
+def test_loading_saved_predictions_and_empty_arm(tmp_path, monkeypatch):
     monkeypatch.setattr(sig, "_family_dirs", lambda: {"example": tmp_path})
     directory = tmp_path / "example_predictions_v2"
     directory.mkdir()
@@ -164,7 +164,7 @@ def test_loading_saved_float16_predictions_and_empty_arm(tmp_path, monkeypatch):
     np.savez_compressed(directory / "small__nowcast__main.npz",
                         issue_time=frame.issue_time.to_numpy(dtype="datetime64[ns]").astype("int64"),
                         fold=frame.fold.to_numpy(dtype="int8"), c=frame.c.to_numpy(dtype="int8"),
-                        pmf=sig._pmf(frame).astype("float16"),
+                        pmf=sig._pmf(frame),
                         dpd_c=frame.dpd_c.to_numpy(dtype="float32"), wind_kmh=frame.wind_kmh.to_numpy(dtype="float32"))
     loaded = sig.load_predictions("example", "main")
     assert loaded.site.unique().tolist() == ["small"]
