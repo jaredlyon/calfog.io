@@ -8,6 +8,15 @@ LOCATION 6 (Madera)
 
 NOWCAST
 
+NOx (primary) paired AQI delta AP: 0.000000 (95% CI 0.000000, 0.000000)
+NOx (primary) paired AQI delta RPS (with minus without; negative favors AQI): 0.000000 (95% CI 0.000000, 0.000000)
+
+PM2.5 (secondary) paired AQI delta AP: 0.000000 (95% CI 0.000000, 0.000000)
+PM2.5 (secondary) paired AQI delta RPS (with minus without; negative favors AQI): 0.000000 (95% CI 0.000000, 0.000000)
+
+CAMS (appendix) paired AQI delta AP: 0.000000 (95% CI 0.000000, 0.000000)
+CAMS (appendix) paired AQI delta RPS (with minus without; negative favors AQI): 0.000000 (95% CI 0.000000, 0.000000)
+
 WITHOUT AQI (full history)
 Average Precision: 0.774813 (95% CI 0.749574, 0.800052)
 RPS: 0.023829 (95% CI 0.022927, 0.024731)
@@ -28,50 +37,136 @@ FN:FP 5:1 threshold=0.141667, precision=0.649180, recall=0.805130, F1=0.718794, 
 FN:FP 10:1 threshold=0.068333, precision=0.516602, recall=0.871129, F1=0.648579, cost/issue=0.062938
 FN:FP 20:1 threshold=0.028333, precision=0.419583, recall=0.907413, F1=0.573830, cost/issue=0.092947
 
-WITH AQI (matched rows)
-Average Precision: 0.819334 (95% CI 0.772587, 0.866082)
-RPS: 0.025587 (95% CI 0.023017, 0.028156)
-NLL: 0.639077
-Within one category: 0.889721
+NOx (primary) WITH AQI (matched rows)
+Average Precision: 0.779780 (95% CI 0.753334, 0.806226)
+RPS: 0.024112 (95% CI 0.023165, 0.025060)
+NLL: 0.678674
+Within one category: 0.889826
+Median-meters log10 MAE (observed and median categories 1–16 only): 0.146736 (n=18474)
+ROC-AUC: 0.979412 (95% CI 0.976204, 0.982620)
+Brier (calibrated): 0.011517
+ECE (calibrated): 0.001619
+Cost-selected threshold (1:1 FN:FP; fold mean): 0.413333
+Precision: 0.802036
+Recall: 0.694191
+F1: 0.744227
+Climatology AP: 0.029192
+FN:FP 1:1 threshold=0.413333, precision=0.802036, recall=0.694191, F1=0.744227, cost/issue=0.014760
+FN:FP 3:1 threshold=0.196667, precision=0.714117, recall=0.789164, F1=0.749767, cost/issue=0.029338
+FN:FP 5:1 threshold=0.125000, precision=0.625429, recall=0.833225, F1=0.714526, cost/issue=0.041231
+FN:FP 10:1 threshold=0.068333, precision=0.519938, recall=0.876632, F1=0.652734, cost/issue=0.063199
+FN:FP 20:1 threshold=0.028333, precision=0.422629, recall=0.911880, F1=0.577571, cost/issue=0.093052
+
+NOx (primary) WITHOUT AQI (matched rows)
+Average Precision: 0.779780 (95% CI 0.753334, 0.806226)
+RPS: 0.024112 (95% CI 0.023165, 0.025060)
+NLL: 0.678674
+Within one category: 0.889826
+Median-meters log10 MAE (observed and median categories 1–16 only): 0.146736 (n=18474)
+ROC-AUC: 0.979412 (95% CI 0.976204, 0.982620)
+Brier (calibrated): 0.011517
+ECE (calibrated): 0.001619
+Cost-selected threshold (1:1 FN:FP; fold mean): 0.413333
+Precision: 0.802036
+Recall: 0.694191
+F1: 0.744227
+Climatology AP: 0.029192
+FN:FP 1:1 threshold=0.413333, precision=0.802036, recall=0.694191, F1=0.744227, cost/issue=0.014760
+FN:FP 3:1 threshold=0.196667, precision=0.714117, recall=0.789164, F1=0.749767, cost/issue=0.029338
+FN:FP 5:1 threshold=0.125000, precision=0.625429, recall=0.833225, F1=0.714526, cost/issue=0.041231
+FN:FP 10:1 threshold=0.068333, precision=0.519938, recall=0.876632, F1=0.652734, cost/issue=0.063199
+FN:FP 20:1 threshold=0.028333, precision=0.422629, recall=0.911880, F1=0.577571, cost/issue=0.093052
+
+PM2.5 (secondary) WITH AQI (matched rows)
+Average Precision: 0.785159 (95% CI 0.750905, 0.819413)
+RPS: 0.023063 (95% CI 0.021866, 0.024260)
+NLL: 0.643747
+Within one category: 0.895897
+Median-meters log10 MAE (observed and median categories 1–16 only): 0.148196 (n=10191)
+ROC-AUC: 0.978792 (95% CI 0.974484, 0.983100)
+Brier (calibrated): 0.011041
+ECE (calibrated): 0.002093
+Cost-selected threshold (1:1 FN:FP; fold mean): 0.376667
+Precision: 0.810160
+Recall: 0.696952
+F1: 0.749304
+Climatology AP: 0.030423
+FN:FP 1:1 threshold=0.376667, precision=0.810160, recall=0.696952, F1=0.749304, cost/issue=0.013953
+FN:FP 3:1 threshold=0.191667, precision=0.717573, recall=0.788959, F1=0.751575, cost/issue=0.028232
+FN:FP 5:1 threshold=0.111667, precision=0.638451, recall=0.815411, F1=0.716162, cost/issue=0.041428
+FN:FP 10:1 threshold=0.061667, precision=0.559386, recall=0.858539, F1=0.677405, cost/issue=0.062555
+FN:FP 20:1 threshold=0.035000, precision=0.440601, recall=0.893617, F1=0.590201, cost/issue=0.097600
+
+PM2.5 (secondary) WITHOUT AQI (matched rows)
+Average Precision: 0.785159 (95% CI 0.750905, 0.819413)
+RPS: 0.023063 (95% CI 0.021866, 0.024260)
+NLL: 0.643747
+Within one category: 0.895897
+Median-meters log10 MAE (observed and median categories 1–16 only): 0.148196 (n=10191)
+ROC-AUC: 0.978792 (95% CI 0.974484, 0.983100)
+Brier (calibrated): 0.011041
+ECE (calibrated): 0.002093
+Cost-selected threshold (1:1 FN:FP; fold mean): 0.376667
+Precision: 0.810160
+Recall: 0.696952
+F1: 0.749304
+Climatology AP: 0.030423
+FN:FP 1:1 threshold=0.376667, precision=0.810160, recall=0.696952, F1=0.749304, cost/issue=0.013953
+FN:FP 3:1 threshold=0.191667, precision=0.717573, recall=0.788959, F1=0.751575, cost/issue=0.028232
+FN:FP 5:1 threshold=0.111667, precision=0.638451, recall=0.815411, F1=0.716162, cost/issue=0.041428
+FN:FP 10:1 threshold=0.061667, precision=0.559386, recall=0.858539, F1=0.677405, cost/issue=0.062555
+FN:FP 20:1 threshold=0.035000, precision=0.440601, recall=0.893617, F1=0.590201, cost/issue=0.097600
+
+CAMS (appendix) WITH AQI (matched rows)
+Average Precision: 0.819334 (95% CI 0.772747, 0.865922)
+RPS: 0.025585 (95% CI 0.023148, 0.028022)
+NLL: 0.639040
+Within one category: 0.889728
 Median-meters log10 MAE (observed and median categories 1–16 only): 0.198340 (n=2672)
-ROC-AUC: 0.977428 (95% CI 0.970760, 0.984097)
-Brier (calibrated): 0.016577
+ROC-AUC: 0.977430 (95% CI 0.970621, 0.984239)
+Brier (calibrated): 0.016576
 ECE (calibrated): 0.006202
 Cost-selected threshold (1:1 FN:FP; fold mean): 0.236667
 Precision: 0.778195
 Recall: 0.794118
 F1: 0.786076
-Climatology AP: 0.039558
-FN:FP 1:1 threshold=0.236667, precision=0.778195, recall=0.794118, F1=0.786076, cost/issue=0.020754
-FN:FP 3:1 threshold=0.135000, precision=0.736964, recall=0.813299, F1=0.773252, cost/issue=0.040833
-FN:FP 5:1 threshold=0.095000, precision=0.728311, recall=0.815857, F1=0.769602, cost/issue=0.058824
-FN:FP 10:1 threshold=0.051667, precision=0.607595, recall=0.859335, F1=0.711864, cost/issue=0.094191
-FN:FP 20:1 threshold=0.045000, precision=0.544365, recall=0.870844, F1=0.669946, cost/issue=0.159032
+Climatology AP: 0.039556
+FN:FP 1:1 threshold=0.236667, precision=0.778195, recall=0.794118, F1=0.786076, cost/issue=0.020753
+FN:FP 3:1 threshold=0.135000, precision=0.736964, recall=0.813299, F1=0.773252, cost/issue=0.040830
+FN:FP 5:1 threshold=0.095000, precision=0.728311, recall=0.815857, F1=0.769602, cost/issue=0.058820
+FN:FP 10:1 threshold=0.051667, precision=0.607595, recall=0.859335, F1=0.711864, cost/issue=0.094186
+FN:FP 20:1 threshold=0.045000, precision=0.544365, recall=0.870844, F1=0.669946, cost/issue=0.159023
 
-WITHOUT AQI (matched rows)
-Average Precision: 0.819334 (95% CI 0.772587, 0.866082)
-RPS: 0.025587 (95% CI 0.023017, 0.028156)
-NLL: 0.639077
-Within one category: 0.889721
+CAMS (appendix) WITHOUT AQI (matched rows)
+Average Precision: 0.819334 (95% CI 0.772747, 0.865922)
+RPS: 0.025585 (95% CI 0.023148, 0.028022)
+NLL: 0.639040
+Within one category: 0.889728
 Median-meters log10 MAE (observed and median categories 1–16 only): 0.198340 (n=2672)
-ROC-AUC: 0.977428 (95% CI 0.970760, 0.984097)
-Brier (calibrated): 0.016577
+ROC-AUC: 0.977430 (95% CI 0.970621, 0.984239)
+Brier (calibrated): 0.016576
 ECE (calibrated): 0.006202
 Cost-selected threshold (1:1 FN:FP; fold mean): 0.236667
 Precision: 0.778195
 Recall: 0.794118
 F1: 0.786076
-Climatology AP: 0.039558
-FN:FP 1:1 threshold=0.236667, precision=0.778195, recall=0.794118, F1=0.786076, cost/issue=0.020754
-FN:FP 3:1 threshold=0.135000, precision=0.736964, recall=0.813299, F1=0.773252, cost/issue=0.040833
-FN:FP 5:1 threshold=0.095000, precision=0.728311, recall=0.815857, F1=0.769602, cost/issue=0.058824
-FN:FP 10:1 threshold=0.051667, precision=0.607595, recall=0.859335, F1=0.711864, cost/issue=0.094191
-FN:FP 20:1 threshold=0.045000, precision=0.544365, recall=0.870844, F1=0.669946, cost/issue=0.159032
-
-Paired AQI delta AP: 0.000000 (95% CI 0.000000, 0.000000)
-Paired AQI delta RPS (with minus without; negative favors AQI): 0.000000 (95% CI 0.000000, 0.000000)
+Climatology AP: 0.039556
+FN:FP 1:1 threshold=0.236667, precision=0.778195, recall=0.794118, F1=0.786076, cost/issue=0.020753
+FN:FP 3:1 threshold=0.135000, precision=0.736964, recall=0.813299, F1=0.773252, cost/issue=0.040830
+FN:FP 5:1 threshold=0.095000, precision=0.728311, recall=0.815857, F1=0.769602, cost/issue=0.058820
+FN:FP 10:1 threshold=0.051667, precision=0.607595, recall=0.859335, F1=0.711864, cost/issue=0.094186
+FN:FP 20:1 threshold=0.045000, precision=0.544365, recall=0.870844, F1=0.669946, cost/issue=0.159023
 
 LEAD_TIME
+
+NOx (primary) paired AQI delta AP: 0.000000 (95% CI 0.000000, 0.000000)
+NOx (primary) paired AQI delta RPS (with minus without; negative favors AQI): 0.000000 (95% CI 0.000000, 0.000000)
+
+PM2.5 (secondary) paired AQI delta AP: 0.000000 (95% CI 0.000000, 0.000000)
+PM2.5 (secondary) paired AQI delta RPS (with minus without; negative favors AQI): 0.000000 (95% CI 0.000000, 0.000000)
+
+CAMS (appendix) paired AQI delta AP: 0.000000 (95% CI 0.000000, 0.000000)
+CAMS (appendix) paired AQI delta RPS (with minus without; negative favors AQI): 0.000000 (95% CI 0.000000, 0.000000)
 
 WITHOUT AQI (full history)
 Average Precision: 0.319455 (95% CI 0.280452, 0.358459)
@@ -93,13 +188,93 @@ FN:FP 5:1 threshold=0.078333, precision=0.381902, recall=0.469811, F1=0.421320, 
 FN:FP 10:1 threshold=0.066667, precision=0.375000, recall=0.475472, F1=0.419301, cost/issue=0.753828
 FN:FP 20:1 threshold=0.015000, precision=0.145698, recall=0.843396, F1=0.248471, cost/issue=1.008481
 
-WITH AQI (matched rows)
-Average Precision: 0.331014 (95% CI 0.250669, 0.411359)
-RPS: 0.170582 (95% CI 0.156031, 0.185133)
+NOx (primary) WITH AQI (matched rows)
+Average Precision: 0.324510 (95% CI 0.284008, 0.365012)
+RPS: 0.138633 (95% CI 0.133547, 0.143720)
+NLL: 2.044587
+Within one category: 0.592112
+Median-meters log10 MAE (observed and median categories 1–16 only): 0.395940 (n=1849)
+ROC-AUC: 0.695554 (95% CI 0.669110, 0.721997)
+Brier (calibrated): 0.099789
+ECE (calibrated): 0.023835
+Cost-selected threshold (1:1 FN:FP; fold mean): 0.428333
+Precision: 0.503704
+Recall: 0.132554
+F1: 0.209877
+Climatology AP: 0.131330
+FN:FP 1:1 threshold=0.428333, precision=0.503704, recall=0.132554, F1=0.209877, cost/issue=0.130280
+FN:FP 3:1 threshold=0.218333, precision=0.474747, recall=0.366472, F1=0.413641, cost/issue=0.301018
+FN:FP 5:1 threshold=0.115000, precision=0.398936, recall=0.438596, F1=0.417827, cost/issue=0.452672
+FN:FP 10:1 threshold=0.073333, precision=0.374810, recall=0.481481, F1=0.421502, cost/issue=0.781679
+FN:FP 20:1 threshold=0.000000, precision=0.130534, recall=1.000000, F1=0.230925, cost/issue=0.869466
+
+NOx (primary) WITHOUT AQI (matched rows)
+Average Precision: 0.324510 (95% CI 0.284008, 0.365012)
+RPS: 0.138633 (95% CI 0.133547, 0.143720)
+NLL: 2.044587
+Within one category: 0.592112
+Median-meters log10 MAE (observed and median categories 1–16 only): 0.395940 (n=1849)
+ROC-AUC: 0.695554 (95% CI 0.669110, 0.721997)
+Brier (calibrated): 0.099789
+ECE (calibrated): 0.023835
+Cost-selected threshold (1:1 FN:FP; fold mean): 0.428333
+Precision: 0.503704
+Recall: 0.132554
+F1: 0.209877
+Climatology AP: 0.131330
+FN:FP 1:1 threshold=0.428333, precision=0.503704, recall=0.132554, F1=0.209877, cost/issue=0.130280
+FN:FP 3:1 threshold=0.218333, precision=0.474747, recall=0.366472, F1=0.413641, cost/issue=0.301018
+FN:FP 5:1 threshold=0.115000, precision=0.398936, recall=0.438596, F1=0.417827, cost/issue=0.452672
+FN:FP 10:1 threshold=0.073333, precision=0.374810, recall=0.481481, F1=0.421502, cost/issue=0.781679
+FN:FP 20:1 threshold=0.000000, precision=0.130534, recall=1.000000, F1=0.230925, cost/issue=0.869466
+
+PM2.5 (secondary) WITH AQI (matched rows)
+Average Precision: 0.306529 (95% CI 0.251793, 0.361266)
+RPS: 0.134140 (95% CI 0.127408, 0.140873)
+NLL: 1.984732
+Within one category: 0.579983
+Median-meters log10 MAE (observed and median categories 1–16 only): 0.404132 (n=276)
+ROC-AUC: 0.706665 (95% CI 0.672584, 0.740745)
+Brier (calibrated): 0.093528
+ECE (calibrated): 0.013045
+Cost-selected threshold (1:1 FN:FP; fold mean): 0.356667
+Precision: 0.517241
+Recall: 0.157895
+F1: 0.241935
+Climatology AP: 0.116969
+FN:FP 1:1 threshold=0.356667, precision=0.517241, recall=0.157895, F1=0.241935, cost/issue=0.118090
+FN:FP 3:1 threshold=0.160000, precision=0.465217, recall=0.375439, F1=0.415534, cost/issue=0.275126
+FN:FP 5:1 threshold=0.118333, precision=0.390572, recall=0.407018, F1=0.398625, cost/issue=0.429648
+FN:FP 10:1 threshold=0.043333, precision=0.174339, recall=0.624561, F1=0.272588, cost/issue=0.801089
+FN:FP 20:1 threshold=0.000000, precision=0.119347, recall=1.000000, F1=0.213244, cost/issue=0.880653
+
+PM2.5 (secondary) WITHOUT AQI (matched rows)
+Average Precision: 0.306529 (95% CI 0.251793, 0.361266)
+RPS: 0.134140 (95% CI 0.127408, 0.140873)
+NLL: 1.984732
+Within one category: 0.579983
+Median-meters log10 MAE (observed and median categories 1–16 only): 0.404132 (n=276)
+ROC-AUC: 0.706665 (95% CI 0.672584, 0.740745)
+Brier (calibrated): 0.093528
+ECE (calibrated): 0.013045
+Cost-selected threshold (1:1 FN:FP; fold mean): 0.356667
+Precision: 0.517241
+Recall: 0.157895
+F1: 0.241935
+Climatology AP: 0.116969
+FN:FP 1:1 threshold=0.356667, precision=0.517241, recall=0.157895, F1=0.241935, cost/issue=0.118090
+FN:FP 3:1 threshold=0.160000, precision=0.465217, recall=0.375439, F1=0.415534, cost/issue=0.275126
+FN:FP 5:1 threshold=0.118333, precision=0.390572, recall=0.407018, F1=0.398625, cost/issue=0.429648
+FN:FP 10:1 threshold=0.043333, precision=0.174339, recall=0.624561, F1=0.272588, cost/issue=0.801089
+FN:FP 20:1 threshold=0.000000, precision=0.119347, recall=1.000000, F1=0.213244, cost/issue=0.880653
+
+CAMS (appendix) WITH AQI (matched rows)
+Average Precision: 0.331014 (95% CI 0.249997, 0.412032)
+RPS: 0.170582 (95% CI 0.154889, 0.186275)
 NLL: 2.047320
 Within one category: 0.594595
 Median-meters log10 MAE (observed and median categories 1–16 only): 0.612781 (n=55)
-ROC-AUC: 0.609985 (95% CI 0.546864, 0.673106)
+ROC-AUC: 0.609985 (95% CI 0.545512, 0.674458)
 Brier (calibrated): 0.154770
 ECE (calibrated): 0.124794
 Cost-selected threshold (1:1 FN:FP; fold mean): 0.118333
@@ -113,13 +288,13 @@ FN:FP 5:1 threshold=0.055000, precision=0.246753, recall=0.467213, F1=0.322946, 
 FN:FP 10:1 threshold=0.005000, precision=0.157658, recall=0.573770, F1=0.247350, cost/issue=1.342342
 FN:FP 20:1 threshold=0.005000, precision=0.157658, recall=0.573770, F1=0.247350, cost/issue=2.123123
 
-WITHOUT AQI (matched rows)
-Average Precision: 0.331014 (95% CI 0.250669, 0.411359)
-RPS: 0.170582 (95% CI 0.156031, 0.185133)
+CAMS (appendix) WITHOUT AQI (matched rows)
+Average Precision: 0.331014 (95% CI 0.249997, 0.412032)
+RPS: 0.170582 (95% CI 0.154889, 0.186275)
 NLL: 2.047320
 Within one category: 0.594595
 Median-meters log10 MAE (observed and median categories 1–16 only): 0.612781 (n=55)
-ROC-AUC: 0.609985 (95% CI 0.546864, 0.673106)
+ROC-AUC: 0.609985 (95% CI 0.545512, 0.674458)
 Brier (calibrated): 0.154770
 ECE (calibrated): 0.124794
 Cost-selected threshold (1:1 FN:FP; fold mean): 0.118333
@@ -132,13 +307,19 @@ FN:FP 3:1 threshold=0.118333, precision=0.508197, recall=0.254098, F1=0.338798, 
 FN:FP 5:1 threshold=0.055000, precision=0.246753, recall=0.467213, F1=0.322946, cost/issue=0.749249
 FN:FP 10:1 threshold=0.005000, precision=0.157658, recall=0.573770, F1=0.247350, cost/issue=1.342342
 FN:FP 20:1 threshold=0.005000, precision=0.157658, recall=0.573770, F1=0.247350, cost/issue=2.123123
-
-Paired AQI delta AP: 0.000000 (95% CI 0.000000, 0.000000)
-Paired AQI delta RPS (with minus without; negative favors AQI): 0.000000 (95% CI 0.000000, 0.000000)
 
 LOCATION 7 (Fresno)
 
 NOWCAST
+
+NOx (primary) paired AQI delta AP: 0.000000 (95% CI 0.000000, 0.000000)
+NOx (primary) paired AQI delta RPS (with minus without; negative favors AQI): 0.000000 (95% CI 0.000000, 0.000000)
+
+PM2.5 (secondary) paired AQI delta AP: 0.000000 (95% CI 0.000000, 0.000000)
+PM2.5 (secondary) paired AQI delta RPS (with minus without; negative favors AQI): 0.000000 (95% CI 0.000000, 0.000000)
+
+CAMS (appendix) paired AQI delta AP: 0.000000 (95% CI 0.000000, 0.000000)
+CAMS (appendix) paired AQI delta RPS (with minus without; negative favors AQI): 0.000000 (95% CI 0.000000, 0.000000)
 
 WITHOUT AQI (full history)
 Average Precision: 0.831777 (95% CI 0.814431, 0.849123)
@@ -160,50 +341,136 @@ FN:FP 5:1 threshold=0.148333, precision=0.758992, recall=0.841076, F1=0.797929, 
 FN:FP 10:1 threshold=0.068333, precision=0.589856, recall=0.885758, F1=0.708139, cost/issue=0.037672
 FN:FP 20:1 threshold=0.040000, precision=0.494243, recall=0.915461, F1=0.641923, cost/issue=0.056296
 
-WITH AQI (matched rows)
-Average Precision: 0.828446 (95% CI 0.781964, 0.874928)
-RPS: 0.017282 (95% CI 0.015274, 0.019290)
-NLL: 0.547192
-Within one category: 0.932569
+NOx (primary) WITH AQI (matched rows)
+Average Precision: 0.830005 (95% CI 0.810409, 0.849600)
+RPS: 0.016854 (95% CI 0.016272, 0.017436)
+NLL: 0.592936
+Within one category: 0.925811
+Median-meters log10 MAE (observed and median categories 1–16 only): 0.076094 (n=32186)
+ROC-AUC: 0.986316 (95% CI 0.983694, 0.988939)
+Brier (calibrated): 0.006111
+ECE (calibrated): 0.000592
+Cost-selected threshold (1:1 FN:FP; fold mean): 0.211667
+Precision: 0.823003
+Recall: 0.822730
+F1: 0.822867
+Climatology AP: 0.019463
+FN:FP 1:1 threshold=0.211667, precision=0.823003, recall=0.822730, F1=0.822867, cost/issue=0.007316
+FN:FP 3:1 threshold=0.211667, precision=0.823003, recall=0.822730, F1=0.822867, cost/issue=0.014638
+FN:FP 5:1 threshold=0.115000, precision=0.736270, recall=0.852883, F1=0.790298, cost/issue=0.021502
+FN:FP 10:1 threshold=0.071667, precision=0.592067, recall=0.885355, F1=0.709600, cost/issue=0.036277
+FN:FP 20:1 threshold=0.038333, precision=0.496230, recall=0.915838, F1=0.643689, cost/issue=0.053967
+
+NOx (primary) WITHOUT AQI (matched rows)
+Average Precision: 0.830005 (95% CI 0.810409, 0.849600)
+RPS: 0.016854 (95% CI 0.016272, 0.017436)
+NLL: 0.592936
+Within one category: 0.925811
+Median-meters log10 MAE (observed and median categories 1–16 only): 0.076094 (n=32186)
+ROC-AUC: 0.986316 (95% CI 0.983694, 0.988939)
+Brier (calibrated): 0.006111
+ECE (calibrated): 0.000592
+Cost-selected threshold (1:1 FN:FP; fold mean): 0.211667
+Precision: 0.823003
+Recall: 0.822730
+F1: 0.822867
+Climatology AP: 0.019463
+FN:FP 1:1 threshold=0.211667, precision=0.823003, recall=0.822730, F1=0.822867, cost/issue=0.007316
+FN:FP 3:1 threshold=0.211667, precision=0.823003, recall=0.822730, F1=0.822867, cost/issue=0.014638
+FN:FP 5:1 threshold=0.115000, precision=0.736270, recall=0.852883, F1=0.790298, cost/issue=0.021502
+FN:FP 10:1 threshold=0.071667, precision=0.592067, recall=0.885355, F1=0.709600, cost/issue=0.036277
+FN:FP 20:1 threshold=0.038333, precision=0.496230, recall=0.915838, F1=0.643689, cost/issue=0.053967
+
+PM2.5 (secondary) WITH AQI (matched rows)
+Average Precision: 0.822241 (95% CI 0.795031, 0.849451)
+RPS: 0.017012 (95% CI 0.016165, 0.017860)
+NLL: 0.580575
+Within one category: 0.926507
+Median-meters log10 MAE (observed and median categories 1–16 only): 0.076865 (n=16026)
+ROC-AUC: 0.985490 (95% CI 0.981982, 0.988999)
+Brier (calibrated): 0.006938
+ECE (calibrated): 0.002255
+Cost-selected threshold (1:1 FN:FP; fold mean): 0.196667
+Precision: 0.824000
+Recall: 0.823493
+F1: 0.823747
+Climatology AP: 0.019998
+FN:FP 1:1 threshold=0.196667, precision=0.824000, recall=0.823493, F1=0.823747, cost/issue=0.008020
+FN:FP 3:1 threshold=0.166667, precision=0.812462, recall=0.825953, F1=0.819152, cost/issue=0.016221
+FN:FP 5:1 threshold=0.121667, precision=0.773090, recall=0.833948, F1=0.802367, cost/issue=0.024465
+FN:FP 10:1 threshold=0.046667, precision=0.535873, recall=0.891144, F1=0.669284, cost/issue=0.042338
+FN:FP 20:1 threshold=0.040000, precision=0.528151, recall=0.894219, F1=0.664079, cost/issue=0.066327
+
+PM2.5 (secondary) WITHOUT AQI (matched rows)
+Average Precision: 0.822241 (95% CI 0.795031, 0.849451)
+RPS: 0.017012 (95% CI 0.016165, 0.017860)
+NLL: 0.580575
+Within one category: 0.926507
+Median-meters log10 MAE (observed and median categories 1–16 only): 0.076865 (n=16026)
+ROC-AUC: 0.985490 (95% CI 0.981982, 0.988999)
+Brier (calibrated): 0.006938
+ECE (calibrated): 0.002255
+Cost-selected threshold (1:1 FN:FP; fold mean): 0.196667
+Precision: 0.824000
+Recall: 0.823493
+F1: 0.823747
+Climatology AP: 0.019998
+FN:FP 1:1 threshold=0.196667, precision=0.824000, recall=0.823493, F1=0.823747, cost/issue=0.008020
+FN:FP 3:1 threshold=0.166667, precision=0.812462, recall=0.825953, F1=0.819152, cost/issue=0.016221
+FN:FP 5:1 threshold=0.121667, precision=0.773090, recall=0.833948, F1=0.802367, cost/issue=0.024465
+FN:FP 10:1 threshold=0.046667, precision=0.535873, recall=0.891144, F1=0.669284, cost/issue=0.042338
+FN:FP 20:1 threshold=0.040000, precision=0.528151, recall=0.894219, F1=0.664079, cost/issue=0.066327
+
+CAMS (appendix) WITH AQI (matched rows)
+Average Precision: 0.828446 (95% CI 0.782030, 0.874862)
+RPS: 0.017280 (95% CI 0.015381, 0.019179)
+NLL: 0.547131
+Within one category: 0.932577
 Median-meters log10 MAE (observed and median categories 1–16 only): 0.104460 (n=3044)
-ROC-AUC: 0.974734 (95% CI 0.964462, 0.985005)
-Brier (calibrated): 0.013575
-ECE (calibrated): 0.006072
+ROC-AUC: 0.974735 (95% CI 0.964152, 0.985318)
+Brier (calibrated): 0.013573
+ECE (calibrated): 0.006071
 Cost-selected threshold (1:1 FN:FP; fold mean): 0.321667
 Precision: 0.843672
 Recall: 0.568562
 F1: 0.679321
-Climatology AP: 0.030059
-FN:FP 1:1 threshold=0.321667, precision=0.843672, recall=0.568562, F1=0.679321, cost/issue=0.019361
-FN:FP 3:1 threshold=0.101667, precision=0.691057, recall=0.852843, F1=0.763473, cost/issue=0.029674
-FN:FP 5:1 threshold=0.073333, precision=0.691057, recall=0.852843, F1=0.763473, cost/issue=0.040290
-FN:FP 10:1 threshold=0.060000, precision=0.690122, recall=0.852843, F1=0.762902, cost/issue=0.066888
-FN:FP 20:1 threshold=0.020000, precision=0.379021, recall=0.906355, F1=0.534517, cost/issue=0.121110
+Climatology AP: 0.030055
+FN:FP 1:1 threshold=0.321667, precision=0.843672, recall=0.568562, F1=0.679321, cost/issue=0.019358
+FN:FP 3:1 threshold=0.101667, precision=0.691057, recall=0.852843, F1=0.763473, cost/issue=0.029671
+FN:FP 5:1 threshold=0.073333, precision=0.691057, recall=0.852843, F1=0.763473, cost/issue=0.040285
+FN:FP 10:1 threshold=0.060000, precision=0.690122, recall=0.852843, F1=0.762902, cost/issue=0.066880
+FN:FP 20:1 threshold=0.020000, precision=0.379021, recall=0.906355, F1=0.534517, cost/issue=0.121095
 
-WITHOUT AQI (matched rows)
-Average Precision: 0.828446 (95% CI 0.781964, 0.874928)
-RPS: 0.017282 (95% CI 0.015274, 0.019290)
-NLL: 0.547192
-Within one category: 0.932569
+CAMS (appendix) WITHOUT AQI (matched rows)
+Average Precision: 0.828446 (95% CI 0.782030, 0.874862)
+RPS: 0.017280 (95% CI 0.015381, 0.019179)
+NLL: 0.547131
+Within one category: 0.932577
 Median-meters log10 MAE (observed and median categories 1–16 only): 0.104460 (n=3044)
-ROC-AUC: 0.974734 (95% CI 0.964462, 0.985005)
-Brier (calibrated): 0.013575
-ECE (calibrated): 0.006072
+ROC-AUC: 0.974735 (95% CI 0.964152, 0.985318)
+Brier (calibrated): 0.013573
+ECE (calibrated): 0.006071
 Cost-selected threshold (1:1 FN:FP; fold mean): 0.321667
 Precision: 0.843672
 Recall: 0.568562
 F1: 0.679321
-Climatology AP: 0.030059
-FN:FP 1:1 threshold=0.321667, precision=0.843672, recall=0.568562, F1=0.679321, cost/issue=0.019361
-FN:FP 3:1 threshold=0.101667, precision=0.691057, recall=0.852843, F1=0.763473, cost/issue=0.029674
-FN:FP 5:1 threshold=0.073333, precision=0.691057, recall=0.852843, F1=0.763473, cost/issue=0.040290
-FN:FP 10:1 threshold=0.060000, precision=0.690122, recall=0.852843, F1=0.762902, cost/issue=0.066888
-FN:FP 20:1 threshold=0.020000, precision=0.379021, recall=0.906355, F1=0.534517, cost/issue=0.121110
-
-Paired AQI delta AP: 0.000000 (95% CI 0.000000, 0.000000)
-Paired AQI delta RPS (with minus without; negative favors AQI): 0.000000 (95% CI 0.000000, 0.000000)
+Climatology AP: 0.030055
+FN:FP 1:1 threshold=0.321667, precision=0.843672, recall=0.568562, F1=0.679321, cost/issue=0.019358
+FN:FP 3:1 threshold=0.101667, precision=0.691057, recall=0.852843, F1=0.763473, cost/issue=0.029671
+FN:FP 5:1 threshold=0.073333, precision=0.691057, recall=0.852843, F1=0.763473, cost/issue=0.040285
+FN:FP 10:1 threshold=0.060000, precision=0.690122, recall=0.852843, F1=0.762902, cost/issue=0.066880
+FN:FP 20:1 threshold=0.020000, precision=0.379021, recall=0.906355, F1=0.534517, cost/issue=0.121095
 
 LEAD_TIME
+
+NOx (primary) paired AQI delta AP: 0.000000 (95% CI 0.000000, 0.000000)
+NOx (primary) paired AQI delta RPS (with minus without; negative favors AQI): 0.000000 (95% CI 0.000000, 0.000000)
+
+PM2.5 (secondary) paired AQI delta AP: 0.000000 (95% CI 0.000000, 0.000000)
+PM2.5 (secondary) paired AQI delta RPS (with minus without; negative favors AQI): 0.000000 (95% CI 0.000000, 0.000000)
+
+CAMS (appendix) paired AQI delta AP: 0.000000 (95% CI 0.000000, 0.000000)
+CAMS (appendix) paired AQI delta RPS (with minus without; negative favors AQI): 0.000000 (95% CI 0.000000, 0.000000)
 
 WITHOUT AQI (full history)
 Average Precision: 0.281571 (95% CI 0.241305, 0.321836)
@@ -225,13 +492,93 @@ FN:FP 5:1 threshold=0.153333, precision=0.294695, recall=0.317125, F1=0.305499, 
 FN:FP 10:1 threshold=0.031667, precision=0.238019, recall=0.630021, F1=0.345507, cost/issue=0.366495
 FN:FP 20:1 threshold=0.031667, precision=0.238019, recall=0.630021, F1=0.345507, cost/issue=0.603687
 
-WITH AQI (matched rows)
-Average Precision: 0.348714 (95% CI 0.236079, 0.461349)
-RPS: 0.110750 (95% CI 0.096591, 0.124910)
+NOx (primary) WITH AQI (matched rows)
+Average Precision: 0.287092 (95% CI 0.238957, 0.335227)
+RPS: 0.095326 (95% CI 0.092247, 0.098405)
+NLL: 1.807354
+Within one category: 0.622477
+Median-meters log10 MAE (observed and median categories 1–16 only): 0.241224 (n=803)
+ROC-AUC: 0.757459 (95% CI 0.727936, 0.786983)
+Brier (calibrated): 0.052014
+ECE (calibrated): 0.009352
+Cost-selected threshold (1:1 FN:FP; fold mean): 0.293333
+Precision: 0.486486
+Recall: 0.143617
+F1: 0.221766
+Climatology AP: 0.060320
+FN:FP 1:1 threshold=0.293333, precision=0.486486, recall=0.143617, F1=0.221766, cost/issue=0.064831
+FN:FP 3:1 threshold=0.206667, precision=0.391791, recall=0.279255, F1=0.326087, cost/issue=0.166952
+FN:FP 5:1 threshold=0.105000, precision=0.306452, recall=0.555851, F1=0.395085, cost/issue=0.223743
+FN:FP 10:1 threshold=0.073333, precision=0.282695, recall=0.569149, F1=0.377758, cost/issue=0.369997
+FN:FP 20:1 threshold=0.035000, precision=0.247046, recall=0.611702, F1=0.351951, cost/issue=0.619398
+
+NOx (primary) WITHOUT AQI (matched rows)
+Average Precision: 0.287092 (95% CI 0.238957, 0.335227)
+RPS: 0.095326 (95% CI 0.092247, 0.098405)
+NLL: 1.807354
+Within one category: 0.622477
+Median-meters log10 MAE (observed and median categories 1–16 only): 0.241224 (n=803)
+ROC-AUC: 0.757459 (95% CI 0.727936, 0.786983)
+Brier (calibrated): 0.052014
+ECE (calibrated): 0.009352
+Cost-selected threshold (1:1 FN:FP; fold mean): 0.293333
+Precision: 0.486486
+Recall: 0.143617
+F1: 0.221766
+Climatology AP: 0.060320
+FN:FP 1:1 threshold=0.293333, precision=0.486486, recall=0.143617, F1=0.221766, cost/issue=0.064831
+FN:FP 3:1 threshold=0.206667, precision=0.391791, recall=0.279255, F1=0.326087, cost/issue=0.166952
+FN:FP 5:1 threshold=0.105000, precision=0.306452, recall=0.555851, F1=0.395085, cost/issue=0.223743
+FN:FP 10:1 threshold=0.073333, precision=0.282695, recall=0.569149, F1=0.377758, cost/issue=0.369997
+FN:FP 20:1 threshold=0.035000, precision=0.247046, recall=0.611702, F1=0.351951, cost/issue=0.619398
+
+PM2.5 (secondary) WITH AQI (matched rows)
+Average Precision: 0.258332 (95% CI 0.195347, 0.321316)
+RPS: 0.096449 (95% CI 0.091334, 0.101563)
+NLL: 1.777503
+Within one category: 0.639768
+Median-meters log10 MAE (observed and median categories 1–16 only): 0.231581 (n=419)
+ROC-AUC: 0.732232 (95% CI 0.689557, 0.774908)
+Brier (calibrated): 0.056661
+ECE (calibrated): 0.007893
+Cost-selected threshold (1:1 FN:FP; fold mean): 0.363333
+Precision: 0.583333
+Recall: 0.070000
+F1: 0.125000
+Climatology AP: 0.061749
+FN:FP 1:1 threshold=0.363333, precision=0.583333, recall=0.070000, F1=0.125000, cost/issue=0.066735
+FN:FP 3:1 threshold=0.166667, precision=0.314050, recall=0.190000, F1=0.236760, cost/issue=0.193735
+FN:FP 5:1 threshold=0.126667, precision=0.359788, recall=0.340000, F1=0.349614, cost/issue=0.265918
+FN:FP 10:1 threshold=0.043333, precision=0.247140, recall=0.540000, F1=0.339089, cost/issue=0.425264
+FN:FP 20:1 threshold=0.043333, precision=0.247140, recall=0.540000, F1=0.339089, cost/issue=0.738509
+
+PM2.5 (secondary) WITHOUT AQI (matched rows)
+Average Precision: 0.258332 (95% CI 0.195347, 0.321316)
+RPS: 0.096449 (95% CI 0.091334, 0.101563)
+NLL: 1.777503
+Within one category: 0.639768
+Median-meters log10 MAE (observed and median categories 1–16 only): 0.231581 (n=419)
+ROC-AUC: 0.732232 (95% CI 0.689557, 0.774908)
+Brier (calibrated): 0.056661
+ECE (calibrated): 0.007893
+Cost-selected threshold (1:1 FN:FP; fold mean): 0.363333
+Precision: 0.583333
+Recall: 0.070000
+F1: 0.125000
+Climatology AP: 0.061749
+FN:FP 1:1 threshold=0.363333, precision=0.583333, recall=0.070000, F1=0.125000, cost/issue=0.066735
+FN:FP 3:1 threshold=0.166667, precision=0.314050, recall=0.190000, F1=0.236760, cost/issue=0.193735
+FN:FP 5:1 threshold=0.126667, precision=0.359788, recall=0.340000, F1=0.349614, cost/issue=0.265918
+FN:FP 10:1 threshold=0.043333, precision=0.247140, recall=0.540000, F1=0.339089, cost/issue=0.425264
+FN:FP 20:1 threshold=0.043333, precision=0.247140, recall=0.540000, F1=0.339089, cost/issue=0.738509
+
+CAMS (appendix) WITH AQI (matched rows)
+Average Precision: 0.348714 (95% CI 0.238848, 0.458581)
+RPS: 0.110750 (95% CI 0.097832, 0.123668)
 NLL: 1.806426
 Within one category: 0.665192
 Median-meters log10 MAE (observed and median categories 1–16 only): 0.347144 (n=52)
-ROC-AUC: 0.703634 (95% CI 0.628185, 0.779083)
+ROC-AUC: 0.703634 (95% CI 0.630884, 0.776383)
 Brier (calibrated): 0.076369
 ECE (calibrated): 0.019686
 Cost-selected threshold (1:1 FN:FP; fold mean): 0.053333
@@ -245,13 +592,13 @@ FN:FP 5:1 threshold=0.053333, precision=0.600000, recall=0.464789, F1=0.523810, 
 FN:FP 10:1 threshold=0.053333, precision=0.600000, recall=0.464789, F1=0.523810, cost/issue=0.592920
 FN:FP 20:1 threshold=0.006667, precision=0.094170, recall=0.591549, F1=0.162476, cost/issue=1.451327
 
-WITHOUT AQI (matched rows)
-Average Precision: 0.348714 (95% CI 0.236079, 0.461349)
-RPS: 0.110750 (95% CI 0.096591, 0.124910)
+CAMS (appendix) WITHOUT AQI (matched rows)
+Average Precision: 0.348714 (95% CI 0.238848, 0.458581)
+RPS: 0.110750 (95% CI 0.097832, 0.123668)
 NLL: 1.806426
 Within one category: 0.665192
 Median-meters log10 MAE (observed and median categories 1–16 only): 0.347144 (n=52)
-ROC-AUC: 0.703634 (95% CI 0.628185, 0.779083)
+ROC-AUC: 0.703634 (95% CI 0.630884, 0.776383)
 Brier (calibrated): 0.076369
 ECE (calibrated): 0.019686
 Cost-selected threshold (1:1 FN:FP; fold mean): 0.053333
@@ -264,13 +611,19 @@ FN:FP 3:1 threshold=0.053333, precision=0.600000, recall=0.464789, F1=0.523810, 
 FN:FP 5:1 threshold=0.053333, precision=0.600000, recall=0.464789, F1=0.523810, cost/issue=0.312684
 FN:FP 10:1 threshold=0.053333, precision=0.600000, recall=0.464789, F1=0.523810, cost/issue=0.592920
 FN:FP 20:1 threshold=0.006667, precision=0.094170, recall=0.591549, F1=0.162476, cost/issue=1.451327
-
-Paired AQI delta AP: 0.000000 (95% CI 0.000000, 0.000000)
-Paired AQI delta RPS (with minus without; negative favors AQI): 0.000000 (95% CI 0.000000, 0.000000)
 
 LOCATION 8 (Visalia)
 
 NOWCAST
+
+NOx (primary) paired AQI delta AP: 0.000000 (95% CI 0.000000, 0.000000)
+NOx (primary) paired AQI delta RPS (with minus without; negative favors AQI): 0.000000 (95% CI 0.000000, 0.000000)
+
+PM2.5 (secondary) paired AQI delta AP: 0.000000 (95% CI 0.000000, 0.000000)
+PM2.5 (secondary) paired AQI delta RPS (with minus without; negative favors AQI): 0.000000 (95% CI 0.000000, 0.000000)
+
+CAMS (appendix) paired AQI delta AP: 0.000000 (95% CI 0.000000, 0.000000)
+CAMS (appendix) paired AQI delta RPS (with minus without; negative favors AQI): 0.000000 (95% CI 0.000000, 0.000000)
 
 WITHOUT AQI (full history)
 Average Precision: 0.830263 (95% CI 0.814692, 0.845834)
@@ -292,13 +645,93 @@ FN:FP 5:1 threshold=0.136667, precision=0.697841, recall=0.858835, F1=0.770013, 
 FN:FP 10:1 threshold=0.081667, precision=0.566352, recall=0.903690, F1=0.696316, cost/issue=0.066738
 FN:FP 20:1 threshold=0.036667, precision=0.479375, recall=0.924509, F1=0.631372, cost/issue=0.101369
 
-WITH AQI (matched rows)
-Average Precision: 0.868586 (95% CI 0.832729, 0.904444)
-RPS: 0.029335 (95% CI 0.026173, 0.032497)
+NOx (primary) WITH AQI (matched rows)
+Average Precision: 0.822462 (95% CI 0.805958, 0.838966)
+RPS: 0.026996 (95% CI 0.026175, 0.027816)
+NLL: 0.815933
+Within one category: 0.869574
+Median-meters log10 MAE (observed and median categories 1–16 only): 0.136904 (n=23434)
+ROC-AUC: 0.977110 (95% CI 0.973650, 0.980570)
+Brier (calibrated): 0.011954
+ECE (calibrated): 0.001501
+Cost-selected threshold (1:1 FN:FP; fold mean): 0.413333
+Precision: 0.807702
+Recall: 0.752170
+F1: 0.778947
+Climatology AP: 0.036107
+FN:FP 1:1 threshold=0.413333, precision=0.807702, recall=0.752170, F1=0.778947, cost/issue=0.015579
+FN:FP 3:1 threshold=0.135000, precision=0.688040, recall=0.855413, F1=0.762651, cost/issue=0.029983
+FN:FP 5:1 threshold=0.135000, precision=0.688040, recall=0.855413, F1=0.762651, cost/issue=0.040536
+FN:FP 10:1 threshold=0.078333, precision=0.570471, recall=0.894016, F1=0.696503, cost/issue=0.063242
+FN:FP 20:1 threshold=0.043333, precision=0.463157, recall=0.920283, F1=0.616196, cost/issue=0.097109
+
+NOx (primary) WITHOUT AQI (matched rows)
+Average Precision: 0.822462 (95% CI 0.805958, 0.838966)
+RPS: 0.026996 (95% CI 0.026175, 0.027816)
+NLL: 0.815933
+Within one category: 0.869574
+Median-meters log10 MAE (observed and median categories 1–16 only): 0.136904 (n=23434)
+ROC-AUC: 0.977110 (95% CI 0.973650, 0.980570)
+Brier (calibrated): 0.011954
+ECE (calibrated): 0.001501
+Cost-selected threshold (1:1 FN:FP; fold mean): 0.413333
+Precision: 0.807702
+Recall: 0.752170
+F1: 0.778947
+Climatology AP: 0.036107
+FN:FP 1:1 threshold=0.413333, precision=0.807702, recall=0.752170, F1=0.778947, cost/issue=0.015579
+FN:FP 3:1 threshold=0.135000, precision=0.688040, recall=0.855413, F1=0.762651, cost/issue=0.029983
+FN:FP 5:1 threshold=0.135000, precision=0.688040, recall=0.855413, F1=0.762651, cost/issue=0.040536
+FN:FP 10:1 threshold=0.078333, precision=0.570471, recall=0.894016, F1=0.696503, cost/issue=0.063242
+FN:FP 20:1 threshold=0.043333, precision=0.463157, recall=0.920283, F1=0.616196, cost/issue=0.097109
+
+PM2.5 (secondary) WITH AQI (matched rows)
+Average Precision: 0.815940 (95% CI 0.793935, 0.837944)
+RPS: 0.026262 (95% CI 0.025257, 0.027266)
+NLL: 0.764748
+Within one category: 0.875761
+Median-meters log10 MAE (observed and median categories 1–16 only): 0.149472 (n=15618)
+ROC-AUC: 0.977544 (95% CI 0.974040, 0.981049)
+Brier (calibrated): 0.012215
+ECE (calibrated): 0.003323
+Cost-selected threshold (1:1 FN:FP; fold mean): 0.391667
+Precision: 0.807207
+Recall: 0.727037
+F1: 0.765027
+Climatology AP: 0.038450
+FN:FP 1:1 threshold=0.391667, precision=0.807207, recall=0.727037, F1=0.765027, cost/issue=0.016043
+FN:FP 3:1 threshold=0.191667, precision=0.711198, recall=0.822460, F1=0.762793, cost/issue=0.031130
+FN:FP 5:1 threshold=0.115000, precision=0.668369, recall=0.849724, F1=0.748214, cost/issue=0.042136
+FN:FP 10:1 threshold=0.076667, precision=0.623337, recall=0.866926, F1=0.725224, cost/issue=0.066620
+FN:FP 20:1 threshold=0.036667, precision=0.490364, recall=0.908471, F1=0.636933, cost/issue=0.099674
+
+PM2.5 (secondary) WITHOUT AQI (matched rows)
+Average Precision: 0.815940 (95% CI 0.793935, 0.837944)
+RPS: 0.026262 (95% CI 0.025257, 0.027266)
+NLL: 0.764748
+Within one category: 0.875761
+Median-meters log10 MAE (observed and median categories 1–16 only): 0.149472 (n=15618)
+ROC-AUC: 0.977544 (95% CI 0.974040, 0.981049)
+Brier (calibrated): 0.012215
+ECE (calibrated): 0.003323
+Cost-selected threshold (1:1 FN:FP; fold mean): 0.391667
+Precision: 0.807207
+Recall: 0.727037
+F1: 0.765027
+Climatology AP: 0.038450
+FN:FP 1:1 threshold=0.391667, precision=0.807207, recall=0.727037, F1=0.765027, cost/issue=0.016043
+FN:FP 3:1 threshold=0.191667, precision=0.711198, recall=0.822460, F1=0.762793, cost/issue=0.031130
+FN:FP 5:1 threshold=0.115000, precision=0.668369, recall=0.849724, F1=0.748214, cost/issue=0.042136
+FN:FP 10:1 threshold=0.076667, precision=0.623337, recall=0.866926, F1=0.725224, cost/issue=0.066620
+FN:FP 20:1 threshold=0.036667, precision=0.490364, recall=0.908471, F1=0.636933, cost/issue=0.099674
+
+CAMS (appendix) WITH AQI (matched rows)
+Average Precision: 0.868586 (95% CI 0.834641, 0.902532)
+RPS: 0.029335 (95% CI 0.025931, 0.032739)
 NLL: 0.703673
 Within one category: 0.876701
 Median-meters log10 MAE (observed and median categories 1–16 only): 0.208272 (n=2593)
-ROC-AUC: 0.983985 (95% CI 0.978418, 0.989553)
+ROC-AUC: 0.983985 (95% CI 0.978149, 0.989822)
 Brier (calibrated): 0.014761
 ECE (calibrated): 0.007073
 Cost-selected threshold (1:1 FN:FP; fold mean): 0.358333
@@ -312,13 +745,13 @@ FN:FP 5:1 threshold=0.115000, precision=0.708449, recall=0.904028, F1=0.794378, 
 FN:FP 10:1 threshold=0.053333, precision=0.606202, recall=0.926540, F1=0.732896, cost/issue=0.068818
 FN:FP 20:1 threshold=0.020000, precision=0.571843, recall=0.933649, F1=0.709271, cost/issue=0.104326
 
-WITHOUT AQI (matched rows)
-Average Precision: 0.868586 (95% CI 0.832729, 0.904444)
-RPS: 0.029335 (95% CI 0.026173, 0.032497)
+CAMS (appendix) WITHOUT AQI (matched rows)
+Average Precision: 0.868586 (95% CI 0.834641, 0.902532)
+RPS: 0.029335 (95% CI 0.025931, 0.032739)
 NLL: 0.703673
 Within one category: 0.876701
 Median-meters log10 MAE (observed and median categories 1–16 only): 0.208272 (n=2593)
-ROC-AUC: 0.983985 (95% CI 0.978418, 0.989553)
+ROC-AUC: 0.983985 (95% CI 0.978149, 0.989822)
 Brier (calibrated): 0.014761
 ECE (calibrated): 0.007073
 Cost-selected threshold (1:1 FN:FP; fold mean): 0.358333
@@ -331,11 +764,17 @@ FN:FP 3:1 threshold=0.191667, precision=0.794521, recall=0.824645, F1=0.809302, 
 FN:FP 5:1 threshold=0.115000, precision=0.708449, recall=0.904028, F1=0.794378, cost/issue=0.043866
 FN:FP 10:1 threshold=0.053333, precision=0.606202, recall=0.926540, F1=0.732896, cost/issue=0.068818
 FN:FP 20:1 threshold=0.020000, precision=0.571843, recall=0.933649, F1=0.709271, cost/issue=0.104326
-
-Paired AQI delta AP: 0.000000 (95% CI 0.000000, 0.000000)
-Paired AQI delta RPS (with minus without; negative favors AQI): 0.000000 (95% CI 0.000000, 0.000000)
 
 LEAD_TIME
+
+NOx (primary) paired AQI delta AP: 0.000000 (95% CI 0.000000, 0.000000)
+NOx (primary) paired AQI delta RPS (with minus without; negative favors AQI): 0.000000 (95% CI 0.000000, 0.000000)
+
+PM2.5 (secondary) paired AQI delta AP: 0.000000 (95% CI 0.000000, 0.000000)
+PM2.5 (secondary) paired AQI delta RPS (with minus without; negative favors AQI): 0.000000 (95% CI 0.000000, 0.000000)
+
+CAMS (appendix) paired AQI delta AP: 0.000000 (95% CI 0.000000, 0.000000)
+CAMS (appendix) paired AQI delta RPS (with minus without; negative favors AQI): 0.000000 (95% CI 0.000000, 0.000000)
 
 WITHOUT AQI (full history)
 Average Precision: 0.361120 (95% CI 0.323370, 0.398870)
@@ -357,13 +796,93 @@ FN:FP 5:1 threshold=0.083333, precision=0.418133, recall=0.481308, F1=0.447502, 
 FN:FP 10:1 threshold=0.051667, precision=0.211917, recall=0.637072, F1=0.318040, cost/issue=0.873045
 FN:FP 20:1 threshold=0.000000, precision=0.145545, recall=1.000000, F1=0.254106, cost/issue=0.854455
 
-WITH AQI (matched rows)
-Average Precision: 0.352446 (95% CI 0.262676, 0.442217)
-RPS: 0.161310 (95% CI 0.148965, 0.173656)
+NOx (primary) WITH AQI (matched rows)
+Average Precision: 0.328746 (95% CI 0.287405, 0.370087)
+RPS: 0.145816 (95% CI 0.140579, 0.151053)
+NLL: 2.284623
+Within one category: 0.543837
+Median-meters log10 MAE (observed and median categories 1–16 only): 0.354081 (n=2177)
+ROC-AUC: 0.680665 (95% CI 0.653906, 0.707424)
+Brier (calibrated): 0.110398
+ECE (calibrated): 0.021004
+Cost-selected threshold (1:1 FN:FP; fold mean): 0.436667
+Precision: 0.500000
+Recall: 0.090744
+F1: 0.153610
+Climatology AP: 0.142168
+FN:FP 1:1 threshold=0.436667, precision=0.500000, recall=0.090744, F1=0.153610, cost/issue=0.144203
+FN:FP 3:1 threshold=0.225000, precision=0.425703, recall=0.384755, F1=0.404194, cost/issue=0.341010
+FN:FP 5:1 threshold=0.086667, precision=0.387786, recall=0.460980, F1=0.421227, cost/issue=0.493588
+FN:FP 10:1 threshold=0.051667, precision=0.203924, recall=0.622505, F1=0.307210, cost/issue=0.894792
+FN:FP 20:1 threshold=0.000000, precision=0.144203, recall=1.000000, F1=0.252059, cost/issue=0.855797
+
+NOx (primary) WITHOUT AQI (matched rows)
+Average Precision: 0.328746 (95% CI 0.287405, 0.370087)
+RPS: 0.145816 (95% CI 0.140579, 0.151053)
+NLL: 2.284623
+Within one category: 0.543837
+Median-meters log10 MAE (observed and median categories 1–16 only): 0.354081 (n=2177)
+ROC-AUC: 0.680665 (95% CI 0.653906, 0.707424)
+Brier (calibrated): 0.110398
+ECE (calibrated): 0.021004
+Cost-selected threshold (1:1 FN:FP; fold mean): 0.436667
+Precision: 0.500000
+Recall: 0.090744
+F1: 0.153610
+Climatology AP: 0.142168
+FN:FP 1:1 threshold=0.436667, precision=0.500000, recall=0.090744, F1=0.153610, cost/issue=0.144203
+FN:FP 3:1 threshold=0.225000, precision=0.425703, recall=0.384755, F1=0.404194, cost/issue=0.341010
+FN:FP 5:1 threshold=0.086667, precision=0.387786, recall=0.460980, F1=0.421227, cost/issue=0.493588
+FN:FP 10:1 threshold=0.051667, precision=0.203924, recall=0.622505, F1=0.307210, cost/issue=0.894792
+FN:FP 20:1 threshold=0.000000, precision=0.144203, recall=1.000000, F1=0.252059, cost/issue=0.855797
+
+PM2.5 (secondary) WITH AQI (matched rows)
+Average Precision: 0.327735 (95% CI 0.283756, 0.371714)
+RPS: 0.141169 (95% CI 0.135844, 0.146494)
+NLL: 2.235383
+Within one category: 0.459739
+Median-meters log10 MAE (observed and median categories 1–16 only): 0.351804 (n=1796)
+ROC-AUC: 0.683751 (95% CI 0.654901, 0.712601)
+Brier (calibrated): 0.107819
+ECE (calibrated): 0.020770
+Cost-selected threshold (1:1 FN:FP; fold mean): 0.423333
+Precision: 0.452055
+Recall: 0.146993
+F1: 0.221849
+Climatology AP: 0.138082
+FN:FP 1:1 threshold=0.423333, precision=0.452055, recall=0.146993, F1=0.221849, cost/issue=0.140687
+FN:FP 3:1 threshold=0.150000, precision=0.405213, recall=0.380846, F1=0.392652, cost/issue=0.329687
+FN:FP 5:1 threshold=0.098333, precision=0.394397, recall=0.407572, F1=0.400876, cost/issue=0.489517
+FN:FP 10:1 threshold=0.055000, precision=0.193681, recall=0.628062, F1=0.296063, cost/issue=0.864175
+FN:FP 20:1 threshold=0.000000, precision=0.136433, recall=1.000000, F1=0.240107, cost/issue=0.863567
+
+PM2.5 (secondary) WITHOUT AQI (matched rows)
+Average Precision: 0.327735 (95% CI 0.283756, 0.371714)
+RPS: 0.141169 (95% CI 0.135844, 0.146494)
+NLL: 2.235383
+Within one category: 0.459739
+Median-meters log10 MAE (observed and median categories 1–16 only): 0.351804 (n=1796)
+ROC-AUC: 0.683751 (95% CI 0.654901, 0.712601)
+Brier (calibrated): 0.107819
+ECE (calibrated): 0.020770
+Cost-selected threshold (1:1 FN:FP; fold mean): 0.423333
+Precision: 0.452055
+Recall: 0.146993
+F1: 0.221849
+Climatology AP: 0.138082
+FN:FP 1:1 threshold=0.423333, precision=0.452055, recall=0.146993, F1=0.221849, cost/issue=0.140687
+FN:FP 3:1 threshold=0.150000, precision=0.405213, recall=0.380846, F1=0.392652, cost/issue=0.329687
+FN:FP 5:1 threshold=0.098333, precision=0.394397, recall=0.407572, F1=0.400876, cost/issue=0.489517
+FN:FP 10:1 threshold=0.055000, precision=0.193681, recall=0.628062, F1=0.296063, cost/issue=0.864175
+FN:FP 20:1 threshold=0.000000, precision=0.136433, recall=1.000000, F1=0.240107, cost/issue=0.863567
+
+CAMS (appendix) WITH AQI (matched rows)
+Average Precision: 0.352446 (95% CI 0.263763, 0.441129)
+RPS: 0.161310 (95% CI 0.147963, 0.174658)
 NLL: 2.297116
 Within one category: 0.527653
 Median-meters log10 MAE (observed and median categories 1–16 only): 0.389607 (n=345)
-ROC-AUC: 0.577649 (95% CI 0.507965, 0.647332)
+ROC-AUC: 0.577649 (95% CI 0.507760, 0.647537)
 Brier (calibrated): 0.136727
 ECE (calibrated): 0.080870
 Cost-selected threshold (1:1 FN:FP; fold mean): 0.255000
@@ -377,13 +896,13 @@ FN:FP 5:1 threshold=0.070000, precision=0.144876, recall=0.362832, F1=0.207071, 
 FN:FP 10:1 threshold=0.020000, precision=0.165563, recall=0.663717, F1=0.265018, cost/issue=1.133034
 FN:FP 20:1 threshold=0.000000, precision=0.168909, recall=1.000000, F1=0.289003, cost/issue=0.831091
 
-WITHOUT AQI (matched rows)
-Average Precision: 0.352446 (95% CI 0.262676, 0.442217)
-RPS: 0.161310 (95% CI 0.148965, 0.173656)
+CAMS (appendix) WITHOUT AQI (matched rows)
+Average Precision: 0.352446 (95% CI 0.263763, 0.441129)
+RPS: 0.161310 (95% CI 0.147963, 0.174658)
 NLL: 2.297116
 Within one category: 0.527653
 Median-meters log10 MAE (observed and median categories 1–16 only): 0.389607 (n=345)
-ROC-AUC: 0.577649 (95% CI 0.507965, 0.647332)
+ROC-AUC: 0.577649 (95% CI 0.507760, 0.647537)
 Brier (calibrated): 0.136727
 ECE (calibrated): 0.080870
 Cost-selected threshold (1:1 FN:FP; fold mean): 0.255000
@@ -396,13 +915,19 @@ FN:FP 3:1 threshold=0.163333, precision=0.508475, recall=0.265487, F1=0.348837, 
 FN:FP 5:1 threshold=0.070000, precision=0.144876, recall=0.362832, F1=0.207071, cost/issue=0.899851
 FN:FP 10:1 threshold=0.020000, precision=0.165563, recall=0.663717, F1=0.265018, cost/issue=1.133034
 FN:FP 20:1 threshold=0.000000, precision=0.168909, recall=1.000000, F1=0.289003, cost/issue=0.831091
-
-Paired AQI delta AP: 0.000000 (95% CI 0.000000, 0.000000)
-Paired AQI delta RPS (with minus without; negative favors AQI): 0.000000 (95% CI 0.000000, 0.000000)
 
 LOCATION 9 (Hanford)
 
 NOWCAST
+
+NOx (primary) paired AQI delta AP: 0.000000 (95% CI 0.000000, 0.000000)
+NOx (primary) paired AQI delta RPS (with minus without; negative favors AQI): 0.000000 (95% CI 0.000000, 0.000000)
+
+PM2.5 (secondary) paired AQI delta AP: 0.000000 (95% CI 0.000000, 0.000000)
+PM2.5 (secondary) paired AQI delta RPS (with minus without; negative favors AQI): 0.000000 (95% CI 0.000000, 0.000000)
+
+CAMS (appendix) paired AQI delta AP: 0.000000 (95% CI 0.000000, 0.000000)
+CAMS (appendix) paired AQI delta RPS (with minus without; negative favors AQI): 0.000000 (95% CI 0.000000, 0.000000)
 
 WITHOUT AQI (full history)
 Average Precision: 0.869916 (95% CI 0.857030, 0.882801)
@@ -424,50 +949,136 @@ FN:FP 5:1 threshold=0.131667, precision=0.676358, recall=0.896766, F1=0.771121, 
 FN:FP 10:1 threshold=0.081667, precision=0.625513, recall=0.917450, F1=0.743863, cost/issue=0.067472
 FN:FP 20:1 threshold=0.033333, precision=0.478467, recall=0.950545, F1=0.636530, cost/issue=0.099395
 
-WITH AQI (matched rows)
-Average Precision: 0.892389 (95% CI 0.865464, 0.919315)
-RPS: 0.026005 (95% CI 0.023933, 0.028076)
-NLL: 0.746265
-Within one category: 0.880061
+NOx (primary) WITH AQI (matched rows)
+Average Precision: 0.863030 (95% CI 0.850055, 0.876005)
+RPS: 0.029488 (95% CI 0.028617, 0.030360)
+NLL: 0.927863
+Within one category: 0.862382
+Median-meters log10 MAE (observed and median categories 1–16 only): 0.122897 (n=31809)
+ROC-AUC: 0.985093 (95% CI 0.983176, 0.987011)
+Brier (calibrated): 0.014431
+ECE (calibrated): 0.001649
+Cost-selected threshold (1:1 FN:FP; fold mean): 0.421667
+Precision: 0.839629
+Recall: 0.758834
+F1: 0.797190
+Climatology AP: 0.052780
+FN:FP 1:1 threshold=0.421667, precision=0.839629, recall=0.758834, F1=0.797190, cost/issue=0.019186
+FN:FP 3:1 threshold=0.180000, precision=0.697520, recall=0.881613, F1=0.778836, cost/issue=0.036646
+FN:FP 5:1 threshold=0.136667, precision=0.667960, recall=0.893592, F1=0.764475, cost/issue=0.048511
+FN:FP 10:1 threshold=0.073333, precision=0.580025, recall=0.921741, F1=0.712006, cost/issue=0.072053
+FN:FP 20:1 threshold=0.035000, precision=0.462414, recall=0.949291, F1=0.621894, cost/issue=0.105237
+
+NOx (primary) WITHOUT AQI (matched rows)
+Average Precision: 0.863030 (95% CI 0.850055, 0.876005)
+RPS: 0.029488 (95% CI 0.028617, 0.030360)
+NLL: 0.927863
+Within one category: 0.862382
+Median-meters log10 MAE (observed and median categories 1–16 only): 0.122897 (n=31809)
+ROC-AUC: 0.985093 (95% CI 0.983176, 0.987011)
+Brier (calibrated): 0.014431
+ECE (calibrated): 0.001649
+Cost-selected threshold (1:1 FN:FP; fold mean): 0.421667
+Precision: 0.839629
+Recall: 0.758834
+F1: 0.797190
+Climatology AP: 0.052780
+FN:FP 1:1 threshold=0.421667, precision=0.839629, recall=0.758834, F1=0.797190, cost/issue=0.019186
+FN:FP 3:1 threshold=0.180000, precision=0.697520, recall=0.881613, F1=0.778836, cost/issue=0.036646
+FN:FP 5:1 threshold=0.136667, precision=0.667960, recall=0.893592, F1=0.764475, cost/issue=0.048511
+FN:FP 10:1 threshold=0.073333, precision=0.580025, recall=0.921741, F1=0.712006, cost/issue=0.072053
+FN:FP 20:1 threshold=0.035000, precision=0.462414, recall=0.949291, F1=0.621894, cost/issue=0.105237
+
+PM2.5 (secondary) WITH AQI (matched rows)
+Average Precision: 0.858553 (95% CI 0.839030, 0.878075)
+RPS: 0.028022 (95% CI 0.026927, 0.029118)
+NLL: 0.862420
+Within one category: 0.867944
+Median-meters log10 MAE (observed and median categories 1–16 only): 0.127256 (n=16956)
+ROC-AUC: 0.986244 (95% CI 0.983722, 0.988766)
+Brier (calibrated): 0.013185
+ECE (calibrated): 0.002515
+Cost-selected threshold (1:1 FN:FP; fold mean): 0.418333
+Precision: 0.841215
+Recall: 0.736143
+F1: 0.785179
+Climatology AP: 0.046830
+FN:FP 1:1 threshold=0.418333, precision=0.841215, recall=0.736143, F1=0.785179, cost/issue=0.017830
+FN:FP 3:1 threshold=0.168333, precision=0.706048, recall=0.855353, F1=0.773562, cost/issue=0.034972
+FN:FP 5:1 threshold=0.138333, precision=0.688082, recall=0.870159, F1=0.768483, cost/issue=0.046198
+FN:FP 10:1 threshold=0.070000, precision=0.601156, recall=0.908125, F1=0.723424, cost/issue=0.067339
+FN:FP 20:1 threshold=0.026667, precision=0.489723, recall=0.931663, F1=0.641988, cost/issue=0.103470
+
+PM2.5 (secondary) WITHOUT AQI (matched rows)
+Average Precision: 0.858553 (95% CI 0.839030, 0.878075)
+RPS: 0.028022 (95% CI 0.026927, 0.029118)
+NLL: 0.862420
+Within one category: 0.867944
+Median-meters log10 MAE (observed and median categories 1–16 only): 0.127256 (n=16956)
+ROC-AUC: 0.986244 (95% CI 0.983722, 0.988766)
+Brier (calibrated): 0.013185
+ECE (calibrated): 0.002515
+Cost-selected threshold (1:1 FN:FP; fold mean): 0.418333
+Precision: 0.841215
+Recall: 0.736143
+F1: 0.785179
+Climatology AP: 0.046830
+FN:FP 1:1 threshold=0.418333, precision=0.841215, recall=0.736143, F1=0.785179, cost/issue=0.017830
+FN:FP 3:1 threshold=0.168333, precision=0.706048, recall=0.855353, F1=0.773562, cost/issue=0.034972
+FN:FP 5:1 threshold=0.138333, precision=0.688082, recall=0.870159, F1=0.768483, cost/issue=0.046198
+FN:FP 10:1 threshold=0.070000, precision=0.601156, recall=0.908125, F1=0.723424, cost/issue=0.067339
+FN:FP 20:1 threshold=0.026667, precision=0.489723, recall=0.931663, F1=0.641988, cost/issue=0.103470
+
+CAMS (appendix) WITH AQI (matched rows)
+Average Precision: 0.892389 (95% CI 0.861925, 0.922854)
+RPS: 0.026012 (95% CI 0.024023, 0.028002)
+NLL: 0.746531
+Within one category: 0.879954
 Median-meters log10 MAE (observed and median categories 1–16 only): 0.146691 (n=3578)
-ROC-AUC: 0.989393 (95% CI 0.985879, 0.992906)
-Brier (calibrated): 0.013827
-ECE (calibrated): 0.004137
+ROC-AUC: 0.989393 (95% CI 0.985933, 0.992854)
+Brier (calibrated): 0.013825
+ECE (calibrated): 0.004136
 Cost-selected threshold (1:1 FN:FP; fold mean): 0.328333
 Precision: 0.895969
 Recall: 0.760486
 F1: 0.822687
-Climatology AP: 0.046263
-FN:FP 1:1 threshold=0.328333, precision=0.895969, recall=0.760486, F1=0.822687, cost/issue=0.018055
-FN:FP 3:1 threshold=0.175000, precision=0.807359, recall=0.823400, F1=0.815301, cost/issue=0.040000
-FN:FP 5:1 threshold=0.090000, precision=0.712069, recall=0.911700, F1=0.799613, cost/issue=0.044620
-FN:FP 10:1 threshold=0.046667, precision=0.599150, recall=0.933775, F1=0.729940, cost/issue=0.070881
-FN:FP 20:1 threshold=0.035000, precision=0.592437, recall=0.933775, F1=0.724936, cost/issue=0.108328
+Climatology AP: 0.046258
+FN:FP 1:1 threshold=0.328333, precision=0.895969, recall=0.760486, F1=0.822687, cost/issue=0.018053
+FN:FP 3:1 threshold=0.175000, precision=0.807359, recall=0.823400, F1=0.815301, cost/issue=0.039995
+FN:FP 5:1 threshold=0.090000, precision=0.712069, recall=0.911700, F1=0.799613, cost/issue=0.044615
+FN:FP 10:1 threshold=0.046667, precision=0.599150, recall=0.933775, F1=0.729940, cost/issue=0.070873
+FN:FP 20:1 threshold=0.035000, precision=0.592437, recall=0.933775, F1=0.724936, cost/issue=0.108315
 
-WITHOUT AQI (matched rows)
-Average Precision: 0.892389 (95% CI 0.865464, 0.919315)
-RPS: 0.026005 (95% CI 0.023933, 0.028076)
-NLL: 0.746265
-Within one category: 0.880061
+CAMS (appendix) WITHOUT AQI (matched rows)
+Average Precision: 0.892389 (95% CI 0.861925, 0.922854)
+RPS: 0.026012 (95% CI 0.024023, 0.028002)
+NLL: 0.746531
+Within one category: 0.879954
 Median-meters log10 MAE (observed and median categories 1–16 only): 0.146691 (n=3578)
-ROC-AUC: 0.989393 (95% CI 0.985879, 0.992906)
-Brier (calibrated): 0.013827
-ECE (calibrated): 0.004137
+ROC-AUC: 0.989393 (95% CI 0.985933, 0.992854)
+Brier (calibrated): 0.013825
+ECE (calibrated): 0.004136
 Cost-selected threshold (1:1 FN:FP; fold mean): 0.328333
 Precision: 0.895969
 Recall: 0.760486
 F1: 0.822687
-Climatology AP: 0.046263
-FN:FP 1:1 threshold=0.328333, precision=0.895969, recall=0.760486, F1=0.822687, cost/issue=0.018055
-FN:FP 3:1 threshold=0.175000, precision=0.807359, recall=0.823400, F1=0.815301, cost/issue=0.040000
-FN:FP 5:1 threshold=0.090000, precision=0.712069, recall=0.911700, F1=0.799613, cost/issue=0.044620
-FN:FP 10:1 threshold=0.046667, precision=0.599150, recall=0.933775, F1=0.729940, cost/issue=0.070881
-FN:FP 20:1 threshold=0.035000, precision=0.592437, recall=0.933775, F1=0.724936, cost/issue=0.108328
-
-Paired AQI delta AP: 0.000000 (95% CI 0.000000, 0.000000)
-Paired AQI delta RPS (with minus without; negative favors AQI): 0.000000 (95% CI 0.000000, 0.000000)
+Climatology AP: 0.046258
+FN:FP 1:1 threshold=0.328333, precision=0.895969, recall=0.760486, F1=0.822687, cost/issue=0.018053
+FN:FP 3:1 threshold=0.175000, precision=0.807359, recall=0.823400, F1=0.815301, cost/issue=0.039995
+FN:FP 5:1 threshold=0.090000, precision=0.712069, recall=0.911700, F1=0.799613, cost/issue=0.044615
+FN:FP 10:1 threshold=0.046667, precision=0.599150, recall=0.933775, F1=0.729940, cost/issue=0.070873
+FN:FP 20:1 threshold=0.035000, precision=0.592437, recall=0.933775, F1=0.724936, cost/issue=0.108315
 
 LEAD_TIME
+
+NOx (primary) paired AQI delta AP: 0.000000 (95% CI 0.000000, 0.000000)
+NOx (primary) paired AQI delta RPS (with minus without; negative favors AQI): 0.000000 (95% CI 0.000000, 0.000000)
+
+PM2.5 (secondary) paired AQI delta AP: 0.000000 (95% CI 0.000000, 0.000000)
+PM2.5 (secondary) paired AQI delta RPS (with minus without; negative favors AQI): 0.000000 (95% CI 0.000000, 0.000000)
+
+CAMS (appendix) paired AQI delta AP: 0.000000 (95% CI 0.000000, 0.000000)
+CAMS (appendix) paired AQI delta RPS (with minus without; negative favors AQI): 0.000000 (95% CI 0.000000, 0.000000)
 
 WITHOUT AQI (full history)
 Average Precision: 0.456375 (95% CI 0.419963, 0.492788)
@@ -489,13 +1100,93 @@ FN:FP 5:1 threshold=0.078333, precision=0.434706, recall=0.640000, F1=0.517745, 
 FN:FP 10:1 threshold=0.046667, precision=0.266106, recall=0.735484, F1=0.390812, cost/issue=0.849238
 FN:FP 20:1 threshold=0.000000, precision=0.181712, recall=1.000000, F1=0.307540, cost/issue=0.818288
 
-WITH AQI (matched rows)
-Average Precision: 0.466110 (95% CI 0.371679, 0.560540)
-RPS: 0.162884 (95% CI 0.152340, 0.173429)
+NOx (primary) WITH AQI (matched rows)
+Average Precision: 0.445235 (95% CI 0.405734, 0.484735)
+RPS: 0.151886 (95% CI 0.147523, 0.156248)
+NLL: 2.329620
+Within one category: 0.201212
+Median-meters log10 MAE (observed and median categories 1–16 only): 0.347722 (n=2298)
+ROC-AUC: 0.740100 (95% CI 0.717692, 0.762508)
+Brier (calibrated): 0.120826
+ECE (calibrated): 0.015526
+Cost-selected threshold (1:1 FN:FP; fold mean): 0.380000
+Precision: 0.583162
+Recall: 0.398317
+F1: 0.473333
+Climatology AP: 0.162157
+FN:FP 1:1 threshold=0.380000, precision=0.583162, recall=0.398317, F1=0.473333, cost/issue=0.159556
+FN:FP 3:1 threshold=0.123333, precision=0.427300, recall=0.605891, F1=0.501160, cost/issue=0.359000
+FN:FP 5:1 threshold=0.088333, precision=0.419145, recall=0.632539, F1=0.504192, cost/issue=0.488513
+FN:FP 10:1 threshold=0.055000, precision=0.267721, recall=0.736325, F1=0.392670, cost/issue=0.837162
+FN:FP 20:1 threshold=0.000000, precision=0.180005, recall=1.000000, F1=0.305092, cost/issue=0.819995
+
+NOx (primary) WITHOUT AQI (matched rows)
+Average Precision: 0.445235 (95% CI 0.405734, 0.484735)
+RPS: 0.151886 (95% CI 0.147523, 0.156248)
+NLL: 2.329620
+Within one category: 0.201212
+Median-meters log10 MAE (observed and median categories 1–16 only): 0.347722 (n=2298)
+ROC-AUC: 0.740100 (95% CI 0.717692, 0.762508)
+Brier (calibrated): 0.120826
+ECE (calibrated): 0.015526
+Cost-selected threshold (1:1 FN:FP; fold mean): 0.380000
+Precision: 0.583162
+Recall: 0.398317
+F1: 0.473333
+Climatology AP: 0.162157
+FN:FP 1:1 threshold=0.380000, precision=0.583162, recall=0.398317, F1=0.473333, cost/issue=0.159556
+FN:FP 3:1 threshold=0.123333, precision=0.427300, recall=0.605891, F1=0.501160, cost/issue=0.359000
+FN:FP 5:1 threshold=0.088333, precision=0.419145, recall=0.632539, F1=0.504192, cost/issue=0.488513
+FN:FP 10:1 threshold=0.055000, precision=0.267721, recall=0.736325, F1=0.392670, cost/issue=0.837162
+FN:FP 20:1 threshold=0.000000, precision=0.180005, recall=1.000000, F1=0.305092, cost/issue=0.819995
+
+PM2.5 (secondary) WITH AQI (matched rows)
+Average Precision: 0.409551 (95% CI 0.362917, 0.456186)
+RPS: 0.153841 (95% CI 0.148229, 0.159454)
+NLL: 2.303134
+Within one category: 0.175725
+Median-meters log10 MAE (observed and median categories 1–16 only): 0.380083 (n=1344)
+ROC-AUC: 0.733415 (95% CI 0.705455, 0.761374)
+Brier (calibrated): 0.123921
+ECE (calibrated): 0.031257
+Cost-selected threshold (1:1 FN:FP; fold mean): 0.441667
+Precision: 0.543624
+Recall: 0.192399
+F1: 0.284211
+Climatology AP: 0.177057
+FN:FP 1:1 threshold=0.441667, precision=0.543624, recall=0.192399, F1=0.284211, cost/issue=0.166735
+FN:FP 3:1 threshold=0.168333, precision=0.454768, recall=0.441805, F1=0.448193, cost/issue=0.379240
+FN:FP 5:1 threshold=0.105000, precision=0.434783, recall=0.498812, F1=0.464602, cost/issue=0.542705
+FN:FP 10:1 threshold=0.046667, precision=0.237469, recall=0.686461, F1=0.352869, cost/issue=0.918676
+FN:FP 20:1 threshold=0.000000, precision=0.172047, recall=1.000000, F1=0.293584, cost/issue=0.827953
+
+PM2.5 (secondary) WITHOUT AQI (matched rows)
+Average Precision: 0.409551 (95% CI 0.362917, 0.456186)
+RPS: 0.153841 (95% CI 0.148229, 0.159454)
+NLL: 2.303134
+Within one category: 0.175725
+Median-meters log10 MAE (observed and median categories 1–16 only): 0.380083 (n=1344)
+ROC-AUC: 0.733415 (95% CI 0.705455, 0.761374)
+Brier (calibrated): 0.123921
+ECE (calibrated): 0.031257
+Cost-selected threshold (1:1 FN:FP; fold mean): 0.441667
+Precision: 0.543624
+Recall: 0.192399
+F1: 0.284211
+Climatology AP: 0.177057
+FN:FP 1:1 threshold=0.441667, precision=0.543624, recall=0.192399, F1=0.284211, cost/issue=0.166735
+FN:FP 3:1 threshold=0.168333, precision=0.454768, recall=0.441805, F1=0.448193, cost/issue=0.379240
+FN:FP 5:1 threshold=0.105000, precision=0.434783, recall=0.498812, F1=0.464602, cost/issue=0.542705
+FN:FP 10:1 threshold=0.046667, precision=0.237469, recall=0.686461, F1=0.352869, cost/issue=0.918676
+FN:FP 20:1 threshold=0.000000, precision=0.172047, recall=1.000000, F1=0.293584, cost/issue=0.827953
+
+CAMS (appendix) WITH AQI (matched rows)
+Average Precision: 0.466110 (95% CI 0.370248, 0.561971)
+RPS: 0.162884 (95% CI 0.152113, 0.173656)
 NLL: 2.185729
 Within one category: 0.529762
 Median-meters log10 MAE (observed and median categories 1–16 only): 0.427523 (n=310)
-ROC-AUC: 0.732742 (95% CI 0.673985, 0.791499)
+ROC-AUC: 0.732742 (95% CI 0.672027, 0.793457)
 Brier (calibrated): 0.138155
 ECE (calibrated): 0.079972
 Cost-selected threshold (1:1 FN:FP; fold mean): 0.263333
@@ -509,13 +1200,13 @@ FN:FP 5:1 threshold=0.155000, precision=0.541667, recall=0.319672, F1=0.402062, 
 FN:FP 10:1 threshold=0.013333, precision=0.182773, recall=0.713115, F1=0.290970, cost/issue=1.099702
 FN:FP 20:1 threshold=0.013333, precision=0.182773, recall=0.713115, F1=0.290970, cost/issue=1.620536
 
-WITHOUT AQI (matched rows)
-Average Precision: 0.466110 (95% CI 0.371679, 0.560540)
-RPS: 0.162884 (95% CI 0.152340, 0.173429)
+CAMS (appendix) WITHOUT AQI (matched rows)
+Average Precision: 0.466110 (95% CI 0.370248, 0.561971)
+RPS: 0.162884 (95% CI 0.152113, 0.173656)
 NLL: 2.185729
 Within one category: 0.529762
 Median-meters log10 MAE (observed and median categories 1–16 only): 0.427523 (n=310)
-ROC-AUC: 0.732742 (95% CI 0.673985, 0.791499)
+ROC-AUC: 0.732742 (95% CI 0.672027, 0.793457)
 Brier (calibrated): 0.138155
 ECE (calibrated): 0.079972
 Cost-selected threshold (1:1 FN:FP; fold mean): 0.263333
@@ -528,13 +1219,19 @@ FN:FP 3:1 threshold=0.155000, precision=0.541667, recall=0.319672, F1=0.402062, 
 FN:FP 5:1 threshold=0.155000, precision=0.541667, recall=0.319672, F1=0.402062, cost/issue=0.666667
 FN:FP 10:1 threshold=0.013333, precision=0.182773, recall=0.713115, F1=0.290970, cost/issue=1.099702
 FN:FP 20:1 threshold=0.013333, precision=0.182773, recall=0.713115, F1=0.290970, cost/issue=1.620536
-
-Paired AQI delta AP: 0.000000 (95% CI 0.000000, 0.000000)
-Paired AQI delta RPS (with minus without; negative favors AQI): 0.000000 (95% CI 0.000000, 0.000000)
 
 LOCATION 10 (Bakersfield)
 
 NOWCAST
+
+NOx (primary) paired AQI delta AP: 0.000000 (95% CI 0.000000, 0.000000)
+NOx (primary) paired AQI delta RPS (with minus without; negative favors AQI): 0.000000 (95% CI 0.000000, 0.000000)
+
+PM2.5 (secondary) paired AQI delta AP: 0.000000 (95% CI 0.000000, 0.000000)
+PM2.5 (secondary) paired AQI delta RPS (with minus without; negative favors AQI): 0.000000 (95% CI 0.000000, 0.000000)
+
+CAMS (appendix) paired AQI delta AP: 0.000000 (95% CI 0.000000, 0.000000)
+CAMS (appendix) paired AQI delta RPS (with minus without; negative favors AQI): 0.000000 (95% CI 0.000000, 0.000000)
 
 WITHOUT AQI (full history)
 Average Precision: 0.748380 (95% CI 0.720385, 0.776374)
@@ -556,50 +1253,136 @@ FN:FP 5:1 threshold=0.148333, precision=0.630352, recall=0.798547, F1=0.704550, 
 FN:FP 10:1 threshold=0.061667, precision=0.512384, recall=0.831477, F1=0.634047, cost/issue=0.028051
 FN:FP 20:1 threshold=0.041667, precision=0.398210, recall=0.861985, F1=0.544759, cost/issue=0.046020
 
-WITH AQI (matched rows)
-Average Precision: 0.775831 (95% CI 0.699347, 0.852315)
-RPS: 0.018144 (95% CI 0.016119, 0.020170)
-NLL: 0.625800
-Within one category: 0.925604
-Median-meters log10 MAE (observed and median categories 1–16 only): 0.108468 (n=3283)
-ROC-AUC: 0.982397 (95% CI 0.972614, 0.992179)
-Brier (calibrated): 0.007714
+NOx (primary) WITH AQI (matched rows)
+Average Precision: 0.743727 (95% CI 0.711963, 0.775490)
+RPS: 0.018245 (95% CI 0.017674, 0.018817)
+NLL: 0.719814
+Within one category: 0.932240
+Median-meters log10 MAE (observed and median categories 1–16 only): 0.057668 (n=44895)
+ROC-AUC: 0.972443 (95% CI 0.964324, 0.980562)
+Brier (calibrated): 0.004621
+ECE (calibrated): 0.000496
+Cost-selected threshold (1:1 FN:FP; fold mean): 0.445000
+Precision: 0.808802
+Recall: 0.672466
+F1: 0.734360
+Climatology AP: 0.012250
+FN:FP 1:1 threshold=0.445000, precision=0.808802, recall=0.672466, F1=0.734360, cost/issue=0.005652
+FN:FP 3:1 threshold=0.188333, precision=0.746403, recall=0.746851, F1=0.746627, cost/issue=0.011772
+FN:FP 5:1 threshold=0.136667, precision=0.654215, recall=0.777445, F1=0.710526, cost/issue=0.017703
+FN:FP 10:1 threshold=0.068333, precision=0.539069, recall=0.819436, F1=0.650321, cost/issue=0.029120
+FN:FP 20:1 threshold=0.040000, precision=0.410478, recall=0.855429, F1=0.554756, cost/issue=0.047868
+
+NOx (primary) WITHOUT AQI (matched rows)
+Average Precision: 0.743727 (95% CI 0.711963, 0.775490)
+RPS: 0.018245 (95% CI 0.017674, 0.018817)
+NLL: 0.719814
+Within one category: 0.932240
+Median-meters log10 MAE (observed and median categories 1–16 only): 0.057668 (n=44895)
+ROC-AUC: 0.972443 (95% CI 0.964324, 0.980562)
+Brier (calibrated): 0.004621
+ECE (calibrated): 0.000496
+Cost-selected threshold (1:1 FN:FP; fold mean): 0.445000
+Precision: 0.808802
+Recall: 0.672466
+F1: 0.734360
+Climatology AP: 0.012250
+FN:FP 1:1 threshold=0.445000, precision=0.808802, recall=0.672466, F1=0.734360, cost/issue=0.005652
+FN:FP 3:1 threshold=0.188333, precision=0.746403, recall=0.746851, F1=0.746627, cost/issue=0.011772
+FN:FP 5:1 threshold=0.136667, precision=0.654215, recall=0.777445, F1=0.710526, cost/issue=0.017703
+FN:FP 10:1 threshold=0.068333, precision=0.539069, recall=0.819436, F1=0.650321, cost/issue=0.029120
+FN:FP 20:1 threshold=0.040000, precision=0.410478, recall=0.855429, F1=0.554756, cost/issue=0.047868
+
+PM2.5 (secondary) WITH AQI (matched rows)
+Average Precision: 0.731680 (95% CI 0.687972, 0.775388)
+RPS: 0.018881 (95% CI 0.018173, 0.019589)
+NLL: 0.741063
+Within one category: 0.932632
+Median-meters log10 MAE (observed and median categories 1–16 only): 0.051873 (n=32235)
+ROC-AUC: 0.964453 (95% CI 0.952675, 0.976231)
+Brier (calibrated): 0.004379
+ECE (calibrated): 0.000745
+Cost-selected threshold (1:1 FN:FP; fold mean): 0.423333
+Precision: 0.796912
+Recall: 0.688205
+F1: 0.738580
+Climatology AP: 0.009365
+FN:FP 1:1 threshold=0.423333, precision=0.796912, recall=0.688205, F1=0.738580, cost/issue=0.005238
+FN:FP 3:1 threshold=0.161667, precision=0.712237, recall=0.764103, F1=0.737259, cost/issue=0.010928
+FN:FP 5:1 threshold=0.116667, precision=0.648649, recall=0.787692, F1=0.711440, cost/issue=0.016001
+FN:FP 10:1 threshold=0.061667, precision=0.566833, recall=0.813333, F1=0.668071, cost/issue=0.026753
+FN:FP 20:1 threshold=0.040000, precision=0.475666, recall=0.842051, F1=0.607923, cost/issue=0.043945
+
+PM2.5 (secondary) WITHOUT AQI (matched rows)
+Average Precision: 0.731680 (95% CI 0.687972, 0.775388)
+RPS: 0.018881 (95% CI 0.018173, 0.019589)
+NLL: 0.741063
+Within one category: 0.932632
+Median-meters log10 MAE (observed and median categories 1–16 only): 0.051873 (n=32235)
+ROC-AUC: 0.964453 (95% CI 0.952675, 0.976231)
+Brier (calibrated): 0.004379
+ECE (calibrated): 0.000745
+Cost-selected threshold (1:1 FN:FP; fold mean): 0.423333
+Precision: 0.796912
+Recall: 0.688205
+F1: 0.738580
+Climatology AP: 0.009365
+FN:FP 1:1 threshold=0.423333, precision=0.796912, recall=0.688205, F1=0.738580, cost/issue=0.005238
+FN:FP 3:1 threshold=0.161667, precision=0.712237, recall=0.764103, F1=0.737259, cost/issue=0.010928
+FN:FP 5:1 threshold=0.116667, precision=0.648649, recall=0.787692, F1=0.711440, cost/issue=0.016001
+FN:FP 10:1 threshold=0.061667, precision=0.566833, recall=0.813333, F1=0.668071, cost/issue=0.026753
+FN:FP 20:1 threshold=0.040000, precision=0.475666, recall=0.842051, F1=0.607923, cost/issue=0.043945
+
+CAMS (appendix) WITH AQI (matched rows)
+Average Precision: 0.775772 (95% CI 0.705540, 0.846005)
+RPS: 0.018180 (95% CI 0.016058, 0.020301)
+NLL: 0.626083
+Within one category: 0.925492
+Median-meters log10 MAE (observed and median categories 1–16 only): 0.108834 (n=3285)
+ROC-AUC: 0.982387 (95% CI 0.972830, 0.991944)
+Brier (calibrated): 0.007719
 ECE (calibrated): 0.003937
-Cost-selected threshold (1:1 FN:FP; fold mean): 0.233333
+Cost-selected threshold (1:1 FN:FP; fold mean): 0.231667
 Precision: 0.797619
 Recall: 0.650485
 F1: 0.716578
-Climatology AP: 0.017122
-FN:FP 1:1 threshold=0.233333, precision=0.797619, recall=0.650485, F1=0.716578, cost/issue=0.009601
-FN:FP 3:1 threshold=0.180000, precision=0.797619, recall=0.650485, F1=0.716578, cost/issue=0.022645
-FN:FP 5:1 threshold=0.068333, precision=0.694915, recall=0.796117, F1=0.742081, cost/issue=0.025543
-FN:FP 10:1 threshold=0.045000, precision=0.638889, recall=0.818770, F1=0.717730, cost/issue=0.042452
-FN:FP 20:1 threshold=0.018333, precision=0.418045, recall=0.899676, F1=0.570842, cost/issue=0.060809
+Climatology AP: 0.017120
+FN:FP 1:1 threshold=0.231667, precision=0.797619, recall=0.650485, F1=0.716578, cost/issue=0.009600
+FN:FP 3:1 threshold=0.178333, precision=0.797619, recall=0.650485, F1=0.716578, cost/issue=0.022642
+FN:FP 5:1 threshold=0.066667, precision=0.691011, recall=0.796117, F1=0.739850, cost/issue=0.025661
+FN:FP 10:1 threshold=0.045000, precision=0.635678, recall=0.818770, F1=0.715700, cost/issue=0.042567
+FN:FP 20:1 threshold=0.018333, precision=0.416792, recall=0.899676, F1=0.569672, cost/issue=0.060923
 
-WITHOUT AQI (matched rows)
-Average Precision: 0.775831 (95% CI 0.699347, 0.852315)
-RPS: 0.018144 (95% CI 0.016119, 0.020170)
-NLL: 0.625800
-Within one category: 0.925604
-Median-meters log10 MAE (observed and median categories 1–16 only): 0.108468 (n=3283)
-ROC-AUC: 0.982397 (95% CI 0.972614, 0.992179)
-Brier (calibrated): 0.007714
+CAMS (appendix) WITHOUT AQI (matched rows)
+Average Precision: 0.775772 (95% CI 0.705540, 0.846005)
+RPS: 0.018180 (95% CI 0.016058, 0.020301)
+NLL: 0.626083
+Within one category: 0.925492
+Median-meters log10 MAE (observed and median categories 1–16 only): 0.108834 (n=3285)
+ROC-AUC: 0.982387 (95% CI 0.972830, 0.991944)
+Brier (calibrated): 0.007719
 ECE (calibrated): 0.003937
-Cost-selected threshold (1:1 FN:FP; fold mean): 0.233333
+Cost-selected threshold (1:1 FN:FP; fold mean): 0.231667
 Precision: 0.797619
 Recall: 0.650485
 F1: 0.716578
-Climatology AP: 0.017122
-FN:FP 1:1 threshold=0.233333, precision=0.797619, recall=0.650485, F1=0.716578, cost/issue=0.009601
-FN:FP 3:1 threshold=0.180000, precision=0.797619, recall=0.650485, F1=0.716578, cost/issue=0.022645
-FN:FP 5:1 threshold=0.068333, precision=0.694915, recall=0.796117, F1=0.742081, cost/issue=0.025543
-FN:FP 10:1 threshold=0.045000, precision=0.638889, recall=0.818770, F1=0.717730, cost/issue=0.042452
-FN:FP 20:1 threshold=0.018333, precision=0.418045, recall=0.899676, F1=0.570842, cost/issue=0.060809
-
-Paired AQI delta AP: 0.000000 (95% CI 0.000000, 0.000000)
-Paired AQI delta RPS (with minus without; negative favors AQI): 0.000000 (95% CI 0.000000, 0.000000)
+Climatology AP: 0.017120
+FN:FP 1:1 threshold=0.231667, precision=0.797619, recall=0.650485, F1=0.716578, cost/issue=0.009600
+FN:FP 3:1 threshold=0.178333, precision=0.797619, recall=0.650485, F1=0.716578, cost/issue=0.022642
+FN:FP 5:1 threshold=0.066667, precision=0.691011, recall=0.796117, F1=0.739850, cost/issue=0.025661
+FN:FP 10:1 threshold=0.045000, precision=0.635678, recall=0.818770, F1=0.715700, cost/issue=0.042567
+FN:FP 20:1 threshold=0.018333, precision=0.416792, recall=0.899676, F1=0.569672, cost/issue=0.060923
 
 LEAD_TIME
+
+NOx (primary) paired AQI delta AP: 0.000000 (95% CI 0.000000, 0.000000)
+NOx (primary) paired AQI delta RPS (with minus without; negative favors AQI): 0.000000 (95% CI 0.000000, 0.000000)
+
+PM2.5 (secondary) paired AQI delta AP: 0.000000 (95% CI 0.000000, 0.000000)
+PM2.5 (secondary) paired AQI delta RPS (with minus without; negative favors AQI): 0.000000 (95% CI 0.000000, 0.000000)
+
+CAMS (appendix) paired AQI delta AP: 0.000000 (95% CI 0.000000, 0.000000)
+CAMS (appendix) paired AQI delta RPS (with minus without; negative favors AQI): 0.000000 (95% CI 0.000000, 0.000000)
 
 WITHOUT AQI (full history)
 Average Precision: 0.206583 (95% CI 0.162361, 0.250806)
@@ -621,13 +1404,93 @@ FN:FP 5:1 threshold=0.133333, precision=0.252500, recall=0.367273, F1=0.299259, 
 FN:FP 10:1 threshold=0.071667, precision=0.211111, recall=0.483636, F1=0.293923, cost/issue=0.275471
 FN:FP 20:1 threshold=0.023333, precision=0.115338, recall=0.694545, F1=0.197825, cost/issue=0.451933
 
-WITH AQI (matched rows)
-Average Precision: 0.238300 (95% CI 0.109316, 0.367284)
-RPS: 0.088760 (95% CI 0.078968, 0.098552)
+NOx (primary) WITH AQI (matched rows)
+Average Precision: 0.211009 (95% CI 0.158304, 0.263714)
+RPS: 0.083787 (95% CI 0.081046, 0.086527)
+NLL: 1.871168
+Within one category: 0.614578
+Median-meters log10 MAE (observed and median categories 1–16 only): 0.206800 (n=1513)
+ROC-AUC: 0.756103 (95% CI 0.712787, 0.799418)
+Brier (calibrated): 0.036930
+ECE (calibrated): 0.006729
+Cost-selected threshold (1:1 FN:FP; fold mean): 0.321667
+Precision: 0.416667
+Recall: 0.066372
+F1: 0.114504
+Climatology AP: 0.043164
+FN:FP 1:1 threshold=0.321667, precision=0.416667, recall=0.066372, F1=0.114504, cost/issue=0.041961
+FN:FP 3:1 threshold=0.218333, precision=0.333333, recall=0.123894, F1=0.180645, cost/issue=0.117562
+FN:FP 5:1 threshold=0.105000, precision=0.236908, recall=0.420354, F1=0.303030, cost/issue=0.173811
+FN:FP 10:1 threshold=0.083333, precision=0.212177, recall=0.508850, F1=0.299479, cost/issue=0.277989
+FN:FP 20:1 threshold=0.016667, precision=0.098171, recall=0.712389, F1=0.172562, cost/issue=0.502623
+
+NOx (primary) WITHOUT AQI (matched rows)
+Average Precision: 0.211009 (95% CI 0.158304, 0.263714)
+RPS: 0.083787 (95% CI 0.081046, 0.086527)
+NLL: 1.871168
+Within one category: 0.614578
+Median-meters log10 MAE (observed and median categories 1–16 only): 0.206800 (n=1513)
+ROC-AUC: 0.756103 (95% CI 0.712787, 0.799418)
+Brier (calibrated): 0.036930
+ECE (calibrated): 0.006729
+Cost-selected threshold (1:1 FN:FP; fold mean): 0.321667
+Precision: 0.416667
+Recall: 0.066372
+F1: 0.114504
+Climatology AP: 0.043164
+FN:FP 1:1 threshold=0.321667, precision=0.416667, recall=0.066372, F1=0.114504, cost/issue=0.041961
+FN:FP 3:1 threshold=0.218333, precision=0.333333, recall=0.123894, F1=0.180645, cost/issue=0.117562
+FN:FP 5:1 threshold=0.105000, precision=0.236908, recall=0.420354, F1=0.303030, cost/issue=0.173811
+FN:FP 10:1 threshold=0.083333, precision=0.212177, recall=0.508850, F1=0.299479, cost/issue=0.277989
+FN:FP 20:1 threshold=0.016667, precision=0.098171, recall=0.712389, F1=0.172562, cost/issue=0.502623
+
+PM2.5 (secondary) WITH AQI (matched rows)
+Average Precision: 0.143025 (95% CI 0.093707, 0.192342)
+RPS: 0.085979 (95% CI 0.082156, 0.089802)
+NLL: 1.917641
+Within one category: 0.571468
+Median-meters log10 MAE (observed and median categories 1–16 only): 0.202698 (n=1183)
+ROC-AUC: 0.703395 (95% CI 0.650834, 0.755957)
+Brier (calibrated): 0.036801
+ECE (calibrated): 0.003987
+Cost-selected threshold (1:1 FN:FP; fold mean): 0.213333
+Precision: 0.375000
+Recall: 0.062500
+F1: 0.107143
+Climatology AP: 0.037477
+FN:FP 1:1 threshold=0.213333, precision=0.375000, recall=0.062500, F1=0.107143, cost/issue=0.041152
+FN:FP 3:1 threshold=0.198333, precision=0.307692, recall=0.083333, F1=0.131148, cost/issue=0.116049
+FN:FP 5:1 threshold=0.125000, precision=0.201754, recall=0.159722, F1=0.178295, cost/issue=0.190947
+FN:FP 10:1 threshold=0.065000, precision=0.191176, recall=0.361111, F1=0.250000, cost/issue=0.312757
+FN:FP 20:1 threshold=0.025000, precision=0.084589, recall=0.506944, F1=0.144985, cost/issue=0.606310
+
+PM2.5 (secondary) WITHOUT AQI (matched rows)
+Average Precision: 0.143025 (95% CI 0.093707, 0.192342)
+RPS: 0.085979 (95% CI 0.082156, 0.089802)
+NLL: 1.917641
+Within one category: 0.571468
+Median-meters log10 MAE (observed and median categories 1–16 only): 0.202698 (n=1183)
+ROC-AUC: 0.703395 (95% CI 0.650834, 0.755957)
+Brier (calibrated): 0.036801
+ECE (calibrated): 0.003987
+Cost-selected threshold (1:1 FN:FP; fold mean): 0.213333
+Precision: 0.375000
+Recall: 0.062500
+F1: 0.107143
+Climatology AP: 0.037477
+FN:FP 1:1 threshold=0.213333, precision=0.375000, recall=0.062500, F1=0.107143, cost/issue=0.041152
+FN:FP 3:1 threshold=0.198333, precision=0.307692, recall=0.083333, F1=0.131148, cost/issue=0.116049
+FN:FP 5:1 threshold=0.125000, precision=0.201754, recall=0.159722, F1=0.178295, cost/issue=0.190947
+FN:FP 10:1 threshold=0.065000, precision=0.191176, recall=0.361111, F1=0.250000, cost/issue=0.312757
+FN:FP 20:1 threshold=0.025000, precision=0.084589, recall=0.506944, F1=0.144985, cost/issue=0.606310
+
+CAMS (appendix) WITH AQI (matched rows)
+Average Precision: 0.238300 (95% CI 0.119878, 0.356721)
+RPS: 0.088760 (95% CI 0.079021, 0.098499)
 NLL: 2.015283
 Within one category: 0.674074
 Median-meters log10 MAE (observed and median categories 1–16 only): 0.284500 (n=149)
-ROC-AUC: 0.673240 (95% CI 0.559238, 0.787241)
+ROC-AUC: 0.673240 (95% CI 0.564264, 0.782215)
 Brier (calibrated): 0.054557
 ECE (calibrated): 0.021328
 Cost-selected threshold (1:1 FN:FP; fold mean): 0.228333
@@ -641,13 +1504,13 @@ FN:FP 5:1 threshold=0.026667, precision=0.231884, recall=0.432432, F1=0.301887, 
 FN:FP 10:1 threshold=0.026667, precision=0.231884, recall=0.432432, F1=0.301887, cost/issue=0.389630
 FN:FP 20:1 threshold=0.008333, precision=0.056537, recall=0.432432, F1=0.100000, cost/issue=1.017778
 
-WITHOUT AQI (matched rows)
-Average Precision: 0.238300 (95% CI 0.109316, 0.367284)
-RPS: 0.088760 (95% CI 0.078968, 0.098552)
+CAMS (appendix) WITHOUT AQI (matched rows)
+Average Precision: 0.238300 (95% CI 0.119878, 0.356721)
+RPS: 0.088760 (95% CI 0.079021, 0.098499)
 NLL: 2.015283
 Within one category: 0.674074
 Median-meters log10 MAE (observed and median categories 1–16 only): 0.284500 (n=149)
-ROC-AUC: 0.673240 (95% CI 0.559238, 0.787241)
+ROC-AUC: 0.673240 (95% CI 0.564264, 0.782215)
 Brier (calibrated): 0.054557
 ECE (calibrated): 0.021328
 Cost-selected threshold (1:1 FN:FP; fold mean): 0.228333
@@ -660,9 +1523,6 @@ FN:FP 3:1 threshold=0.150000, precision=0.000000, recall=0.000000, F1=0.000000, 
 FN:FP 5:1 threshold=0.026667, precision=0.231884, recall=0.432432, F1=0.301887, cost/issue=0.234074
 FN:FP 10:1 threshold=0.026667, precision=0.231884, recall=0.432432, F1=0.301887, cost/issue=0.389630
 FN:FP 20:1 threshold=0.008333, precision=0.056537, recall=0.432432, F1=0.100000, cost/issue=1.017778
-
-Paired AQI delta AP: 0.000000 (95% CI 0.000000, 0.000000)
-Paired AQI delta RPS (with minus without; negative favors AQI): 0.000000 (95% CI 0.000000, 0.000000)
 
 AVERAGE METRICS
 Arithmetic means across sites, not pooled observations; mean site-CI endpoints are descriptive, not an aggregate confidence interval.
@@ -685,41 +1545,113 @@ brier_after: 0.009727
 ece_after: 0.001220
 Climatology AP: 0.030251
 
-NOWCAST - WITH AQI (matched rows)
-ap: 0.836917
-roc_auc: 0.981587
-precision: 0.841053
-recall: 0.707811
-f1: 0.765518
-cost_threshold: 0.295667
-Mean site ap_ci endpoints (not aggregate CI): 0.790418, 0.883417
-Mean site roc_auc_ci endpoints (not aggregate CI): 0.974427, 0.988748
-rps: 0.023271
-nll: 0.652402
-within_one: 0.900931
-median_category_mae: 0.504938
-Pooled median-meters log10 MAE: 0.149569 (n=15170)
-brier_after: 0.013291
-ece_after: 0.005484
-Climatology AP: 0.035165
+NOWCAST - NOx (primary) WITH AQI (matched rows)
+ap: 0.807801
+roc_auc: 0.980075
+precision: 0.816234
+recall: 0.740078
+f1: 0.775518
+cost_threshold: 0.381000
+Mean site ap_ci endpoints (not aggregate CI): 0.786344, 0.829257
+Mean site roc_auc_ci endpoints (not aggregate CI): 0.976209, 0.983940
+rps: 0.023139
+nll: 0.747044
+within_one: 0.895967
+median_category_mae: 0.486454
+Pooled median-meters log10 MAE: 0.098585 (n=150798)
+brier_after: 0.009727
+ece_after: 0.001171
+Climatology AP: 0.029958
 
-NOWCAST - WITHOUT AQI (matched rows)
-ap: 0.836917
-roc_auc: 0.981587
+NOWCAST - NOx (primary) WITHOUT AQI (matched rows)
+ap: 0.807801
+roc_auc: 0.980075
+precision: 0.816234
+recall: 0.740078
+f1: 0.775518
+cost_threshold: 0.381000
+Mean site ap_ci endpoints (not aggregate CI): 0.786344, 0.829257
+Mean site roc_auc_ci endpoints (not aggregate CI): 0.976209, 0.983940
+rps: 0.023139
+nll: 0.747044
+within_one: 0.895967
+median_category_mae: 0.486454
+Pooled median-meters log10 MAE: 0.098585 (n=150798)
+brier_after: 0.009727
+ece_after: 0.001171
+Climatology AP: 0.029958
+
+NOWCAST - PM2.5 (secondary) WITH AQI (matched rows)
+ap: 0.802714
+roc_auc: 0.978505
+precision: 0.815899
+recall: 0.734366
+f1: 0.772368
+cost_threshold: 0.361333
+Mean site ap_ci endpoints (not aggregate CI): 0.773375, 0.832054
+Mean site roc_auc_ci endpoints (not aggregate CI): 0.973381, 0.983629
+rps: 0.022648
+nll: 0.718510
+within_one: 0.899748
+median_category_mae: 0.475500
+Pooled median-meters log10 MAE: 0.097845 (n=91026)
+brier_after: 0.009551
+ece_after: 0.002186
+Climatology AP: 0.029013
+
+NOWCAST - PM2.5 (secondary) WITHOUT AQI (matched rows)
+ap: 0.802714
+roc_auc: 0.978505
+precision: 0.815899
+recall: 0.734366
+f1: 0.772368
+cost_threshold: 0.361333
+Mean site ap_ci endpoints (not aggregate CI): 0.773375, 0.832054
+Mean site roc_auc_ci endpoints (not aggregate CI): 0.973381, 0.983629
+rps: 0.022648
+nll: 0.718510
+within_one: 0.899748
+median_category_mae: 0.475500
+Pooled median-meters log10 MAE: 0.097845 (n=91026)
+brier_after: 0.009551
+ece_after: 0.002186
+Climatology AP: 0.029013
+
+NOWCAST - CAMS (appendix) WITH AQI (matched rows)
+ap: 0.836906
+roc_auc: 0.981586
 precision: 0.841053
 recall: 0.707811
 f1: 0.765518
-cost_threshold: 0.295667
-Mean site ap_ci endpoints (not aggregate CI): 0.790418, 0.883417
-Mean site roc_auc_ci endpoints (not aggregate CI): 0.974427, 0.988748
-rps: 0.023271
-nll: 0.652402
-within_one: 0.900931
-median_category_mae: 0.504938
-Pooled median-meters log10 MAE: 0.149569 (n=15170)
+cost_threshold: 0.295333
+Mean site ap_ci endpoints (not aggregate CI): 0.791376, 0.882435
+Mean site roc_auc_ci endpoints (not aggregate CI): 0.974337, 0.988835
+rps: 0.023278
+nll: 0.652492
+within_one: 0.900890
+median_category_mae: 0.505154
+Pooled median-meters log10 MAE: 0.149642 (n=15172)
 brier_after: 0.013291
 ece_after: 0.005484
-Climatology AP: 0.035165
+Climatology AP: 0.035163
+
+NOWCAST - CAMS (appendix) WITHOUT AQI (matched rows)
+ap: 0.836906
+roc_auc: 0.981586
+precision: 0.841053
+recall: 0.707811
+f1: 0.765518
+cost_threshold: 0.295333
+Mean site ap_ci endpoints (not aggregate CI): 0.791376, 0.882435
+Mean site roc_auc_ci endpoints (not aggregate CI): 0.974337, 0.988835
+rps: 0.023278
+nll: 0.652492
+within_one: 0.900890
+median_category_mae: 0.505154
+Pooled median-meters log10 MAE: 0.149642 (n=15172)
+brier_after: 0.013291
+ece_after: 0.005484
+Climatology AP: 0.035163
 
 LEAD_TIME - WITHOUT AQI (full history)
 ap: 0.325021
@@ -739,15 +1671,87 @@ brier_after: 0.082880
 ece_after: 0.016387
 Climatology AP: 0.110195
 
-LEAD_TIME - WITH AQI (matched rows)
+LEAD_TIME - NOx (primary) WITH AQI (matched rows)
+ap: 0.319318
+roc_auc: 0.725976
+precision: 0.498004
+recall: 0.166321
+f1: 0.234618
+cost_threshold: 0.372000
+Mean site ap_ci endpoints (not aggregate CI): 0.274882, 0.363755
+Mean site roc_auc_ci endpoints (not aggregate CI): 0.696286, 0.755666
+rps: 0.123090
+nll: 2.067470
+within_one: 0.514843
+median_category_mae: 2.904851
+Pooled median-meters log10 MAE: 0.325067 (n=8640)
+brier_after: 0.083991
+ece_after: 0.015289
+Climatology AP: 0.107828
+
+LEAD_TIME - NOx (primary) WITHOUT AQI (matched rows)
+ap: 0.319318
+roc_auc: 0.725976
+precision: 0.498004
+recall: 0.166321
+f1: 0.234618
+cost_threshold: 0.372000
+Mean site ap_ci endpoints (not aggregate CI): 0.274882, 0.363755
+Mean site roc_auc_ci endpoints (not aggregate CI): 0.696286, 0.755666
+rps: 0.123090
+nll: 2.067470
+within_one: 0.514843
+median_category_mae: 2.904851
+Pooled median-meters log10 MAE: 0.325067 (n=8640)
+brier_after: 0.083991
+ece_after: 0.015289
+Climatology AP: 0.107828
+
+LEAD_TIME - PM2.5 (secondary) WITH AQI (matched rows)
+ap: 0.289034
+roc_auc: 0.711892
+precision: 0.494251
+recall: 0.125957
+f1: 0.196028
+cost_threshold: 0.359667
+Mean site ap_ci endpoints (not aggregate CI): 0.237504, 0.340565
+Mean site roc_auc_ci endpoints (not aggregate CI): 0.674666, 0.749117
+rps: 0.122316
+nll: 2.043679
+within_one: 0.485337
+median_category_mae: 2.876482
+Pooled median-meters log10 MAE: 0.317066 (n=5018)
+brier_after: 0.083746
+ece_after: 0.015390
+Climatology AP: 0.106267
+
+LEAD_TIME - PM2.5 (secondary) WITHOUT AQI (matched rows)
+ap: 0.289034
+roc_auc: 0.711892
+precision: 0.494251
+recall: 0.125957
+f1: 0.196028
+cost_threshold: 0.359667
+Mean site ap_ci endpoints (not aggregate CI): 0.237504, 0.340565
+Mean site roc_auc_ci endpoints (not aggregate CI): 0.674666, 0.749117
+rps: 0.122316
+nll: 2.043679
+within_one: 0.485337
+median_category_mae: 2.876482
+Pooled median-meters log10 MAE: 0.317066 (n=5018)
+brier_after: 0.083746
+ece_after: 0.015390
+Climatology AP: 0.106267
+
+LEAD_TIME - CAMS (appendix) WITH AQI (matched rows)
 ap: 0.347317
 roc_auc: 0.659450
 precision: 0.442480
 recall: 0.257400
 f1: 0.322406
 cost_threshold: 0.183667
-Mean site ap_ci endpoints (not aggregate CI): 0.246084, 0.448550
-Mean site roc_auc_ci endpoints (not aggregate CI): 0.583247, 0.735652
+Mean site ap_ci endpoints (not aggregate CI): 0.248547, 0.446087
+Mean site roc_auc_ci endpoints (not aggregate CI): 0.584090, 0.734810
 rps: 0.138857
 nll: 2.070375
 within_one: 0.598255
@@ -757,15 +1761,15 @@ brier_after: 0.112115
 ece_after: 0.065330
 Climatology AP: 0.116984
 
-LEAD_TIME - WITHOUT AQI (matched rows)
+LEAD_TIME - CAMS (appendix) WITHOUT AQI (matched rows)
 ap: 0.347317
 roc_auc: 0.659450
 precision: 0.442480
 recall: 0.257400
 f1: 0.322406
 cost_threshold: 0.183667
-Mean site ap_ci endpoints (not aggregate CI): 0.246084, 0.448550
-Mean site roc_auc_ci endpoints (not aggregate CI): 0.583247, 0.735652
+Mean site ap_ci endpoints (not aggregate CI): 0.248547, 0.446087
+Mean site roc_auc_ci endpoints (not aggregate CI): 0.584090, 0.734810
 rps: 0.138857
 nll: 2.070375
 within_one: 0.598255
