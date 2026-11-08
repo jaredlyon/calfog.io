@@ -348,3 +348,22 @@ Thresholds 0–4 are fog; 5–15 are haze. The mean of all 17 thresholds equals 
 | ebm / lead_time | location_7 | RPS | -0.003038 | [-0.003571, -0.002506] |
 | ebm / lead_time | location_8 | RPS | -0.0005721 | [-0.001154, 9.92e-06] |
 | ebm / lead_time | location_9 | RPS | -0.0005933 | [-0.001132, -5.488e-05] |
+
+## Training-seed sensitivity (D-081)
+
+Primary NOx AP tests refit under 10 model seeds (replicate 0 = the result above), each with the same day resamples and its own Holm family. Agreement counts replicates matching replicate 0's verdict; robust if both verdicts agree in ≥90% of replicates.
+
+| Family / task / stratum | Training | ΔAP (r0) | Bonferroni CI (r0) | Seed mean ± SD | Seed range | Holm-significant (r0): agree | Rules out +0.02 (r0): agree |
+|---|---|---:|---|---:|---|---|---|
+| logistic_regression / nowcast / all | deterministic fit | 0.009054 | [-0.001833, 0.01994] | 0.009054 ± 0 | [0.009054, 0.009054] | false: 10/10 | true: 10/10 |
+| logistic_regression / nowcast / near_saturation | deterministic fit | 0.01519 | [0.002404, 0.02798] | 0.01519 ± 0 | [0.01519, 0.01519] | true: 10/10 | false: 10/10 |
+| logistic_regression / lead_time / all | deterministic fit | 0.004777 | [-0.002807, 0.01236] | 0.004777 ± 9.143e-19 | [0.004777, 0.004777] | false: 10/10 | true: 10/10 |
+| logistic_regression / lead_time / near_saturation | deterministic fit | 0.008605 | [-0.0002995, 0.01751] | 0.008605 ± 1.829e-18 | [0.008605, 0.008605] | false: 10/10 | true: 10/10 |
+| xgboost / nowcast / all | 10 seeds | -0.02456 | [-0.03653, -0.0126] | -0.02457 ± 0.001905 | [-0.02712, -0.02225] | true: 10/10 | true: 10/10 |
+| xgboost / nowcast / near_saturation | 10 seeds | -0.02031 | [-0.03352, -0.007096] | -0.02111 ± 0.002332 | [-0.02479, -0.01835] | true: 10/10 | true: 10/10 |
+| xgboost / lead_time / all | 10 seeds | -0.01272 | [-0.02733, 0.001885] | -0.01322 ± 0.002671 | [-0.0176, -0.009116] | false: 6/10 | true: 10/10 |
+| xgboost / lead_time / near_saturation | 10 seeds | -0.008656 | [-0.02555, 0.008233] | -0.009012 ± 0.002933 | [-0.01401, -0.004414] | false: 10/10 | true: 10/10 |
+| ebm / nowcast / all | 10 seeds | -0.004584 | [-0.01313, 0.003967] | -0.003081 ± 0.001569 | [-0.005808, -0.0009911] | false: 10/10 | true: 10/10 |
+| ebm / nowcast / near_saturation | 10 seeds | -0.002953 | [-0.01169, 0.005784] | -0.0005885 ± 0.001583 | [-0.003425, 0.001516] | false: 10/10 | true: 10/10 |
+| ebm / lead_time / all | 10 seeds | 0.005263 | [-0.006416, 0.01694] | 0.00116 ± 0.00233 | [-0.002069, 0.005263] | false: 10/10 | true: 10/10 |
+| ebm / lead_time / near_saturation | 10 seeds | 0.00933 | [-0.003438, 0.0221] | 0.004216 ± 0.002905 | [0.0001247, 0.00933] | false: 10/10 | false: 2/10 |

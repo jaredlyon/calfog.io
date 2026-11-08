@@ -10433,5 +10433,273 @@
       }
     }
   ],
-  "seed_sensitivity": null
+  "seed_sensitivity": {
+    "replicate_ids": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "verdict_rule": "robust if both verdicts agree in \u226590% of replicates",
+    "tests": [
+      {
+        "family": "logistic_regression",
+        "task": "nowcast",
+        "stratum": "all",
+        "status": "ok",
+        "training_seed": "deterministic fit",
+        "replicates": 10,
+        "estimate_r0": 0.009053840461632174,
+        "ci_bonf_r0": [
+          -0.0018334170090409524,
+          0.0199410979323053
+        ],
+        "seed_mean": 0.009053840461632174,
+        "seed_sd": 0.0,
+        "seed_min": 0.009053840461632174,
+        "seed_max": 0.009053840461632174,
+        "holm_significant_r0": false,
+        "holm_agree": 10,
+        "rules_out_r0": true,
+        "rules_out_agree": 10
+      },
+      {
+        "family": "logistic_regression",
+        "task": "nowcast",
+        "stratum": "near_saturation",
+        "status": "ok",
+        "training_seed": "deterministic fit",
+        "replicates": 10,
+        "estimate_r0": 0.015191852828684576,
+        "ci_bonf_r0": [
+          0.0024042047564068053,
+          0.027979500900962347
+        ],
+        "seed_mean": 0.015191852828684576,
+        "seed_sd": 0.0,
+        "seed_min": 0.015191852828684576,
+        "seed_max": 0.015191852828684576,
+        "holm_significant_r0": true,
+        "holm_agree": 10,
+        "rules_out_r0": false,
+        "rules_out_agree": 10
+      },
+      {
+        "family": "logistic_regression",
+        "task": "lead_time",
+        "stratum": "all",
+        "status": "ok",
+        "training_seed": "deterministic fit",
+        "replicates": 10,
+        "estimate_r0": 0.004776631839792644,
+        "ci_bonf_r0": [
+          -0.0028071673950373537,
+          0.012360431074622643
+        ],
+        "seed_mean": 0.004776631839792643,
+        "seed_sd": 9.14279549108516e-19,
+        "seed_min": 0.004776631839792644,
+        "seed_max": 0.004776631839792644,
+        "holm_significant_r0": false,
+        "holm_agree": 10,
+        "rules_out_r0": true,
+        "rules_out_agree": 10
+      },
+      {
+        "family": "logistic_regression",
+        "task": "lead_time",
+        "stratum": "near_saturation",
+        "status": "ok",
+        "training_seed": "deterministic fit",
+        "replicates": 10,
+        "estimate_r0": 0.00860507255671974,
+        "ci_bonf_r0": [
+          -0.000299505996318462,
+          0.01750965110975794
+        ],
+        "seed_mean": 0.008605072556719742,
+        "seed_sd": 1.828559098217032e-18,
+        "seed_min": 0.00860507255671974,
+        "seed_max": 0.00860507255671974,
+        "holm_significant_r0": false,
+        "holm_agree": 10,
+        "rules_out_r0": true,
+        "rules_out_agree": 10
+      },
+      {
+        "family": "xgboost",
+        "task": "nowcast",
+        "stratum": "all",
+        "status": "ok",
+        "training_seed": "10 seeds",
+        "replicates": 10,
+        "estimate_r0": -0.024562799030306726,
+        "ci_bonf_r0": [
+          -0.03652567070975663,
+          -0.012599927350856818
+        ],
+        "seed_mean": -0.024568294961118464,
+        "seed_sd": 0.0019049593929326273,
+        "seed_min": -0.02711993757944981,
+        "seed_max": -0.022254092736871456,
+        "holm_significant_r0": true,
+        "holm_agree": 10,
+        "rules_out_r0": true,
+        "rules_out_agree": 10
+      },
+      {
+        "family": "xgboost",
+        "task": "nowcast",
+        "stratum": "near_saturation",
+        "status": "ok",
+        "training_seed": "10 seeds",
+        "replicates": 10,
+        "estimate_r0": -0.020309938991726617,
+        "ci_bonf_r0": [
+          -0.03352339473262099,
+          -0.007096483250832248
+        ],
+        "seed_mean": -0.021111010887375565,
+        "seed_sd": 0.002332451647751015,
+        "seed_min": -0.024789191216846647,
+        "seed_max": -0.018347945121077496,
+        "holm_significant_r0": true,
+        "holm_agree": 10,
+        "rules_out_r0": true,
+        "rules_out_agree": 10
+      },
+      {
+        "family": "xgboost",
+        "task": "lead_time",
+        "stratum": "all",
+        "status": "ok",
+        "training_seed": "10 seeds",
+        "replicates": 10,
+        "estimate_r0": -0.012724547432982392,
+        "ci_bonf_r0": [
+          -0.02733397411018206,
+          0.001884879244217274
+        ],
+        "seed_mean": -0.013217543026935338,
+        "seed_sd": 0.0026708731895059915,
+        "seed_min": -0.017602643022339503,
+        "seed_max": -0.0091155797725741,
+        "holm_significant_r0": false,
+        "holm_agree": 6,
+        "rules_out_r0": true,
+        "rules_out_agree": 10
+      },
+      {
+        "family": "xgboost",
+        "task": "lead_time",
+        "stratum": "near_saturation",
+        "status": "ok",
+        "training_seed": "10 seeds",
+        "replicates": 10,
+        "estimate_r0": -0.008656326180265139,
+        "ci_bonf_r0": [
+          -0.02554613624231732,
+          0.008233483881787042
+        ],
+        "seed_mean": -0.009011548957515284,
+        "seed_sd": 0.0029329156628859474,
+        "seed_min": -0.014008882356782937,
+        "seed_max": -0.004414072323460161,
+        "holm_significant_r0": false,
+        "holm_agree": 10,
+        "rules_out_r0": true,
+        "rules_out_agree": 10
+      },
+      {
+        "family": "ebm",
+        "task": "nowcast",
+        "stratum": "all",
+        "status": "ok",
+        "training_seed": "10 seeds",
+        "replicates": 10,
+        "estimate_r0": -0.00458399294300349,
+        "ci_bonf_r0": [
+          -0.013134749341079062,
+          0.003966763455072082
+        ],
+        "seed_mean": -0.0030805980067393508,
+        "seed_sd": 0.0015687022507872733,
+        "seed_min": -0.005808416640723712,
+        "seed_max": -0.0009910680787303284,
+        "holm_significant_r0": false,
+        "holm_agree": 10,
+        "rules_out_r0": true,
+        "rules_out_agree": 10
+      },
+      {
+        "family": "ebm",
+        "task": "nowcast",
+        "stratum": "near_saturation",
+        "status": "ok",
+        "training_seed": "10 seeds",
+        "replicates": 10,
+        "estimate_r0": -0.002953054419540568,
+        "ci_bonf_r0": [
+          -0.011690176551453768,
+          0.005784067712372631
+        ],
+        "seed_mean": -0.0005885285763750414,
+        "seed_sd": 0.0015827245784326603,
+        "seed_min": -0.0034249912912166446,
+        "seed_max": 0.0015155212896088622,
+        "holm_significant_r0": false,
+        "holm_agree": 10,
+        "rules_out_r0": true,
+        "rules_out_agree": 10
+      },
+      {
+        "family": "ebm",
+        "task": "lead_time",
+        "stratum": "all",
+        "status": "ok",
+        "training_seed": "10 seeds",
+        "replicates": 10,
+        "estimate_r0": 0.0052627667415893085,
+        "ci_bonf_r0": [
+          -0.006415839860747054,
+          0.016941373343925672
+        ],
+        "seed_mean": 0.0011599225512468456,
+        "seed_sd": 0.002330322727051556,
+        "seed_min": -0.0020693732419923895,
+        "seed_max": 0.0052627667415893085,
+        "holm_significant_r0": false,
+        "holm_agree": 10,
+        "rules_out_r0": true,
+        "rules_out_agree": 10
+      },
+      {
+        "family": "ebm",
+        "task": "lead_time",
+        "stratum": "near_saturation",
+        "status": "ok",
+        "training_seed": "10 seeds",
+        "replicates": 10,
+        "estimate_r0": 0.009330201887190382,
+        "ci_bonf_r0": [
+          -0.003437603888963702,
+          0.022098007663344466
+        ],
+        "seed_mean": 0.004215914224751665,
+        "seed_sd": 0.002904916416736536,
+        "seed_min": 0.00012465496865897706,
+        "seed_max": 0.009330201887190382,
+        "holm_significant_r0": false,
+        "holm_agree": 10,
+        "rules_out_r0": false,
+        "rules_out_agree": 2
+      }
+    ]
+  }
 }
