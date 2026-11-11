@@ -4,8 +4,9 @@
 experimental rebuild under review: NOT publication-ready, NOT production-ready, and NO-GO for autonomous
 public fog alerts.** The V2 code uses fixed PST (`Etc/GMT+8`), GHCNh visibility labels translated to 18
 ordinal categories, and labels an hour as foggy when any valid visibility report in that hour reports fog.
-The committed results in [models/comparison_v2](models/comparison_v2/model_comparison_v2.md) predate the measured
-air-quality study design and will be replaced by its combined rerun. The archived pre-fix V2 numbers are superseded,
+The committed results in [models/comparison_v2](models/comparison_v2/model_comparison_v2.md) come from the measured
+air-quality study's combined rerun ([air-quality tests](models/comparison_v2/aqi_tests_v2.md),
+[family significance](models/comparison_v2/family_significance_v2.md)) and are under review. The archived pre-fix V2 numbers are superseded,
 not validated replacements for V1.
 
 - Historical V1: [class report PDF](report.pdf) and [report source](report.tex).
@@ -99,8 +100,7 @@ Family runs write `<family>_metrics_v2.json`, `<family>_results_v2.txt`,
 Predictions retain issue time, fold, category PMFs and evaluation-only dew-point depression/wind.
 `--reuse` keeps only families whose saved metrics have the current air-quality nesting and predictions;
 others are retrained. The temporal CNN and every XGBoost family train on the GPU when CUDA is available;
-GPU and CPU XGBoost boosters differ slightly. **Numbers are pending the combined rerun.** The public-alert
-NO-GO stands regardless.
+GPU and CPU XGBoost boosters differ slightly. The public-alert NO-GO stands.
 
 The air-quality study uses measured EPA hourly **NOx (primary)** and **PM2.5 (secondary)**;
 CAMS channels remain appendix comparisons. `datasets/scripts/airdata_epa.py` builds fixed-PST
@@ -117,11 +117,7 @@ Logistic regression is deterministic.
 
 ### This repository began as a class project for UCI's graduate 210P (Statistical Methods I) course and was turned in on March 16th, 2026.
 
-Development will continue as I attempt to create a production-ready predictive model, which will then be linked to https://www.calfog.io for public use.
-
 The original (V1) class report is `report.pdf`, kept unchanged as a historical record.
-
-README is WIP.
 
 ## Data sources and attribution
 
