@@ -1,11 +1,8 @@
-# Spark snapshot logger (proposed corrected copy)
+# Spark snapshot logger (deployed)
 
-The original version was deployed on DGX Spark to bank production-feed data. The corrected files here are
-**not deployed**; changing the live logger requires a separately authorized action. Passive recorder only:
-no model, predictions, or learning.
-
-Repository source now lives under `ops/shadow/spark_deploy/`. This relocation does not
-change any deployed Spark file or unit.
+These files are deployed on DGX Spark, replacing the original version on 2026-11-10 (2026-11-11 03:36 UTC is the
+first capture). Rows captured before that used the old Bakersfield coordinates, America/Los_Angeles request time
+and an unconditional `lead_1800` label. Passive recorder only: no model, predictions, or learning.
 
 - `calfog_snapshot.py` → `~/calfog-shadow/calfog_snapshot.py` on the Spark. Uses system `python3` + `requests`
   (no torch). Fetches an Open-Meteo Forecast superset + AviationWeather METAR for all 5 airports → `snapshots.sqlite`
