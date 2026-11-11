@@ -187,10 +187,13 @@ def test_analysis_outputs_and_holm_families(tmp_path, monkeypatch):
     aqi = json.loads((directory / "aqi_tests_v2.json").read_text(encoding="utf-8"))
     family = json.loads((directory / "family_significance_v2.json").read_text(encoding="utf-8"))
     primary = [row for row in aqi["tests"] if row["primary"]]
-    assert len(primary) == 6
-    for rows in (primary, [row["near_saturation"] for row in primary]):
-        expected = sig.holm_adjust([row["ap"]["p_two_sided"] for row in rows])
-        assert [row["ap"]["p_holm"] for row in rows] == expected
+    lag_aware = [row for row in aqi["tests"] if row["lag_aware"]]
+    assert len(primary) == len(lag_aware) == 6
+    assert all(row["set"] == "nox_lag" and "haze" not in row for row in lag_aware)
+    for group in (primary, lag_aware):  # each its own Holm family, not 12 pooled tests
+        for rows in (group, [row["near_saturation"] for row in group]):
+            expected = sig.holm_adjust([row["ap"]["p_two_sided"] for row in rows])
+            assert [row["ap"]["p_holm"] for row in rows] == expected
     assert (aqi["n_boot"], family["n_boot"]) == (12, 20)
     assert len(family["tests"]) == 12  # four comparators, six pairs, two tasks
     for task in sig.TASKS:
@@ -199,6 +202,7 @@ def test_analysis_outputs_and_holm_families(tmp_path, monkeypatch):
             assert [row[metric]["p_holm"] for row in rows] == sig.holm_adjust([row[metric]["p_two_sided"] for row in rows])
     aqi_md = (directory / "aqi_tests_v2.md").read_text(encoding="utf-8")
     assert "5–15" in aqi_md and "α/6" in aqi_md and "near-saturation" in aqi_md
+    assert "| xgboost / nox_lag / nowcast / near-saturation | AP |" in aqi_md
     assert "| Family A" in (directory / "family_significance_v2.md").read_text(encoding="utf-8")
 
 

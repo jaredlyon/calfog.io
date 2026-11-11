@@ -62,8 +62,11 @@ observations retain the full record, and hourly model labels start at 1980-01-01
   `models/comparison_v2/`. `--jobs N` runs (family, airport) shards in parallel worker processes with the same
   seeds and outputs as the serial run.
 - `models/seed_replicates_v2.py`: refits the primary NOx ablation for XGBoost and EBM under nine extra model seeds.
+- `models/lag_aware_nox_v2.py`: repeats the primary NOx ablation with the last visibility report (and its
+  24-hour causal history) added to both arms, asking whether NOx helps models that already see visibility.
 - `models/significance_v2.py`: pooled-airport paired air-quality tests (Holm over six primary NOx tests,
-  a +0.02 AP equivalence margin, training-seed sensitivity) and family-versus-family significance.
+  a +0.02 AP equivalence margin, training-seed sensitivity, the six lag-aware NOx tests as their own Holm
+  family) and family-versus-family significance.
 - `eda/long_term_trend/`: weather-adjusted winter fog-day trend, instrument steps, and year-versus-NOx attribution.
 - `eda/k-means clustering/*_v2.py`: reworked k-means analysis alongside its original.
 - `ops/`: retraining, serving bundles and passive shadow evaluation.
@@ -89,6 +92,7 @@ Run from the repository root using the environment in `requirements-v2.txt` (the
 python -m pip install -r requirements-v2.txt
 python models/run_all_v2.py --jobs 8
 python models/seed_replicates_v2.py --jobs 8
+python models/lag_aware_nox_v2.py --jobs 8
 python models/significance_v2.py --n-boot 1000 --family-n-boot 10000
 python eda/long_term_trend/long_term_trend_v2.py
 python models/xgboost/xgboost_fog_prediction_v2.py --sites location_10

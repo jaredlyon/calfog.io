@@ -17,10 +17,12 @@ def main():
     parser.add_argument("--family-n-boot", type=int, default=None,
                         help="draws for the family-pair table (default: --n-boot)")
     parser.add_argument("--seed", type=int, default=SEED)
+    parser.add_argument("--aqi-only", action="store_true",
+                        help="rewrite only aqi_tests_v2 (the family table does not use AQ arms)")
     args = parser.parse_args()
     if args.n_boot < 1 or (args.family_n_boot is not None and args.family_n_boot < 1):
         parser.error("--n-boot and --family-n-boot must be positive")
-    write_analysis(args.n_boot, args.seed, args.family_n_boot)
+    write_analysis(args.n_boot, args.seed, args.family_n_boot, include_families=not args.aqi_only)
 
 
 if __name__ == "__main__":

@@ -309,27 +309,31 @@ def analyze_aqi(n_boot=1000, seed=SEED):
     for family in _family_dirs():
         if family == "xgboost_pooled":
             continue
-        for aq_set in ("nox", "pm25", "cams", "nox_monitor"):
-            if aq_set == "nox_monitor" and family not in PRIMARY_FAMILIES:
+        for aq_set in ("nox", "pm25", "cams", "nox_monitor", "nox_lag"):
+            if aq_set in ("nox_monitor", "nox_lag") and family not in PRIMARY_FAMILIES:
                 continue
             a = load_predictions(family, f"{aq_set}_with")
             b = load_predictions(family, f"{aq_set}_without")
             for task in TASKS:
                 aa, bb = a[a.task == task], b[b.task == task]
                 primary = aq_set == "nox" and family in PRIMARY_FAMILIES
+                # D-097: lag-aware NOx tests mirror the primary design as their own Holm family.
+                lag_aware = aq_set == "nox_lag"
                 row = {"family": family, "set": aq_set, "task": task, "primary": primary,
-                       **_compare(aa, bb, n_boot, seed)}
-                if primary:
+                       "lag_aware": lag_aware, **_compare(aa, bb, n_boot, seed)}
+                if primary or lag_aware:
                     row["near_saturation"] = _compare(aa, bb, n_boot, seed, near_saturation)
-                    if row["status"] == "ok":
-                        row["haze"] = haze_decomposition(aa, bb, n_boot, seed)
+                if primary and row["status"] == "ok":
+                    row["haze"] = haze_decomposition(aa, bb, n_boot, seed)
                 tests.append(row)
-    primary = [row for row in tests if row["primary"]]
-    for metric in ("ap", "rps"):
-        _adjust_tests(primary, metric)
-        _adjust_tests([row["near_saturation"] for row in primary], metric)
+    for group in ("primary", "lag_aware"):
+        rows = [row for row in tests if row[group]]
+        for metric in ("ap", "rps"):
+            _adjust_tests(rows, metric)
+            _adjust_tests([row["near_saturation"] for row in rows], metric)
     return {"n_boot": n_boot, "seed": seed, "convention": CI_CONVENTION,
-            "holm_family": "six primary NOx tests; near-saturation six tested separately; RPS secondary",
+            "holm_family": "six primary NOx tests; near-saturation six tested separately; the six lag-aware "
+                           "NOx tests (nox_lag) and their near-saturation six as two further families; RPS secondary",
             "tests": tests, "seed_sensitivity": seed_sensitivity(n_boot, seed)}
 
 
@@ -375,16 +379,18 @@ def _table_row(label, row, metric, equivalence=False):
 
 def aqi_markdown(result):
     lines = ["# Air-quality paired tests", "", result["convention"], "",
-             "Primary/near-saturation intervals use α/6; all others use 95%. "
+             "Primary, lag-aware (nox_lag) and near-saturation intervals use α/6; all others use 95%. "
              "Rules-out = upper simultaneous AP bound < 0.02. RPS has no equivalence margin. "
-             "Holm is applied to six primary tests, separately in each stratum and metric.", "",
+             "Holm is applied to six primary tests, separately in each stratum and metric; the six lag-aware "
+             "tests (models also given the last visibility report, D-097) form their own Holm families.", "",
              "| Family / set / task / stratum | Metric | Δ with−without | Interval | p | p Holm | Rows/days/draws | Rules-out |",
              "|---|---|---:|---|---:|---:|---:|---|"]
     for row in result["tests"]:
         label = f"{row['family']} / {row['set']} / {row['task']}"
+        equivalence = row["primary"] or row.get("lag_aware", False)
         for metric in ("ap", "rps"):
-            lines.append(_table_row(label + " / all", row, metric, row["primary"]))
-            if row["primary"]:
+            lines.append(_table_row(label + " / all", row, metric, equivalence))
+            if equivalence:
                 lines.append(_table_row(label + " / near-saturation", row["near_saturation"], metric, True))
     lines += ["", "## Primary NOx threshold-Brier decomposition", "",
               "Thresholds 0–4 are fog; 5–15 are haze. The mean of all 17 thresholds equals ΔRPS. "
@@ -439,13 +445,14 @@ def family_markdown(result):
     return "\n".join(lines) + "\n"
 
 
-def write_analysis(n_boot=1000, seed=SEED, family_n_boot=None):
+def write_analysis(n_boot=1000, seed=SEED, family_n_boot=None, include_families=True):
     # Family pairs need more draws: 78 Holm tests floor p at 78/(B+1) (F-093).
     directory = ROOT / "models" / "comparison_v2"
     directory.mkdir(parents=True, exist_ok=True)
-    for name, analyze, markdown, draws in (
-            ("aqi_tests_v2", analyze_aqi, aqi_markdown, n_boot),
-            ("family_significance_v2", analyze_families, family_markdown, family_n_boot or n_boot)):
+    tables = [("aqi_tests_v2", analyze_aqi, aqi_markdown, n_boot)]
+    if include_families:
+        tables.append(("family_significance_v2", analyze_families, family_markdown, family_n_boot or n_boot))
+    for name, analyze, markdown, draws in tables:
         result = analyze(draws, seed)
         (directory / f"{name}.json").write_text(json.dumps(result, indent=2, allow_nan=False), encoding="utf-8")
         (directory / f"{name}.md").write_text(markdown(result), encoding="utf-8")

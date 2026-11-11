@@ -165,6 +165,17 @@ def _visibility_lags(issue_times: pd.Series, vis: pd.DataFrame) -> pd.DataFrame:
     assert (lag.loc[lag.lag_time.notna(), 'lag_time'] <= lag.loc[lag.lag_time.notna(), 'cutoff']).all()
     return lag[['lag_category', 'lag_time']]
 
+def hourly_visibility_lag(weather: pd.DataFrame, vis: pd.DataFrame) -> pd.Series:
+    """Per weather hour, the last visibility category an issue at that hour may see (as float, NaN if stale).
+
+    The value at hour t equals label_tables' lag_category for an issue at t, so a 24-hour window ending
+    at the issue hour carries the last report plus the causal visibility history before it (D-097).
+    """
+    known = vis.loc[vis.category.notna(), ['time', 'category']]
+    lag = _visibility_lags(weather.time, known).lag_category.astype(float)
+    return pd.Series(lag.to_numpy(), index=weather.index, name='vis_lag_category')
+
+
 
 def add_neighbor_lags(labels_by_site: dict[str, pd.DataFrame],
                       vis_by_site: dict[str, pd.DataFrame]) -> dict[str, pd.DataFrame]:

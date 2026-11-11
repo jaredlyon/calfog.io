@@ -7,7 +7,7 @@ import pandas as pd
 from models._shared import report, study, windows
 from models._shared.data import AQI_COLS, CAL_COLS, SITES
 from models._shared.families import FAMILIES, FamilyOutput
-from models._shared.labels import add_neighbor_lags, label_tables
+from models._shared.labels import add_neighbor_lags, hourly_visibility_lag, label_tables
 from models._shared.visibility import N_CATEGORIES
 
 
@@ -52,6 +52,20 @@ def test_lag_staler_than_three_hours_is_missing():
     row = now.loc[now.issue_time.eq(times[12])].iloc[0]
     assert pd.isna(row.lag_category)
     assert pd.isna(row.lag_time)
+
+
+def test_hourly_visibility_lag_matches_issue_lag_for_both_tasks():
+    times = pd.date_range('2024-01-01', periods=96, freq='h')
+    rng = np.random.default_rng(0)
+    vis = pd.DataFrame({'time': times, 'category': rng.integers(0, 18, len(times)).astype(float)})
+    vis.loc[30:34, 'category'] = np.nan  # a gap longer than the 2 h staleness tolerance
+    weather = _weather(times)
+    hourly = hourly_visibility_lag(weather, vis).set_axis(weather.time)
+    for table in label_tables(weather, vis, 'a'):
+        expected = table.lag_category.astype(float).to_numpy()
+        np.testing.assert_array_equal(hourly.reindex(table.issue_time).to_numpy(), expected)
+    assert np.isnan(hourly.loc[times[35]])  # hours 32–34 are all missing: stale beyond 2 h
+    assert hourly.loc[times[30]] == vis.category[29]  # issue 30 sees hour 29, never its own hour
 
 
 def test_neighbor_aggregates_exclude_self_issue_hour_and_stale_reports():
