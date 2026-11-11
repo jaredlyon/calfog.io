@@ -439,11 +439,13 @@ def family_markdown(result):
     return "\n".join(lines) + "\n"
 
 
-def write_analysis(n_boot=1000, seed=SEED):
+def write_analysis(n_boot=1000, seed=SEED, family_n_boot=None):
+    # Family pairs need more draws: 78 Holm tests floor p at 78/(B+1) (F-093).
     directory = ROOT / "models" / "comparison_v2"
     directory.mkdir(parents=True, exist_ok=True)
-    for name, analyze, markdown in (("aqi_tests_v2", analyze_aqi, aqi_markdown),
-                                     ("family_significance_v2", analyze_families, family_markdown)):
-        result = analyze(n_boot, seed)
+    for name, analyze, markdown, draws in (
+            ("aqi_tests_v2", analyze_aqi, aqi_markdown, n_boot),
+            ("family_significance_v2", analyze_families, family_markdown, family_n_boot or n_boot)):
+        result = analyze(draws, seed)
         (directory / f"{name}.json").write_text(json.dumps(result, indent=2, allow_nan=False), encoding="utf-8")
         (directory / f"{name}.md").write_text(markdown(result), encoding="utf-8")

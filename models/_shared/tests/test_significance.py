@@ -182,7 +182,7 @@ def test_analysis_outputs_and_holm_families(tmp_path, monkeypatch):
         return pd.concat([frame, frame.assign(task="lead_time")], ignore_index=True)
     monkeypatch.setattr(sig, "load_predictions", load)
     monkeypatch.setattr(sig, "ROOT", tmp_path)
-    sig.write_analysis(12, 3)
+    sig.write_analysis(12, 3, family_n_boot=20)
     directory = tmp_path / "models" / "comparison_v2"
     aqi = json.loads((directory / "aqi_tests_v2.json").read_text(encoding="utf-8"))
     family = json.loads((directory / "family_significance_v2.json").read_text(encoding="utf-8"))
@@ -191,6 +191,7 @@ def test_analysis_outputs_and_holm_families(tmp_path, monkeypatch):
     for rows in (primary, [row["near_saturation"] for row in primary]):
         expected = sig.holm_adjust([row["ap"]["p_two_sided"] for row in rows])
         assert [row["ap"]["p_holm"] for row in rows] == expected
+    assert (aqi["n_boot"], family["n_boot"]) == (12, 20)
     assert len(family["tests"]) == 12  # four comparators, six pairs, two tasks
     for task in sig.TASKS:
         rows = [row for row in family["tests"] if row["task"] == task]

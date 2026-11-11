@@ -89,7 +89,7 @@ Run from the repository root using the environment in `requirements-v2.txt` (the
 python -m pip install -r requirements-v2.txt
 python models/run_all_v2.py --jobs 8
 python models/seed_replicates_v2.py --jobs 8
-python models/significance_v2.py --n-boot 1000
+python models/significance_v2.py --n-boot 1000 --family-n-boot 10000
 python eda/long_term_trend/long_term_trend_v2.py
 python models/xgboost/xgboost_fog_prediction_v2.py --sites location_10
 python -m pytest models/_shared/tests ops "eda/k-means clustering" eda/long_term_trend datasets/scripts -q
