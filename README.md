@@ -1,5 +1,7 @@
 ## Research status and report versions
 
+> **Under revision.** A correctness audit found defects that change the numbers in this document. Measured air-quality inputs were read one hour too late in the day's timeline (each forecast saw one hour of data from after its issue time). The logistic-regression fits stopped before convergence. Temporal-CNN tuning overlapped two NOx test periods. The monitor-ID sensitivity compared the wrong pair of models. Every air-quality result, the family comparison and the long-term analysis are being regenerated. Statements below were corrected where the existing outputs already contradict them; all numbers are provisional until the rerun is committed.
+
 **V1 is the historical class-project report, not the current validated scientific account. V2 is an
 experimental rebuild under review: NOT publication-ready, NOT production-ready, and NO-GO for autonomous
 public fog alerts.** The V2 code uses fixed PST (`Etc/GMT+8`), GHCNh visibility labels translated to 18
@@ -33,6 +35,8 @@ The following V1 claims are superseded as publication conclusions and are **not 
 The historical materials are retained unchanged for provenance. Neither version establishes readiness for
 public warning deployment. Distribution shift and prospective issue-time validation remain unresolved.
 
+Weather covariates come from Open-Meteo’s unpinned Historical Weather archive, which may combine ERA5, ERA5-Land and IFS, not airport station observations. Feature windows are restricted by valid time; historical issue-time availability has not been established. “Nowcast” denotes retrospective contemporaneous diagnosis. “Lead_time” denotes a retrospective next-morning hindcast using archive weather with an 18:00 fixed-PST valid-time cutoff. These results do not establish operational forecast skill or the operational value of adding NOx.
+
 ## Dependent variable
 
 V2 models the **reported airport visibility category**, not uncensored physical visibility.
@@ -50,6 +54,8 @@ distribution; visibility summaries and P(fog) derive from that same distribution
 Build labels with `python datasets/scripts/visibility_ghcnh.py --cache <dir>`;
 observations retain the full record, and hourly model labels start at 1980-01-01.
 
+Lead-time evaluation requires a known hourly category in every hour from 00:00 through 09:59 following the 18:00 fixed-PST issue. AQ comparisons additionally require eligible 24-hour input windows and use identical cases in both arms. Results describe the retained chronological test cohorts, not all airport mornings or historical eras. Coverage varies substantially by airport, era and month; no Visalia morning in the available 1980s record met the completeness requirement. Pairing controls between-arm case mix but does not establish generalisability to excluded cases.
+
 ## Repository layout (V2)
 
 - `models/<family>/*_v2.py`: reworked model scripts alongside the unchanged originals, including
@@ -65,9 +71,9 @@ observations retain the full record, and hourly model labels start at 1980-01-01
 - `models/lag_aware_nox_v2.py`: repeats the primary NOx ablation with the last visibility report (and its
   24-hour causal history) added to both arms, asking whether NOx helps models that already see visibility.
 - `models/significance_v2.py`: pooled-airport paired air-quality tests (Holm over six primary NOx tests,
-  a +0.02 AP equivalence margin, training-seed sensitivity, the six lag-aware NOx tests as their own Holm
+  a labelled +0.02 AP benchmark column, training-seed sensitivity, the six lag-aware NOx tests as their own Holm
   family) and family-versus-family significance.
-- `eda/long_term_trend/`: weather-adjusted winter fog-day trend, instrument steps, and year-versus-NOx attribution.
+- `eda/long_term_trend/`: weather-adjusted winter fog-day trend, instrument steps, and year-versus-NOx association. Its intervals hold the learned expected-fog predictions fixed (first-stage uncertainty is not included); historical reporting cadence changed over the record and is examined by sensitivity runs.
 - `eda/k-means clustering/*_v2.py`: reworked k-means analysis alongside its original.
 - `ops/`: retraining, serving bundles and passive shadow evaluation.
 - `report_files/v2_prefix/`: superseded pre-fix PoC/full-study outputs and handoff, retained for provenance.
@@ -111,11 +117,17 @@ CAMS channels remain appendix comparisons. `datasets/scripts/airdata_epa.py` bui
 airport series in `datasets/aq_measured/` using monthly priority-monitor splices and records
 monitor switches and acquisition provenance. Each ablation requires at least 20 of 24
 nonmissing hours per air-quality channel; training medians impute the remainder, and both arms
-use identical rows. Logistic regression, XGBoost and EBM also test NOx with monitor-ID indicators.
+use identical rows. Logistic regression, XGBoost and EBM also test NOx conditional on monitor ID: both arms receive monitor-ID indicators and only the with-arm adds NOx (the committed outputs added both together and are superseded).
 Strata (dew-point depression <4.2 °C and wind <7.2 km/h) are evaluation-only, never features.
 Because training randomness can move these small differences, XGBoost and EBM are refit under ten model seeds
 for the primary NOx tests; the significance report shows the seed spread and how often each verdict repeats.
 Logistic regression is deterministic.
+
+Effect size is reported by estimation. For each primary test we give the equal-airport mean paired ΔAP, its Holm-adjusted p-value, and the upper end of the simultaneous 95% interval, which is the largest gain the data do not exclude. The study does not claim what size of gain is practically meaningful: a literature review (fog-forecast verification, equivalence-margin methodology, forecast-value theory) found no defensible numerical AP margin, and no user cost information was collected. The +0.02 AP benchmark recorded before the first analysis is shown as a labelled column only. It is owner-selected, has no literature or cost basis, and was kept after the first, superseded results had been seen. An upper bound below it is not evidence of zero benefit, of two-sided equivalence, or of no benefit at any single airport. Descriptive tables give the change in misclassification loss at five assumed miss-to-false-alarm cost ratios and the change in Brier skill.
+
+These retrospective matched-row ablations measure incremental predictive skill for the specified models, inputs and eligible cases; they do not estimate the causal effect of aerosols or emissions on fog. Nowcast and next-morning horizons are not the high-/low-frequency decomposition used by [Gray et al. (2019)](https://doi.org/10.1029/2018JD029419). Compatibility with that account is not a test or confirmation of it. The winter-scale analyses are diagnostic associations, not causal attribution.
+
+PM2.5 showed positive exploratory AP increments in many fitted model-task comparisons on its matched cohort. These estimates use start-labelled issue-hour samples and are not yet valid issue-time results pending availability correction. Fog and humidity can alter atmospheric particle composition, removal and instrument response; their contributions are not identified here. Lead-time gains do not exclude persistent prior-fog or meteorological pathways. LR’s adverse nowcast ranking persists in the worst tested fold after extended optimization; its cause remains unresolved.
 
 ---
 
@@ -203,6 +215,7 @@ modification and responsibility notices. Historical observation dates are not da
   `datasets/aq_measured/aq_manifest.json`. The acquisition code excludes superseded PM2.5
   methods 236/238, converts GMT to fixed PST, and splices monitor-months without adjustment.
   These transformed observations are not an EPA AQI index or an EPA-endorsed forecast.
+  The selected EPA AirData monitor series contain no measured NOx during 1988–1993 at any of the five study airports. Inspection of all six original, hash-matched national hourly archives found no records at the configured monitor sites. This is a selected-monitor source-availability gap, not an acquisition-filter defect, and does not imply that no other regional measurements exist. NOx comparisons therefore apply to coverage-eligible periods rather than uninterrupted historical records.
 
 ### Modifications and availability
 

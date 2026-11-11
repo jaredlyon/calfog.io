@@ -8,7 +8,7 @@ was available at each issue time:
 Stores raw JSON + retrieval timestamp + source URL + sha256 to snapshots.sqlite AND to dated files, tagged with
 an issue label (env CALFOG_ISSUE, default "hourly"; lead_1800 only for captures in the minute ending 18:00 fixed PST).
 It does NOT load any model, predict, or expose anything. Predictions/scoring are replayed later against these
-snapshots. Never contacts the mesh/Ollama/Minecraft.
+snapshots. Does not contact or manage unrelated services.
 """
 import os, sys, json, time, hashlib, sqlite3, datetime, urllib.parse
 import requests

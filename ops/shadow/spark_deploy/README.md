@@ -22,4 +22,4 @@ export XDG_RUNTIME_DIR=/run/user/$(id -u)
 systemctl --user list-timers "calfog-*"
 systemctl --user disable --now calfog-snapshot.timer calfog-issue1800.timer   # stop
 ```
-It runs only in `~/calfog-shadow`; it never touches the Spark's Ollama or Minecraft services.
+It runs only in `~/calfog-shadow`; it does not manage unrelated services.
