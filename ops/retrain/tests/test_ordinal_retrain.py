@@ -1,6 +1,7 @@
 """Small, offline retrain PMF contract checks; no training or GPU access."""
 import json
 import numpy as np
+import pandas as pd
 from ops.retrain import run_retrain as rr
 
 
@@ -45,7 +46,10 @@ def test_serving_fit_uses_categories_and_calibrates_pmf_fog(tmp_path,monkeypatch
 
 def test_proxy_crosscheck_reports_fog_ap_and_rps(monkeypatch):
     pmf=np.stack([np.eye(18)[4],np.eye(18)[17]])
-    monkeypatch.setattr(rr,'label_tables',lambda *a:(None,None))
+    now=pd.DataFrame({'issue_time':pd.to_datetime(['2025-12-01','2026-02-28'])})
+    lead=pd.DataFrame({'verification_start':pd.to_datetime(['2025-12-01','2026-02-28']),
+                       'verification_end':pd.to_datetime(['2025-12-01 10:00','2026-02-28 10:00'])})
+    monkeypatch.setattr(rr,'label_tables',lambda *a:(now,lead))
     monkeypatch.setattr(rr,'predict_proxy',lambda *a:(np.array([4,17]),{'xgboost':pmf},None))
     archive={task:{'xgboost':{'ap':1.}} for task in ('nowcast','lead_time')}
     result=rr.proxy_crosscheck('location_6',None,None,{'nowcast':{},'lead_time':{}},archive,[])
@@ -54,3 +58,22 @@ def test_proxy_crosscheck_reports_fog_ap_and_rps(monkeypatch):
         assert metrics['hf_proxy_ap']==1
         assert metrics['hf_proxy_rps']==0
         assert metrics['pos_proxy']==1
+
+
+def test_report_labels_between_run_contrast(tmp_path,monkeypatch):
+    monkeypatch.setattr(rr,'OUT',tmp_path)
+    monkeypatch.setattr(rr,'SITES',{'location_6':{}})
+    tasks={task:{family:{'ap':.5,'ap_ci':[.4,.6]} for family in
+        ('climatology','xgboost','random_forest','temporal_cnn')} for task in ('nowcast','lead_time')}
+    metrics={'per_site':{'location_6':{'tasks':tasks}},'shift_crosscheck':{'per_site':{}}}
+    old={'per_site':{'location_6':{'tasks':{task:{family:{'ap':.4} for family in
+        ('climatology','xgboost','random_forest','temporal_cnn')} for task in tasks}}}}
+    rr.report(metrics,{'approved':rr.APPROVED,'dropped':[]},old)
+    text=(tmp_path/'report_retrain.md').read_text()
+    assert 'comparison-run AP' in text
+    assert 'different evaluation cohorts and chronological fold boundaries' in text
+    assert 'not intervals for a paired schema effect' in text
+    assert 'does not establish the precise upstream product/version' in text
+    assert '| 0.4000 | +0.1000 |' in text
+    assert 'metrics_retrain.partial.json' in text
+    assert '## Archive evaluation and skill cost' not in text

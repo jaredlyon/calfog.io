@@ -24,9 +24,14 @@ from models._shared.labels import label_tables
 from models._shared.splits import rolling_origin_folds
 from models._shared.evaluation import COST_GRID
 from models._shared.families import xgboost, random_forest, temporal_cnn
+from models._shared.artifacts import canonical_hash, file_sha256, atomic_write_json
+from models._shared.environment import capture_environment
 
 SEED=20260228
 N_BOOT_RETRAIN=1000
+PROXY_SEASON_START=pd.Timestamp('2025-12-01')
+PROXY_SEASON_END=pd.Timestamp('2026-03-01')
+ARCHIVE_CUTOFF='2025-08-27 23:00:00'
 SITES={
  'location_6':{'name':'Madera','icao':'KMAE','iem':'MAE','lat':36.989159,'lon':-120.111030},
  'location_7':{'name':'Fresno','icao':'KFAT','iem':'FAT','lat':36.777045,'lon':-119.716862},
@@ -106,7 +111,7 @@ def probe_archive_soil(manifest):
 def fetch_archive(site,sd,manifest):
     src=ROOT/'datasets'/'weather'/f'{site}_weather_appended.csv'
     w=pd.read_csv(src,usecols=['time']+APPROVED)
-    w=w[pd.to_datetime(w.time)<=pd.Timestamp('2025-08-27 23:00:00')].copy()
+    w=w[pd.to_datetime(w.time)<=pd.Timestamp(ARCHIVE_CUTOFF)].copy()
     if w[APPROVED].isna().any().any():
         bad=w[APPROVED].isna().sum();raise AssertionError(f'{site} archive nulls: {bad[bad>0].to_dict()}')
     manifest.append({'kind':'local_archive_source','site':site,'path':src.relative_to(ROOT).as_posix(),
@@ -149,10 +154,66 @@ def save_serving(site,task,weather,labels,cfg):
     return bundle,{**info,'training_rows':len(prep.ctr),'validation_rows':len(prep.cv)}
 
 def serving_bundle_exists(site,task):
-    required=all((SERV/site/f'{task}_{suffix}').is_file() for suffix in
-      ('preprocessor.joblib','xgboost.joblib','calibrators.joblib','temporal_cnn.pt','manifest.json'))
-    if not required:return False
-    return json.loads((SERV/site/f'{task}_manifest.json').read_text()).get('target')=='ordinal-18'
+    try:
+        required=all((SERV/site/f'{task}_{suffix}').is_file() for suffix in
+          ('preprocessor.joblib','xgboost.joblib','calibrators.joblib','temporal_cnn.pt','manifest.json'))
+        return required and json.loads((SERV/site/f'{task}_manifest.json').read_text()).get('target')=='ordinal-18'
+    except (OSError,ValueError,AttributeError):
+        return False
+
+def producing_inputs(site):
+    sources=[ROOT/'datasets'/'weather'/f'{site}_weather_appended.csv',
+             ROOT/'datasets'/'visibility'/f'{site}_visibility_hourly.csv']
+    code=sorted((ROOT/'models'/'_shared').glob('*.py'))+sorted((ROOT/'models'/'_shared'/'families').glob('*.py'))
+    sources += [Path(__file__),*code]
+    return {'site':site,'site_spec':SITES[site],'sites':sorted(SITES),
+      'files':{str(p.resolve()):file_sha256(p) for p in sources},
+      'cutoff':ARCHIVE_CUTOFF,'features':APPROVED+CALENDAR,'seed':SEED,
+      'n_boot':N_BOOT_RETRAIN,'target':'ordinal-18','tuning_trials':8,
+      'environment':capture_environment()}
+
+def bundle_hashes(site):
+    directory=SERV/site
+    names=['feature_spec.json','metadata.json']
+    for task in ('nowcast','lead_time'):
+        if not serving_bundle_exists(site,task):raise ValueError(f'{site}/{task}: incomplete serving bundle')
+        names += [f'{task}_{suffix}' for suffix in
+                  ('preprocessor.joblib','xgboost.joblib','calibrators.joblib','temporal_cnn.pt','manifest.json')]
+        optional=f'{task}_random_forest.joblib'
+        if (directory/optional).exists():names.append(optional)
+    return {name:file_sha256(directory/name) for name in names}
+
+def resume_matches(site,result,site_log,inputs):
+    try:
+        record=result['resume']
+        if record['schema_version']!=1 or record['inputs']!=inputs:return False
+        if set(result['tasks'])!={'nowcast','lead_time'} or set(site_log['tasks'])!={'nowcast','lead_time'}:return False
+        if record['metrics_sha256']!=canonical_hash({k:v for k,v in result.items() if k!='resume'}):return False
+        if record['log_sha256']!=canonical_hash(site_log):return False
+        actual=bundle_hashes(site);expected=record['bundle_sha256']
+        # RF is optional in clean clones; any present pickle must belong to the recorded generation.
+        required={k:v for k,v in expected.items() if not k.endswith('_random_forest.joblib')}
+        if required!={k:v for k,v in actual.items() if not k.endswith('_random_forest.joblib')}:return False
+        return all(expected.get(k)==v for k,v in actual.items())
+    except (KeyError,TypeError,ValueError,OSError,AttributeError):
+        return False
+
+def load_checkpoint(path):
+    try:
+        checkpoint=json.loads(path.read_text())
+        if not isinstance(checkpoint,dict):return None
+        metrics,log=checkpoint['metrics'],checkpoint['log']
+        if not isinstance(metrics,dict) or not isinstance(log,dict):return None
+        if not isinstance(metrics.get('per_site'),dict) or not isinstance(log.get('per_site'),dict):return None
+        if checkpoint['schema_version']!=1 or metrics['target']!='ordinal-18':return None
+        if set(metrics['per_site'])!=set(log['per_site']):return None
+        if set(metrics['per_site'])-set(SITES):return None
+        return metrics,log
+    except (KeyError,TypeError,ValueError,OSError):
+        return None
+
+def save_checkpoint(path,metrics,log):
+    atomic_write_json(path,{'schema_version':1,'metrics':metrics,'log':log})
 
 def load_serving_bundle(site,task):
     sdir=SERV/site;prep=joblib.load(sdir/f'{task}_preprocessor.joblib')
@@ -189,8 +250,8 @@ def fetch_proxy_and_labels(site,sd,manifest):
         for v in APPROVED:w[v]=h[v] if v in h else np.nan
         w.to_csv(p,index=False);manifest.append({'kind':'historical_forecast_best_match_proxy','site':site,'url':HF_URL,'params':params,'resolved_url':r.url,'http_status':r.status_code,'rows':len(w),'sha256':hashlib.sha256(r.content).hexdigest(),'sha256_scope':'raw HTTP response','saved_file':str(p.relative_to(OUT))})
     missing=[v for v in APPROVED if v not in w or w[v].isna().any()]
-    lp=DATA/f'{site}_fog_season_iem_ordinal18_pst.csv'
-    ip={'station':sd['iem'],'data':['vsby','metar'],'year1':2025,'month1':12,'day1':1,'year2':2026,'month2':3,'day2':1,'tz':'Etc/UTC','format':'comma','latlon':'no','elev':'no','missing':'empty','trace':'empty','direct':'no'}
+    lp=DATA/f'{site}_fog_season_iem_ordinal18_20251201_20260301_pst.csv'
+    ip={'station':sd['iem'],'data':['vsby','metar'],'year1':2025,'month1':12,'day1':1,'hour1':8,'minute1':0,'year2':2026,'month2':3,'day2':1,'hour2':8,'minute2':0,'tz':'Etc/UTC','format':'comma','latlon':'no','elev':'no','missing':'empty','trace':'empty','direct':'no'}
     if lp.exists():
         labels=pd.read_csv(lp);labels['time']=pd.to_datetime(labels.time);manifest.append({'kind':'archival_metar_labels_cache','site':site,'url':IEM_URL,'params':ip,'http_status':None,'rows':len(labels),'sha256':hashlib.sha256(lp.read_bytes()).hexdigest(),'sha256_scope':'saved normalized CSV','saved_file':str(lp.relative_to(OUT))})
     else:
@@ -214,8 +275,10 @@ def predict_proxy(weather,part,bundle):
 
 def proxy_crosscheck(site,weather,vis,bundles,archive_tasks,missing):
     now,lead=label_tables(weather,vis,site)
+    now=now.loc[now.issue_time.between(PROXY_SEASON_START,PROXY_SEASON_END,inclusive='left')].copy()
+    lead=lead.loc[lead.verification_start.ge(PROXY_SEASON_START)&lead.verification_end.le(PROXY_SEASON_END)].copy()
     out={'label':'APPROXIMATE Historical-Forecast best-match proxy; non-vintage; not proof of faithfulness',
-      'season':'2025-12-01 through 2026-02-28','vintage_preserved':False,'missing_features':missing,
+      'season':'[2025-12-01 00:00, 2026-03-01 00:00) fixed PST; lead membership by verification window','vintage_preserved':False,'missing_features':missing,
       'status':'not_evaluated' if missing else 'evaluated','tasks':{}}
     if missing:return out
     for task,part in [('nowcast',now),('lead_time',lead)]:
@@ -233,15 +296,15 @@ def proxy_crosscheck(site,weather,vis,bundles,archive_tasks,missing):
 
 def report(metrics,contract,old):
     L=['# CalFog V2 — schema-compatible archive retrain','',
-    '> **STATUS: SCHEMA-COMPATIBLE ONLY; NOT FAITHFUL; NOT PRODUCTION-READY.** The models were trained on ERA5 Archive reanalysis while the operational endpoint supplies forecast/analysis values. Matching names and non-null availability removes the null-channel blocker but does not resolve distribution shift. A forward-feed evaluation from the separately deployed shadow logger over a fog season is required before any production claim.','',
-    '## Methodology',f'All five weather-only airport models use the shared `models/_shared/` protocol with seed {SEED}. We read the exact approved variables from the local Open-Meteo ERA5 Archive weather files, already aligned to fixed UTC-8 (Etc/GMT+8), retaining rows through 2025-08-27 23:00:00 rather than re-pulling the archive API. We rebuilt 24-hour causal windows and evaluated nowcast and 18:00-to-next-morning lead tasks. Three expanding-origin folds have a 24-hour purge. Predictions are pooled out-of-fold. AP is primary and ROC-AUC secondary. Uncertainty is {N_BOOT_RETRAIN} seeded whole-day block bootstrap resamples, never IID hourly sampling. Calibration is fold-local validation-fit isotonic regression. The complete validation-selected cost grid is FN:FP {1,3,5,10,20}:1. CNN tuning uses 8 Ray Tune trials per site/task on the RTX GPU.','',
+    '> **STATUS: SCHEMA-COMPATIBLE ONLY; NOT FAITHFUL; NOT PRODUCTION-READY.** Training used preserved local Open-Meteo archive exports. The legacy identifier `era5_archive` does not establish the precise upstream product/version. Matching names and non-null availability does not resolve distribution shift; forward-feed evaluation over a fog season is required.','',
+    '## Methodology',f'All five weather-only airport models use the shared `models/_shared/` protocol with seed {SEED}. Training used preserved local Open-Meteo archive exports. The legacy identifier `era5_archive` does not establish the precise upstream product/version. Approved variables retain fixed UTC-8 (Etc/GMT+8) rows through {ARCHIVE_CUTOFF}. Three expanding-origin folds have a 24-hour purge. AP is primary and ROC-AUC secondary. Uncertainty uses {N_BOOT_RETRAIN} seeded whole-day bootstrap draws. Calibration and FN:FP thresholds (1,3,5,10,20) use fold-local validation; CNN tuning uses eight trials per site/task.','',
     'The target is GHCNh airport visibility decoded by one date-free rule into 18 ordinal categories, with <1/4 SM and 10+ SM censored endpoints. Each family predicts a category PMF; fog probability sums categories 0–4 (reported visibility <=1 SM). Serving calibrates only this derived fog probability with isotonic regression. Proxy RPS scores the uncalibrated category PMF; IEM labels use the same statute-mile decoder and hourly category minimum.','',
     '## Production availability contract','The live Forecast API was queried for seven recent past days plus one forecast day at every site, then queried again after artifact construction. Approval requires every returned value to be non-null at all five airports in both rounds. Calendar sine/cosine terms are deterministic derived inputs, not remote API fields.','',
     '**Approved, exact API order:** `'+ '`, `'.join(contract['approved'])+'`','',
     '**Dropped:** '+', '.join(f"`{x['name']}` ({x['reason']})" for x in contract['dropped']),'',
-    'Temperature, RH, dew point, precipitation, surface pressure, VPD, 10 m/100 m wind, gusts, weather code, and low cloud passed the all-site non-null and Archive-reproducibility rule. Forecast served the 0 cm and 6 cm soil fields, but ERA5 Archive returned them entirely NULL even in a dedicated feasibility probe. Because `train_source=era5_archive` is mandatory, both replacement soil fields were explicitly dropped rather than silently synthesized from a different depth layer. This is a narrower no-soil schema and an unavoidable deviation from the requested soil replacement; it preserves source honesty.','',
-    '## Archive evaluation and skill cost versus family studies','The table reports AP with marginal per-model day-block confidence intervals from this retrain and the corresponding original-feature-set AP. Deltas are descriptive across two completed runs; they are not a paired refit uncertainty interval.','',
-    '| site/task/model | retrain AP [95% CI] | family study AP | Δ AP |','|---|---:|---:|---:|']
+    'Temperature, RH, dew point, precipitation, surface pressure, VPD, 10 m/100 m wind, gusts, weather code, and low cloud passed the all-site non-null and archive-export reproducibility rule. Forecast served the 0 cm and 6 cm soil fields, but the archive probe returned them entirely NULL. These fields were dropped rather than synthesized from a different depth layer.','',
+    '## Archive evaluation — between-run comparison','**Archive evaluation — historical between-run comparison.** These AP differences compare completed runs with different evaluation cohorts and chronological fold boundaries. They do not estimate the skill cost of removing soil features or adopting the production-compatible schema. Intervals are marginal per-model intervals, not intervals for a paired schema effect.','',
+    '| site/task/model | retrain AP [95% CI] | comparison-run AP | Δ AP |','|---|---:|---:|---:|']
     for s in SITES:
       for t in ('nowcast','lead_time'):
        for m in ('climatology','xgboost','random_forest','temporal_cnn'):
@@ -257,7 +320,7 @@ def report(metrics,contract,old):
     '## Serving artifacts and limitations','Each committed `serving/location_*` directory contains serialized XGBoost, temporal-CNN, preprocessing, and isotonic-calibrator artifacts for both tasks, plus a strictly ordered feature spec and metadata. RandomForest pickles are optional, generated locally by a full retrain, and excluded from Git; resumed proxy checks score RF only when its pickle is present. Published RF scores describe the original complete local run, not the RF-free committed bundle. Every metadata file sets `faithful=false`, `train_source="era5_archive"`, and `production_ready=false`. The re-probe proves only that required schema fields are currently populated.','',
     'Hourly METAR labels record any valid fog report (minimum valid visibility), not the last report; nowcasts are hourly interval targets and mornings require ten represented hours. Other limitations include METAR time flooring, airport/grid mismatch, rare positive events, fitted-prediction bootstrap intervals that omit training variability, possible calibration instability, and changing upstream forecast models. Thresholds under all cost ratios are decision-support scenarios, not chosen operational utilities.','',
     '## Required next step','Continue the separately deployed forward-feed shadow logger through a representative fog season, preserve issue-time vintages and publication latency, join prospective METAR outcomes, and compare drift, AP, calibration, and operating costs. Only that forward-feed evidence can establish faithfulness. Until then this build is schema-compatible only and must not be described as production-ready.','',
-    '## Reproduction','Run `bash ops/retrain/run_retrain.sh` from the repository root. Network fetch manifests include parameters, resolved URLs, response status, row counts, and response SHA-256 hashes. All outputs remain under `ops/retrain/`.']
+    '## Reproduction','Run `bash ops/retrain/run_retrain.sh` from the repository root. Resume accepts only the atomic, schema-versioned `metrics_retrain.partial.json` containing metrics and log together. Each completed site binds its producing data/code/configuration/environment, metrics and log hashes, and both serving tasks (including any present optional RF) to one generation. Legacy or mismatched sites retrain; current validation never replaces producing provenance. Network fetch manifests include parameters, resolved URLs, response status, row counts, and response SHA-256 hashes. All outputs remain under `ops/retrain/`.']
     (OUT/'report_retrain.md').write_text('\n'.join(L))
 
 def main():
@@ -280,10 +343,11 @@ def main():
       'sites':{s:{'airport':SITES[s]['icao'],'initial_probe':e,'archive_soil_probe':archive_soil[s]} for s,e in initial.items()}}
     (OUT/'production_feature_contract.json').write_text(json.dumps(contract,indent=2))
     ray.init(num_cpus=min(8,os.cpu_count() or 4),num_gpus=1,include_dashboard=False,log_to_driver=False,_temp_dir='/tmp/calfog_retrain_ray')
-    mp=OUT/'metrics_retrain.partial.json';lp=ART/'training_log.partial.json'
-    if mp.exists() and lp.exists() and json.loads(mp.read_text()).get('target')=='ordinal-18':
-        metrics=json.loads(mp.read_text());log=json.loads(lp.read_text())
-        print(f"Resuming completed sites: {list(metrics.get('per_site',{}))}",flush=True)
+    mp=OUT/'metrics_retrain.partial.json'
+    checkpoint=load_checkpoint(mp)
+    if checkpoint is not None:
+        metrics,log=checkpoint
+        print(f"Checking cached sites: {list(metrics.get('per_site',{}))}",flush=True)
     else:
         metrics={'target':'ordinal-18','sites':list(SITES),'seed':SEED,'faithful':False,'train_source':'era5_archive','schema_compatible':True,
           'gpu':{'used':True,'device':device},'feature_set':APPROVED+CALENDAR,
@@ -291,8 +355,15 @@ def main():
         log={'started_utc':pd.Timestamp.now('UTC').isoformat(),'device':device,'cuda':True,'seed':SEED,'ray_tune_trials':0,'per_site':{}}
     bundles={}
     for site,sd in SITES.items():
-        if site in metrics.get('per_site',{}) and all(serving_bundle_exists(site,t) for t in ('nowcast','lead_time')):
-            print(f'=== {site} resume existing real artifacts ===',flush=True);_cached=fetch_archive(site,sd,manifest);del _cached;bundles[site]={t:load_serving_bundle(site,t) for t in ('nowcast','lead_time')};continue
+        inputs=producing_inputs(site)
+        if resume_matches(site,metrics['per_site'].get(site,{}),log['per_site'].get(site,{}),inputs):
+            print(f'=== {site} resume verified artifacts ===',flush=True)
+            metrics.setdefault('resume_validation',{})[site]={'validated_utc':pd.Timestamp.now('UTC').isoformat(),'inputs_sha256':canonical_hash(inputs)}
+            bundles[site]={t:load_serving_bundle(site,t) for t in ('nowcast','lead_time')}
+            save_checkpoint(mp,metrics,log);continue
+        metrics['per_site'].pop(site,None);log['per_site'].pop(site,None)
+        metrics.get('resume_validation',{}).pop(site,None)
+        save_checkpoint(mp,metrics,log)
         print(f'=== {site} archive/retrain ===',flush=True);weather=fetch_archive(site,sd,manifest);_,vis=load_sources(site,weather_cols=APPROVED);now,lead=label_tables(weather,vis,site)
         siteout={'airport':sd['icao'],'tasks':{},'fold_audit':{}};slog={'tasks':{}};bundles[site]={}
         for task,labels in [('nowcast',now),('lead_time',lead)]:
@@ -310,8 +381,13 @@ def main():
             siteout['tasks'][task]=result;siteout['fold_audit'][task]=audit
             bundle,serve_log=save_serving(site,task,weather,labels,cfg);bundles[site][task]=bundle
             slog['tasks'][task]={'tuning_trials':8,'best_config':cfg,'family_info':info,'serving_refit':serve_log}
-        write_site_spec(site);metrics['per_site'][site]=siteout;log['per_site'][site]=slog
-        (OUT/'metrics_retrain.partial.json').write_text(json.dumps(metrics,indent=2,allow_nan=False));(ART/'training_log.partial.json').write_text(json.dumps(log,indent=2,allow_nan=False))
+        write_site_spec(site)
+        if producing_inputs(site)!=inputs:raise RuntimeError(f'{site}: inputs changed during retrain')
+        siteout['resume']={'schema_version':1,'inputs':inputs,'metrics_sha256':canonical_hash(siteout),
+                           'log_sha256':canonical_hash(slog),'bundle_sha256':bundle_hashes(site)}
+        metrics['per_site'][site]=siteout;log['per_site'][site]=slog
+        log['ray_tune_trials']=sum(sum(t['tuning_trials'] for t in s['tasks'].values()) for s in log['per_site'].values())
+        save_checkpoint(mp,metrics,log)
     # Second live check is deliberately after artifact construction.
     verify=probe('serving_verification',manifest)
     for s,e in verify.items():

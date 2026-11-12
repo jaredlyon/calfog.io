@@ -44,6 +44,7 @@ def test_proxy_rejects_old_clock_caches(monkeypatch, tmp_path):
         tmp_path / f'{site}_{stem}.csv', index=False)
     pd.DataFrame({'time': ['2024-07-15T05:00'], 'visibility_meters': [1000.], 'fog': [1]}).to_csv(
         tmp_path / f'{site}_fog_season_iem_metar.csv', index=False)
+    (tmp_path/f'{site}_fog_season_iem_ordinal18_pst.csv').write_text('obsolete UTC-bounded labels')
     calls = []
 
     class Response:
@@ -59,12 +60,16 @@ def test_proxy_rejects_old_clock_caches(monkeypatch, tmp_path):
         calls.append((url, params))
         if url == rr.HF_URL:
             assert params['timezone'] == 'Etc/GMT+8'
+        else:
+            assert params['tz']=='Etc/UTC'
+            assert (params['hour1'],params['minute1'],params['hour2'],params['minute2'])==(8,0,8,0)
         return Response()
 
     monkeypatch.setattr(rr, 'get', get)
     rr.fetch_proxy_and_labels(site, rr.SITES[site], [])
     assert calls
     assert (tmp_path / f'{site}_{stem}_pst.csv').exists()
+    assert (tmp_path/f'{site}_fog_season_iem_ordinal18_20251201_20260301_pst.csv').exists()
 
 
 @pytest.mark.parametrize('has_null', [False, True])
@@ -138,3 +143,24 @@ def test_iem_proxy_loader_keeps_any_fog(monkeypatch, tmp_path):
     _, labels, _ = rr.fetch_proxy_and_labels('location_10', rr.SITES['location_10'], [])
     assert labels.fog.tolist() == [1]
     assert labels.category.tolist() == [2]
+
+
+def test_proxy_season_uses_pst_targets_not_issue_membership(monkeypatch):
+    now=pd.DataFrame({'issue_time':pd.to_datetime([
+        '2025-11-30 23:00','2025-12-01 00:00','2026-02-28 23:00','2026-03-01 00:00'])})
+    lead=pd.DataFrame({'issue_time':pd.to_datetime([
+        '2025-11-29 18:00','2025-11-30 18:00','2026-02-28 18:00']),
+        'verification_start':pd.to_datetime(['2025-11-30','2025-12-01','2026-03-01']),
+        'verification_end':pd.to_datetime(['2025-11-30 10:00','2025-12-01 10:00','2026-03-01 10:00'])})
+    monkeypatch.setattr(rr,'label_tables',lambda *a:(now,lead))
+    seen=[]
+    def predict(weather,part,bundle):
+        seen.append(part.copy())
+        return np.full(len(part),17),{'xgboost':np.tile(np.eye(18)[17],(len(part),1))},None
+    monkeypatch.setattr(rr,'predict_proxy',predict)
+    archive={t:{'xgboost':{'ap':0.}} for t in ('nowcast','lead_time')}
+    result=rr.proxy_crosscheck('location_6',None,None,{'nowcast':{},'lead_time':{}},archive,[])
+    assert seen[0].issue_time.tolist()==pd.to_datetime(['2025-12-01','2026-02-28 23:00'],format='mixed').tolist()
+    assert seen[1].issue_time.tolist()==[pd.Timestamp('2025-11-30 18:00')]
+    assert result['season']=='[2025-12-01 00:00, 2026-03-01 00:00) fixed PST; lead membership by verification window'
+    assert now.shape[0]==4 and lead.shape[0]==3

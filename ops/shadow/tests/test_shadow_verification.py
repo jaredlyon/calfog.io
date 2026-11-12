@@ -105,6 +105,8 @@ def test_shadow2_explicit_cohort_and_separate_output(tmp_path, monkeypatch):
     group = result['per_site']['location_6']['tasks']['nowcast']['xgboost']
     assert group['n_issues'] == 1
     assert group['feed_source'] == FORWARD
+    assert group['vintage_faithful'] is True
+    assert group['faithful'] is False
     assert result_path.exists()
     assert not (tmp_path / 'shadow_metrics.json').exists()
 
@@ -141,6 +143,7 @@ def test_shadow7_empty_group_is_no_evidence(tmp_path, monkeypatch):
     assert d['status'] == 'no_evaluable_issues'
     assert d['live_ap'] is None
     assert d['cost_operating_points'] == {}
+    assert d['vintage_faithful'] is False
 
 
 @pytest.mark.parametrize('start', ['2026-03-08T00:00:00Z', '2026-11-01T00:00:00Z'])
@@ -248,3 +251,88 @@ def test_forward_labels_snap_fraction_and_preserve_category(tmp_path,monkeypatch
     now=[row for row in rows if row['task']=='nowcast']
     assert [row['category'] for row in now]==[0,5]
     assert [row['fog'] for row in now]==[True,False]
+
+
+@pytest.mark.parametrize('timezone,offset', [
+    (None,0),('Etc/GMT+8',-28800),('America/Los_Angeles',-25200),('UTC',3600)])
+def test_payload_rejects_non_utc_clock(timezone,offset):
+    payload={'timezone':timezone,'utc_offset_seconds':offset,'hourly':{'time':['2026-01-01T08:00']}}
+    with pytest.raises(ValueError,match='Open-Meteo payload timezone must be UTC'):
+        common.raw_hourly_to_frame(payload)
+
+
+@pytest.mark.parametrize('timezone',['UTC','GMT','ETC/UTC'])
+def test_payload_utc_aliases_preserve_fixed_pst(timezone):
+    frame=common.raw_hourly_to_frame({'timezone':timezone,'utc_offset_seconds':0,
+        'hourly':{'time':['2026-07-01T08:00'],'temperature_2m':[10.],
+                  'relative_humidity_2m':[90.],'dew_point_2m':[8.]}})
+    assert frame.time.tolist()==[pd.Timestamp('2026-07-01')]
+
+
+@pytest.mark.parametrize('manifest_object',[False,True])
+def test_reset_preserves_nonhistorical_evidence(tmp_path,monkeypatch,manifest_object):
+    from ops.shadow import replay_hindcast as replay
+    monkeypatch.setattr(replay,'SHADOW',tmp_path)
+    rows=[{'feed_source':source,'value':i} for i,source in enumerate([HIST,FORWARD,None,'unknown'])]
+    lines=[(json.dumps(row,indent=None)+'\r\n').encode() for row in rows]
+    (tmp_path/'predictions.jsonl').write_bytes(b''.join(lines))
+    (tmp_path/'outcomes.jsonl').write_text('{"fog":true}\n')
+    (tmp_path/'outcomes_forward.jsonl').write_bytes(b'forward evidence\n')
+    raw=tmp_path/'raw_snapshots';raw.mkdir();(raw/'capture.json').write_bytes(b'raw evidence')
+    entries=[{'kind':'historical_forecast'},{'kind':'iem_metar'},
+             {'kind':'forecast_input','feed':'historical'},{'kind':'forecast_input','feed':'forward'},
+             {'kind':'forward_label'},{'kind':'unknown'}]
+    manifest={'fetches':entries,'metadata':'preserve'} if manifest_object else entries
+    (tmp_path/'fetch_manifest.json').write_text(json.dumps(manifest))
+    with sqlite3.connect(tmp_path/'predictions.sqlite') as db:
+        db.execute('CREATE TABLE predictions (feed_source TEXT,value INTEGER)')
+        db.executemany('INSERT INTO predictions VALUES (?,?)',[(r['feed_source'],r['value']) for r in rows])
+    for _ in range(2):
+        replay.reset_historical()
+        assert (tmp_path/'predictions.jsonl').read_bytes()==b''.join(lines[1:])
+        assert (tmp_path/'outcomes.jsonl').read_bytes()==b''
+        assert (tmp_path/'outcomes_forward.jsonl').read_bytes()==b'forward evidence\n'
+        assert (raw/'capture.json').read_bytes()==b'raw evidence'
+        saved=json.loads((tmp_path/'fetch_manifest.json').read_text())
+        assert saved==({'fetches':entries[3:],'metadata':'preserve'} if manifest_object else entries[3:])
+        with sqlite3.connect(tmp_path/'predictions.sqlite') as db:
+            assert db.execute('SELECT * FROM predictions ORDER BY value').fetchall()==[(r['feed_source'],r['value']) for r in rows[1:]]
+
+
+@pytest.mark.parametrize('broken',['predictions.jsonl','outcomes.jsonl','fetch_manifest.json'])
+def test_reset_malformed_input_changes_nothing(tmp_path,monkeypatch,broken):
+    from ops.shadow import replay_hindcast as replay
+    monkeypatch.setattr(replay,'SHADOW',tmp_path)
+    for name,body in [('predictions.jsonl',json.dumps({'feed_source':HIST})+'\n'),
+                      ('outcomes.jsonl','{"fog":true}\n'),('fetch_manifest.json','{"fetches":[]}'),
+                      ('outcomes_forward.jsonl','preserved')]:
+        (tmp_path/name).write_text('invalid JSON' if name==broken else body)
+    with sqlite3.connect(tmp_path/'predictions.sqlite') as db:
+        db.execute('CREATE TABLE predictions (feed_source TEXT)')
+        db.execute('INSERT INTO predictions VALUES (?)',(HIST,))
+    before={p:p.read_bytes() for p in tmp_path.iterdir()}
+    with pytest.raises(ValueError):replay.reset_historical()
+    assert {p:p.read_bytes() for p in tmp_path.iterdir()}==before
+
+
+@pytest.mark.parametrize('feed,capture,expected',[
+    ('historical','2026-01-01T08:00:00Z',1),
+    ('forward',None,0),
+    ('forward','2026-01-01T08:00:01Z',0)])
+def test_vintage_requires_eligible_forward_capture(tmp_path,monkeypatch,feed,capture,expected):
+    for model in ('xgboost','temporal_cnn'):
+        directory=tmp_path/'models'/model;directory.mkdir(parents=True)
+        (directory/f'{model}_metrics_v2.json').write_text(json.dumps({'per_site':{'location_6':{
+            'tasks':{task:{model:{'ap':.5}} for task in ('nowcast','lead_time')}}}}))
+    monkeypatch.setattr(score,'ROOT',tmp_path)
+    row=prediction()
+    row.update(feed_source=score.FEEDS[feed],created_utc=capture,issued_at_utc=capture)
+    outcome=dict(site='location_6',task='nowcast',issue_time_utc=row['issue_time_utc'],fog=1,
+                 verification_end_utc='2026-01-01T09:00:00Z',finalized_utc='2026-01-01T10:00:00Z')
+    setup_score(tmp_path,monkeypatch,[row],[outcome])
+    jsonl(tmp_path,'outcomes_forward.jsonl',[outcome])
+    score.main(['--feed',feed,'--start','2026-01-01T00:00:00Z','--end','2026-01-02T00:00:00Z'])
+    result=json.loads((tmp_path/f'shadow_metrics_{feed}.json').read_text())
+    group=result['per_site']['location_6']['tasks']['nowcast']['xgboost']
+    assert group['n_issues']==expected
+    assert group['vintage_faithful'] is False

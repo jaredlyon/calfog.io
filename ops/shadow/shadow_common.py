@@ -95,9 +95,11 @@ def raw_hourly_to_frame(payload:dict)->pd.DataFrame:
     if "hourly" not in payload or "time" not in payload["hourly"]: raise ValueError("Open-Meteo payload lacks hourly.time")
     z=pd.DataFrame(payload["hourly"])
     # UTC input labels become naive fixed UTC-8 keys, never civil/DST wall hours.
-    if str(payload.get("timezone","")).upper() in {"GMT","UTC","ETC/UTC"}:
-        z["time"]=pd.to_datetime(z["time"],utc=True,errors="raise").dt.tz_convert("Etc/GMT+8").dt.tz_localize(None)
-    else:z["time"]=pd.to_datetime(z["time"],errors="raise")
+    if str(payload.get("timezone","")).upper() not in {"GMT","UTC","ETC/UTC"}:
+        raise ValueError("Open-Meteo payload timezone must be UTC")
+    if "utc_offset_seconds" in payload and payload["utc_offset_seconds"] != 0:
+        raise ValueError("Open-Meteo payload timezone must be UTC")
+    z["time"]=pd.to_datetime(z["time"],utc=True,errors="raise").dt.tz_convert("Etc/GMT+8").dt.tz_localize(None)
     for c in FEATURES[:12]:
         if c not in z: z[c]=np.nan
         z[c]=pd.to_numeric(z[c],errors="coerce")

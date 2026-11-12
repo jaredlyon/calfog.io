@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Fetch and replay the completed 2025-12-01..2026-02-28 issue-time season."""
 from __future__ import annotations
-import argparse, io, json, sys, time, uuid
+import argparse, io, json, sqlite3, sys, time, uuid
 from pathlib import Path
 import numpy as np,pandas as pd,requests,torch
 ROOT=Path(__file__).resolve().parents[2]
@@ -10,6 +10,7 @@ from ops.shadow.shadow_common import SHADOW,SITES,FEATURES,raw_hourly_to_frame,w
 from ops.shadow.shadow_predict import HISTORICAL_URL,HOURLY,FEED_HIST,append_manifest,append_predictions,load_bundle,transform_window
 from models._shared.visibility import decode_statute_miles, hourly_labels, FOG_MAX_CATEGORY
 from models._shared.evaluation import pmf_to_fog
+from models._shared.artifacts import atomic_write_bytes
 from models._shared.families.temporal_cnn import predict_cnn
 IEM_URL='https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py'
 MONTHS=[('2025-12-01','2025-12-31'),('2026-01-01','2026-01-31'),('2026-02-01','2026-02-28')]
@@ -100,10 +101,40 @@ def predict_batches(site,weather,created):
                 missing=missing_by[i];records.append(build_log_record(site=site,task=task,issue_time_utc=iu,target_window_utc=target,model=model,p_fog=float(prob),pmf=pmf[i],feed_source=FEED_HIST,feature_end_time_utc=eu,costgrid_decisions={str(k):bool(prob>=float(v)) for k,v in ths.items()},created_utc=created,faithful=not missing,nonfaithful_features=missing))
     return records
 
+def reset_historical():
+    """Reset replay records only; shared-store writers must be quiescent."""
+    rewrites={}
+    for name in ('predictions.jsonl','outcomes.jsonl'):
+        path=SHADOW/name
+        if not path.exists():continue
+        kept=[]
+        for line in path.read_bytes().splitlines(keepends=True):
+            row=json.loads(line)
+            if not isinstance(row,dict):raise ValueError(f'{path}: expected object')
+            if name=='predictions.jsonl' and row.get('feed_source')!=FEED_HIST:kept.append(line)
+        rewrites[path]=b''.join(kept)
+    path=SHADOW/'fetch_manifest.json'
+    if path.exists():
+        manifest=json.loads(path.read_bytes())
+        entries=manifest if isinstance(manifest,list) else manifest['fetches']
+        if not isinstance(entries,list) or any(not isinstance(x,dict) for x in entries):
+            raise ValueError(f'{path}: expected fetch entries')
+        kept=[x for x in entries if not (x.get('kind') in {'historical_forecast','iem_metar'}
+              or (x.get('kind')=='forecast_input' and x.get('feed')=='historical'))]
+        if isinstance(manifest,list):manifest=kept
+        else:manifest={**manifest,'fetches':kept}
+        rewrites[path]=json.dumps(manifest,indent=2).encode()
+    db=SHADOW/'predictions.sqlite'
+    if db.exists():
+        with sqlite3.connect(db) as conn:
+            conn.execute('DELETE FROM predictions WHERE feed_source = ?', (FEED_HIST,))
+            for path,body in rewrites.items():atomic_write_bytes(path,body)
+    else:
+        for path,body in rewrites.items():atomic_write_bytes(path,body)
+
 def main(argv=None):
     p=argparse.ArgumentParser();p.add_argument('--reset',action='store_true');a=p.parse_args(argv)
-    if a.reset:
-        for x in ('predictions.jsonl','predictions.sqlite','outcomes.jsonl','fetch_manifest.json'): (SHADOW/x).unlink(missing_ok=True)
+    if a.reset:reset_historical()
     session=requests.Session();session.headers['User-Agent']='CalFog-v2-private-shadow-research/1.0 (public-data-only)';allout=[];n=0
     for site in SITES:
         print('FETCH/REPLAY',site,flush=True);weather,created=fetch_weather(session,site);_,hour=fetch_iem(session,site);outs=outcomes_for_site(site,hour);recs=predict_batches(site,weather,created);append_predictions(recs);allout.extend(outs);n+=len(recs);print(site,len(recs),len(outs),flush=True)

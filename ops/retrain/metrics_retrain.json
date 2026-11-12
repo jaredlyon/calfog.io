@@ -93366,7 +93366,7 @@
     "per_site": {
       "location_6": {
         "label": "APPROXIMATE Historical-Forecast best-match proxy; non-vintage; not proof of faithfulness",
-        "season": "2025-12-01 through 2026-02-28",
+        "season": "HISTORICAL UTC-bounded extraction: [2025-12-01T00:00Z, 2026-03-01T00:00Z); not the full fixed-PST Dec–Feb season",
         "vintage_preserved": false,
         "missing_features": [],
         "status": "evaluated",
@@ -93443,7 +93443,7 @@
       },
       "location_7": {
         "label": "APPROXIMATE Historical-Forecast best-match proxy; non-vintage; not proof of faithfulness",
-        "season": "2025-12-01 through 2026-02-28",
+        "season": "HISTORICAL UTC-bounded extraction: [2025-12-01T00:00Z, 2026-03-01T00:00Z); not the full fixed-PST Dec–Feb season",
         "vintage_preserved": false,
         "missing_features": [],
         "status": "evaluated",
@@ -93520,7 +93520,7 @@
       },
       "location_8": {
         "label": "APPROXIMATE Historical-Forecast best-match proxy; non-vintage; not proof of faithfulness",
-        "season": "2025-12-01 through 2026-02-28",
+        "season": "HISTORICAL UTC-bounded extraction: [2025-12-01T00:00Z, 2026-03-01T00:00Z); not the full fixed-PST Dec–Feb season",
         "vintage_preserved": false,
         "missing_features": [],
         "status": "evaluated",
@@ -93597,7 +93597,7 @@
       },
       "location_9": {
         "label": "APPROXIMATE Historical-Forecast best-match proxy; non-vintage; not proof of faithfulness",
-        "season": "2025-12-01 through 2026-02-28",
+        "season": "HISTORICAL UTC-bounded extraction: [2025-12-01T00:00Z, 2026-03-01T00:00Z); not the full fixed-PST Dec–Feb season",
         "vintage_preserved": false,
         "missing_features": [],
         "status": "evaluated",
@@ -93674,7 +93674,7 @@
       },
       "location_10": {
         "label": "APPROXIMATE Historical-Forecast best-match proxy; non-vintage; not proof of faithfulness",
-        "season": "2025-12-01 through 2026-02-28",
+        "season": "HISTORICAL UTC-bounded extraction: [2025-12-01T00:00Z, 2026-03-01T00:00Z); not the full fixed-PST Dec–Feb season",
         "vintage_preserved": false,
         "missing_features": [],
         "status": "evaluated",

@@ -137,7 +137,7 @@ python ops/shadow/replay_hindcast.py --reset
 python ops/shadow/shadow_score.py --feed historical --start 2025-12-01T08:00:00Z --end 2026-03-01T08:00:00Z
 ```
 
-The builder regenerates serving bundles. `--reset` replaces the local replay prediction/outcome logs and fetch manifest; preserve evidence before rerunning. The replay fetches public weather and verification data, so later retrievals need not reproduce identical provider responses. Retain the raw snapshots and manifest with the metrics for an auditable run.
+The builder regenerates serving bundles. `--reset` removes recognized historical records only; forward and unclassified evidence and raw captures are preserved. Stop shared-store writers during reset. The replay fetches public weather and verification data, so later retrievals need not reproduce identical provider responses. Retain the raw snapshots and manifest with the metrics for an auditable run. `vintage_faithful` identifies eligible captured-input provenance, independently of feature completeness (`faithful`); it is false for historical replay and empty groups.
 
 ## Audit inventory
 

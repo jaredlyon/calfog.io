@@ -145,3 +145,95 @@ def test_ray_starts_from_deep_checkout_path(tmp_path):
                 ray.shutdown()
     finally:
         os.chdir(old)
+
+
+@pytest.fixture
+def resume_site(tmp_path,monkeypatch):
+    import copy
+    monkeypatch.setattr(retrain,'SERV',tmp_path/'serving')
+    site='location_6';directory=retrain.SERV/site;directory.mkdir(parents=True)
+    for task in ('nowcast','lead_time'):
+        for suffix in ('preprocessor.joblib','xgboost.joblib','calibrators.joblib',
+                       'temporal_cnn.pt','random_forest.joblib','manifest.json'):
+            (directory/f'{task}_{suffix}').write_text('{"target":"ordinal-18"}' if suffix=='manifest.json' else 'original')
+    for name in ('feature_spec.json','metadata.json'):(directory/name).write_text('{}')
+    inputs={'data':'hash','code':'hash','features':['temperature_2m'],'environment':{'python':'test'}}
+    result={'tasks':{task:{'ap':.5} for task in ('nowcast','lead_time')}}
+    log={'tasks':{task:{'tuning_trials':8} for task in ('nowcast','lead_time')}}
+    result['resume']={'schema_version':1,'inputs':copy.deepcopy(inputs),
+        'metrics_sha256':retrain.canonical_hash(result),'log_sha256':retrain.canonical_hash(log),
+        'bundle_sha256':retrain.bundle_hashes(site)}
+    return site,result,log,inputs
+
+
+def test_resume_preserves_producer_and_allows_missing_rf(resume_site):
+    import copy
+    site,result,log,inputs=resume_site;before=copy.deepcopy(result)
+    assert retrain.resume_matches(site,result,log,inputs)
+    for task in ('nowcast','lead_time'):
+        (retrain.SERV/site/f'{task}_random_forest.joblib').unlink()
+    assert retrain.resume_matches(site,result,log,inputs)
+    assert result==before
+
+
+@pytest.mark.parametrize('changed',['inputs','metrics','log','missing_task','missing_record',
+    'preprocessor.joblib','xgboost.joblib','calibrators.joblib','temporal_cnn.pt',
+    'manifest.json','random_forest.joblib','feature_spec.json','metadata.json'])
+def test_resume_rejects_changed_generation(resume_site,changed):
+    site,result,log,inputs=resume_site
+    if changed=='inputs':inputs['data']='changed'
+    elif changed=='metrics':result['tasks']['nowcast']['ap']=.4
+    elif changed=='log':log['tasks']['nowcast']['tuning_trials']=7
+    elif changed=='missing_task':result['tasks'].pop('lead_time')
+    elif changed=='missing_record':result.pop('resume')
+    else:
+        name=changed if changed in ('feature_spec.json','metadata.json') else f'lead_time_{changed}'
+        (retrain.SERV/site/name).write_text('modified')
+    assert not retrain.resume_matches(site,result,log,inputs)
+
+
+def test_resume_rejects_unrecorded_rf(resume_site):
+    site,result,log,inputs=resume_site
+    result['resume']['bundle_sha256'].pop('nowcast_random_forest.joblib')
+    assert not retrain.resume_matches(site,result,log,inputs)
+
+
+def test_checkpoint_is_one_versioned_atomic_record(tmp_path,resume_site,monkeypatch):
+    site,result,site_log,_=resume_site
+    path=tmp_path/'metrics_retrain.partial.json'
+    metrics={'target':'ordinal-18','per_site':{site:result}}
+    log={'per_site':{site:site_log}}
+    retrain.save_checkpoint(path,metrics,log)
+    assert retrain.load_checkpoint(path)==(metrics,log)
+    before=path.read_bytes()
+    def fail(*args):raise OSError('injected publication failure')
+    monkeypatch.setattr(retrain,'atomic_write_json',fail)
+    with pytest.raises(OSError,match='publication failure'):retrain.save_checkpoint(path,{}, {})
+    assert path.read_bytes()==before
+    assert sorted(p.name for p in tmp_path.glob('*.json'))==['metrics_retrain.partial.json']
+
+
+@pytest.mark.parametrize('checkpoint',[
+    {},{'target':'ordinal-18','per_site':{}},
+    {'schema_version':2,'metrics':{'target':'ordinal-18','per_site':{}},'log':{'per_site':{}}},
+    {'schema_version':1,'metrics':{'target':'ordinal-18','per_site':{'location_6':{}}},'log':{'per_site':{}}}])
+def test_legacy_malformed_or_mixed_checkpoint_is_stale(tmp_path,checkpoint):
+    path=tmp_path/'metrics_retrain.partial.json';path.write_text(json.dumps(checkpoint))
+    assert retrain.load_checkpoint(path) is None
+
+
+@pytest.mark.parametrize('changed',['weather','visibility','label_code','family_code','features','cutoff','environment'])
+def test_producing_fingerprint_binds_inputs_code_config_and_environment(tmp_path,monkeypatch,changed):
+    monkeypatch.setattr(retrain,'ROOT',tmp_path)
+    monkeypatch.setattr(retrain,'capture_environment',lambda:{'python':'test'})
+    paths={'weather':tmp_path/'datasets/weather/location_6_weather_appended.csv',
+           'visibility':tmp_path/'datasets/visibility/location_6_visibility_hourly.csv',
+           'label_code':tmp_path/'models/_shared/labels.py',
+           'family_code':tmp_path/'models/_shared/families/xgboost.py'}
+    for path in paths.values():path.parent.mkdir(parents=True,exist_ok=True);path.write_text('original')
+    before=retrain.producing_inputs('location_6')
+    if changed in paths:paths[changed].write_text('modified')
+    elif changed=='features':monkeypatch.setattr(retrain,'APPROVED',retrain.APPROVED+['different'])
+    elif changed=='cutoff':monkeypatch.setattr(retrain,'ARCHIVE_CUTOFF','2025-08-26 23:00:00')
+    else:monkeypatch.setattr(retrain,'capture_environment',lambda:{'python':'changed'})
+    assert retrain.producing_inputs('location_6')!=before

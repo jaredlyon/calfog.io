@@ -92,6 +92,6 @@ def main(argv=None):
             local=pd.to_datetime(z.issue_time_utc,utc=True).dt.tz_convert('Etc/GMT+8').dt.tz_localize(None);meta=pd.DataFrame({'issue_time':local,'fold':np.ones(len(z),int)})
             boot=block_bootstrap(z.fog.to_numpy(int),z.p_fog.to_numpy(float),meta,n_boot=1000,seed=20250917+100*si+10*ti+mi,block='day')
             nonfaith=sorted(set(sum((x if isinstance(x,list) else json.loads(x) for x in z.nonfaithful_features),[])))
-            td[model]={**base,'live_ap_ci':boot['ap_ci'],'live_roc_auc_ci':boot['roc_auc_ci'],'bootstrap_resamples':1000,'valid_ap_resamples':boot['valid_ap_resamples'],'retrospective_ap':rap,'delta_ap':float(base['live_ap']-rap),'feed_source':FEEDS[a.feed],'faithful':bool(z.faithful.all()),'nonfaithful_features':nonfaith,'vintage_faithful':False,'cost_operating_points':operating_points(z)}
+            td[model]={**base,'live_ap_ci':boot['ap_ci'],'live_roc_auc_ci':boot['roc_auc_ci'],'bootstrap_resamples':1000,'valid_ap_resamples':boot['valid_ap_resamples'],'retrospective_ap':rap,'delta_ap':float(base['live_ap']-rap),'feed_source':FEEDS[a.feed],'faithful':bool(z.faithful.all()),'nonfaithful_features':nonfaith,'vintage_faithful':a.feed=='forward','cost_operating_points':operating_points(z)}
     (SHADOW/f'shadow_metrics_{a.feed}.json').write_text(json.dumps(result,indent=2,allow_nan=False));print(json.dumps({'sites':len(result['per_site']),'prediction_rows':len(preds),'outcome_rows':len(outs)}))
 if __name__=='__main__':main()
