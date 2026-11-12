@@ -1,5 +1,6 @@
 """Synthetic, CPU-only and network-free checks for the settled long-term design."""
 import importlib.util
+import json
 from pathlib import Path
 
 import numpy as np
@@ -121,7 +122,9 @@ def test_panel_ols_recovers_planted_year_slope_and_instrument_steps():
     for site in trend.STEPS:
         assert result["coefficients"][f"step_{site}"]["estimate"] == pytest.approx(0.9, abs=1e-12)
     assert result["r_squared"] == pytest.approx(1.0)
-    assert result["valid_draws"] == 50
+    assert result["n_boot"] == 50
+    assert result["method"] == "dependent_wild_bootstrap"
+    assert result["coefficients"]["year"]["valid_draws"] == 50
     post = trend.fit_panel(panel.loc[panel.winter >= 1996], n_boot=10)
     assert post["status"] == "ok"
     assert post["coefficients"]["year"]["estimate"] == pytest.approx(0.012, abs=1e-12)
@@ -238,3 +241,312 @@ def test_json_markdown_and_png_outputs_include_unavailable_attribution(tmp_path)
     assert "measured NOx winters not available" in (tmp_path / "long_term_trend_v2.md").read_text(encoding="utf-8")
     for name in ("logistic_regression", "gray"):
         assert (tmp_path / f"long_term_trend_v2_{name}.png").read_bytes().startswith(b"\x89PNG\r\n\x1a\n")
+
+
+def test_wild_multipliers_share_winter_and_preserve_calendar_gaps():
+    years = np.array([2000, 2000, 2002, 2003])
+    seed, length = 17, 3
+    normals = np.random.default_rng(seed).standard_normal(4 + length - 1)
+    weights = np.array([normals[i:i + length].sum() / np.sqrt(length) for i in range(4)])
+    actual = trend._winter_multipliers(years, length, np.random.default_rng(seed))
+    assert actual[0] == actual[1]
+    np.testing.assert_allclose(actual, weights[[0, 0, 2, 3]], rtol=0, atol=1e-15)
+
+
+def test_wild_bootstrap_matches_fixed_design_refit():
+    panel = synthetic_panel()
+    panel["y"] += np.random.default_rng(1).normal(0, .1, len(panel))
+    X, names, _ = trend.panel_design(panel)
+    y = panel.y.to_numpy()
+    beta = np.linalg.lstsq(X, y, rcond=None)[0]
+    P = np.linalg.pinv(X)
+    h = np.diag(X @ P)
+    length = int(np.ceil(47 ** (1 / 3)))
+    weights = trend._winter_multipliers(panel.winter.to_numpy(), length, np.random.default_rng(3))
+    refit = np.linalg.lstsq(X, X @ beta + (y - X @ beta) / np.sqrt(1 - h) * weights, rcond=None)[0]
+    result = trend.fit_panel(panel, n_boot=1, seed=3)
+    for j, name in enumerate(names):
+        radius = abs(refit[j] - beta[j])
+        assert result["coefficients"][name]["ci95"] == pytest.approx([beta[j] - radius, beta[j] + radius], abs=1e-12)
+    assert result["calendar_span"] == 47
+    assert set(result["dependence_sensitivity"]) == {"1", "3", "4", "5"}
+
+
+def _sparse_panel():
+    return pd.DataFrame({"site": ["a"] * 6 + ["b"], "winter": list(range(2000, 2006)) + [2000],
+                         "nox_ppb": [0, 1, 2, 3, 4, 5, 2],
+                         "y": [3, 5, 7, 9, 11, 13, 7]})
+
+
+def test_pairs_winter_keeps_supported_slope_despite_missing_nuisance(monkeypatch):
+    monkeypatch.setattr(trend, "winter_bootstrap_indices", lambda years, rng: np.array([1, 2, 3, 4, 5, 5]))
+    result = trend.fit_panel(_sparse_panel(), ("nox_ppb",), steps={}, n_boot=2)
+    slope = result["coefficients"]["nox_ppb"]
+    assert slope["estimate"] == pytest.approx(2)
+    assert slope["ci95"] is None
+    assert slope["inference_status"] == "not_available"
+    assert slope["inference_reason"] == "unit_leverage"
+    assert slope["pairs_winter"]["valid_draws"] == 2
+    assert slope["pairs_winter"]["ci95"] == pytest.approx([2, 2])
+    nuisance = result["coefficients"]["intercept_b"]["pairs_winter"]
+    assert nuisance["ci95"] is None
+    assert nuisance["inference_reason"] == "incomplete_bootstrap_support"
+    assert result["pairs_winter_full_rank_draws"] == 0
+
+
+def test_pairs_winter_refuses_incomplete_slope_support(monkeypatch):
+    monkeypatch.setattr(trend, "winter_bootstrap_indices", lambda years, rng: np.zeros(7, dtype=int))
+    result = trend.fit_panel(_sparse_panel(), ("nox_ppb",), steps={}, n_boot=2)
+    slope = result["coefficients"]["nox_ppb"]
+    assert slope["estimate"] == pytest.approx(2)
+    assert slope["pairs_winter"]["ci95"] is None
+    assert slope["pairs_winter"]["p"] is None
+    assert slope["pairs_winter"]["valid_draws"] == 0
+
+
+def test_rank_calendar_bootstrap_matches_independent_length_one():
+    years = np.arange(2000, 2008)
+    values = np.array([0, 2, 1, 4, 3, 8, 5, 9], dtype=float)
+    slope = trend.stats.theilslopes(values, years).slope
+    tau = trend.stats.kendalltau(years, values).statistic
+    residual = values - np.median(values - slope * years) - slope * years
+    rng = np.random.default_rng(8)
+    slopes, taus = [], []
+    for _ in range(12):
+        sample = residual[rng.integers(0, 8, size=8)]
+        slopes.append(trend.stats.theilslopes(sample, years).slope)
+        taus.append(0 if np.ptp(sample) == 0 else trend.stats.kendalltau(years, sample).statistic)
+    radius = np.quantile(np.abs(slopes), .95)
+    expected_p = (1 + np.count_nonzero(np.abs(taus) >= abs(tau))) / 13
+    result = trend.monotone_trend(years, values, n_boot=12, seed=8)
+    one = result["dependence_sensitivity"]["1"]
+    assert one["ci95"] == pytest.approx([slope - radius, slope + radius])
+    assert one["mann_kendall_p"] == expected_p
+
+
+def test_sparse_kvis_length_five_is_unavailable_without_redrawing(monkeypatch):
+    class GapDraw:
+        def integers(self, low, high, size):
+            return np.full(size, 5)
+    monkeypatch.setattr(trend.np.random, "default_rng", lambda seed: GapDraw())
+    result = trend.monotone_trend([1992, 1993, 2015], [1, 2, 3], n_boot=4)
+    five = result["dependence_sensitivity"]["5"]
+    assert result["calendar_span"] == 24
+    assert five["inference_status"] == "not_available"
+    assert five["ci95"] is None and five["mann_kendall_p"] is None
+    assert five["n_boot"] == 4
+
+
+def test_constant_rank_series_has_zero_slope_tau_and_p_one():
+    result = trend.monotone_trend(np.arange(10), np.ones(10), n_boot=5)
+    assert result["slope"] == result["kendall_tau"] == 0
+    assert result["ci95"] == [0, 0]
+    assert result["mann_kendall_p"] == 1
+
+
+def test_site_rank_trends_are_separate_and_empty_is_empty():
+    frame = pd.DataFrame({"site": ["a"] * 3 + ["b"] * 3,
+                          "winter": [1980, 1981, 1982, 2000, 2001, 2002],
+                          "value": [0, .1, .2, .2, .1, 0]})
+    frame.attrs.update(n_boot=3, seed=7)
+    result = trend.site_trends(frame, "value")
+    assert set(result) == {"a", "b"}
+    for site in ("a", "b"):
+        part = frame.loc[frame.site == site]
+        assert result[site] == trend.monotone_trend(part.winter, part.value, n_boot=3, seed=7)
+    assert result["a"]["slope"] == pytest.approx(.1)
+    assert result["b"]["slope"] == pytest.approx(-.1)
+    assert trend.site_trends(frame.iloc[:0], "value") == {}
+
+
+def test_gray_integration_and_rendering_have_no_pooled_rank(tmp_path):
+    weather, visibility = full_winter()
+    daily, _ = trend.daily_table(weather, visibility, "a", start_year=2000, end_year=2000)
+    daily = pd.concat([daily, daily.assign(site="b")], ignore_index=True)
+    daily.attrs["n_boot"] = 2
+    gray = trend.gray_replication(daily)
+    assert all(set(trends) == {"a", "b"} for trends in gray["trends"].values())
+    result = {"coverage": [], "nox_availability": {}, "gray_replication": gray,
+              "diagnostics": {"logistic_regression": {"winters": [], "folds": []}}}
+    trend.write_outputs(result, tmp_path)
+    saved = json.loads((tmp_path / "long_term_trend_v2.json").read_text())
+    text = (tmp_path / "long_term_trend_v2.md").read_text(encoding="utf-8")
+    assert "pooled_site_demeaned" not in json.dumps(saved)
+    assert "Trends are reported separately by airport; no regional pooled rank test is reported." in text
+    assert "≤1-SM extension (not a replication of Gray's dense-fog analysis)" in text
+    assert "They exclude first-stage estimation uncertainty" in text
+    assert saved["diagnostics"]["logistic_regression"]["first_stage_refit"] is False
+    assert saved["diagnostics"]["logistic_regression"]["uncertainty_scope"] == "fixed_diagnostic_predictions"
+    assert "uncertainty_scope" not in saved["gray_replication"]
+
+
+def test_era5_missing_site_winter_or_channel_never_falls_back(tmp_path, monkeypatch):
+    monkeypatch.setattr(trend, "load_sources", lambda *a, **k: pytest.fail("archive fallback"))
+    with pytest.raises(FileNotFoundError):
+        trend._weather("location_6", "era5", [2000], root=tmp_path)
+    folder = tmp_path / "datasets" / "weather_era5_trend"
+    folder.mkdir(parents=True)
+    weather, _ = full_winter()
+    path = folder / "location_6_weather_era5_trend.csv"
+    weather.iloc[:-1].to_csv(path, index=False)
+    with pytest.raises(ValueError, match="winter 2001"):
+        trend._weather("location_6", "era5", [2000], root=tmp_path)
+    weather.loc[0, trend.WEATHER_COLS[-1]] = np.nan
+    weather.to_csv(path, index=False)
+    with pytest.raises(ValueError, match="nonfinite"):
+        trend._weather("location_6", "era5", [2000], root=tmp_path)
+
+
+def test_era5_provenance_and_weather_change_do_not_change_labels(tmp_path):
+    folder = tmp_path / "datasets" / "weather_era5_trend"
+    folder.mkdir(parents=True)
+    weather, visibility = full_winter()
+    weather["temperature_2m"] = 5
+    path = folder / "location_6_weather_era5_trend.csv"
+    weather.to_csv(path, index=False)
+    era5, provenance = trend._weather("location_6", "era5", [2000], root=tmp_path)
+    assert provenance["source"] == "era5" and provenance["request_winters"] == [2001]
+    assert len(provenance["sha256"]) == 64
+    other = weather.assign(temperature_2m=4)
+    a, _ = trend.daily_table(era5, visibility, "location_6", start_year=2000, end_year=2000)
+    b, _ = trend.daily_table(other, visibility, "location_6", start_year=2000, end_year=2000)
+    pd.testing.assert_series_equal(a.fog_day, b.fog_day)
+    assert not a.optimal.any() and b.optimal.all()
+
+
+def test_write_valid_winters_uses_labels_only_and_january_year(tmp_path, monkeypatch):
+    _, visibility = full_winter()
+    monkeypatch.setattr(trend, "SITES", {"location_6": "Madera"})
+    monkeypatch.setattr(trend, "_visibility", lambda *a: (visibility, None))
+    monkeypatch.setattr(trend, "_weather", lambda *a, **k: pytest.fail("weather loaded"))
+    monkeypatch.setattr(trend, "capture_environment", lambda: pytest.fail("environment not needed for label export"))
+    monkeypatch.setattr(trend, "diagnostic_predictions", lambda *a, **k: pytest.fail("fit attempted"))
+    path = tmp_path / "winters.csv"
+    trend.main(["--start-year", "2000", "--end-year", "2000", "--write-valid-winters", str(path)])
+    assert pd.read_csv(path).to_dict("records") == [{"site": "location_6", "winter": 2001}]
+
+
+def test_inference_only_uses_saved_panels_without_loading_or_fitting(tmp_path, monkeypatch):
+    panel = synthetic_panel()
+    panel["observed_all_days"] = panel["observed"] = 3
+    panel["expected"], panel["n_days"] = 2.0, 100
+    result = {"seed": 11, "coverage": [{"unchanged": True}], "nox_availability": {},
+              "gray_replication": {"winters": [], "trends": {}},
+              "diagnostics": {"logistic_regression": {"winters": panel.to_dict("records"), "folds": [{"unchanged": True}],
+                                "attribution": {"status": "not_available"}}}}
+    (tmp_path / "long_term_trend_v2.json").write_text(json.dumps(result))
+    monkeypatch.setattr(trend, "capture_environment", lambda: {"sentinel": "analysis"})
+    monkeypatch.setattr(trend, "_visibility", lambda *a: pytest.fail("labels loaded"))
+    monkeypatch.setattr(trend, "_weather", lambda *a, **k: pytest.fail("weather loaded"))
+    monkeypatch.setattr(trend, "diagnostic_predictions", lambda *a, **k: pytest.fail("fit attempted"))
+    saved = {}
+    monkeypatch.setattr(trend, "write_outputs", lambda result, out: saved.update(result))
+    trend.main(["--inference-only", "--out-dir", str(tmp_path), "--n-boot", "2"])
+    assert saved["diagnostics"]["logistic_regression"]["winters"] == result["diagnostics"]["logistic_regression"]["winters"]
+    assert saved["diagnostics"]["logistic_regression"]["folds"] == [{"unchanged": True}]
+    assert saved["coverage"] == [{"unchanged": True}]
+    assert saved["analysis_environment"] == {"sentinel": "analysis"}
+    assert saved["diagnostics"]["logistic_regression"]["panel"]["coefficients"]["year"]["estimate"] == pytest.approx(.012)
+
+
+def test_nondefault_visibility_requires_isolated_output_and_missing_sidecar_fails(tmp_path):
+    with pytest.raises(SystemExit) as exc:
+        trend.main(["--visibility-mode", "routine_only"])
+    assert exc.value.code == 2
+    with pytest.raises(SystemExit):
+        trend.main(["--visibility-mode", "one_per_hour", "--out-dir", str(trend.OUT_DIR)])
+    with pytest.raises(FileNotFoundError):
+        trend._visibility("location_6", "routine_only", root=tmp_path)
+
+
+def test_cadence_run_refits_endpoints_on_identical_paired_support(tmp_path, monkeypatch):
+    weather, minimum = full_winter()
+    selected = minimum.copy()
+    minimum.loc[[0, 24], "category"] = 4
+    selected.loc[0, "category"] = np.nan
+    selected["report_type"], selected["obs_minute"] = "FM15", 55
+    monkeypatch.setattr(trend, "SITES", {"location_6": "Madera"})
+    monkeypatch.setattr(trend, "_visibility", lambda site, mode: (minimum if mode == "minimum" else selected, None))
+    monkeypatch.setattr(trend, "_weather", lambda *a, **k: (weather, {"source": "era5"}))
+    monkeypatch.setattr(trend, "measured_nox", lambda site: (pd.DataFrame(columns=["site", "winter", "nox_ppb"]), {"status": "not_available"}))
+    monkeypatch.setattr(trend, "capture_environment", lambda: {"sentinel": True})
+    calls = []
+    def predictions(daily, X, family, **kwargs):
+        calls.append((family, daily.copy()))
+        return np.full(len(daily), .2 if daily.fog_day.sum() else .3), [{"status": "ok"}]
+    monkeypatch.setattr(trend, "diagnostic_predictions", predictions)
+    saved = {}
+    monkeypatch.setattr(trend, "write_outputs", lambda result, out: saved.update(result))
+    trend.main(["--start-year", "2000", "--end-year", "2000", "--visibility-mode", "routine_only",
+                "--out-dir", str(tmp_path), "--n-boot", "2"])
+    assert len(calls) == 6
+    for (_, a), (_, b) in zip(calls[2:4], calls[4:6]):
+        pd.testing.assert_frame_equal(a[["site", "date", "winter", "valid", "known_hours"]],
+                                      b[["site", "date", "winter", "valid", "known_hours"]])
+        assert a.fog_day.sum() == 1 and b.fog_day.sum() == 0
+    paired = saved["cadence_sensitivity"]["paired_control"]
+    for family in ("logistic_regression", "ebm"):
+        a, b = paired["minimum"]["diagnostics"][family], paired["selected"]["diagnostics"][family]
+        assert a["folds"] == b["folds"]
+        assert a["winters"][0]["n_days"] == b["winters"][0]["n_days"]
+        assert a["winters"][0]["expected"] != b["winters"][0]["expected"]
+    assert saved["visibility_mode"] == "routine_only"
+    assert saved["analysis_environment"] == {"sentinel": True}
+    audit = saved["cadence_sensitivity"]["observation_process"]["location_6"]
+    assert audit["site_year_distributions"][0]["report_type"] == {"FM15": 1463}
+
+
+def test_attribution_scales_supported_pairs_interval_and_status(monkeypatch):
+    monkeypatch.setattr(trend, "winter_bootstrap_indices", lambda years, rng: np.array([1, 2, 3, 4, 5, 5]))
+    fit = trend.fit_panel(_sparse_panel(), ("nox_ppb",), steps={}, n_boot=2)
+    fit["coefficients"]["year"] = fit["coefficients"]["nox_ppb"]
+    monkeypatch.setattr(trend, "fit_panel", lambda *a, **k: {**fit})
+    panel = _sparse_panel().assign(dpd_c=3, fog_day_residual=1)
+    nox = panel[["site", "winter", "nox_ppb"]]
+    result = trend.attribution(panel.drop(columns="nox_ppb"), nox, n_boot=2)
+    for comparison in result["gray_comparison"].values():
+        coef = comparison["coefficients"]["nox_ppb"]
+        scaled = comparison["fog_days_per_10ppb"]
+        assert scaled["estimate"] == 10 * coef["estimate"]
+        assert scaled["inference_status"] == coef["inference_status"]
+        assert scaled["inference_reason"] == "unit_leverage"
+        assert scaled["ci95"] is None
+        assert scaled["pairs_winter"]["ci95"] == pytest.approx([10 * x for x in coef["pairs_winter"]["ci95"]])
+        assert scaled["pairs_winter"]["valid_draws"] == coef["pairs_winter"]["valid_draws"]
+
+
+def test_null_primary_interval_is_reported_with_exploratory_secondary():
+    coefficient = {"estimate": 2, "ci95": None, "p": None,
+                   "pairs_winter": {"ci95": [1, 3], "p": .2}}
+    fit = {"method": "dependent_wild_bootstrap", "block_length": 2,
+           "coefficients": {"nox_ppb": coefficient}}
+    text = "\n".join(trend._coefficient_lines(fit, "near_saturation"))
+    assert "nox_ppb: 2" in text
+    assert "exploratory; assumes independent winters" in text
+    coefficient["pairs_winter"]["ci95"] = None
+    assert "uncertainty unavailable" in "\n".join(trend._coefficient_lines(fit))
+
+
+def test_archive_weather_dispatch_is_explicit(monkeypatch):
+    weather, visibility = full_winter()
+    calls = []
+    def load(site):
+        calls.append(site)
+        return weather, visibility
+    monkeypatch.setattr(trend, "load_sources", load)
+    actual, provenance = trend._weather("location_6", "archive_best_match", [2000])
+    assert actual is weather
+    assert calls == ["location_6"]
+    assert provenance["source"] == "archive_best_match"
+
+
+def test_cadence_differences_include_panel_attribution_and_share_trends():
+    def endpoint(value):
+        return {"diagnostics": {"lr": {
+            "panel": {"coefficients": {"year": {"estimate": value, "ci95": None}}},
+            "attribution": {"models": {"nox_only": {"coefficients": {"nox_ppb": {"estimate": value}}}}}}},
+            "gray_replication": {"trends": {"fog_share_of_optimal": {"a": {"slope": value}}}}}
+    result = trend._cadence_differences({"minimum": endpoint(1), "selected": endpoint(3)})
+    assert result["diagnostics"]["lr"]["panel"]["coefficients"]["year"]["delta_estimate"] == 2
+    assert result["diagnostics"]["lr"]["attribution"]["models"]["nox_only"]["coefficients"]["nox_ppb"]["delta_estimate"] == 2
+    assert result["gray_replication"]["trends"]["fog_share_of_optimal"]["a"]["delta_estimate"] == 2
