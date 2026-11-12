@@ -8,7 +8,7 @@ from .data import SITES
 from .evaluation import COST_GRID
 
 AQ_SET_LABELS = {'nox': 'NOx (primary)', 'pm25': 'PM2.5 (secondary)',
-                 'cams': 'CAMS (appendix)', 'nox_monitor': 'NOx + monitor ID (sensitivity)'}
+                 'cams': 'CAMS (appendix)', 'nox_monitor': 'NOx conditional on monitor ID (sensitivity)'}
 
 
 def aggregate(metrics):
@@ -16,23 +16,27 @@ def aggregate(metrics):
     out = {'aqi_not_estimable': [], 'aqi_not_applicable': []}
     notes, resolved = [], []
     for task in ('nowcast', 'lead_time'):
-        families = sorted(set().union(*(sd['tasks'][task] for sd in sites.values())))
+        families = sorted({family for sd in sites.values() for family, result in sd['tasks'][task].items()
+                           if result.get('status') not in ('not_estimable', 'not_applicable')})
         out[task] = {}
         for family in families:
             values = {site: sd['tasks'][task][family]['ap'] for site, sd in sites.items()
-                      if family in sd['tasks'][task]}
+                      if family in sd['tasks'][task] and sd['tasks'][task][family].get('status') not in ('not_estimable', 'not_applicable')}
             out[task][family] = {'mean_ap': float(np.mean(list(values.values()))), 'site_aps': values}
             rps_values = {site: sd['tasks'][task][family]['ordinal']['rps'] for site, sd in sites.items()
-                          if family in sd['tasks'][task]}
+                          if family in sd['tasks'][task] and sd['tasks'][task][family].get('status') not in ('not_estimable', 'not_applicable')}
             out[task][family].update(mean_rps=float(np.mean(list(rps_values.values()))), site_rps=rps_values)
     out['site_task_summary'], out['aqi_site_summary'] = {}, {}
     for site, sd in sites.items():
         out['site_task_summary'][site], out['aqi_site_summary'][site] = {}, {}
         for task in ('nowcast', 'lead_time'):
             results = sd['tasks'][task]
-            out['site_task_summary'][site][task] = {family: {key: result[key] for key in ('ap', 'ap_ci', 'ordinal')}
-                                                   for family, result in results.items()}
-            learned = [family for family in results if family != 'climatology']
+            out['site_task_summary'][site][task] = {
+                family: (dict(result) if result.get('status') in ('not_estimable', 'not_applicable') else
+                         {key: result[key] for key in ('ap', 'ap_ci', 'ordinal')})
+                for family, result in results.items()}
+            learned = [family for family, result in results.items() if family != 'climatology'
+                       and result.get('status') not in ('not_estimable', 'not_applicable')]
             if learned:
                 best = max(learned, key=lambda family: results[family]['ap'])
                 result, baseline = results[best], results['climatology']
@@ -76,9 +80,9 @@ def _cohort_lines(title, result, climatology_ap):
     cal = result['calibration']
     lines = [title, f'Average Precision: {_interval(result["ap"], result["ap_ci"])}',
              f'RPS: {_interval(result["ordinal"]["rps"], result["ordinal"]["rps_ci"])}',
-             f'NLL: {result["ordinal"]["nll"]:.6f}',
+             f'Capped NLL (eps=1e-9, nats): {result["ordinal"]["nll"]:.6f}',
              f'Within one category: {result["ordinal"]["within_one"]:.6f}',
-             f'Median-meters log10 MAE (observed and median categories 1–16 only): {_meters_error(result["ordinal"])}',
+             f'category-representative meters log10 MAE (observed and median categories 1–16 only): {_meters_error(result["ordinal"])}',
              f'ROC-AUC: {_interval(result["roc_auc"], result["roc_auc_ci"])}',
              f'Brier (calibrated): {cal["brier_after"]:.6f}', f'ECE (calibrated): {cal["ece_after"]:.6f}',
              f'Cost-selected threshold (1:1 FN:FP; fold mean): {result["cost_threshold"]:.6f}',
@@ -100,13 +104,20 @@ def write_family_report(metrics, path):
              f'Predictor set: {metrics.get("predictor_set", "weather")}',
              'Clock: fixed PST (UTC-8). Hourly label: minimum known GHCNh visibility category; fog = reported <=1 SM.',
              'AP/AUC/RPS intervals are marginal whole-day block intervals, not paired-model comparisons.',
+             'Capped NLL = mean(-log(clip(p_true_category, 1e-9, 1))), in nats.',
+             'For NOx conditional on monitor ID, both arms contain identical monitor indicators; only the with-arm adds NOx.',
              'Thresholds and isotonic calibration fit validation only; each held-out fold is evaluated once.', '']
     grouped = {}
     for site, sd in metrics['per_site'].items():
         lines += [f'LOCATION {site.removeprefix("location_")} ({SITES.get(site, site)})', '']
         for task in ('nowcast', 'lead_time'):
             lines += [task.upper(), '']
-            blocks = [('WITHOUT AQI (full history)', sd['tasks'][task][family], sd['tasks'][task]['climatology']['ap'])]
+            main = sd['tasks'][task][family]
+            blocks = []
+            if main.get('status') in ('not_estimable', 'not_applicable'):
+                lines += [f'WITHOUT AQI (full history): {main["status"].replace("_", " ")} — {main["reason"]}', '']
+            else:
+                blocks.append(('WITHOUT AQI (full history)', main, sd['tasks'][task]['climatology']['ap']))
             for aq_set, tasks in sd['aqi_ablation'].items():
                 ablation = tasks[task][family]
                 label = AQ_SET_LABELS[aq_set]
@@ -130,11 +141,12 @@ def write_family_report(metrics, path):
             lo, hi = np.mean([result[key] for result, _ in rows], axis=0)
             lines.append(f'Mean site {key} endpoints (not aggregate CI): {lo:.6f}, {hi:.6f}')
         for key in ('rps', 'nll', 'within_one', 'median_category_mae'):
-            lines.append(f'{key}: {np.mean([result["ordinal"][key] for result, _ in rows]):.6f}')
+            label = 'Capped NLL (eps=1e-9, nats)' if key == 'nll' else key
+            lines.append(f'{label}: {np.mean([result["ordinal"][key] for result, _ in rows]):.6f}')
         meter_rows = [result['ordinal'] for result, _ in rows if result['ordinal']['median_meters_n']]
         meter_count = sum(row['median_meters_n'] for row in meter_rows)
         meter_mae = sum(row['median_meters_mae_log10'] * row['median_meters_n'] for row in meter_rows) / meter_count if meter_count else None
-        lines.append(f'Pooled median-meters log10 MAE: {_meters_error({"median_meters_mae_log10": meter_mae, "median_meters_n": meter_count})}')
+        lines.append(f'Pooled category-representative meters log10 MAE: {_meters_error({"median_meters_mae_log10": meter_mae, "median_meters_n": meter_count})}')
         for key in ('brier_after', 'ece_after'):
             lines.append(f'{key}: {np.mean([result["calibration"][key] for result, _ in rows]):.6f}')
         lines += [f'Climatology AP: {np.mean([baseline for _, baseline in rows]):.6f}', '']
@@ -184,7 +196,85 @@ def write_plots(metrics, *, art_dir):
             plt.close(fig)
 
 
+def nox_value_rows(combined) -> list[dict]:
+    rows = []
+    for site, sd in combined['per_site'].items():
+        for task, results in sd['aqi_ablation'].get('nox', {}).items():
+            for family in ('logistic_regression', 'xgboost', 'ebm'):
+                result = results.get(family)
+                if result is None or result.get('status') in ('not_estimable', 'not_applicable'):
+                    continue
+                w, o = result['with'], result['without']
+                pi = result['pos_count'] / result['n_test']
+                common = {'scope': 'airport', 'site': site, 'task': task, 'family': family}
+                for ratio in COST_GRID:
+                    cost_without = o['cost_operating_points'][str(ratio)]['expected_cost_per_issue']
+                    cost_with = w['cost_operating_points'][str(ratio)]['expected_cost_per_issue']
+                    g = min(ratio * pi, 1 - pi)
+                    rows.append({**common, 'kind': 'cost', 'ratio': ratio,
+                                 'cost_without': cost_without, 'cost_with': cost_with,
+                                 'delta_cost': cost_with - cost_without,
+                                 'delta_value': (cost_without - cost_with) / g if g else None})
+                variance = pi * (1 - pi)
+                brier = {'n_test': result['n_test'], 'pos_count': result['pos_count'], 'prevalence': pi,
+                         'ap_without': o['ap'], 'ap_with': w['ap'], 'delta_ap': w['ap'] - o['ap'],
+                         'relative_ap_change': (w['ap'] - o['ap']) / o['ap'] if o['ap'] else None}
+                for prefix, without, with_ in (
+                        ('', o['brier'], w['brier']),
+                        ('calibrated_', o['calibration']['brier_after'], w['calibration']['brier_after'])):
+                    brier.update({prefix + 'brier_without': without, prefix + 'brier_with': with_,
+                                  prefix + 'bss_without': 1 - without / variance if variance else None,
+                                  prefix + 'bss_with': 1 - with_ / variance if variance else None,
+                                  prefix + 'delta_bss': (without - with_) / variance if variance else None})
+                rows.append({**common, 'kind': 'brier', **brier})
+    groups = {}
+    for row in rows:
+        key = (row['family'], row['task'], row['kind'], row.get('ratio'))
+        groups.setdefault(key, []).append(row)
+    for (family, task, kind, ratio), group in groups.items():
+        mean = {'scope': 'equal_airport_mean', 'site': None, 'family': family, 'task': task,
+                'kind': kind, 'n_airports': len(group), 'n_airports_by_value': {}}
+        if ratio is not None:
+            mean['ratio'] = ratio
+        for key in sorted(group[0].keys() - {'scope', 'site', 'family', 'task', 'kind', 'ratio'}):
+            values = [row[key] for row in group if row[key] is not None]
+            mean[key] = float(np.mean(values)) if values else None
+            mean['n_airports_by_value'][key] = len(values)
+        rows.append(mean)
+    return rows
+
+
+def _nox_value_lines(rows):
+    lines = ['', '## NOx decision-loss and Brier descriptives (primary families)', '',
+             'Descriptive, retrospective misclassification-loss sensitivities at validation-selected thresholds (calibrated probabilities). Cost ratios are assumptions, not measured user costs. Raw Brier uses uncalibrated probabilities; Brier skill is relative to sample climatology. No inference is attached and no value is a practical-significance threshold.']
+    tables = (
+        ('cost', ('ratio', 'cost_without', 'cost_with', 'delta_cost', 'delta_value')),
+        ('brier', ('n_test', 'pos_count', 'prevalence', 'ap_without', 'ap_with', 'delta_ap', 'relative_ap_change',
+                   'brier_without', 'brier_with', 'bss_without', 'bss_with', 'delta_bss',
+                   'calibrated_brier_without', 'calibrated_brier_with', 'calibrated_bss_without',
+                   'calibrated_bss_with', 'calibrated_delta_bss')))
+    for scope, title in (('airport', 'Per-airport descriptives'), ('equal_airport_mean', 'Equal-airport means')):
+        lines += ['', f'### {title}', '']
+        for kind, columns in tables:
+            headings = ['Site', 'Task', 'Family'] + list(columns)
+            if scope == 'equal_airport_mean':
+                headings += ['Airports used (by value column)']
+            lines += ['| ' + ' | '.join(headings) + ' |', '|' + '---|' * len(headings)]
+            for row in rows:
+                if row['scope'] != scope or row['kind'] != kind:
+                    continue
+                cells = [row['site'] or 'equal-airport mean', row['task'], row['family']]
+                cells += ['not estimable' if row[key] is None else f'{row[key]:.6f}' for key in columns]
+                if scope == 'equal_airport_mean':
+                    cells.append(', '.join(f'{key}={row["n_airports_by_value"][key]}' for key in columns if key != 'ratio'))
+                lines.append('| ' + ' | '.join(cells) + ' |')
+    return lines
+
+
 def write_comparison(runs, out_dir):
+    rosters = [set(metrics['per_site']) for metrics in runs.values()]
+    if any(roster != rosters[0] for roster in rosters[1:]):
+        raise ValueError('comparison families have unequal site rosters')
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
     combined = {'families': list(runs),
@@ -194,6 +284,7 @@ def write_comparison(runs, out_dir):
     for family, metrics in runs.items():
         for site, sd in metrics['per_site'].items():
             target = combined['per_site'].setdefault(site, {'cohort': sd['cohort'], 'tasks': {}, 'aqi_ablation': {}, 'fold_audit': {}})
+            target.setdefault('environments', {})[family] = sd.get('environment')
             for task in ('nowcast', 'lead_time'):
                 target['tasks'].setdefault(task, {}).update(sd['tasks'][task])
                 target['fold_audit'].setdefault(task, {})[family] = sd['fold_audit'][task]
@@ -201,15 +292,20 @@ def write_comparison(runs, out_dir):
                 for task, results in tasks.items():
                     target['aqi_ablation'].setdefault(aq_set, {}).setdefault(task, {}).update(results)
     combined['aggregate'] = aggregate(combined)
+    combined['nox_value_descriptives'] = nox_value_rows(combined)
     lines = ['# CalFog V2 model comparison', '',
              'Fixed PST; hourly minimum GHCNh category; fog = reported <=1 SM. Retrospective expanding-origin evaluation.',
              'AP/AUC/RPS confidence intervals are marginal per-model whole-day block intervals; only AQI deltas use paired draws.',
-             'Median-meters log10 error excludes rows where either the observed or median category is censored (0 or 17).', '',
-             '| Site | Task | Family | Predictor set | AP (95% CI) | RPS (95% CI) | NLL | Within one | Median-meters log10 MAE (n) | ROC-AUC (95% CI) | Calibrated Brier / ECE |',
+             'Category-representative meters log10 error excludes observed or median categories 0 and 17; it is not physical-visibility accuracy.',
+             'Capped NLL (eps=1e-9, nats) = mean(-log(clip(p_true_category, 1e-9, 1))).', '',
+             '| Site | Task | Family | Predictor set | AP (95% CI) | RPS (95% CI) | Capped NLL | Within one | category-representative meters log10 MAE (n) | ROC-AUC (95% CI) | Calibrated Brier / ECE |',
              '|---|---|---|---|---|---|---|---|---|---|---|']
     for site, sd in combined['per_site'].items():
         for task, results in sd['tasks'].items():
             for family, result in results.items():
+                if result.get('status') in ('not_estimable', 'not_applicable'):
+                    lines.append(f'- Main {result["status"].replace("_", " ")}: {site}/{task}/{family} — {result["reason"]}')
+                    continue
                 cal = result['calibration']
                 ordinal = result['ordinal']
                 lines.append(f'| {site} | {task} | {family} | {combined["predictor_sets"][family]} | {_interval(result["ap"], result["ap_ci"])} | {_interval(ordinal["rps"], ordinal["rps_ci"])} | {ordinal["nll"]:.6f} | {ordinal["within_one"]:.6f} | {_meters_error(ordinal)} | {_interval(result["roc_auc"], result["roc_auc_ci"])} | {cal["brier_after"]:.6f} / {cal["ece_after"]:.6f} |')
@@ -219,6 +315,8 @@ def write_comparison(runs, out_dir):
     for site, sd in combined['per_site'].items():
         for task, results in sd['tasks'].items():
             for family, result in results.items():
+                if result.get('status') in ('not_estimable', 'not_applicable'):
+                    continue
                 for ratio, point in result['cost_operating_points'].items():
                     lines.append(f'| {site} | {task} | {family} | {ratio}:1 | {point["mean_threshold"]:.6f} | {point["precision"]:.6f} | {point["recall"]:.6f} | {point["f1"]:.6f} | {point["alert_rate"]:.6f} | {point["expected_cost_per_issue"]:.6f} |')
     lines += ['', '## Cross-site mean scores', '', '| Task | Family | Mean AP | Mean RPS |', '|---|---|---|---|']
@@ -236,6 +334,9 @@ def write_comparison(runs, out_dir):
     for status in ('not_estimable', 'not_applicable'):
         for row in combined['aggregate']['aqi_' + status]:
             lines.append(f'- AQI {status.replace("_", " ")}: {row["site"]}/{AQ_SET_LABELS[row["set"]]}/{row["task"]}/{row["family"]} — {row["reason"]}')
+    if any('nox_monitor' in sd['aqi_ablation'] for sd in combined['per_site'].values()):
+        lines += ['', 'NOx conditional on monitor ID (sensitivity): both arms contain identical weather/calendar inputs and monitor-ID indicators; only the with-arm adds NOx.']
+    lines += _nox_value_lines(combined['nox_value_descriptives'])
     lines += ['', '## Operational verdict', '', combined['aggregate']['predictability_verdict'], '', combined['aggregate']['aqi_verdict']]
     (out_dir / 'model_comparison_v2.json').write_text(json.dumps(combined, indent=2, allow_nan=False), encoding='utf-8')
     (out_dir / 'model_comparison_v2.md').write_text('\n'.join(lines) + '\n', encoding='utf-8')

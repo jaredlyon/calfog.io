@@ -9,7 +9,7 @@ from .visibility import CATEGORY_NOMINAL_M, FOG_MAX_CATEGORY, N_CATEGORIES
 
 
 def pmf_to_fog(pmf) -> np.ndarray:
-    return np.asarray(pmf)[:, :FOG_MAX_CATEGORY+1].sum(axis=1)
+    return np.asarray(pmf)[:, :FOG_MAX_CATEGORY+1].sum(axis=1, dtype=np.float64)
 
 
 def _rps_rows(c, pmf):
@@ -23,6 +23,7 @@ def rps(c, pmf) -> float:
 
 
 def nll(c, pmf, eps=1e-9) -> float:
+    """Mean capped log loss: −mean(log(clip(p_true, eps, 1))), in nats."""
     c = np.asarray(c, dtype=int)
     return float(-np.log(np.clip(np.asarray(pmf)[np.arange(len(c)), c], eps, 1.)).mean())
 
@@ -56,6 +57,13 @@ def ordinal_bootstrap(c, pmf, meta, n_boot=1000, seed=20250901, block='day'):
     result = ordinal_summary(c, pmf)
     draws = _loss_bootstrap(_rps_rows(c, pmf), meta, n_boot, seed, block)
     point = result['rps']
+    if block == 'fog_year':
+        times = pd.to_datetime(meta["issue_time"])
+        clusters = int((times.dt.year - (times.dt.month < 7)).nunique())
+        result.update(n_clusters=clusters, inference_status='ok' if clusters >= 2 else 'not_available')
+        if clusters < 2:
+            result.update(rps_ci=None, valid_rps_resamples=0, bootstrap_unit=block)
+            return result
     radius = float(np.quantile(np.abs(draws-point), .95)) if len(draws) else 0.
     result.update(rps_ci=[max(0., point-radius), min(1., point+radius)],
                   valid_rps_resamples=len(draws), bootstrap_unit=block)
@@ -66,6 +74,8 @@ def paired_rps_delta_bootstrap(c, pmf_with, pmf_without, meta, n_boot=1000, seed
     loss = _rps_rows(c, pmf_with)-_rps_rows(c, pmf_without)
     point = float(loss.mean())
     draws = _loss_bootstrap(loss, meta, n_boot, seed, block)
+    if block == 'fog_year' and len(np.unique(_fog_year_draw_counts(meta, 1, seed)[0])) < 2:
+        return point, None, 0
     radius = float(np.quantile(np.abs(draws-point), .95)) if len(draws) else 0.
     return point, [max(-1., point-radius), min(1., point+radius)], len(draws)
 
@@ -86,8 +96,25 @@ def _groups(meta, block="day"):
     fold=meta["fold"].astype(str) if "fold" in meta else pd.Series("1",index=meta.index)
     return (fold+"|"+period).to_numpy()
 
+def _fog_year_draw_counts(meta, n_boot, seed):
+    """Joint July–June clusters, without fold stratification."""
+    if n_boot < 1:
+        raise ValueError("n_boot must be positive")
+    times = pd.to_datetime(meta["issue_time"])
+    years = times.dt.year.to_numpy() - (times.dt.month.to_numpy() < 7)
+    unique, codes = np.unique(years, return_inverse=True)
+    if not len(unique):
+        raise ValueError("no prediction rows")
+    counts = np.random.default_rng(seed).multinomial(
+        len(unique), np.full(len(unique), 1 / len(unique)), size=n_boot).astype(np.int32)
+    return codes, counts
+
 def _block_draw_counts(meta,n_boot,seed,block):
     """Return row->block codes and stratified multinomial bootstrap counts."""
+    if block == "fog_year":
+        return _fog_year_draw_counts(meta, n_boot, seed)
+    if block not in {"day", "week"}:
+        raise ValueError("block must be day, week or fog_year")
     labels=_groups(meta,block); _,codes=np.unique(labels,return_inverse=True)
     folds=meta["fold"].to_numpy() if "fold" in meta else np.ones(len(meta),int)
     rng=np.random.default_rng(seed); counts=np.zeros((n_boot,int(codes.max())+1),dtype=np.uint16)
@@ -125,12 +152,17 @@ def block_bootstrap(y,p,meta,n_boot=1000,seed=20250901,block="day"):
     y=np.asarray(y,dtype=int);p=np.asarray(p,dtype=float);meta=meta.reset_index(drop=True)
     codes,counts=_block_draw_counts(meta,n_boot,seed,block);aps,aucs=_weighted_boot_metrics(y,p,codes,counts)
     ap=safe_ap(y,p);auc=safe_auc(y,p)
+    unavailable = block == "fog_year" and counts.shape[1] < 2
     def ci(vals,point):
+        if unavailable:
+            return None
         if not vals:return [point,point]
         radius=float(np.quantile(np.abs(np.asarray(vals)-point),.95))
         return [float(max(0.,point-radius)),float(min(1.,point+radius))]
     return {"ap":ap,"ap_ci":ci(aps,ap),"roc_auc":auc,"roc_auc_ci":ci(aucs,auc),
-      "valid_ap_resamples":len(aps),"valid_auc_resamples":len(aucs),"bootstrap_unit":block}
+      "valid_ap_resamples":0 if unavailable else len(aps),"valid_auc_resamples":0 if unavailable else len(aucs),
+      "bootstrap_unit":block, "n_clusters":counts.shape[1],
+      "inference_status":"not_available" if unavailable else "ok"}
 
 def paired_delta_bootstrap(y,p_with,p_without,meta,n_boot=1000,seed=20250901,block="day"):
     """Paired AP delta using exactly the same fold/block count matrix."""
@@ -149,6 +181,8 @@ def paired_delta_bootstrap(y,p_with,p_without,meta,n_boot=1000,seed=20250901,blo
             if y[ix].sum()>0:vals.append(safe_ap(y[ix],a[ix])-safe_ap(y[ix],b[ix]))
         vals=np.asarray(vals)
     point=safe_ap(y,a)-safe_ap(y,b)
+    if block == "fog_year" and counts.shape[1] < 2:
+        return float(point), None, 0
     if len(vals):
         radius=float(np.quantile(np.abs(np.asarray(vals)-point),.95));ci=[float(max(-1.,point-radius)),float(min(1.,point+radius))]
     else:ci=[point,point]

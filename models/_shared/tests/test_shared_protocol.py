@@ -1,8 +1,10 @@
 """Shared registry, parameterized windows and one-family orchestration contracts."""
+from copy import deepcopy
 import hashlib
 import json
 import numpy as np
 import pandas as pd
+import pytest
 from models._shared import study
 from models._shared.data import WEATHER_COLS, CAL_COLS, AQI_COLS, MEASURED_AQ_COLS, AQ_SETS, PRIMARY_FAMILIES
 from models._shared.families import FAMILIES, FamilyOutput, seed_for
@@ -100,8 +102,8 @@ def test_run_family_routes_one_family_and_baseline_without_tuning(monkeypatch, t
     assert json.loads(path.read_text())['family'] == 'xgboost'
     assert (tmp_path / 'xgboost_results_v2.txt').is_file()
     text = (tmp_path / 'xgboost_results_v2.txt').read_text(encoding='utf-8')
-    assert 'RPS:' in text and 'NLL:' in text and 'Within one category:' in text
-    assert 'Median-meters log10 MAE' in text
+    assert 'RPS:' in text and 'Capped NLL (eps=1e-9, nats):' in text and 'Within one category:' in text
+    assert 'category-representative meters log10 MAE' in text
     assert 'Predictor set: weather' in text
     comparison = report.write_comparison({'xgboost': metrics}, tmp_path / 'comparison')
     assert comparison['aggregate']['nowcast']['xgboost']['mean_rps'] >= 0
@@ -109,6 +111,11 @@ def test_run_family_routes_one_family_and_baseline_without_tuning(monkeypatch, t
     assert '| RPS (95% CI) |' in markdown and 'Paired delta RPS' in markdown
     assert '| Predictor set |' in markdown
     assert all(label in markdown for label in ('NOx (primary)', 'PM2.5 (secondary)', 'CAMS (appendix)'))
+    assert 'NOx conditional on monitor ID (sensitivity)' in markdown
+    assert 'both arms contain identical weather/calendar inputs and monitor-ID indicators' in markdown
+    assert 'mean(-log(clip(p_true_category, 1e-9, 1)))' in markdown
+    assert comparison['per_site']['location_10']['environments']['xgboost'] == sd['environment']
+    assert comparison['nox_value_descriptives']
 
 
 def test_reuse_retrains_binary_only_metrics(monkeypatch, tmp_path):
@@ -124,3 +131,184 @@ def test_reuse_retrains_binary_only_metrics(monkeypatch, tmp_path):
     monkeypatch.setattr(run_all_v2, 'write_comparison', lambda *a: None)
     run_all_v2.main()
     assert retrained == ['xgboost']
+
+
+def _report_result():
+    point = {'expected_cost_per_issue': .03, 'mean_threshold': .5, 'precision': .4,
+             'recall': .6, 'f1': .48, 'alert_rate': .1}
+    return {'ap': .4, 'ap_ci': [.3, .5], 'roc_auc': .6, 'roc_auc_ci': [.5, .7],
+            'brier': .03, 'calibration': {'brier_after': .025, 'ece_after': .01},
+            'ordinal': {'rps': .1, 'rps_ci': [.08, .12], 'nll': 1.2, 'within_one': .8,
+                        'median_category_mae': 1., 'median_meters_mae_log10': .2, 'median_meters_n': 10},
+            'precision': .4, 'recall': .6, 'f1': .48, 'cost_threshold': .5,
+            'climatology_ap': .05, 'cost_operating_points': {str(r): dict(point) for r in (1, 3, 5, 10, 20)}}
+
+
+def _report_run(family='xgboost', *, sites=('location_10',)):
+    return {'family': family, 'per_site': {
+        site: {'cohort': {}, 'tasks': {
+            task: {family: _report_result(), 'climatology': _report_result()}
+            for task in ('nowcast', 'lead_time')},
+            'aqi_ablation': {}, 'fold_audit': {'nowcast': [], 'lead_time': []}}
+        for site in sites}}
+
+
+def _nox_ablation(*, n=100, positives=5):
+    without, with_ = _report_result(), _report_result()
+    with_['ap'], with_['brier'], with_['calibration']['brier_after'] = .5, .02, .015
+    for point in with_['cost_operating_points'].values():
+        point['expected_cost_per_issue'] = .02
+    return {'n_test': n, 'pos_count': positives, 'with': with_, 'without': without,
+            'delta_ap': .1, 'delta_ap_ci': [.05, .15], 'delta_rps': -.01, 'delta_rps_ci': [-.02, 0.]}
+
+
+def test_nox_value_rows_numeric_and_equal_airport_means():
+    from models._shared.report import nox_value_rows
+    run = _report_run(sites=('location_10', 'location_9'))
+    for site, positives in (('location_10', 5), ('location_9', 90)):
+        run['per_site'][site]['aqi_ablation'] = {
+            'nox': {'nowcast': {'xgboost': _nox_ablation(positives=positives)}}}
+    before = deepcopy(run)
+    rows = nox_value_rows(run)
+    assert run == before
+    assert len(rows) == 18  # two airports plus means, five cost rows and one Brier row each
+    cost = next(r for r in rows if r['site'] == 'location_10' and r.get('ratio') == 1)
+    assert cost['cost_without'] == .03 and cost['cost_with'] == .02
+    assert cost['delta_cost'] == pytest.approx(-.01)
+    assert cost['delta_value'] == pytest.approx(.2)
+    high = next(r for r in rows if r['site'] == 'location_9' and r.get('ratio') == 20)
+    assert high['delta_value'] == pytest.approx(.1)  # denominator min(20*.9, .1), not 18
+    brier = next(r for r in rows if r['site'] == 'location_10' and r['kind'] == 'brier')
+    assert brier['delta_bss'] == pytest.approx(.01 / (.05 * .95))
+    assert brier['calibrated_brier_without'] == .025 and brier['calibrated_brier_with'] == .015
+    assert brier['calibrated_delta_bss'] == pytest.approx(.01 / (.05 * .95))
+    assert brier['bss_without'] == pytest.approx(1 - .03 / (.05 * .95))
+    assert brier['relative_ap_change'] == pytest.approx(.25)
+    mean = next(r for r in rows if r['scope'] == 'equal_airport_mean' and r.get('ratio') == 20)
+    assert mean['delta_value'] == pytest.approx((.01 / .95 + .01 / .1) / 2)
+    assert mean['n_airports'] == mean['n_airports_by_value']['delta_value'] == 2
+    json.dumps(rows, allow_nan=False)
+
+
+@pytest.mark.parametrize('positives', [0, 100])
+def test_nox_value_rows_degenerate_prevalence_and_identical_arms(positives):
+    from models._shared.report import nox_value_rows
+    run = _report_run(sites=('location_10', 'location_9'))
+    for site, pos in (('location_10', positives), ('location_9', 5)):
+        result = _nox_ablation(positives=pos)
+        result['with'] = deepcopy(result['without'])
+        result['with']['ap'] = result['without']['ap'] = 0.
+        run['per_site'][site]['aqi_ablation'] = {'nox': {'lead_time': {
+            'xgboost': result, 'ebm': {'status': 'not_estimable', 'reason': 'insufficient classes'},
+            'logistic_regression': {'status': 'not_applicable', 'reason': 'excluded fixture'},
+            'random_forest': result}}}
+    rows = nox_value_rows(run)
+    assert {r['family'] for r in rows} == {'xgboost'}
+    for row in rows:
+        if row['kind'] == 'cost':
+            assert row['delta_cost'] == 0.
+            assert row['delta_value'] is None if row['site'] == 'location_10' else row['delta_value'] == 0.
+        else:
+            assert row['relative_ap_change'] is None
+            assert row['delta_bss'] is None if row['site'] == 'location_10' else row['delta_bss'] == 0.
+    mean = next(r for r in rows if r['scope'] == 'equal_airport_mean' and r['kind'] == 'brier')
+    assert mean['n_airports'] == 2
+    assert mean['n_airports_by_value']['delta_bss'] == 1
+    json.dumps(rows, allow_nan=False)
+
+
+def test_comparison_rejects_unequal_rosters_before_writing(tmp_path):
+    from models._shared.report import write_comparison
+    out = tmp_path / 'comparison'
+    with pytest.raises(ValueError, match='unequal site rosters'):
+        write_comparison({'xgboost': _report_run(),
+                          'ebm': _report_run('ebm', sites=('location_10', 'location_9'))}, out)
+    assert not out.exists()
+
+
+def test_comparison_forwards_producing_environments_and_legacy_null(monkeypatch, tmp_path):
+    from models._shared import report
+    monkeypatch.setattr(report, 'write_plots', lambda *a, **kw: None)
+    runs = {family: _report_run(family, sites=('location_10', 'location_9'))
+            for family in ('xgboost', 'ebm')}
+    for family, run in runs.items():
+        for site, sd in run['per_site'].items():
+            sd['environment'] = {'python': f'producer {family}/{site}'}
+    del runs['ebm']['per_site']['location_9']['environment']
+    combined = report.write_comparison(runs, tmp_path)
+    for site, sd in combined['per_site'].items():
+        assert sd['environments'] == {
+            family: run['per_site'][site].get('environment') for family, run in runs.items()}
+    assert combined['per_site']['location_9']['environments']['ebm'] is None
+
+
+def test_comparison_descriptives_leave_earlier_sections_unchanged(monkeypatch, tmp_path):
+    from models._shared import report
+    monkeypatch.setattr(report, 'write_plots', lambda *a, **kw: None)
+    run = _report_run()
+    report.write_comparison({'xgboost': run}, tmp_path / 'baseline')
+    baseline = (tmp_path / 'baseline' / 'model_comparison_v2.md').read_text(encoding='utf-8')
+    assert report.nox_value_rows(run) == []
+    run['per_site']['location_10']['aqi_ablation'] = {
+        'nox': {'nowcast': {'xgboost': _nox_ablation()}}}
+    # Remove only the new rows to isolate the new section from the existing AQ table/verdict.
+    full = report.write_comparison({'xgboost': run}, tmp_path / 'full')
+    assert len(full['nox_value_descriptives']) == 12
+    text = (tmp_path / 'full' / 'model_comparison_v2.md').read_text(encoding='utf-8')
+    preamble = ('Descriptive, retrospective misclassification-loss sensitivities at validation-selected thresholds '
+                '(calibrated probabilities). Cost ratios are assumptions, not measured user costs. Raw Brier uses '
+                'uncalibrated probabilities; Brier skill is relative to sample climatology. No inference is attached '
+                'and no value is a practical-significance threshold.')
+    assert preamble in text
+    assert '### Per-airport descriptives' in text and '### Equal-airport means' in text
+    assert text.split('## Matched AQI comparisons')[0] == baseline.split('## Matched AQI comparisons')[0]
+    original_rows = report.nox_value_rows
+    monkeypatch.setattr(report, 'nox_value_rows', lambda combined: [])
+    report.write_comparison({'xgboost': run}, tmp_path / 'no_rows')
+    no_rows = (tmp_path / 'no_rows' / 'model_comparison_v2.md').read_text(encoding='utf-8')
+    heading = '## NOx decision-loss and Brier descriptives (primary families)'
+    assert text.split(heading)[0] == no_rows.split(heading)[0]
+    assert text.split('## Operational verdict')[1] == no_rows.split('## Operational verdict')[1]
+    assert original_rows(run) == full['nox_value_descriptives']
+    assert 'Capped NLL (eps=1e-9, nats) = mean(-log(clip(p_true_category, 1e-9, 1)))' in text
+
+
+def test_main_not_estimable_survives_reports(monkeypatch, tmp_path):
+    from models._shared import report
+    monkeypatch.setattr(report, 'write_plots', lambda *a, **kw: None)
+    run = _report_run('temporal_cnn')
+    unavailable = {'status': 'not_estimable', 'reason': 'cnn tuning prefix lacks both classes'}
+    for sd in run['per_site'].values():
+        for task in sd['tasks']:
+            sd['tasks'][task]['temporal_cnn'] = dict(unavailable)
+    run['aggregate'] = report.aggregate(run)
+    assert 'temporal_cnn' not in run['aggregate']['nowcast']
+    report.write_family_report(run, tmp_path / 'family.txt')
+    combined = report.write_comparison({'temporal_cnn': run}, tmp_path / 'comparison')
+    assert combined['aggregate']['site_task_summary']['location_10']['nowcast']['temporal_cnn'] == unavailable
+    assert unavailable['reason'] in (tmp_path / 'family.txt').read_text(encoding='utf-8')
+    assert unavailable['reason'] in (tmp_path / 'comparison' / 'model_comparison_v2.md').read_text(encoding='utf-8')
+
+
+def test_nox_value_rows_cover_primary_tasks_and_sample_climatology():
+    from models._shared.report import nox_value_rows
+    run = _report_run()
+    result = _nox_ablation()
+    for arm in ('with', 'without'):
+        result[arm]['brier'] = .05 * .95
+        result[arm]['calibration']['brier_after'] = .05 * .95
+    run['per_site']['location_10']['aqi_ablation'] = {
+        'nox': {task: {family: deepcopy(result) for family in PRIMARY_FAMILIES}
+                for task in ('nowcast', 'lead_time')},
+        'pm25': {'nowcast': {'xgboost': _nox_ablation()}}}
+    rows = nox_value_rows(run)
+    airport = [row for row in rows if row['scope'] == 'airport']
+    assert len(airport) == 3 * 2 * 6
+    for family in PRIMARY_FAMILIES:
+        for task in ('nowcast', 'lead_time'):
+            selected = [row for row in airport if row['family'] == family and row['task'] == task]
+            assert {row['ratio'] for row in selected if row['kind'] == 'cost'} == {1, 3, 5, 10, 20}
+            brier, = [row for row in selected if row['kind'] == 'brier']
+            for key in ('bss_without', 'bss_with', 'delta_bss',
+                        'calibrated_bss_without', 'calibrated_bss_with', 'calibrated_delta_bss'):
+                assert brier[key] == 0.

@@ -155,21 +155,44 @@ def test_zero_positive_draws_do_not_unpair_airports():
     assert result["valid_draws"] == np.count_nonzero(counts[:, 0])
 
 
-def test_loading_saved_predictions_and_empty_arm(tmp_path, monkeypatch):
+def _completed_predictions(tmp_path, monkeypatch):
+    from models._shared.artifacts import canonical_hash, file_sha256
     monkeypatch.setattr(sig, "_family_dirs", lambda: {"example": tmp_path})
     directory = tmp_path / "example_predictions_v2"
     directory.mkdir()
     a, _ = _predictions()
     frame = a[a.site == "small"]
-    np.savez_compressed(directory / "small__nowcast__main.npz",
-                        issue_time=frame.issue_time.to_numpy(dtype="datetime64[ns]").astype("int64"),
-                        fold=frame.fold.to_numpy(dtype="int8"), c=frame.c.to_numpy(dtype="int8"),
-                        pmf=sig._pmf(frame),
-                        dpd_c=frame.dpd_c.to_numpy(dtype="float32"), wind_kmh=frame.wind_kmh.to_numpy(dtype="float32"))
+    inventory, per_site = {}, {}
+    for site in sig.SITES:
+        per_site[site] = {"aqi_ablation": {
+            name: {task: {"example": {"status": "not_estimable", "reason": "fixture"}}
+                   for task in sig.TASKS} for name in ("nox", "pm25", "cams")}}
+        per_site[site]["tasks"] = {task: {"example": {}, "climatology": {}} for task in sig.TASKS}
+        for task in sig.TASKS:
+            for arm in ("main", "climatology"):
+                path = directory / f"{site}__{task}__{arm}.npz"
+                np.savez_compressed(path,
+                    issue_time=frame.issue_time.to_numpy(dtype="datetime64[ns]").astype("int64"),
+                    fold=frame.fold.to_numpy(dtype="int8"), c=frame.c.to_numpy(dtype="int8"),
+                    pmf=sig._pmf(frame), dpd_c=frame.dpd_c.to_numpy(dtype="float32"),
+                    wind_kmh=frame.wind_kmh.to_numpy(dtype="float32"))
+                inventory[path.relative_to(tmp_path).as_posix()] = file_sha256(path)
+    metrics = {"family": "example", "per_site": per_site}
+    (tmp_path / "example_metrics_v2.json").write_text(json.dumps(metrics), encoding="utf-8")
+    record = {"schema_version": 1, "family": "example", "sites": sorted(sig.SITES),
+              "inputs": {}, "metrics_sha256": canonical_hash(metrics), "prediction_sha256": inventory}
+    (tmp_path / "example_run_v2.json").write_text(json.dumps(record), encoding="utf-8")
+    return frame
+
+
+def test_loading_saved_predictions_and_empty_arm(tmp_path, monkeypatch):
+    frame = _completed_predictions(tmp_path, monkeypatch)
     loaded = sig.load_predictions("example", "main")
-    assert loaded.site.unique().tolist() == ["small"]
-    np.testing.assert_array_equal(loaded.issue_time, frame.issue_time)
-    assert sig.pooled_delta(loaded, loaded, "ap", 10, 2)["estimate"] == 0
+    assert set(loaded.site) == set(sig.SITES)
+    np.testing.assert_array_equal(loaded[loaded.site == next(iter(sorted(sig.SITES)))].issue_time,
+                                  pd.concat([frame, frame]).issue_time)
+    single = loaded[loaded.task == "nowcast"]
+    assert sig.pooled_delta(single, single, "ap", 10, 2)["estimate"] == 0
     assert sig.load_predictions("example", "missing").empty
 
 
@@ -182,6 +205,7 @@ def test_analysis_outputs_and_holm_families(tmp_path, monkeypatch):
         return pd.concat([frame, frame.assign(task="lead_time")], ignore_index=True)
     monkeypatch.setattr(sig, "load_predictions", load)
     monkeypatch.setattr(sig, "ROOT", tmp_path)
+    monkeypatch.setattr(sig, "capture_environment", lambda: {"sentinel": "analysis"})
     sig.write_analysis(12, 3, family_n_boot=20)
     directory = tmp_path / "models" / "comparison_v2"
     aqi = json.loads((directory / "aqi_tests_v2.json").read_text(encoding="utf-8"))
@@ -195,6 +219,8 @@ def test_analysis_outputs_and_holm_families(tmp_path, monkeypatch):
             expected = sig.holm_adjust([row["ap"]["p_two_sided"] for row in rows])
             assert [row["ap"]["p_holm"] for row in rows] == expected
     assert (aqi["n_boot"], family["n_boot"]) == (12, 20)
+    assert aqi["analysis_environment"] == family["analysis_environment"] == {"sentinel": "analysis"}
+    assert aqi["pm25_robustness"] == "not_run"
     assert len(family["tests"]) == 12  # four comparators, six pairs, two tasks
     for task in sig.TASKS:
         rows = [row for row in family["tests"] if row["task"] == task]
@@ -243,3 +269,160 @@ def test_seed_sensitivity_keeps_replicate_zero_primary_and_lr_single_fit(tmp_pat
     (roster["ebm"] / "ebm_predictions_v2" / "replicates" / "r2").rmdir()
     with pytest.raises(ValueError, match="ebm: replicates"):
         sig.seed_sensitivity(12, 3)
+
+
+@pytest.mark.parametrize("present,missing", [("xgboost", "ebm"), ("ebm", "xgboost"), (None, None)])
+def test_seed_rosters_fail_before_loading(tmp_path, monkeypatch, present, missing):
+    roster = {name: tmp_path / name for name in sig.PRIMARY_FAMILIES}
+    if present:
+        for replicate in (1, 2):
+            (roster[present] / f"{present}_predictions_v2" / "replicates" / f"r{replicate}").mkdir(parents=True)
+    monkeypatch.setattr(sig, "_family_dirs", lambda: roster)
+    monkeypatch.setattr(sig, "load_predictions", lambda *a: pytest.fail("must reject before loading"))
+    if present:
+        with pytest.raises(ValueError) as error:
+            sig.seed_sensitivity(10)
+        assert str(error.value) == f"{missing}: replicates [] differ from [1, 2]"
+    else:
+        assert sig.seed_sensitivity(10) is None
+    assert sig.DETERMINISTIC_FAMILIES == frozenset({"logistic_regression"})
+
+
+def test_mc_summary_matches_binomial_and_quantile_oracles():
+    from scipy.stats import binomtest, quantile_test
+    draws = np.linspace(-.2, .4, 2000)
+    point = .1
+    score = sig._summary(point, draws)
+    distance = abs(draws-point)
+    k, n = np.count_nonzero(distance >= abs(point)), len(draws)
+    expected = binomtest(k, n).proportion_ci(sig.MC_CONFIDENCE, method="exact")
+    assert score["p_mc_interval"] == [expected.low, expected.high]
+    assert score["p_mcse"] == pytest.approx(np.sqrt(n*(k/n)*(1-k/n))/(n+1))
+    upper = quantile_test(distance, p=1-.05/6).confidence_interval(sig.MC_CONFIDENCE)
+    assert score["ci_bonf_upper_mc_interval"] == pytest.approx(np.array([upper.low, upper.high])+point)
+    zero = sig._summary(1., np.ones(12))
+    assert zero["p_mc_interval"][1] > 0 and zero["p_mcse"] == 0
+    assert zero["ci_bonf_upper_mc_interval"] is None
+    json.dumps([score, zero, sig._summary(1., [])], allow_nan=False)
+
+
+def test_mc_holm_bounds_preserve_missing_slots_and_input_order():
+    scores = [{"ap": sig._summary(point, np.linspace(-.1, .1, 2000))}
+              for point in (.01, .03, -.02, .1, -.05)]
+    scores.insert(2, {"status": "not_estimable"})
+    sig._adjust_tests(scores, "ap")
+    for endpoint in (0, 1):
+        expected = sig.holm_adjust([s["ap"]["p_mc_interval"][endpoint] if "ap" in s else 1. for s in scores])
+        assert [s["ap"]["p_holm_mc_interval"][endpoint] for s in scores if "ap" in s] == [
+            value for value, s in zip(expected, scores) if "ap" in s]
+    assert all(s["ap"]["p_holm_mc_interval"][0] <= s["ap"]["p_holm"] <= s["ap"]["p_holm_mc_interval"][1]
+               for s in scores if "ap" in s)
+
+
+def test_mc_benchmark_and_cumulative_event_wording():
+    c = np.array([4])
+    pmf = np.zeros((1, 18)); pmf[0, [4, 17]] = .5
+    score = sig.threshold_brier(c, pmf)[0]
+    np.testing.assert_array_equal(score[:4], 0.)
+    np.testing.assert_array_equal(score[4:], .25)
+    assert score[:5].mean() == .05
+    a, b = _predictions()
+    compared = sig._compare(a, b, 20, 1)
+    row = {"family": "xgboost", "set": "nox", "task": "nowcast", "primary": True,
+           **compared, "near_saturation": compared, "haze": sig.haze_decomposition(a, b, 20, 1)}
+    text = sig.aqi_markdown({"convention": "fixture", "tests": [row]})
+    assert sig.BENCHMARK_TEXT in text and "Rules-out =" not in text
+    assert "C≤4 (≤1 SM; fog event)" in text and "C≤16" in text
+    assert "mean over k=0–4" in text and "mean over k=5–15" in text
+    assert "not disjoint observation strata" in text
+    assert "NOx conditional on monitor ID (sensitivity)" in text
+    for point, band, expected in ((.0199, [.0194,.0206], "MC-unresolved"),
+                                  (.012, [.0118,.0123], "yes"), (.02, [.02,.021], "no")):
+        assert sig._benchmark({"ci_bonf": [0,point], "ci_bonf_upper_mc_interval": band}) == expected
+    assert sig._mc_decision(.049, [.04,.06], .05) == "MC-unresolved"
+    assert sig._mc_decision(.01, None, .05) == "unavailable"
+
+
+@pytest.mark.parametrize("defect", ["missing_record", "wrong_roster", "metrics", "prediction", "unlisted"])
+def test_core_completion_rejects_unbound_or_corrupt_inputs(tmp_path, monkeypatch, defect):
+    _completed_predictions(tmp_path, monkeypatch)
+    record_path = tmp_path / "example_run_v2.json"
+    record = json.loads(record_path.read_text())
+    if defect == "missing_record":
+        record_path.unlink()
+    elif defect == "wrong_roster":
+        record["sites"] = record["sites"][:1]
+        record_path.write_text(json.dumps(record))
+    elif defect == "metrics":
+        path = tmp_path / "example_metrics_v2.json"
+        metrics = json.loads(path.read_text()); metrics["extra"] = 1
+        path.write_text(json.dumps(metrics))
+    else:
+        directory = tmp_path / "example_predictions_v2"
+        path = next(directory.glob("*__main.npz"))
+        if defect == "prediction":
+            content = path.read_bytes()
+            path.write_bytes(content[:-1] + bytes([content[-1] ^ 1]))
+        else:
+            (directory / "obsolete__nowcast__main.npz").write_bytes(path.read_bytes())
+    with pytest.raises(ValueError):
+        sig.load_predictions("example", "main")
+
+
+def _pm25_fixture(tmp_path, monkeypatch):
+    roster = {name: tmp_path / name for name in sig.PRIMARY_FAMILIES}
+    monkeypatch.setattr(sig, "_family_dirs", lambda: roster)
+    for family, root in roster.items():
+        directory = root / f"{family}_predictions_v2"
+        directory.mkdir(parents=True)
+        for site in sig.SITES:
+            for check in ("pm25_lag24", "pm25_fem"):
+                manifest = {"environment": {}, "tasks": {task: {"status": "ok", "reason": None} for task in sig.TASKS},
+                            "prediction_files": [f"{site}__{task}__{check}_{arm}.npz"
+                                                 for task in sig.TASKS for arm in ("with","reference","without")]}
+                (directory / f"{site}__{check}.environment.json").write_text(json.dumps(manifest))
+    a, b = _predictions()
+    a = pd.concat([a[a.site == "small"].assign(site=site, task=task)
+                   for site in sig.SITES for task in sig.TASKS], ignore_index=True)
+    b = a.copy(); b["pmf"] = [np.r_[.5,np.zeros(16),.5] for _ in range(len(b))]
+    monkeypatch.setattr(sig, "load_predictions", lambda family, arm: a if arm.endswith("_with") else b)
+    return roster
+
+
+def test_pm25_robustness_consumes_all_three_contrasts(tmp_path, monkeypatch):
+    _pm25_fixture(tmp_path, monkeypatch)
+    result = sig.analyze_pm25_robustness(20, 3)
+    assert len(result["tests"]) == 36
+    assert {row["contrast"] for row in result["tests"]} == {
+        "candidate_minus_baseline", "reference_minus_baseline", "candidate_minus_reference"}
+    assert {row["check"] for row in result["tests"]} == {"pm25_lag24", "pm25_fem"}
+    for row in result["tests"]:
+        assert row["ap"]["estimate"] == (0 if row["contrast"] == "reference_minus_baseline" else .5)
+        assert "p_holm" not in row["ap"] and "rules_out_gain_0.02" not in row["ap"]
+        assert set(row["ap"]["per_airport"]) == set(sig.SITES)
+
+
+def test_pm25_partial_manifests_fail_closed(tmp_path, monkeypatch):
+    roster = _pm25_fixture(tmp_path, monkeypatch)
+    next((roster["ebm"] / "ebm_predictions_v2").glob("*.environment.json")).unlink()
+    with pytest.raises(RuntimeError, match="^pm25 robustness predictions incomplete$"):
+        sig.analyze_pm25_robustness(10)
+
+
+def test_cli_defaults_and_options(monkeypatch):
+    from models import significance_v2 as cli
+    calls = []
+    monkeypatch.setattr(cli, "write_analysis", lambda *args, **kwargs: calls.append((args, kwargs)))
+    monkeypatch.setattr("sys.argv", ["significance_v2.py"])
+    cli.main()
+    assert calls[0][0][0] == 50000 and calls[0][0][2] == 10000
+    monkeypatch.setattr("sys.argv", ["significance_v2.py", "--block-robustness",
+                                   "--robustness-n-boot", "37", "--pm25-n-boot", "41"])
+    cli.main()
+    assert calls[1][1]["block_robustness"] and calls[1][1]["robustness_n_boot"] == 37
+    assert calls[1][1]["pm25_n_boot"] == 41
+
+
+def test_insufficient_mc_precision_never_yields_stable_benchmark():
+    assert sig._benchmark({"ci_bonf": [0,.01], "ci_bonf_upper_mc_interval": None}) == "MC-unresolved"
+    assert sig._benchmark({"ci_bonf": None, "ci_bonf_upper_mc_interval": None}) == "unavailable"
