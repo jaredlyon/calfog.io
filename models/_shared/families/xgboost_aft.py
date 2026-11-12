@@ -1,11 +1,11 @@
-"""Interval-censored visibility with validation-selected AFT distributions."""
+"""Fixed-cutpoint latent ordinal model with validation-selected AFT distributions."""
 
 import numpy as np
 import xgboost as xgb
 from scipy.special import expit, ndtr
 
 from ..evaluation import rps
-from ..visibility import CATEGORY_LOWER_M, CATEGORY_UPPER_M
+from ..visibility import CATEGORY_SM, SM_TO_M
 from ..windows import tree_view, tree_feature_names
 from . import FamilyOutput
 from .xgboost import BASE_PARAMS
@@ -13,12 +13,13 @@ from .xgboost import BASE_PARAMS
 NEEDS_CNN_CFG = False
 DISTRIBUTIONS = ("normal", "logistic")
 SCALES = (0.5, 1.0, 1.5)
+AFT_LATENT_BOUNDS = tuple(q * SM_TO_M for q in CATEGORY_SM) + (np.inf,)
 
 
 def median_to_pmf(median, distribution, scale):
     # Boundaries include the open left and right tails of the visibility scale. The predicted median can
     # overflow to inf (or underflow to 0); clip it so inf - inf never yields NaN at the open top category.
-    bounds = np.r_[CATEGORY_LOWER_M, np.inf]
+    bounds = np.asarray(AFT_LATENT_BOUNDS)
     log_median = np.log(np.clip(np.asarray(median, dtype=float), 1e-3, 1e12))
     with np.errstate(divide="ignore"):
         z = (np.log(bounds)[None, :] - log_median[:, None]) / scale
@@ -32,7 +33,7 @@ class AFTBoosterPMF:
         self.distribution = distribution
         self.scale = scale
         self.best_iteration = int(booster.best_iteration)
-        gain = booster.get_score(importance_type="gain")
+        gain = booster[:self.best_iteration + 1].get_score(importance_type="gain")
         values = np.array([gain.get(f"f{i}", 0.0) for i in range(n_features)])
         self.feature_importances_ = values / (values.sum() or 1)
 
@@ -45,8 +46,9 @@ class AFTBoosterPMF:
 
 def _interval_data(X, categories):
     data = xgb.DMatrix(X)
-    data.set_float_info("label_lower_bound", np.asarray(CATEGORY_LOWER_M)[categories])
-    data.set_float_info("label_upper_bound", np.asarray(CATEGORY_UPPER_M)[categories])
+    bounds = np.asarray(AFT_LATENT_BOUNDS)
+    data.set_float_info("label_lower_bound", bounds[:-1][categories])
+    data.set_float_info("label_upper_bound", bounds[1:][categories])
     return data
 
 

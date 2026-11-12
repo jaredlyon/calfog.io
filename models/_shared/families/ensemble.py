@@ -83,6 +83,7 @@ def fit_predict(prep, *, cnn_cfg: dict | None, seed: int) -> FamilyOutput:
             _require_categories(categories, name, f"{block + 1} OOF")
         _require_categories(prep.ctr[bounds[stage]:], name, f"{stage + 1}..{N_BLOCKS} refit")
     _require_categories(prep.ctr[bounds[3]:], "temporal_cnn", f"4..{N_BLOCKS} refit")
+    lr_optimization = []
 
     for stage, (fit_model, name) in enumerate(zip(fitters, names)):
         width = n_features + stage * n_cumulative
@@ -96,6 +97,9 @@ def fit_predict(prep, *, cnn_cfg: dict | None, seed: int) -> FamilyOutput:
             else:
                 Xv, cv = Xtr[:0], ctr[:0]
             model = fit_model(Xtr, ctr, Xv, cv, seed=seed_for(seed, name, "oof", block))
+            if stage == 0:
+                lr_optimization.append({"phase": "oof", "block": block + 1,
+                                        "optimization": model.optimization_})
             rows = slice(bounds[block], bounds[block + 1])
             predict = model.predict_proba_raw if stage == 1 else model.predict_proba
             pmf = predict(train[rows, :width])
@@ -107,6 +111,9 @@ def fit_predict(prep, *, cnn_cfg: dict | None, seed: int) -> FamilyOutput:
         start = bounds[stage]
         model = fit_model(train[start:, :width], prep.ctr[start:], val[:, :width], prep.cv,
                           seed=seed_for(seed, name, "refit"))
+        if stage == 0:
+            lr_optimization.append({"phase": "refit", "block": None,
+                                    "optimization": model.optimization_})
         models.append(model)
         pv, pt = model.predict_proba(val[:, :width]), model.predict_proba(test[:, :width])
         pmf_val.append(pv)
@@ -130,6 +137,6 @@ def fit_predict(prep, *, cnn_cfg: dict | None, seed: int) -> FamilyOutput:
         pmf_test=sum(weight * pmf for weight, pmf in zip(BLEND_WEIGHTS, pmf_test)),
         importance=_importance(models, tree_feature_names(prep.cols)),
         info={"inner_blocks": N_BLOCKS, "cnn_train_rows": int(len(prep.ctr) - start),
-              **cnn_info, "blend_weights": list(BLEND_WEIGHTS)},
+              **cnn_info, "blend_weights": list(BLEND_WEIGHTS), "lr_optimization": lr_optimization},
         state={key: value.detach().cpu().clone() for key, value in cnn.state_dict().items()},
     )

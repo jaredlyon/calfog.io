@@ -10,51 +10,93 @@ from models._shared.evaluation import fit_calibrator, finalize_model, ordinal_bo
 from models._shared.visibility import N_CATEGORIES, hourly_labels
 
 
+@pytest.fixture(autouse=True)
+def synthetic_environment(monkeypatch):
+    monkeypatch.setattr(study, 'capture_environment', lambda: {'python': 'synthetic producer'})
+
+
+def tuning_data():
+    times = pd.date_range('2020-01-01', periods=24 * 181, freq='h')
+    weather = pd.DataFrame({'time': times, 'custom': np.arange(len(times), dtype=float),
+        **{col: 0. for col in data.CAL_COLS + data.AQI_COLS + data.MEASURED_AQ_COLS}})
+    issues = times[24::24]
+    categories = np.where(np.arange(len(issues)) % 2, 4, 17)
+    labels = pd.DataFrame({'issue_time': issues, 'row_key': issues.astype(str),
+                           'category': categories, 'fog': categories <= 4})
+    return weather, labels
+
+
 def test_poc_2_nowcast_uses_own_validation(monkeypatch, tmp_path):
-    labels = {task: pd.DataFrame({'fog': [0, 1]}) for task in ('nowcast', 'lead_time')}
-    for task, frame in labels.items():
-        frame.attrs['task'] = task
-    monkeypatch.setattr(study, 'load_sources', lambda *a, **kw: (None, None))
-    monkeypatch.setattr(study, 'label_tables', lambda *a: tuple(labels.values()))
-    monkeypatch.setattr(study, 'build_windows', lambda w, frame, *a, **kw: (None, None, frame, None))
-    monkeypatch.setattr(study, 'rolling_origin_folds', lambda frame: [{key: frame.attrs['task'] for key in ('train', 'val', 'test')}])
-    monkeypatch.setattr(study, 'prepare', lambda w, parts, **kw: SimpleNamespace(cv=parts['val']))
-    tuned = []
-
-    def tune(prep, site, task, **kw):
-        tuned.append((task, prep.cv))
-        return {'selected_on': prep.cv}
-
+    weather, now = tuning_data()
+    lead = now.assign(category=np.where(now.category.eq(4), 17, 4), fog=~now.fog)
+    monkeypatch.setattr(study, 'load_sources', lambda *a, **kw: (weather, None))
+    monkeypatch.setattr(study, 'label_tables', lambda *a: (now, lead))
+    tuned = {}
+    def tune(prep, site, task, **kwargs):
+        tuned[task] = prep.cv.copy()
+        return {'selected_on': task}
     monkeypatch.setattr(study, 'tune_cnn', tune)
     received = []
-
-    class StopProbe(Exception):
-        pass
-
-    def evaluate(weather, frame, site, task, family, *, cnn_cfg, **kw):
+    def evaluate(weather, frame, site, task, family, *, cnn_cfg, **kwargs):
         if family != 'climatology':
             received.append((task, cnn_cfg['selected_on']))
-            if task == 'lead_time':
-                raise StopProbe
         return {}, [], {}
-
     monkeypatch.setattr(study, 'evaluate_family', evaluate)
     monkeypatch.setattr(study, 'evaluate_ablation', lambda *a, **kw: {'fold_audit': []})
-    with pytest.raises(StopProbe):
-        study.run_family('temporal_cnn', sites=('location_10',), out_dir=tmp_path)
-    assert tuned == [('nowcast', 'nowcast'), ('lead_time', 'lead_time')]
+    metrics = study.run_family('temporal_cnn', sites=('location_10',), weather_cols=['custom'],
+                               out_dir=tmp_path, write=False)
     assert received == [('nowcast', 'nowcast'), ('lead_time', 'lead_time')]
+    assert not np.array_equal(tuned['nowcast'], tuned['lead_time'])
+    assert set(metrics['per_site']['location_10']['cnn_tuning']) == {'nowcast', 'lead_time'}
 
 
-def test_cnn_tuning_cache_is_shared_per_site_and_task(monkeypatch, tmp_path):
+def test_cnn_tuning_prefix_clips_against_earlier_matched_tests():
+    weather, labels = tuning_data()
+    cohort = labels.iloc[:160]
+    original = study.rolling_origin_folds(labels)
+    prep, context, tests = study.tuning_prefix(weather, labels, [cohort], weather_cols=['custom'])
+    expected = study.rolling_origin_folds(cohort)[0]['test_start'] - pd.Timedelta(hours=24)
+    assert pd.Timestamp(context['cutoff']) == expected
+    for split in ('train', 'val'):
+        assert (prep.metas[split].issue_time < expected).all()
+        assert set(prep.metas[split].row_key) <= set(original[0][split].row_key)
+        assert all(not set(prep.metas[split].row_key) & set(test.row_key) for test in tests)
+    assert len(prep.cv) < len(original[0]['val'])
+    pd.testing.assert_frame_equal(study.rolling_origin_folds(labels)[0]['test'], original[0]['test'])
+
+
+def test_cnn_tuning_cache_is_shared_only_for_identical_context(monkeypatch, tmp_path):
+    weather, labels = tuning_data()
+    prep, context, tests = study.tuning_prefix(weather, labels, [labels], weather_cols=['custom'])
+    first = study.rolling_origin_folds(labels)[0]
+    assert prep.metas['val'].row_key.tolist() == first['val'].row_key.tolist()
     calls = []
-    monkeypatch.setattr(study, 'tune_cnn', lambda prep, site, task, **kw: calls.append((site, task, prep.cv)) or {'selected_on': prep.cv})
+    monkeypatch.setattr(study, 'tune_cnn', lambda *a, **kw: calls.append(a[2]) or {'call': len(calls)})
     cache = {}
-    first = SimpleNamespace(cv='nowcast')
-    assert study.tuned_cnn_cfg(first, 'location_10', 'nowcast', art_dir=tmp_path, cache=cache) == {'selected_on': 'nowcast'}
-    assert study.tuned_cnn_cfg(SimpleNamespace(cv='ignored'), 'location_10', 'nowcast', art_dir=tmp_path, cache=cache) == {'selected_on': 'nowcast'}
-    study.tuned_cnn_cfg(SimpleNamespace(cv='lead_time'), 'location_10', 'lead_time', art_dir=tmp_path, cache=cache)
-    assert calls == [('location_10', 'nowcast', 'nowcast'), ('location_10', 'lead_time', 'lead_time')]
+    def select(prepared, ctx, recipient):
+        return study.tuned_cnn_cfg(prepared, 'location_10', 'nowcast', art_dir=tmp_path,
+                                    cache=cache, context=ctx, recipient_tests=recipient)
+    assert select(prep, context, tests) == select(prep, context, tests) == {'call': 1}
+    changed = labels.copy()
+    changed.loc[0, 'category'] = 4 if changed.category.iloc[0] == 17 else 17
+    updated, new_context, new_tests = study.tuning_prefix(weather, changed, [changed], weather_cols=['custom'])
+    assert new_context['train_sha256'] != context['train_sha256']
+    assert select(updated, new_context, new_tests) == {'call': 2}
+    assert cache['location_10', 'nowcast'] == {'cfg': {'call': 2}, 'context': new_context}
+    earlier, earlier_context, earlier_tests = study.tuning_prefix(
+        weather, labels, [labels.iloc[:160]], weather_cols=['custom'])
+    assert earlier_context['cutoff'] != context['cutoff']
+    assert select(earlier, earlier_context, earlier_tests) == {'call': 3}
+    with pytest.raises(AssertionError):
+        select(prep, context, [prep.metas['train']])
+
+
+def test_cnn_tuning_unavailable_prefix_does_not_move_folds():
+    weather, labels = tuning_data()
+    before = study.rolling_origin_folds(labels)[0]['test']
+    with pytest.raises(study.NotEstimable, match='cnn tuning prefix lacks both classes'):
+        study.tuning_prefix(weather, labels, [labels.iloc[:120]], weather_cols=['custom'])
+    pd.testing.assert_frame_equal(before, study.rolling_origin_folds(labels)[0]['test'])
 
 
 def test_poc_3_hourly_loader_keeps_min_category_and_drops_unknown(monkeypatch, tmp_path):
@@ -133,7 +175,11 @@ def test_full_4_nonestimable_comparison_keeps_main_result(monkeypatch, tmp_path,
     categories = np.where(y, 2, 17)
     pmf = np.zeros((len(y), N_CATEGORIES)); pmf[:, 2] = p; pmf[:, 17] = 1-p
     main_result['ordinal'] = ordinal_bootstrap(categories, pmf, test_meta, n_boot=4, seed=17)
-    monkeypatch.setattr(study, 'evaluate_family', lambda *a, **kw: (main_result, [{'fold': 1}], {}))
+    def evaluate_main(*args, prediction_path=None, **kwargs):
+        prediction_path.parent.mkdir(parents=True, exist_ok=True)
+        prediction_path.write_bytes(b'synthetic main prediction')
+        return main_result, [{'fold': 1}], {}
+    monkeypatch.setattr(study, 'evaluate_family', evaluate_main)
     monkeypatch.setattr(report, 'write_plots', Mock())
     metrics = study.run_family('xgboost', sites=('location_10',), out_dir=tmp_path, n_boot=4)
     trainer.assert_not_called()
@@ -157,3 +203,26 @@ def test_full_4_nonestimable_comparison_keeps_main_result(monkeypatch, tmp_path,
     monkeypatch.setattr(study, 'evaluate_ablation', Mock(side_effect=ValueError('real failure')))
     with pytest.raises(ValueError, match='real failure'):
         study.run_family('xgboost', sites=('location_10',), out_dir=tmp_path, n_boot=4)
+
+
+def test_unavailable_cnn_prefix_marks_every_recipient_without_training(monkeypatch, tmp_path):
+    weather, labels = tuning_data()
+    monkeypatch.setattr(study, 'load_sources', lambda *a, **kw: (weather, None))
+    monkeypatch.setattr(study, 'label_tables', lambda *a: (labels, labels))
+    def unavailable(*args, **kwargs):
+        raise study.NotEstimable('cnn tuning prefix lacks both classes')
+    monkeypatch.setattr(study, 'tuning_prefix', unavailable)
+    monkeypatch.setattr(study, 'tune_cnn', Mock(side_effect=AssertionError('tuning began')))
+    monkeypatch.setattr(study, 'evaluate_ablation', Mock(side_effect=AssertionError('ablation began')))
+    def baseline(*args, **kwargs):
+        assert args[4] == 'climatology'
+        return {'ordinal': {}}, [], {}
+    monkeypatch.setattr(study, 'evaluate_family', baseline)
+    result = study.run_family('temporal_cnn', sites=('location_10',), weather_cols=['custom'],
+                               out_dir=tmp_path, write=False)
+    sd = result['per_site']['location_10']
+    for task in ('nowcast', 'lead_time'):
+        expected = {'status': 'not_estimable', 'reason': 'cnn tuning prefix lacks both classes'}
+        assert sd['tasks'][task]['temporal_cnn'] == expected
+        assert sd['tasks'][task]['climatology'] == {'ordinal': {}}
+        assert all(tasks[task]['temporal_cnn'] == expected for tasks in sd['aqi_ablation'].values())

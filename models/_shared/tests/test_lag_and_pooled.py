@@ -167,6 +167,7 @@ def test_run_pooled_loads_all_sites_once_and_reports_not_applicable(monkeypatch,
         loaded.append(site)
         return _weather(times), pd.DataFrame({'time': times, 'category': np.where(np.arange(len(times)) % 2, 2, 17)})
     monkeypatch.setattr(study, 'load_sources', load)
+    monkeypatch.setattr(study, 'capture_environment', lambda: {'python': 'pooled producer'})
     # Use one small fixed fold, while retaining real label, window, evaluation and reporting paths.
     def folds(labels):
         return [{'train': labels.loc[labels.issue_time < times[48]],
@@ -193,6 +194,8 @@ def test_run_pooled_loads_all_sites_once_and_reports_not_applicable(monkeypatch,
     assert len(pooled_calls) == 2
     assert baseline_sites == [{site}, {site}]
     assert metrics['predictor_set'] == study.PREDICTOR_SETS['xgboost_pooled']
+    assert metrics['per_site'][site]['environment'] == {'python': 'pooled producer'}
+    assert metrics['inputs'][site]['source_sites'] == sorted(SITES)
     for task in ('nowcast', 'lead_time'):
         for aq_set in ('nox', 'pm25', 'cams'):
             assert metrics['per_site'][site]['aqi_ablation'][aq_set][task]['xgboost_pooled'] == {
@@ -210,3 +213,44 @@ def test_run_pooled_loads_all_sites_once_and_reports_not_applicable(monkeypatch,
     assert '| Predictor set |' in markdown
     assert study.PREDICTOR_SETS['xgboost_pooled'] in markdown
     assert '- AQI not applicable:' in markdown
+
+
+def test_lag_runner_completed_nox_excludes_issue_hour_sentinel(monkeypatch, tmp_path):
+    from models import lag_aware_nox_v2 as runner
+    from models._shared import data
+    times = pd.date_range('2024-01-01', periods=72, freq='h')
+    weather = pd.DataFrame({'time': times, **{col: 1. for col in data.WEATHER_COLS}})
+    measured = pd.DataFrame({'time': times[27:48], 'nox_ppb': [7.] * 20 + [999999.],
+        'pm25_ugm3': 3., 'nox_monitor': 'old', 'pm25_monitor': 'pm'})
+    vis = pd.DataFrame({'time': times, 'cat_lo': 17, 'cat_hi': 17, 'category': 17, 'fog': False})
+    root = tmp_path / 'datasets'
+    for folder in ('weather', 'aqi', 'visibility', 'aq_measured'):
+        (root / folder).mkdir(parents=True)
+    (root / 'weather/location_10_weather.csv').touch()
+    (root / 'aq_measured/location_10_aq_measured.csv').touch()
+    def read_csv(path, **kwargs):
+        if 'aq_measured' in str(path):
+            return measured.copy()
+        if 'visibility' in str(path):
+            return vis.copy()
+        if 'aqi' in str(path):
+            return pd.DataFrame({'time': times, **{col: 0. for col in data.AQI_COLS}})
+        return weather.copy()
+    monkeypatch.setattr(data, 'ROOT', tmp_path)
+    monkeypatch.setattr(pd, 'read_csv', read_csv)
+    monkeypatch.setattr(runner, 'capture_environment', lambda: {'python': 'lag producer'})
+    monkeypatch.setattr(runner, 'prediction_dir', lambda *a: tmp_path / 'predictions')
+    labels = pd.DataFrame({'issue_time': [times[47]], 'category': [4], 'row_key': ['issue']})
+    monkeypatch.setattr(runner, 'label_tables', lambda *a: (labels, labels))
+    seen = []
+    def evaluate(source, matched, site, task, family, **kwargs):
+        assert matched.row_key.tolist() == ['issue']
+        X, _, _, columns = windows.build_windows(source, matched, aq_cols=['nox_ppb'],
+            aq_min_hours=20, weather_cols=runner.LAG_WEATHER_COLS)
+        assert X[0, -1, columns.index('nox_ppb')] == 7.
+        assert not np.any(X == 999999.)
+        seen.append(task)
+        return {}
+    monkeypatch.setattr(runner, 'evaluate_ablation', evaluate)
+    runner.run_unit('xgboost', 'location_10')
+    assert seen == ['nowcast', 'lead_time']

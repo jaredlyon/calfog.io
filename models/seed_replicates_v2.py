@@ -20,6 +20,8 @@ from models._shared.data import AQ_MIN_HOURS, AQ_SETS, SEED, SITES, WEATHER_COLS
 from models._shared.families import seed_for
 from models._shared.labels import label_tables
 from models._shared.study import FAMILY_DIRS, evaluate_ablation
+from models._shared.environment import capture_environment
+from models._shared.artifacts import atomic_write_json
 from models._shared.windows import build_windows
 
 REPLICATE_FAMILIES = ('xgboost', 'ebm')
@@ -37,6 +39,7 @@ def complete(family, site, replicate):
 
 
 def run_unit(family, site, replicate):
+    environment = capture_environment()
     weather, vis = load_sources(site, weather_cols=WEATHER_COLS)
     for task, labels in zip(TASKS, label_tables(weather, vis, site)):
         _, _, matched, _ = build_windows(weather, labels, aq_cols=AQ_SETS['nox'],
@@ -45,6 +48,10 @@ def run_unit(family, site, replicate):
                           seed=seed_for(SEED, family, site, task, 'nox', 'aqi_bootstrap'),
                           aq_cols=AQ_SETS['nox'], prediction_dir=replicate_dir(family, replicate),
                           aq_set='nox', replicate=replicate)
+    directory = replicate_dir(family, replicate)
+    atomic_write_json(directory / f'{site}__nox.environment.json', {
+        'environment': environment, 'prediction_files': [
+            f'{site}__{task}__nox_{arm}.npz' for task in TASKS for arm in ('with', 'without')]})
     return family, site, replicate
 
 

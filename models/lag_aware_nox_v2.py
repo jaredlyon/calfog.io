@@ -14,6 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 import argparse
+import json
 import multiprocessing
 from concurrent.futures import ProcessPoolExecutor
 
@@ -22,6 +23,8 @@ from models._shared.families import seed_for
 from models._shared.labels import hourly_visibility_lag, label_tables
 from models._shared.study import FAMILY_DIRS, evaluate_ablation
 from models._shared.windows import build_windows
+from models._shared.environment import capture_environment
+from models._shared.artifacts import atomic_write_json
 
 AQ_SET = 'nox_lag'
 LAG_WEATHER_COLS = [*WEATHER_COLS, 'vis_lag_category']
@@ -38,14 +41,21 @@ def complete(family, site):
 
 
 def run_unit(family, site):
+    environment = capture_environment()
     weather, vis = load_sources(site, weather_cols=WEATHER_COLS)
     weather['vis_lag_category'] = hourly_visibility_lag(weather, vis)
     for task, labels in zip(TASKS, label_tables(weather, vis, site)):
         _, _, matched, _ = build_windows(weather, labels, aq_cols=AQ_SETS['nox'],
                                          aq_min_hours=AQ_MIN_HOURS, weather_cols=LAG_WEATHER_COLS)
-        evaluate_ablation(weather, matched, site, task, family, cnn_cfg=None, weather_cols=LAG_WEATHER_COLS,
+        result = evaluate_ablation(weather, matched, site, task, family, cnn_cfg=None, weather_cols=LAG_WEATHER_COLS,
                           seed=seed_for(SEED, family, site, task, AQ_SET, 'aqi_bootstrap'),
                           aq_cols=AQ_SETS['nox'], prediction_dir=prediction_dir(family), aq_set=AQ_SET)
+        if family == 'logistic_regression':
+            print(json.dumps({'family': family, 'site': site, 'task': task, 'folds': result['info']},
+                             allow_nan=False), flush=True)
+    atomic_write_json(prediction_dir(family) / f'{site}__{AQ_SET}.environment.json', {
+        'environment': environment, 'prediction_files': [
+            f'{site}__{task}__{AQ_SET}_{arm}.npz' for task in TASKS for arm in ('with', 'without')]})
     return family, site
 
 

@@ -10,7 +10,32 @@ import pytest
 from models._shared.evaluation import rps
 from models._shared.families import random_forest, xgboost_aft, xgboost_ordinal
 from models._shared.families.xgboost import BASE_PARAMS
-from models._shared.visibility import CATEGORY_LOWER_M, CATEGORY_UPPER_M, N_CATEGORIES
+from models._shared.visibility import N_CATEGORIES
+
+FROZEN_AFT_BOUNDS = np.r_[
+    np.array([0., .25, .5, .75, 1., 1.25, 1.5, 1.75, 2., 2.5, 3., 4., 5., 6., 7., 8., 9., 10.]) * 1609.344,
+    np.inf,
+]
+
+
+class _Booster:
+    def __init__(self, best_iteration, gains, predict):
+        self.best_iteration = best_iteration
+        self.gains = gains
+        self.predict = predict
+
+    def __getitem__(self, selected):
+        assert selected.start is None and selected.step is None
+        assert selected.stop == self.best_iteration + 1
+
+        def get_score(*, importance_type):
+            assert importance_type == "gain"
+            return self.gains
+
+        return SimpleNamespace(get_score=get_score)
+
+    def get_score(self, **kwargs):
+        raise AssertionError("importance must exclude post-best trees")
 
 
 def test_ordinal_monotonizes_crossing_thresholds_and_keeps_constant_tails(monkeypatch):
@@ -29,8 +54,11 @@ def test_ordinal_monotonizes_crossing_thresholds_and_keeps_constant_tails(monkey
         np.testing.assert_array_equal(kwargs["evals"][0][0].get_label(), [1, 0])
         probability = next(probabilities)
         calls.append(probability)
-        return SimpleNamespace(best_iteration=2, get_score=lambda **kw: {"f0": 4.0},
-                               predict=lambda data, **kw: np.full(data.num_row(), probability))
+        def predict(data, *, iteration_range):
+            assert iteration_range == (0, 3)
+            return np.full(data.num_row(), probability)
+
+        return _Booster(2, {"f0": 4.0}, predict)
 
     monkeypatch.setattr(xgboost_ordinal.xgb, "train", train)
     model = xgboost_ordinal.fit_model(Xtr, ctr, Xv, cv, seed=7)
@@ -70,7 +98,7 @@ def test_aft_normal_interval_mass_matches_hand_calculation():
         return 0.5 * (1 + math.erf(math.log(bound / median) / (scale * math.sqrt(2))))
 
     expected = np.array([cdf(upper) - cdf(lower)
-                         for lower, upper in zip(CATEGORY_LOWER_M, CATEGORY_UPPER_M)])
+                         for lower, upper in zip(FROZEN_AFT_BOUNDS[:-1], FROZEN_AFT_BOUNDS[1:])])
     actual = xgboost_aft.median_to_pmf(np.array([median]), "normal", scale)[0]
     np.testing.assert_allclose(actual, expected, atol=2e-16)
     assert np.all(actual >= 0)
@@ -99,20 +127,23 @@ def test_aft_grid_uses_validation_rps_and_interval_bounds(monkeypatch):
         assert params["eval_metric"] == "aft-nloglik"
         assert kwargs["early_stopping_rounds"] == 40
         np.testing.assert_allclose(data.get_float_info("label_lower_bound"),
-                                   np.asarray(CATEGORY_LOWER_M)[ctr], rtol=1e-6)
+                                   FROZEN_AFT_BOUNDS[:-1][ctr], rtol=1e-6)
         np.testing.assert_allclose(data.get_float_info("label_upper_bound"),
-                                   np.asarray(CATEGORY_UPPER_M)[ctr], rtol=1e-6)
+                                   FROZEN_AFT_BOUNDS[1:][ctr], rtol=1e-6)
         val = kwargs["evals"][0][0]
         assert val.num_row() == len(Xv)
         np.testing.assert_allclose(val.get_float_info("label_lower_bound"),
-                                   np.asarray(CATEGORY_LOWER_M)[cv], rtol=1e-6)
+                                   FROZEN_AFT_BOUNDS[:-1][cv], rtol=1e-6)
         np.testing.assert_allclose(val.get_float_info("label_upper_bound"),
-                                   np.asarray(CATEGORY_UPPER_M)[cv], rtol=1e-6)
+                                   FROZEN_AFT_BOUNDS[1:][cv], rtol=1e-6)
         distribution, scale = params["aft_loss_distribution"], params["aft_loss_distribution_scale"]
         calls.append((distribution, scale))
         median = 1e8 if (distribution, scale) == ("logistic", 1.0) else 1.0
-        return SimpleNamespace(best_iteration=6, get_score=lambda **kw: {"f0": 2.0},
-                               predict=lambda data, **kw: np.full(data.num_row(), median))
+        def predict(data, *, iteration_range):
+            assert iteration_range == (0, 7)
+            return np.full(data.num_row(), median)
+
+        return _Booster(6, {"f0": 2.0}, predict)
 
     monkeypatch.setattr(xgboost_aft.xgb, "train", train)
     cv = np.full(2, 17)
@@ -124,6 +155,44 @@ def test_aft_grid_uses_validation_rps_and_interval_bounds(monkeypatch):
     cv = np.zeros(2, dtype=int)
     selected_low = xgboost_aft.fit_model(Xtr, ctr, Xv, cv, seed=7)
     assert (selected_low.distribution, selected_low.scale) == ("normal", 0.5)
+
+
+def test_aft_frozen_latent_bounds_are_independent_of_report_support(monkeypatch):
+    from models._shared import visibility
+
+    np.testing.assert_array_equal(xgboost_aft.AFT_LATENT_BOUNDS, FROZEN_AFT_BOUNDS)
+    X, categories = np.zeros((18, 1), dtype=np.float32), np.arange(18)
+    before = xgboost_aft.median_to_pmf(np.array([1609.344]), "logistic", 1.)
+    monkeypatch.setattr(visibility, "CATEGORY_LOWER_M", (0.,) * 18)
+    monkeypatch.setattr(visibility, "CATEGORY_UPPER_M", (np.inf,) * 18)
+    data = xgboost_aft._interval_data(X, categories)
+    np.testing.assert_array_equal(data.get_float_info("label_lower_bound"),
+                                  FROZEN_AFT_BOUNDS[:-1].astype(np.float32))
+    np.testing.assert_array_equal(data.get_float_info("label_upper_bound"),
+                                  FROZEN_AFT_BOUNDS[1:].astype(np.float32))
+    after = xgboost_aft.median_to_pmf(np.array([1609.344]), "logistic", 1.)
+    np.testing.assert_array_equal(after, before)
+    assert after[0, :5].sum() == pytest.approx(5 / 9)
+    assert FROZEN_AFT_BOUNDS[2] > FROZEN_AFT_BOUNDS[1]
+
+
+@pytest.mark.parametrize("best_iteration", [0, 6])
+@pytest.mark.parametrize("gains,expected", [
+    ({"f0": 6., "f1": 2.}, [0.75, 0.25, 0.]), ({}, [0., 0., 0.]),
+])
+def test_aft_importance_uses_selected_rounds(best_iteration, gains, expected):
+    booster = _Booster(best_iteration, gains, None)
+    model = xgboost_aft.AFTBoosterPMF(booster, 3, "normal", .5)
+    np.testing.assert_array_equal(model.feature_importances_, expected)
+
+
+@pytest.mark.parametrize("best_iteration", [0, 6])
+@pytest.mark.parametrize("empty", [False, True])
+def test_ordinal_importance_uses_selected_rounds_and_ignores_constants(best_iteration, empty):
+    first = _Booster(best_iteration, {} if empty else {"f0": 6., "f1": 2.}, None)
+    second = _Booster(best_iteration, {} if empty else {"f1": 2.}, None)
+    model = xgboost_ordinal.OrdinalBoosterPMF([first, second] + [1.] * 15, 3)
+    np.testing.assert_allclose(model.feature_importances_, [0., 0., 0.] if empty else [.6, .4, 0.])
 
 
 @pytest.fixture

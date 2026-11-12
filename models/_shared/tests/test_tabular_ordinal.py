@@ -17,6 +17,8 @@ def test_ordered_logit_recovers_monotonic_categories_and_beats_uniform_rps():
     ctr = np.digitize(Xtr[:, 0] + 0.08 * rng.normal(size=len(Xtr)), edges)
     cv = np.digitize(Xv[:, 0], edges)
     model = logistic_regression.fit_model(Xtr, ctr, Xv, cv, seed=42)
+    assert model.optimization_["converged"] is True
+    assert model.optimization_["projected_grad_inf_norm"] <= 1e-7
     pmf = model.predict_proba(Xv)
     uniform = np.full_like(pmf, 1 / N_CATEGORIES)
     assert rps(cv, pmf) < 0.5 * rps(cv, uniform)
@@ -42,6 +44,8 @@ def test_ordered_logit_keeps_full_support_when_categories_are_absent():
     X = np.linspace(-1, 1, 60)[:, None]
     c = np.where(X[:, 0] < 0, 3, 12)
     model = logistic_regression.fit_model(X, c, X[:10], c[:10], seed=42)
+    assert model.optimization_["converged"] is True
+    assert model.optimization_["projected_grad_inf_norm"] <= 1e-7
     pmf = model.predict_proba(np.zeros((2, 1)))
     assert pmf.shape == (2, N_CATEGORIES)
     assert np.isfinite(pmf).all()

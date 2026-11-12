@@ -98,6 +98,8 @@ def stage_spies(monkeypatch, prep):
                 predict_proba=calibrated if stage == 1 else predict_proba,
                 predict_proba_raw=predict_proba, feature_importances_=importance,
                 coef_=importance,
+                optimization_={"converged": True, "projected_grad_inf_norm": 0.,
+                               "training_rows": int(len(ids))},
             )
         return fit_model
 
@@ -164,8 +166,25 @@ def test_exact_pmf_blend_and_family_output(prep, stage_spies):
     assert result.info["cnn_train_rows"] == 40
     assert result.info["cnn_best_val_nll"] == 0.75
     assert result.info["blend_weights"] == [0.1, 0.2, 0.3, 0.4]
+    diagnostics = result.info["lr_optimization"]
+    assert [(entry["phase"], entry["block"]) for entry in diagnostics] == [
+        ("oof", 2), ("oof", 3), ("oof", 4), ("oof", 5), ("refit", None),
+    ]
+    assert [entry["optimization"]["training_rows"] for entry in diagnostics] == [20, 40, 60, 80, 100]
+    assert all(entry["optimization"]["converged"] for entry in diagnostics)
     json.dumps(result.info)
     assert torch.equal(result.state["weight"], torch.tensor([1.0]))
+
+
+def test_rejected_lr_fit_stops_before_any_downstream_predictions(prep, stage_spies, monkeypatch):
+    def rejected(*args, **kwargs):
+        raise RuntimeError("ordered-logit optimization rejected")
+
+    monkeypatch.setattr(ensemble, "fit_lr", rejected)
+    with pytest.raises(RuntimeError, match="ordered-logit optimization rejected"):
+        ensemble.fit_predict(prep, cnn_cfg={}, seed=17)
+    fits, cnn_calls = stage_spies
+    assert fits == [] and cnn_calls == []
 
 
 def test_ensemble_requires_cnn_configuration(prep):

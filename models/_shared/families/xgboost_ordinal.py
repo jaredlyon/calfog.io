@@ -17,7 +17,7 @@ class OrdinalBoosterPMF:
         gain = np.zeros(n_features)
         for model in thresholds:
             if not isinstance(model, float):
-                scores = model.get_score(importance_type="gain")
+                scores = model[:int(model.best_iteration) + 1].get_score(importance_type="gain")
                 gain += [scores.get(f"f{i}", 0.0) for i in range(n_features)]
         gain /= N_CATEGORIES - 1
         self.feature_importances_ = gain / (gain.sum() or 1)

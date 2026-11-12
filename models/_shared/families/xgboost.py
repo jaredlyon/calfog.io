@@ -26,7 +26,7 @@ class BoosterPMF:
     def __init__(self, booster, n_features):
         self.booster = booster
         self.best_iteration = int(booster.best_iteration)
-        gain = booster.get_score(importance_type="gain")
+        gain = booster[:self.best_iteration + 1].get_score(importance_type="gain")
         values = np.array([gain.get(f"f{i}", 0.0) for i in range(n_features)])
         self.feature_importances_ = values / (values.sum() or 1)
 
