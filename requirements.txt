@@ -1,3 +1,4 @@
+# Historical V1 dependencies; use requirements-v2.txt for the reworked V2 scripts.
 pandas==2.2.0
 numpy==1.26.3
 scikit-learn==1.4.0

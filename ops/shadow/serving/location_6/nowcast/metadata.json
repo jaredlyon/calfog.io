@@ -1,0 +1,73 @@
+{
+  "target": "ordinal-18",
+  "category_sm": [
+    0.0,
+    0.25,
+    0.5,
+    0.75,
+    1.0,
+    1.25,
+    1.5,
+    1.75,
+    2.0,
+    2.5,
+    3.0,
+    4.0,
+    5.0,
+    6.0,
+    7.0,
+    8.0,
+    9.0,
+    10.0
+  ],
+  "category_labels": [
+    "<1/4",
+    "1/4",
+    "1/2",
+    "3/4",
+    "1",
+    "1 1/4",
+    "1 1/2",
+    "1 3/4",
+    "2",
+    "2 1/2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "10+"
+  ],
+  "cnn_best_val_nll": 0.874604344367981,
+  "cnn_best_val_ap": 0.42493909626879506,
+  "cnn_epochs": 10,
+  "site": "location_6",
+  "task": "nowcast",
+  "fit_rows": 201834,
+  "fit_positives": 5989,
+  "fit_start_local": "1999-01-14 09:00:00",
+  "fit_end_local": "2022-08-27 04:00:00",
+  "all_history_refit": false,
+  "calibration_method": "isotonic on P(fog) derived from ordinal PMF in last chronological 15%; 24-hour purge",
+  "calibration_rows": 35623,
+  "calibration_positives": 1135,
+  "cost_thresholds": {
+    "xgboost": {
+      "1": 0.43333333333333335,
+      "3": 0.2333333333333333,
+      "5": 0.15666666666666665,
+      "10": 0.08666666666666667,
+      "20": 0.045000000000000005
+    },
+    "temporal_cnn": {
+      "1": 0.425,
+      "3": 0.22833333333333336,
+      "5": 0.16000000000000003,
+      "10": 0.08166666666666667,
+      "20": 0.043333333333333335
+    }
+  },
+  "feature_spec": "../feature_spec.json"
+}

@@ -1,0 +1,44 @@
+{
+  "device": "NVIDIA GeForce RTX 5070",
+  "epochs_run": 14,
+  "best_val_average_precision": 0.11419191026637668,
+  "final_lead_best_val_average_precision": 0.13271361519119584,
+  "ray_tune_trials": 8,
+  "best_config": {
+    "channels": 48,
+    "kernel": 3,
+    "dropout": 0.3,
+    "lr": 0.001736390235799647,
+    "weight_decay": 1e-05,
+    "batch_size": 256,
+    "max_neg": 40000
+  },
+  "search_space": {
+    "channels": [
+      16,
+      32,
+      48,
+      64
+    ],
+    "kernel": [
+      3,
+      5
+    ],
+    "dropout": [
+      0.15,
+      0.3,
+      0.45
+    ],
+    "lr": "loguniform(2e-4,2e-3)",
+    "weight_decay": [
+      1e-05,
+      0.0001,
+      0.001
+    ],
+    "batch_size": [
+      256,
+      512
+    ]
+  },
+  "seed": 20250827
+}

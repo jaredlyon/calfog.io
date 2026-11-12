@@ -1,0 +1,14 @@
+{
+  "site": "location_10",
+  "airport": "KBFL",
+  "faithful": false,
+  "train_source": "era5_archive",
+  "schema_compatible": true,
+  "production_ready": false,
+  "causal_features": {
+    "window_hours": 24,
+    "all_feature_times_lte_issue": true,
+    "lead_label_after_issue": true
+  },
+  "warning": "Reanalysis-to-forecast distribution shift is unresolved; forward-feed fog-season evaluation is required."
+}

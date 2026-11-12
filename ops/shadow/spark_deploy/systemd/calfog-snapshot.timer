@@ -1,0 +1,10 @@
+[Unit]
+Description=Run CalFog V2 shadow snapshot logger hourly
+
+[Timer]
+OnCalendar=hourly
+Persistent=true
+RandomizedDelaySec=120
+
+[Install]
+WantedBy=timers.target

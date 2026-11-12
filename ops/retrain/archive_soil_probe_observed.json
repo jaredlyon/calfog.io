@@ -1,0 +1,72 @@
+{
+  "location_6": {
+    "rows": 168,
+    "variables": {
+      "soil_temperature_0cm": {
+        "rows": 168,
+        "non_null": 0
+      },
+      "soil_temperature_6cm": {
+        "rows": 168,
+        "non_null": 0
+      }
+    },
+    "note": "Observed by successful dedicated Archive request during first interrupted retrain attempt; raw response hash was not retained after interruption."
+  },
+  "location_7": {
+    "rows": 168,
+    "variables": {
+      "soil_temperature_0cm": {
+        "rows": 168,
+        "non_null": 0
+      },
+      "soil_temperature_6cm": {
+        "rows": 168,
+        "non_null": 0
+      }
+    },
+    "note": "Observed by successful dedicated Archive request during first interrupted retrain attempt; raw response hash was not retained after interruption."
+  },
+  "location_8": {
+    "rows": 168,
+    "variables": {
+      "soil_temperature_0cm": {
+        "rows": 168,
+        "non_null": 0
+      },
+      "soil_temperature_6cm": {
+        "rows": 168,
+        "non_null": 0
+      }
+    },
+    "note": "Observed by successful dedicated Archive request during first interrupted retrain attempt; raw response hash was not retained after interruption."
+  },
+  "location_9": {
+    "rows": 168,
+    "variables": {
+      "soil_temperature_0cm": {
+        "rows": 168,
+        "non_null": 0
+      },
+      "soil_temperature_6cm": {
+        "rows": 168,
+        "non_null": 0
+      }
+    },
+    "note": "Observed by successful dedicated Archive request during first interrupted retrain attempt; raw response hash was not retained after interruption."
+  },
+  "location_10": {
+    "rows": 168,
+    "variables": {
+      "soil_temperature_0cm": {
+        "rows": 168,
+        "non_null": 0
+      },
+      "soil_temperature_6cm": {
+        "rows": 168,
+        "non_null": 0
+      }
+    },
+    "note": "Observed by successful dedicated Archive request during first interrupted retrain attempt; raw response hash was not retained after interruption."
+  }
+}

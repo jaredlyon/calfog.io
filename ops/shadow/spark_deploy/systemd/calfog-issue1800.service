@@ -1,0 +1,11 @@
+[Unit]
+Description=CalFog V2 shadow FIXED 18:00 Pacific lead issue snapshot (non-randomized)
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+Environment=CALFOG_ISSUE=lead_1800
+ExecStart=/usr/bin/python3 %h/calfog-shadow/calfog_snapshot.py
+NoNewPrivileges=true
+PrivateTmp=true

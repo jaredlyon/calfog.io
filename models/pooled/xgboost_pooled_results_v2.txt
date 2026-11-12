@@ -1,0 +1,1247 @@
+XGBOOST_POOLED FOG PREDICTION V2
+Predictor set: weather + observed visibility (own + 4 neighbors), pooled sites
+Clock: fixed PST (UTC-8). Hourly label: minimum known GHCNh visibility category; fog = reported <=1 SM.
+AP/AUC/RPS intervals are marginal whole-day block intervals, not paired-model comparisons.
+Thresholds and isotonic calibration fit validation only; each held-out fold is evaluated once.
+
+LOCATION 6 (Madera)
+
+NOWCAST
+
+NOx (primary) AQI ablation: not applicable — pooled multi-site model; AQI matched cohort is per site
+
+PM2.5 (secondary) AQI ablation: not applicable — pooled multi-site model; AQI matched cohort is per site
+
+CAMS (appendix) AQI ablation: not applicable — pooled multi-site model; AQI matched cohort is per site
+
+WITHOUT AQI (full history)
+Average Precision: 0.834016 (95% CI 0.812911, 0.855120)
+RPS: 0.021279 (95% CI 0.020450, 0.022108)
+NLL: 0.606653
+Within one category: 0.896694
+Median-meters log10 MAE (observed and median categories 1–16 only): 0.141706 (n=19336)
+ROC-AUC: 0.988602 (95% CI 0.986826, 0.990379)
+Brier (calibrated): 0.010312
+ECE (calibrated): 0.001986
+Cost-selected threshold (1:1 FN:FP; fold mean): 0.491667
+Precision: 0.802559
+Recall: 0.725993
+F1: 0.762358
+Climatology AP: 0.028582
+FN:FP 1:1 threshold=0.491667, precision=0.802559, recall=0.725993, F1=0.762358, cost/issue=0.013540
+FN:FP 3:1 threshold=0.236667, precision=0.710641, recall=0.818893, F1=0.760936, cost/issue=0.026229
+FN:FP 5:1 threshold=0.145000, precision=0.635110, recall=0.864561, F1=0.732282, cost/issue=0.035118
+FN:FP 10:1 threshold=0.080000, precision=0.554824, recall=0.895840, F1=0.685249, cost/issue=0.052664
+FN:FP 20:1 threshold=0.048333, precision=0.488695, recall=0.912731, F1=0.636562, cost/issue=0.080783
+Feature Importance (%):
+  lag_category: 34.447650%
+  nbr_mean_cat: 6.877632%
+  nbr_reporting: 5.386074%
+  nbr_min_cat: 5.128658%
+  site_location_9: 2.614708%
+  latest_hour_cos: 2.100266%
+  latest_doy_cos: 1.963459%
+  nbr_fog_count: 1.771614%
+  site_location_10: 1.713984%
+  site_location_8: 1.631500%
+  site_location_7: 1.607542%
+  std_precipitation: 1.290982%
+  latest_relative_humidity_2m: 1.212065%
+  mean_precipitation: 1.199875%
+  latest_vapour_pressure_deficit: 1.126099%
+  site_location_6: 1.085228%
+  max_doy_cos: 1.004718%
+  latest_precipitation: 0.995291%
+  mean_wind_gusts_10m: 0.961059%
+  latest_hour_sin: 0.945721%
+  latest_wind_gusts_10m: 0.819998%
+  mean_doy_cos: 0.780243%
+  max_precipitation: 0.762574%
+  min_doy_cos: 0.731640%
+  latest_weather_code: 0.665045%
+  max_wind_gusts_10m: 0.661339%
+  std_soil_temperature_0_to_7cm: 0.570656%
+  min_doy_sin: 0.523531%
+  max_doy_sin: 0.523234%
+  mean_hour_sin: 0.509535%
+  latest_doy_sin: 0.466153%
+  latest_soil_temperature_0_to_7cm: 0.451270%
+  mean_weather_code: 0.438241%
+  mean_hour_cos: 0.437738%
+  mean_doy_sin: 0.435867%
+  max_weather_code: 0.419646%
+  latest_temperature_2m: 0.403164%
+  min_surface_pressure: 0.400740%
+  std_doy_cos: 0.399857%
+  latest_surface_pressure: 0.381414%
+  latest_cloud_cover_low: 0.378308%
+  mean_surface_pressure: 0.376518%
+  mean_relative_humidity_2m: 0.376194%
+  min_vapour_pressure_deficit: 0.371949%
+  max_relative_humidity_2m: 0.358462%
+  max_wind_speed_10m: 0.353900%
+  max_cloud_cover_low: 0.353652%
+  mean_cloud_cover_low: 0.347442%
+  min_soil_temperature_0_to_7cm: 0.347017%
+  min_relative_humidity_2m: 0.343382%
+  std_weather_code: 0.342738%
+  max_wind_speed_100m: 0.342529%
+  max_soil_temperature_0_to_7cm: 0.341205%
+  mean_vapour_pressure_deficit: 0.339312%
+  max_surface_pressure: 0.334971%
+  latest_dew_point_2m: 0.331653%
+  mean_wind_speed_100m: 0.330956%
+  std_doy_sin: 0.330664%
+  std_temperature_2m: 0.329288%
+  max_temperature_2m: 0.327046%
+  max_vapour_pressure_deficit: 0.324364%
+  min_cloud_cover_low: 0.324047%
+  min_temperature_2m: 0.323794%
+  mean_soil_temperature_0_to_7cm: 0.320273%
+  std_cloud_cover_low: 0.315569%
+  mean_temperature_2m: 0.315494%
+  latest_wind_speed_10m: 0.314294%
+  min_dew_point_2m: 0.309773%
+  mean_wind_speed_10m: 0.309596%
+  latest_wind_speed_100m: 0.309427%
+  min_weather_code: 0.308251%
+  std_vapour_pressure_deficit: 0.306103%
+  std_wind_gusts_10m: 0.305324%
+  max_dew_point_2m: 0.303731%
+  mean_dew_point_2m: 0.301828%
+  min_wind_gusts_10m: 0.299078%
+  std_relative_humidity_2m: 0.290097%
+  std_wind_speed_100m: 0.284466%
+  std_dew_point_2m: 0.283942%
+  min_wind_speed_10m: 0.281197%
+  min_wind_speed_100m: 0.278658%
+  std_wind_speed_10m: 0.276792%
+  std_surface_pressure: 0.274643%
+  min_precipitation: 0.236066%
+  max_hour_cos: 0.000000%
+  max_hour_sin: 0.000000%
+  min_hour_cos: 0.000000%
+  min_hour_sin: 0.000000%
+  std_hour_cos: 0.000000%
+  std_hour_sin: 0.000000%
+
+LEAD_TIME
+
+NOx (primary) AQI ablation: not applicable — pooled multi-site model; AQI matched cohort is per site
+
+PM2.5 (secondary) AQI ablation: not applicable — pooled multi-site model; AQI matched cohort is per site
+
+CAMS (appendix) AQI ablation: not applicable — pooled multi-site model; AQI matched cohort is per site
+
+WITHOUT AQI (full history)
+Average Precision: 0.602775 (95% CI 0.559398, 0.646152)
+RPS: 0.099539 (95% CI 0.096326, 0.102752)
+NLL: 1.761133
+Within one category: 0.508834
+Median-meters log10 MAE (observed and median categories 1–16 only): 0.321341 (n=1704)
+ROC-AUC: 0.906820 (95% CI 0.894109, 0.919531)
+Brier (calibrated): 0.073568
+ECE (calibrated): 0.020251
+Cost-selected threshold (1:1 FN:FP; fold mean): 0.468333
+Precision: 0.612832
+Recall: 0.522642
+F1: 0.564155
+Climatology AP: 0.123084
+FN:FP 1:1 threshold=0.468333, precision=0.612832, recall=0.522642, F1=0.564155, cost/issue=0.100824
+FN:FP 3:1 threshold=0.201667, precision=0.452656, recall=0.739623, F1=0.561605, cost/issue=0.209187
+FN:FP 5:1 threshold=0.146667, precision=0.418787, recall=0.807547, F1=0.551546, cost/issue=0.260071
+FN:FP 10:1 threshold=0.080000, precision=0.345954, recall=0.879245, F1=0.496537, cost/issue=0.358304
+FN:FP 20:1 threshold=0.041667, precision=0.299340, recall=0.941509, F1=0.454256, cost/issue=0.421201
+Feature Importance (%):
+  mean_doy_cos: 10.275067%
+  latest_doy_cos: 8.434671%
+  min_doy_cos: 6.253036%
+  max_doy_cos: 5.552104%
+  lag_category: 3.665840%
+  site_location_10: 3.104032%
+  nbr_reporting: 3.043525%
+  nbr_mean_cat: 1.890621%
+  site_location_9: 1.870829%
+  site_location_7: 1.830671%
+  nbr_min_cat: 1.594390%
+  max_doy_sin: 1.461779%
+  latest_relative_humidity_2m: 1.254528%
+  site_location_8: 1.207916%
+  latest_wind_gusts_10m: 1.202768%
+  latest_vapour_pressure_deficit: 1.183912%
+  latest_doy_sin: 1.092844%
+  mean_doy_sin: 1.075833%
+  max_soil_temperature_0_to_7cm: 1.010655%
+  min_relative_humidity_2m: 0.979539%
+  mean_wind_gusts_10m: 0.978303%
+  std_soil_temperature_0_to_7cm: 0.977445%
+  mean_relative_humidity_2m: 0.967496%
+  min_doy_sin: 0.952870%
+  site_location_6: 0.933748%
+  nbr_fog_count: 0.907838%
+  min_surface_pressure: 0.901908%
+  max_relative_humidity_2m: 0.901364%
+  std_doy_cos: 0.894348%
+  latest_surface_pressure: 0.891881%
+  latest_soil_temperature_0_to_7cm: 0.869452%
+  max_wind_gusts_10m: 0.865101%
+  latest_weather_code: 0.801249%
+  mean_vapour_pressure_deficit: 0.786375%
+  min_dew_point_2m: 0.772175%
+  latest_precipitation: 0.738750%
+  std_cloud_cover_low: 0.733770%
+  min_vapour_pressure_deficit: 0.728584%
+  latest_dew_point_2m: 0.725855%
+  mean_surface_pressure: 0.717720%
+  max_vapour_pressure_deficit: 0.711340%
+  max_wind_speed_100m: 0.675626%
+  mean_dew_point_2m: 0.673202%
+  mean_wind_speed_100m: 0.672124%
+  latest_wind_speed_10m: 0.671637%
+  max_surface_pressure: 0.668741%
+  std_doy_sin: 0.668328%
+  max_temperature_2m: 0.665219%
+  latest_temperature_2m: 0.662451%
+  max_weather_code: 0.657671%
+  mean_cloud_cover_low: 0.655430%
+  latest_cloud_cover_low: 0.655157%
+  mean_weather_code: 0.654098%
+  min_temperature_2m: 0.652106%
+  mean_wind_speed_10m: 0.648451%
+  std_temperature_2m: 0.641782%
+  min_soil_temperature_0_to_7cm: 0.639009%
+  mean_soil_temperature_0_to_7cm: 0.636111%
+  std_vapour_pressure_deficit: 0.635252%
+  max_wind_speed_10m: 0.631644%
+  max_cloud_cover_low: 0.630667%
+  std_precipitation: 0.629378%
+  latest_wind_speed_100m: 0.628302%
+  mean_precipitation: 0.617555%
+  max_dew_point_2m: 0.612260%
+  min_wind_gusts_10m: 0.609139%
+  mean_temperature_2m: 0.600966%
+  std_dew_point_2m: 0.594261%
+  std_weather_code: 0.592797%
+  max_precipitation: 0.584435%
+  std_wind_gusts_10m: 0.583469%
+  std_relative_humidity_2m: 0.581854%
+  std_wind_speed_10m: 0.581244%
+  min_precipitation: 0.575048%
+  min_wind_speed_10m: 0.574164%
+  min_weather_code: 0.573620%
+  min_wind_speed_100m: 0.569016%
+  std_surface_pressure: 0.567211%
+  std_wind_speed_100m: 0.547479%
+  min_cloud_cover_low: 0.540962%
+  latest_hour_cos: 0.000000%
+  latest_hour_sin: 0.000000%
+  max_hour_cos: 0.000000%
+  max_hour_sin: 0.000000%
+  mean_hour_cos: 0.000000%
+  mean_hour_sin: 0.000000%
+  min_hour_cos: 0.000000%
+  min_hour_sin: 0.000000%
+  std_hour_cos: 0.000000%
+  std_hour_sin: 0.000000%
+
+LOCATION 7 (Fresno)
+
+NOWCAST
+
+NOx (primary) AQI ablation: not applicable — pooled multi-site model; AQI matched cohort is per site
+
+PM2.5 (secondary) AQI ablation: not applicable — pooled multi-site model; AQI matched cohort is per site
+
+CAMS (appendix) AQI ablation: not applicable — pooled multi-site model; AQI matched cohort is per site
+
+WITHOUT AQI (full history)
+Average Precision: 0.888662 (95% CI 0.875621, 0.901703)
+RPS: 0.015868 (95% CI 0.015413, 0.016324)
+NLL: 0.554176
+Within one category: 0.922481
+Median-meters log10 MAE (observed and median categories 1–16 only): 0.078086 (n=41230)
+ROC-AUC: 0.994438 (95% CI 0.993521, 0.995355)
+Brier (calibrated): 0.005747
+ECE (calibrated): 0.001502
+Cost-selected threshold (1:1 FN:FP; fold mean): 0.491667
+Precision: 0.882508
+Recall: 0.764661
+F1: 0.819369
+Climatology AP: 0.022450
+FN:FP 1:1 threshold=0.491667, precision=0.882508, recall=0.764661, F1=0.819369, cost/issue=0.007223
+FN:FP 3:1 threshold=0.225000, precision=0.784291, recall=0.849200, F1=0.815456, cost/issue=0.014697
+FN:FP 5:1 threshold=0.161667, precision=0.724196, recall=0.879919, F1=0.794499, cost/issue=0.020043
+FN:FP 10:1 threshold=0.083333, precision=0.570201, recall=0.926885, F1=0.706053, cost/issue=0.030634
+FN:FP 20:1 threshold=0.046667, precision=0.462166, recall=0.948972, F1=0.621601, cost/issue=0.045526
+Feature Importance (%):
+  lag_category: 34.699593%
+  nbr_mean_cat: 6.051157%
+  nbr_min_cat: 4.655015%
+  nbr_reporting: 4.560213%
+  site_location_9: 2.313439%
+  latest_doy_cos: 2.170639%
+  latest_hour_cos: 1.852074%
+  nbr_fog_count: 1.774560%
+  site_location_7: 1.741968%
+  site_location_10: 1.740810%
+  site_location_8: 1.738248%
+  latest_relative_humidity_2m: 1.281231%
+  std_precipitation: 1.230154%
+  max_doy_cos: 1.212709%
+  mean_doy_cos: 1.210408%
+  latest_vapour_pressure_deficit: 1.145086%
+  mean_precipitation: 1.115137%
+  min_doy_cos: 1.047592%
+  site_location_6: 1.041439%
+  max_precipitation: 0.937658%
+  latest_precipitation: 0.902185%
+  latest_hour_sin: 0.896459%
+  mean_wind_gusts_10m: 0.761406%
+  latest_wind_gusts_10m: 0.700164%
+  latest_weather_code: 0.579577%
+  max_wind_gusts_10m: 0.574936%
+  std_soil_temperature_0_to_7cm: 0.572559%
+  latest_soil_temperature_0_to_7cm: 0.543461%
+  min_doy_sin: 0.538608%
+  mean_hour_sin: 0.501507%
+  max_doy_sin: 0.498710%
+  latest_doy_sin: 0.483831%
+  mean_weather_code: 0.483700%
+  mean_doy_sin: 0.450640%
+  min_surface_pressure: 0.442968%
+  std_doy_cos: 0.433622%
+  max_weather_code: 0.428584%
+  mean_relative_humidity_2m: 0.426123%
+  latest_temperature_2m: 0.421761%
+  min_vapour_pressure_deficit: 0.416111%
+  mean_hour_cos: 0.415428%
+  max_soil_temperature_0_to_7cm: 0.413890%
+  mean_surface_pressure: 0.409278%
+  max_cloud_cover_low: 0.397378%
+  latest_cloud_cover_low: 0.396543%
+  latest_surface_pressure: 0.392570%
+  max_relative_humidity_2m: 0.388096%
+  min_soil_temperature_0_to_7cm: 0.383464%
+  mean_vapour_pressure_deficit: 0.383167%
+  mean_cloud_cover_low: 0.380122%
+  min_cloud_cover_low: 0.371758%
+  max_wind_speed_10m: 0.369741%
+  min_relative_humidity_2m: 0.368043%
+  max_wind_speed_100m: 0.366128%
+  max_surface_pressure: 0.365985%
+  max_temperature_2m: 0.361486%
+  std_weather_code: 0.361412%
+  std_cloud_cover_low: 0.357504%
+  std_doy_sin: 0.355465%
+  max_vapour_pressure_deficit: 0.354499%
+  latest_dew_point_2m: 0.352012%
+  mean_soil_temperature_0_to_7cm: 0.351181%
+  min_temperature_2m: 0.349931%
+  mean_wind_speed_100m: 0.346169%
+  mean_temperature_2m: 0.342488%
+  std_temperature_2m: 0.342192%
+  min_weather_code: 0.340193%
+  min_dew_point_2m: 0.336421%
+  min_wind_gusts_10m: 0.336172%
+  std_wind_gusts_10m: 0.334854%
+  max_dew_point_2m: 0.334159%
+  mean_dew_point_2m: 0.333624%
+  latest_wind_speed_10m: 0.333079%
+  std_vapour_pressure_deficit: 0.328425%
+  latest_wind_speed_100m: 0.328348%
+  mean_wind_speed_10m: 0.322256%
+  std_dew_point_2m: 0.314410%
+  std_relative_humidity_2m: 0.312885%
+  min_wind_speed_10m: 0.312237%
+  min_wind_speed_100m: 0.307412%
+  std_wind_speed_100m: 0.307348%
+  std_surface_pressure: 0.301395%
+  std_wind_speed_10m: 0.300409%
+  min_precipitation: 0.264406%
+  max_hour_cos: 0.000000%
+  max_hour_sin: 0.000000%
+  min_hour_cos: 0.000000%
+  min_hour_sin: 0.000000%
+  std_hour_cos: 0.000000%
+  std_hour_sin: 0.000000%
+
+LEAD_TIME
+
+NOx (primary) AQI ablation: not applicable — pooled multi-site model; AQI matched cohort is per site
+
+PM2.5 (secondary) AQI ablation: not applicable — pooled multi-site model; AQI matched cohort is per site
+
+CAMS (appendix) AQI ablation: not applicable — pooled multi-site model; AQI matched cohort is per site
+
+WITHOUT AQI (full history)
+Average Precision: 0.511130 (95% CI 0.468215, 0.554045)
+RPS: 0.073781 (95% CI 0.071720, 0.075842)
+NLL: 1.599992
+Within one category: 0.611277
+Median-meters log10 MAE (observed and median categories 1–16 only): 0.213247 (n=2584)
+ROC-AUC: 0.923290 (95% CI 0.914171, 0.932408)
+Brier (calibrated): 0.044685
+ECE (calibrated): 0.019799
+Cost-selected threshold (1:1 FN:FP; fold mean): 0.455000
+Precision: 0.556863
+Recall: 0.300211
+F1: 0.390110
+Climatology AP: 0.066216
+FN:FP 1:1 threshold=0.455000, precision=0.556863, recall=0.300211, F1=0.390110, cost/issue=0.060179
+FN:FP 3:1 threshold=0.236667, precision=0.355682, recall=0.661734, F1=0.462676, cost/issue=0.141908
+FN:FP 5:1 threshold=0.140000, precision=0.290671, recall=0.797040, F1=0.425989, cost/issue=0.189753
+FN:FP 10:1 threshold=0.078333, precision=0.227416, recall=0.915433, F1=0.364325, cost/issue=0.253592
+FN:FP 20:1 threshold=0.045000, precision=0.190072, recall=0.947146, F1=0.316608, cost/issue=0.326511
+Feature Importance (%):
+  mean_doy_cos: 8.072328%
+  latest_doy_cos: 7.181941%
+  max_doy_cos: 6.429815%
+  min_doy_cos: 6.071838%
+  site_location_10: 4.310499%
+  lag_category: 3.620071%
+  nbr_reporting: 2.717570%
+  site_location_9: 2.247588%
+  nbr_mean_cat: 1.953184%
+  site_location_7: 1.832260%
+  nbr_min_cat: 1.644744%
+  latest_vapour_pressure_deficit: 1.623705%
+  site_location_8: 1.508382%
+  latest_relative_humidity_2m: 1.508082%
+  mean_vapour_pressure_deficit: 1.185388%
+  site_location_6: 1.109906%
+  max_doy_sin: 1.075662%
+  min_vapour_pressure_deficit: 1.060174%
+  min_doy_sin: 1.056991%
+  latest_wind_gusts_10m: 1.039388%
+  mean_relative_humidity_2m: 1.038058%
+  min_relative_humidity_2m: 1.023506%
+  mean_doy_sin: 1.005459%
+  max_soil_temperature_0_to_7cm: 0.980179%
+  mean_wind_gusts_10m: 0.957652%
+  latest_doy_sin: 0.910886%
+  std_doy_cos: 0.893393%
+  std_soil_temperature_0_to_7cm: 0.885014%
+  latest_weather_code: 0.877848%
+  min_surface_pressure: 0.876973%
+  latest_surface_pressure: 0.818861%
+  max_relative_humidity_2m: 0.809816%
+  latest_precipitation: 0.805086%
+  max_wind_gusts_10m: 0.787709%
+  latest_dew_point_2m: 0.745423%
+  min_dew_point_2m: 0.739426%
+  mean_wind_speed_100m: 0.737077%
+  std_cloud_cover_low: 0.733103%
+  std_doy_sin: 0.729532%
+  latest_soil_temperature_0_to_7cm: 0.728960%
+  mean_soil_temperature_0_to_7cm: 0.710848%
+  mean_surface_pressure: 0.707453%
+  mean_dew_point_2m: 0.701753%
+  max_wind_speed_100m: 0.701461%
+  mean_temperature_2m: 0.701169%
+  max_vapour_pressure_deficit: 0.696406%
+  max_surface_pressure: 0.693338%
+  max_temperature_2m: 0.691006%
+  mean_cloud_cover_low: 0.685592%
+  min_soil_temperature_0_to_7cm: 0.685173%
+  max_cloud_cover_low: 0.682293%
+  max_weather_code: 0.681102%
+  std_vapour_pressure_deficit: 0.680966%
+  latest_temperature_2m: 0.675507%
+  std_temperature_2m: 0.670273%
+  latest_wind_speed_10m: 0.669256%
+  mean_weather_code: 0.668812%
+  min_wind_gusts_10m: 0.667468%
+  max_wind_speed_10m: 0.667178%
+  mean_wind_speed_10m: 0.666502%
+  min_temperature_2m: 0.658556%
+  nbr_fog_count: 0.652029%
+  latest_cloud_cover_low: 0.648458%
+  max_dew_point_2m: 0.648193%
+  std_precipitation: 0.639532%
+  latest_wind_speed_100m: 0.635094%
+  mean_precipitation: 0.630617%
+  std_relative_humidity_2m: 0.625355%
+  std_weather_code: 0.620240%
+  std_dew_point_2m: 0.619887%
+  std_wind_speed_10m: 0.614630%
+  min_wind_speed_10m: 0.609362%
+  min_cloud_cover_low: 0.608112%
+  std_wind_gusts_10m: 0.607393%
+  min_weather_code: 0.593798%
+  max_precipitation: 0.590323%
+  min_wind_speed_100m: 0.589767%
+  std_surface_pressure: 0.581445%
+  std_wind_speed_100m: 0.580256%
+  min_precipitation: 0.209921%
+  latest_hour_cos: 0.000000%
+  latest_hour_sin: 0.000000%
+  max_hour_cos: 0.000000%
+  max_hour_sin: 0.000000%
+  mean_hour_cos: 0.000000%
+  mean_hour_sin: 0.000000%
+  min_hour_cos: 0.000000%
+  min_hour_sin: 0.000000%
+  std_hour_cos: 0.000000%
+  std_hour_sin: 0.000000%
+
+LOCATION 8 (Visalia)
+
+NOWCAST
+
+NOx (primary) AQI ablation: not applicable — pooled multi-site model; AQI matched cohort is per site
+
+PM2.5 (secondary) AQI ablation: not applicable — pooled multi-site model; AQI matched cohort is per site
+
+CAMS (appendix) AQI ablation: not applicable — pooled multi-site model; AQI matched cohort is per site
+
+WITHOUT AQI (full history)
+Average Precision: 0.888114 (95% CI 0.877484, 0.898744)
+RPS: 0.023175 (95% CI 0.022559, 0.023791)
+NLL: 0.731086
+Within one category: 0.887035
+Median-meters log10 MAE (observed and median categories 1–16 only): 0.126161 (n=30754)
+ROC-AUC: 0.986466 (95% CI 0.984583, 0.988348)
+Brier (calibrated): 0.010928
+ECE (calibrated): 0.001330
+Cost-selected threshold (1:1 FN:FP; fold mean): 0.485000
+Precision: 0.867855
+Recall: 0.758125
+F1: 0.809287
+Climatology AP: 0.042979
+FN:FP 1:1 threshold=0.485000, precision=0.867855, recall=0.758125, F1=0.809287, cost/issue=0.014408
+FN:FP 3:1 threshold=0.231667, precision=0.748905, recall=0.868314, F1=0.804201, cost/issue=0.027670
+FN:FP 5:1 threshold=0.150000, precision=0.681952, recall=0.901151, F1=0.776376, cost/issue=0.036877
+FN:FP 10:1 threshold=0.085000, precision=0.604489, recall=0.925355, F1=0.731273, cost/issue=0.054514
+FN:FP 20:1 threshold=0.046667, precision=0.526754, recall=0.943128, F1=0.675967, cost/issue=0.080033
+Feature Importance (%):
+  lag_category: 35.173345%
+  nbr_mean_cat: 6.754358%
+  nbr_reporting: 5.226689%
+  nbr_min_cat: 3.850769%
+  site_location_9: 2.624730%
+  latest_doy_cos: 2.042513%
+  latest_hour_cos: 1.987683%
+  site_location_10: 1.748126%
+  nbr_fog_count: 1.739888%
+  site_location_8: 1.653455%
+  site_location_7: 1.647188%
+  std_precipitation: 1.280616%
+  latest_relative_humidity_2m: 1.261614%
+  latest_vapour_pressure_deficit: 1.146240%
+  site_location_6: 1.140452%
+  mean_precipitation: 1.127709%
+  max_doy_cos: 1.057177%
+  mean_doy_cos: 0.931522%
+  latest_hour_sin: 0.930907%
+  latest_precipitation: 0.923068%
+  max_precipitation: 0.909210%
+  mean_wind_gusts_10m: 0.811104%
+  latest_wind_gusts_10m: 0.766256%
+  min_doy_cos: 0.716961%
+  latest_weather_code: 0.618350%
+  max_wind_gusts_10m: 0.615436%
+  std_soil_temperature_0_to_7cm: 0.579018%
+  max_weather_code: 0.578719%
+  max_doy_sin: 0.510143%
+  mean_hour_sin: 0.500310%
+  min_doy_sin: 0.498568%
+  latest_soil_temperature_0_to_7cm: 0.494649%
+  latest_doy_sin: 0.468252%
+  mean_doy_sin: 0.460598%
+  mean_weather_code: 0.448147%
+  min_surface_pressure: 0.438835%
+  mean_relative_humidity_2m: 0.418130%
+  mean_hour_cos: 0.416862%
+  std_doy_cos: 0.413995%
+  latest_temperature_2m: 0.410749%
+  latest_cloud_cover_low: 0.394798%
+  min_vapour_pressure_deficit: 0.385580%
+  mean_surface_pressure: 0.385104%
+  latest_surface_pressure: 0.381990%
+  max_soil_temperature_0_to_7cm: 0.378970%
+  max_cloud_cover_low: 0.374164%
+  max_relative_humidity_2m: 0.371724%
+  max_surface_pressure: 0.366794%
+  min_soil_temperature_0_to_7cm: 0.365806%
+  mean_cloud_cover_low: 0.364435%
+  mean_vapour_pressure_deficit: 0.355559%
+  max_wind_speed_100m: 0.355012%
+  max_wind_speed_10m: 0.354127%
+  min_relative_humidity_2m: 0.349790%
+  std_weather_code: 0.348269%
+  min_cloud_cover_low: 0.340097%
+  max_temperature_2m: 0.339709%
+  std_doy_sin: 0.339281%
+  max_vapour_pressure_deficit: 0.336609%
+  min_temperature_2m: 0.336417%
+  latest_dew_point_2m: 0.334441%
+  mean_soil_temperature_0_to_7cm: 0.332450%
+  mean_wind_speed_100m: 0.331665%
+  std_cloud_cover_low: 0.331060%
+  std_temperature_2m: 0.330414%
+  mean_temperature_2m: 0.326432%
+  latest_wind_speed_10m: 0.322231%
+  min_weather_code: 0.320672%
+  min_wind_gusts_10m: 0.317886%
+  std_wind_gusts_10m: 0.317605%
+  std_vapour_pressure_deficit: 0.317316%
+  latest_wind_speed_100m: 0.316614%
+  mean_dew_point_2m: 0.316350%
+  min_dew_point_2m: 0.316221%
+  mean_wind_speed_10m: 0.313691%
+  max_dew_point_2m: 0.311401%
+  std_relative_humidity_2m: 0.304945%
+  std_dew_point_2m: 0.298365%
+  std_wind_speed_100m: 0.292092%
+  min_wind_speed_10m: 0.291849%
+  min_wind_speed_100m: 0.291833%
+  std_wind_speed_10m: 0.289055%
+  std_surface_pressure: 0.284728%
+  min_precipitation: 0.244102%
+  max_hour_cos: 0.000000%
+  max_hour_sin: 0.000000%
+  min_hour_cos: 0.000000%
+  min_hour_sin: 0.000000%
+  std_hour_cos: 0.000000%
+  std_hour_sin: 0.000000%
+
+LEAD_TIME
+
+NOx (primary) AQI ablation: not applicable — pooled multi-site model; AQI matched cohort is per site
+
+PM2.5 (secondary) AQI ablation: not applicable — pooled multi-site model; AQI matched cohort is per site
+
+CAMS (appendix) AQI ablation: not applicable — pooled multi-site model; AQI matched cohort is per site
+
+WITHOUT AQI (full history)
+Average Precision: 0.658248 (95% CI 0.619013, 0.697483)
+RPS: 0.107566 (95% CI 0.104278, 0.110854)
+NLL: 2.019446
+Within one category: 0.497166
+Median-meters log10 MAE (observed and median categories 1–16 only): 0.301429 (n=1890)
+ROC-AUC: 0.903571 (95% CI 0.890993, 0.916149)
+Brier (calibrated): 0.075162
+ECE (calibrated): 0.018190
+Cost-selected threshold (1:1 FN:FP; fold mean): 0.446667
+Precision: 0.674074
+Recall: 0.566978
+F1: 0.615905
+Climatology AP: 0.146061
+FN:FP 1:1 threshold=0.446667, precision=0.674074, recall=0.566978, F1=0.615905, cost/issue=0.102925
+FN:FP 3:1 threshold=0.231667, precision=0.552941, recall=0.732087, F1=0.630027, cost/issue=0.203129
+FN:FP 5:1 threshold=0.131667, precision=0.468972, recall=0.823988, F1=0.597740, cost/issue=0.263886
+FN:FP 10:1 threshold=0.070000, precision=0.401408, recall=0.887850, F1=0.552861, cost/issue=0.355928
+FN:FP 20:1 threshold=0.036667, precision=0.352410, recall=0.911215, F1=0.508254, cost/issue=0.502154
+Feature Importance (%):
+  latest_doy_cos: 9.027642%
+  mean_doy_cos: 8.546723%
+  max_doy_cos: 6.802196%
+  min_doy_cos: 5.741977%
+  lag_category: 3.652266%
+  nbr_reporting: 3.118786%
+  site_location_10: 2.997285%
+  site_location_9: 1.993919%
+  nbr_mean_cat: 1.934693%
+  site_location_7: 1.870506%
+  nbr_min_cat: 1.654915%
+  latest_relative_humidity_2m: 1.338128%
+  latest_vapour_pressure_deficit: 1.278054%
+  site_location_8: 1.216458%
+  latest_wind_gusts_10m: 1.201305%
+  latest_doy_sin: 1.132275%
+  mean_doy_sin: 1.090699%
+  max_soil_temperature_0_to_7cm: 1.022041%
+  mean_relative_humidity_2m: 1.017956%
+  min_relative_humidity_2m: 0.999427%
+  max_doy_sin: 0.997097%
+  std_soil_temperature_0_to_7cm: 0.954994%
+  mean_wind_gusts_10m: 0.953676%
+  site_location_6: 0.947094%
+  max_relative_humidity_2m: 0.934204%
+  std_doy_cos: 0.934170%
+  min_surface_pressure: 0.928638%
+  min_doy_sin: 0.923322%
+  latest_surface_pressure: 0.897120%
+  max_wind_gusts_10m: 0.884189%
+  mean_vapour_pressure_deficit: 0.872259%
+  latest_soil_temperature_0_to_7cm: 0.844643%
+  latest_weather_code: 0.829577%
+  min_dew_point_2m: 0.772958%
+  latest_precipitation: 0.743905%
+  mean_surface_pressure: 0.732006%
+  latest_dew_point_2m: 0.727485%
+  std_cloud_cover_low: 0.721430%
+  max_vapour_pressure_deficit: 0.704618%
+  min_vapour_pressure_deficit: 0.688057%
+  max_weather_code: 0.684737%
+  std_doy_sin: 0.680068%
+  max_temperature_2m: 0.679528%
+  max_wind_speed_100m: 0.678425%
+  mean_weather_code: 0.677860%
+  mean_dew_point_2m: 0.677587%
+  latest_wind_speed_10m: 0.677382%
+  max_surface_pressure: 0.677202%
+  mean_wind_speed_100m: 0.676389%
+  max_cloud_cover_low: 0.669905%
+  mean_cloud_cover_low: 0.667967%
+  min_temperature_2m: 0.667142%
+  min_soil_temperature_0_to_7cm: 0.666986%
+  max_wind_speed_10m: 0.665142%
+  mean_soil_temperature_0_to_7cm: 0.663511%
+  latest_cloud_cover_low: 0.662027%
+  mean_wind_speed_10m: 0.659646%
+  std_temperature_2m: 0.656632%
+  latest_wind_speed_100m: 0.656170%
+  std_vapour_pressure_deficit: 0.656087%
+  min_wind_gusts_10m: 0.654030%
+  mean_temperature_2m: 0.647092%
+  std_precipitation: 0.646257%
+  latest_temperature_2m: 0.644382%
+  max_dew_point_2m: 0.637022%
+  mean_precipitation: 0.627138%
+  min_weather_code: 0.602571%
+  std_wind_speed_10m: 0.599751%
+  std_dew_point_2m: 0.597344%
+  std_weather_code: 0.594095%
+  std_wind_gusts_10m: 0.594001%
+  std_relative_humidity_2m: 0.593963%
+  std_surface_pressure: 0.584562%
+  min_precipitation: 0.579048%
+  min_wind_speed_10m: 0.578317%
+  max_precipitation: 0.575668%
+  min_wind_speed_100m: 0.569152%
+  std_wind_speed_100m: 0.559676%
+  min_cloud_cover_low: 0.559661%
+  nbr_fog_count: 0.527185%
+  latest_hour_cos: 0.000000%
+  latest_hour_sin: 0.000000%
+  max_hour_cos: 0.000000%
+  max_hour_sin: 0.000000%
+  mean_hour_cos: 0.000000%
+  mean_hour_sin: 0.000000%
+  min_hour_cos: 0.000000%
+  min_hour_sin: 0.000000%
+  std_hour_cos: 0.000000%
+  std_hour_sin: 0.000000%
+
+LOCATION 9 (Hanford)
+
+NOWCAST
+
+NOx (primary) AQI ablation: not applicable — pooled multi-site model; AQI matched cohort is per site
+
+PM2.5 (secondary) AQI ablation: not applicable — pooled multi-site model; AQI matched cohort is per site
+
+CAMS (appendix) AQI ablation: not applicable — pooled multi-site model; AQI matched cohort is per site
+
+WITHOUT AQI (full history)
+Average Precision: 0.919094 (95% CI 0.909416, 0.928772)
+RPS: 0.024184 (95% CI 0.023513, 0.024856)
+NLL: 0.808829
+Within one category: 0.880440
+Median-meters log10 MAE (observed and median categories 1–16 only): 0.112732 (n=31594)
+ROC-AUC: 0.991171 (95% CI 0.989811, 0.992531)
+Brier (calibrated): 0.011373
+ECE (calibrated): 0.002289
+Cost-selected threshold (1:1 FN:FP; fold mean): 0.476667
+Precision: 0.858146
+Recall: 0.827003
+F1: 0.842287
+Climatology AP: 0.045274
+FN:FP 1:1 threshold=0.476667, precision=0.858146, recall=0.827003, F1=0.842287, cost/issue=0.015200
+FN:FP 3:1 threshold=0.236667, precision=0.752746, recall=0.902219, F1=0.820732, cost/issue=0.028942
+FN:FP 5:1 threshold=0.151667, precision=0.693837, recall=0.925160, F1=0.792973, cost/issue=0.038401
+FN:FP 10:1 threshold=0.080000, precision=0.598657, recall=0.955622, F1=0.736148, cost/issue=0.053223
+FN:FP 20:1 threshold=0.043333, precision=0.520045, recall=0.965965, F1=0.676099, cost/issue=0.077162
+Feature Importance (%):
+  lag_category: 34.919341%
+  nbr_mean_cat: 6.219980%
+  nbr_reporting: 5.418753%
+  nbr_min_cat: 4.847796%
+  nbr_fog_count: 2.591918%
+  site_location_9: 2.537834%
+  latest_hour_cos: 2.078730%
+  latest_doy_cos: 1.820509%
+  site_location_10: 1.704736%
+  site_location_8: 1.703689%
+  site_location_7: 1.624338%
+  std_precipitation: 1.312855%
+  latest_relative_humidity_2m: 1.214114%
+  latest_vapour_pressure_deficit: 1.139096%
+  mean_precipitation: 1.118263%
+  site_location_6: 1.062475%
+  max_doy_cos: 0.985617%
+  latest_precipitation: 0.966762%
+  latest_hour_sin: 0.933582%
+  mean_wind_gusts_10m: 0.904022%
+  min_doy_cos: 0.830074%
+  max_precipitation: 0.827839%
+  latest_wind_gusts_10m: 0.808897%
+  mean_doy_cos: 0.766164%
+  latest_weather_code: 0.654261%
+  max_wind_gusts_10m: 0.639452%
+  std_soil_temperature_0_to_7cm: 0.570336%
+  min_doy_sin: 0.546646%
+  mean_hour_sin: 0.504651%
+  max_doy_sin: 0.494770%
+  latest_soil_temperature_0_to_7cm: 0.459448%
+  latest_doy_sin: 0.451117%
+  mean_weather_code: 0.445172%
+  mean_doy_sin: 0.438892%
+  mean_hour_cos: 0.438539%
+  max_weather_code: 0.419894%
+  min_surface_pressure: 0.415479%
+  std_doy_cos: 0.396858%
+  latest_temperature_2m: 0.390391%
+  latest_surface_pressure: 0.379496%
+  latest_cloud_cover_low: 0.378459%
+  mean_relative_humidity_2m: 0.371422%
+  max_relative_humidity_2m: 0.365678%
+  mean_surface_pressure: 0.361861%
+  max_cloud_cover_low: 0.357467%
+  min_vapour_pressure_deficit: 0.355721%
+  max_wind_speed_10m: 0.352257%
+  mean_cloud_cover_low: 0.345191%
+  mean_vapour_pressure_deficit: 0.343163%
+  min_relative_humidity_2m: 0.341730%
+  std_weather_code: 0.341561%
+  max_wind_speed_100m: 0.340487%
+  min_soil_temperature_0_to_7cm: 0.339450%
+  max_soil_temperature_0_to_7cm: 0.337891%
+  max_surface_pressure: 0.337477%
+  std_doy_sin: 0.331551%
+  std_temperature_2m: 0.327432%
+  latest_dew_point_2m: 0.324019%
+  max_temperature_2m: 0.323834%
+  mean_wind_speed_100m: 0.322394%
+  min_temperature_2m: 0.320467%
+  max_vapour_pressure_deficit: 0.319377%
+  std_cloud_cover_low: 0.317625%
+  mean_soil_temperature_0_to_7cm: 0.314181%
+  min_weather_code: 0.313007%
+  mean_temperature_2m: 0.312501%
+  latest_wind_speed_10m: 0.312033%
+  latest_wind_speed_100m: 0.310050%
+  mean_wind_speed_10m: 0.309371%
+  min_dew_point_2m: 0.307255%
+  min_cloud_cover_low: 0.307255%
+  max_dew_point_2m: 0.303225%
+  mean_dew_point_2m: 0.299789%
+  std_vapour_pressure_deficit: 0.299552%
+  min_wind_gusts_10m: 0.294937%
+  std_wind_gusts_10m: 0.294255%
+  std_relative_humidity_2m: 0.287443%
+  std_dew_point_2m: 0.282806%
+  std_wind_speed_100m: 0.280590%
+  min_wind_speed_10m: 0.277369%
+  min_wind_speed_100m: 0.277323%
+  std_wind_speed_10m: 0.273613%
+  std_surface_pressure: 0.270913%
+  min_precipitation: 0.233234%
+  max_hour_cos: 0.000000%
+  max_hour_sin: 0.000000%
+  min_hour_cos: 0.000000%
+  min_hour_sin: 0.000000%
+  std_hour_cos: 0.000000%
+  std_hour_sin: 0.000000%
+
+LEAD_TIME
+
+NOx (primary) AQI ablation: not applicable — pooled multi-site model; AQI matched cohort is per site
+
+PM2.5 (secondary) AQI ablation: not applicable — pooled multi-site model; AQI matched cohort is per site
+
+CAMS (appendix) AQI ablation: not applicable — pooled multi-site model; AQI matched cohort is per site
+
+WITHOUT AQI (full history)
+Average Precision: 0.729716 (95% CI 0.698078, 0.761355)
+RPS: 0.106584 (95% CI 0.103450, 0.109719)
+NLL: 2.037089
+Within one category: 0.468933
+Median-meters log10 MAE (observed and median categories 1–16 only): 0.313396 (n=2104)
+ROC-AUC: 0.923173 (95% CI 0.913284, 0.933062)
+Brier (calibrated): 0.079428
+ECE (calibrated): 0.021145
+Cost-selected threshold (1:1 FN:FP; fold mean): 0.451667
+Precision: 0.706647
+Recall: 0.630968
+F1: 0.666667
+Climatology AP: 0.175943
+FN:FP 1:1 threshold=0.451667, precision=0.706647, recall=0.630968, F1=0.666667, cost/issue=0.114654
+FN:FP 3:1 threshold=0.191667, precision=0.578767, recall=0.872258, F1=0.695831, cost/issue=0.184994
+FN:FP 5:1 threshold=0.148333, precision=0.523666, recall=0.899355, F1=0.661918, cost/issue=0.240094
+FN:FP 10:1 threshold=0.071667, precision=0.468126, recall=0.938065, F1=0.624570, cost/issue=0.306213
+FN:FP 20:1 threshold=0.040000, precision=0.426674, recall=0.953548, F1=0.589549, cost/issue=0.401641
+Feature Importance (%):
+  mean_doy_cos: 9.432936%
+  latest_doy_cos: 9.262045%
+  min_doy_cos: 5.801959%
+  max_doy_cos: 5.155343%
+  lag_category: 3.763611%
+  nbr_reporting: 3.128064%
+  site_location_10: 3.102640%
+  site_location_9: 1.996946%
+  nbr_mean_cat: 1.979230%
+  site_location_7: 1.816849%
+  nbr_min_cat: 1.599572%
+  min_doy_sin: 1.332513%
+  latest_relative_humidity_2m: 1.265870%
+  latest_wind_gusts_10m: 1.241073%
+  site_location_8: 1.216875%
+  latest_vapour_pressure_deficit: 1.201939%
+  latest_doy_sin: 1.124883%
+  mean_doy_sin: 1.107671%
+  max_doy_sin: 1.069842%
+  mean_relative_humidity_2m: 1.037739%
+  max_soil_temperature_0_to_7cm: 1.025817%
+  min_relative_humidity_2m: 0.988810%
+  std_soil_temperature_0_to_7cm: 0.984756%
+  mean_wind_gusts_10m: 0.957932%
+  site_location_6: 0.940909%
+  max_relative_humidity_2m: 0.936434%
+  min_surface_pressure: 0.931656%
+  std_doy_cos: 0.885456%
+  latest_surface_pressure: 0.878598%
+  max_wind_gusts_10m: 0.875022%
+  mean_vapour_pressure_deficit: 0.837806%
+  nbr_fog_count: 0.829270%
+  latest_weather_code: 0.815908%
+  latest_soil_temperature_0_to_7cm: 0.808244%
+  min_dew_point_2m: 0.785659%
+  std_cloud_cover_low: 0.744196%
+  mean_surface_pressure: 0.728539%
+  max_vapour_pressure_deficit: 0.726659%
+  latest_dew_point_2m: 0.723482%
+  latest_precipitation: 0.712424%
+  min_vapour_pressure_deficit: 0.699431%
+  mean_dew_point_2m: 0.689454%
+  max_temperature_2m: 0.683406%
+  latest_wind_speed_10m: 0.682114%
+  std_precipitation: 0.678692%
+  mean_wind_speed_100m: 0.677572%
+  max_surface_pressure: 0.677510%
+  mean_wind_speed_10m: 0.675243%
+  std_doy_sin: 0.669610%
+  max_wind_speed_100m: 0.668657%
+  mean_cloud_cover_low: 0.664131%
+  min_soil_temperature_0_to_7cm: 0.663631%
+  max_weather_code: 0.658193%
+  mean_weather_code: 0.657636%
+  latest_temperature_2m: 0.655186%
+  latest_cloud_cover_low: 0.652383%
+  min_temperature_2m: 0.650203%
+  max_cloud_cover_low: 0.647395%
+  mean_precipitation: 0.646973%
+  latest_wind_speed_100m: 0.644132%
+  std_temperature_2m: 0.643153%
+  std_vapour_pressure_deficit: 0.642750%
+  mean_soil_temperature_0_to_7cm: 0.642060%
+  min_wind_gusts_10m: 0.629020%
+  mean_temperature_2m: 0.628273%
+  max_wind_speed_10m: 0.625993%
+  max_dew_point_2m: 0.622381%
+  std_weather_code: 0.601241%
+  std_dew_point_2m: 0.594168%
+  min_wind_speed_10m: 0.590279%
+  min_weather_code: 0.589971%
+  std_wind_gusts_10m: 0.588613%
+  std_relative_humidity_2m: 0.584916%
+  std_wind_speed_10m: 0.581529%
+  min_wind_speed_100m: 0.575259%
+  max_precipitation: 0.573976%
+  std_surface_pressure: 0.570925%
+  min_cloud_cover_low: 0.550410%
+  std_wind_speed_100m: 0.547525%
+  min_precipitation: 0.520829%
+  latest_hour_cos: 0.000000%
+  latest_hour_sin: 0.000000%
+  max_hour_cos: 0.000000%
+  max_hour_sin: 0.000000%
+  mean_hour_cos: 0.000000%
+  mean_hour_sin: 0.000000%
+  min_hour_cos: 0.000000%
+  min_hour_sin: 0.000000%
+  std_hour_cos: 0.000000%
+  std_hour_sin: 0.000000%
+
+LOCATION 10 (Bakersfield)
+
+NOWCAST
+
+NOx (primary) AQI ablation: not applicable — pooled multi-site model; AQI matched cohort is per site
+
+PM2.5 (secondary) AQI ablation: not applicable — pooled multi-site model; AQI matched cohort is per site
+
+CAMS (appendix) AQI ablation: not applicable — pooled multi-site model; AQI matched cohort is per site
+
+WITHOUT AQI (full history)
+Average Precision: 0.797293 (95% CI 0.771059, 0.823526)
+RPS: 0.017706 (95% CI 0.017210, 0.018201)
+NLL: 0.663791
+Within one category: 0.912397
+Median-meters log10 MAE (observed and median categories 1–16 only): 0.069993 (n=45512)
+ROC-AUC: 0.988325 (95% CI 0.984575, 0.992074)
+Brier (calibrated): 0.004243
+ECE (calibrated): 0.000972
+Cost-selected threshold (1:1 FN:FP; fold mean): 0.483333
+Precision: 0.823081
+Recall: 0.680387
+F1: 0.744963
+Climatology AP: 0.011971
+FN:FP 1:1 threshold=0.483333, precision=0.823081, recall=0.680387, F1=0.744963, cost/issue=0.005277
+FN:FP 3:1 threshold=0.228333, precision=0.706995, recall=0.778208, F1=0.740894, cost/issue=0.011190
+FN:FP 5:1 threshold=0.161667, precision=0.629087, recall=0.810654, F1=0.708421, cost/issue=0.016137
+FN:FP 10:1 threshold=0.085000, precision=0.511661, recall=0.860533, F1=0.641748, cost/issue=0.025100
+FN:FP 20:1 threshold=0.046667, precision=0.376156, recall=0.906053, F1=0.531610, cost/issue=0.038302
+Feature Importance (%):
+  lag_category: 33.579981%
+  nbr_mean_cat: 6.330246%
+  nbr_min_cat: 4.905923%
+  nbr_reporting: 4.568185%
+  nbr_fog_count: 2.459480%
+  site_location_9: 2.315882%
+  latest_doy_cos: 2.236327%
+  site_location_10: 2.107954%
+  site_location_7: 1.880153%
+  latest_hour_cos: 1.877981%
+  site_location_8: 1.754320%
+  std_precipitation: 1.346583%
+  max_doy_cos: 1.287393%
+  latest_relative_humidity_2m: 1.259248%
+  latest_vapour_pressure_deficit: 1.115807%
+  mean_precipitation: 1.070277%
+  site_location_6: 0.994904%
+  mean_doy_cos: 0.920427%
+  min_doy_cos: 0.918405%
+  latest_precipitation: 0.901657%
+  latest_hour_sin: 0.877275%
+  max_precipitation: 0.855255%
+  mean_wind_gusts_10m: 0.737101%
+  latest_wind_gusts_10m: 0.677298%
+  max_wind_gusts_10m: 0.580467%
+  latest_weather_code: 0.577662%
+  std_soil_temperature_0_to_7cm: 0.554560%
+  min_doy_sin: 0.545442%
+  latest_soil_temperature_0_to_7cm: 0.505660%
+  max_doy_sin: 0.504778%
+  mean_hour_sin: 0.489689%
+  latest_doy_sin: 0.487163%
+  max_weather_code: 0.484663%
+  mean_weather_code: 0.475348%
+  min_surface_pressure: 0.438065%
+  mean_doy_sin: 0.437081%
+  std_doy_cos: 0.424285%
+  latest_temperature_2m: 0.422154%
+  mean_relative_humidity_2m: 0.412103%
+  mean_hour_cos: 0.411636%
+  mean_surface_pressure: 0.409225%
+  min_vapour_pressure_deficit: 0.407332%
+  max_cloud_cover_low: 0.406728%
+  max_soil_temperature_0_to_7cm: 0.405333%
+  mean_cloud_cover_low: 0.396721%
+  mean_vapour_pressure_deficit: 0.389194%
+  latest_cloud_cover_low: 0.387870%
+  latest_surface_pressure: 0.386416%
+  min_soil_temperature_0_to_7cm: 0.380547%
+  max_relative_humidity_2m: 0.377007%
+  min_cloud_cover_low: 0.374050%
+  max_surface_pressure: 0.373135%
+  max_wind_speed_10m: 0.363760%
+  max_wind_speed_100m: 0.362482%
+  min_relative_humidity_2m: 0.359994%
+  max_vapour_pressure_deficit: 0.353461%
+  max_temperature_2m: 0.353297%
+  latest_dew_point_2m: 0.353182%
+  std_cloud_cover_low: 0.348665%
+  mean_soil_temperature_0_to_7cm: 0.347766%
+  std_doy_sin: 0.344922%
+  mean_wind_speed_100m: 0.343733%
+  std_weather_code: 0.341537%
+  std_temperature_2m: 0.340764%
+  min_temperature_2m: 0.340612%
+  mean_temperature_2m: 0.339461%
+  std_wind_gusts_10m: 0.333826%
+  min_dew_point_2m: 0.332702%
+  min_wind_gusts_10m: 0.332130%
+  latest_wind_speed_10m: 0.330276%
+  mean_dew_point_2m: 0.328426%
+  max_dew_point_2m: 0.326868%
+  min_weather_code: 0.326399%
+  latest_wind_speed_100m: 0.324393%
+  std_vapour_pressure_deficit: 0.323956%
+  mean_wind_speed_10m: 0.323874%
+  std_relative_humidity_2m: 0.308880%
+  std_dew_point_2m: 0.308669%
+  min_wind_speed_100m: 0.305395%
+  min_wind_speed_10m: 0.303624%
+  std_wind_speed_100m: 0.303188%
+  std_wind_speed_10m: 0.298731%
+  std_surface_pressure: 0.296204%
+  min_precipitation: 0.276449%
+  max_hour_cos: 0.000000%
+  max_hour_sin: 0.000000%
+  min_hour_cos: 0.000000%
+  min_hour_sin: 0.000000%
+  std_hour_cos: 0.000000%
+  std_hour_sin: 0.000000%
+
+LEAD_TIME
+
+NOx (primary) AQI ablation: not applicable — pooled multi-site model; AQI matched cohort is per site
+
+PM2.5 (secondary) AQI ablation: not applicable — pooled multi-site model; AQI matched cohort is per site
+
+CAMS (appendix) AQI ablation: not applicable — pooled multi-site model; AQI matched cohort is per site
+
+WITHOUT AQI (full history)
+Average Precision: 0.422086 (95% CI 0.360473, 0.483699)
+RPS: 0.066849 (95% CI 0.064777, 0.068921)
+NLL: 1.631831
+Within one category: 0.628251
+Median-meters log10 MAE (observed and median categories 1–16 only): 0.186399 (n=2406)
+ROC-AUC: 0.926156 (95% CI 0.908497, 0.943816)
+Brier (calibrated): 0.029014
+ECE (calibrated): 0.017838
+Cost-selected threshold (1:1 FN:FP; fold mean): 0.468333
+Precision: 0.588235
+Recall: 0.218182
+F1: 0.318302
+Climatology AP: 0.039672
+FN:FP 1:1 threshold=0.468333, precision=0.588235, recall=0.218182, F1=0.318302, cost/issue=0.036931
+FN:FP 3:1 threshold=0.216667, precision=0.373576, recall=0.596364, F1=0.459384, cost/issue=0.087369
+FN:FP 5:1 threshold=0.148333, precision=0.261993, recall=0.774545, F1=0.391544, cost/issue=0.130766
+FN:FP 10:1 threshold=0.078333, precision=0.193574, recall=0.898182, F1=0.318504, cost/issue=0.188102
+FN:FP 20:1 threshold=0.046667, precision=0.144284, recall=0.945455, F1=0.250361, cost/issue=0.264693
+Feature Importance (%):
+  max_doy_cos: 8.127333%
+  mean_doy_cos: 7.836279%
+  latest_doy_cos: 7.373793%
+  min_doy_cos: 5.093011%
+  site_location_10: 3.927544%
+  lag_category: 3.704935%
+  nbr_reporting: 3.004930%
+  site_location_9: 2.120368%
+  nbr_mean_cat: 1.887343%
+  site_location_7: 1.885790%
+  latest_vapour_pressure_deficit: 1.691222%
+  nbr_min_cat: 1.677240%
+  site_location_8: 1.461292%
+  latest_relative_humidity_2m: 1.457925%
+  mean_vapour_pressure_deficit: 1.193394%
+  site_location_6: 1.100222%
+  mean_relative_humidity_2m: 1.097186%
+  mean_doy_sin: 1.042140%
+  latest_wind_gusts_10m: 1.028795%
+  min_relative_humidity_2m: 1.001902%
+  min_doy_sin: 0.957580%
+  mean_wind_gusts_10m: 0.946855%
+  latest_doy_sin: 0.932991%
+  max_soil_temperature_0_to_7cm: 0.927326%
+  min_surface_pressure: 0.907120%
+  min_vapour_pressure_deficit: 0.901892%
+  std_doy_cos: 0.892527%
+  latest_weather_code: 0.892465%
+  max_doy_sin: 0.884948%
+  std_soil_temperature_0_to_7cm: 0.880603%
+  max_relative_humidity_2m: 0.868983%
+  latest_surface_pressure: 0.850822%
+  max_wind_gusts_10m: 0.835996%
+  latest_precipitation: 0.802639%
+  latest_soil_temperature_0_to_7cm: 0.746352%
+  latest_dew_point_2m: 0.732027%
+  min_dew_point_2m: 0.729974%
+  max_temperature_2m: 0.726272%
+  std_cloud_cover_low: 0.724333%
+  mean_wind_speed_100m: 0.717329%
+  std_doy_sin: 0.710838%
+  mean_cloud_cover_low: 0.705794%
+  mean_surface_pressure: 0.703749%
+  max_vapour_pressure_deficit: 0.703722%
+  max_wind_speed_100m: 0.703603%
+  max_surface_pressure: 0.691880%
+  mean_soil_temperature_0_to_7cm: 0.683262%
+  max_cloud_cover_low: 0.683161%
+  latest_wind_speed_10m: 0.678060%
+  std_temperature_2m: 0.677870%
+  mean_dew_point_2m: 0.676830%
+  max_weather_code: 0.673981%
+  min_wind_gusts_10m: 0.672788%
+  max_wind_speed_10m: 0.671545%
+  min_temperature_2m: 0.669705%
+  mean_temperature_2m: 0.668253%
+  mean_weather_code: 0.661250%
+  latest_temperature_2m: 0.660138%
+  std_vapour_pressure_deficit: 0.659875%
+  mean_wind_speed_10m: 0.650665%
+  min_soil_temperature_0_to_7cm: 0.649459%
+  max_dew_point_2m: 0.648760%
+  latest_wind_speed_100m: 0.641531%
+  std_relative_humidity_2m: 0.630812%
+  latest_cloud_cover_low: 0.627950%
+  std_dew_point_2m: 0.624134%
+  mean_precipitation: 0.617358%
+  std_wind_gusts_10m: 0.607328%
+  std_wind_speed_10m: 0.605684%
+  min_weather_code: 0.604630%
+  std_weather_code: 0.604132%
+  min_cloud_cover_low: 0.596277%
+  max_precipitation: 0.596049%
+  std_precipitation: 0.591994%
+  min_wind_speed_10m: 0.579365%
+  std_surface_pressure: 0.576249%
+  std_wind_speed_100m: 0.570362%
+  min_wind_speed_100m: 0.568784%
+  nbr_fog_count: 0.540796%
+  min_precipitation: 0.339701%
+  latest_hour_cos: 0.000000%
+  latest_hour_sin: 0.000000%
+  max_hour_cos: 0.000000%
+  max_hour_sin: 0.000000%
+  mean_hour_cos: 0.000000%
+  mean_hour_sin: 0.000000%
+  min_hour_cos: 0.000000%
+  min_hour_sin: 0.000000%
+  std_hour_cos: 0.000000%
+  std_hour_sin: 0.000000%
+
+AVERAGE METRICS
+Arithmetic means across sites, not pooled observations; mean site-CI endpoints are descriptive, not an aggregate confidence interval.
+
+NOWCAST - WITHOUT AQI (full history)
+ap: 0.865436
+roc_auc: 0.989800
+precision: 0.846830
+recall: 0.751234
+f1: 0.795653
+cost_threshold: 0.485667
+Mean site ap_ci endpoints (not aggregate CI): 0.849298, 0.881573
+Mean site roc_auc_ci endpoints (not aggregate CI): 0.987863, 0.991738
+rps: 0.020442
+nll: 0.672907
+within_one: 0.899809
+median_category_mae: 0.458418
+Pooled median-meters log10 MAE: 0.098480 (n=168426)
+brier_after: 0.008521
+ece_after: 0.001616
+Climatology AP: 0.030251
+
+LEAD_TIME - WITHOUT AQI (full history)
+ap: 0.584791
+roc_auc: 0.916602
+precision: 0.627730
+recall: 0.447796
+f1: 0.511028
+cost_threshold: 0.458000
+Mean site ap_ci endpoints (not aggregate CI): 0.541035, 0.628547
+Mean site roc_auc_ci endpoints (not aggregate CI): 0.904211, 0.928993
+rps: 0.090864
+nll: 1.809898
+within_one: 0.542892
+median_category_mae: 2.197846
+Pooled median-meters log10 MAE: 0.259745 (n=10688)
+brier_after: 0.060371
+ece_after: 0.019444
+Climatology AP: 0.110195
+
+location_6 nowcast: strongest xgboost_pooled AP=0.834 (interval-separated from climatology); location_6 lead_time: strongest xgboost_pooled AP=0.603 (interval-separated from climatology); location_7 nowcast: strongest xgboost_pooled AP=0.889 (interval-separated from climatology); location_7 lead_time: strongest xgboost_pooled AP=0.511 (interval-separated from climatology); location_8 nowcast: strongest xgboost_pooled AP=0.888 (interval-separated from climatology); location_8 lead_time: strongest xgboost_pooled AP=0.658 (interval-separated from climatology); location_9 nowcast: strongest xgboost_pooled AP=0.919 (interval-separated from climatology); location_9 lead_time: strongest xgboost_pooled AP=0.730 (interval-separated from climatology); location_10 nowcast: strongest xgboost_pooled AP=0.797 (interval-separated from climatology); location_10 lead_time: strongest xgboost_pooled AP=0.422 (interval-separated from climatology). Results are heterogeneous and retrospective; no site is approved for operations without prospective latency-controlled shadow validation.
+Among estimable comparisons, no paired AQI delta AP interval excluded zero. 30 AQI comparisons were not applicable and excluded.

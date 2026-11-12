@@ -1,0 +1,478 @@
+{
+  "generated_utc": "2026-10-26T02:13:47.616138+00:00",
+  "requests": [
+    {
+      "kind": "production_forecast_probe",
+      "round": "initial",
+      "site": "location_6",
+      "url": "https://api.open-meteo.com/v1/forecast",
+      "params": {
+        "latitude": 36.989159,
+        "longitude": -120.11103,
+        "hourly": "temperature_2m,relative_humidity_2m,dew_point_2m,precipitation,surface_pressure,vapour_pressure_deficit,wind_speed_10m,wind_speed_100m,wind_gusts_10m,weather_code,cloud_cover_low,soil_temperature_0cm,soil_temperature_6cm,soil_temperature_0_to_7cm",
+        "timezone": "Etc/GMT+8",
+        "past_days": 7,
+        "forecast_days": 1
+      },
+      "resolved_url": "https://api.open-meteo.com/v1/forecast?latitude=36.989159&longitude=-120.11103&hourly=temperature_2m%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Csurface_pressure%2Cvapour_pressure_deficit%2Cwind_speed_10m%2Cwind_speed_100m%2Cwind_gusts_10m%2Cweather_code%2Ccloud_cover_low%2Csoil_temperature_0cm%2Csoil_temperature_6cm%2Csoil_temperature_0_to_7cm&timezone=Etc%2FGMT%2B8&past_days=7&forecast_days=1",
+      "http_status": 200,
+      "rows": 192,
+      "sha256": "cb884eed8c854750e327bfd8183af9cb4ac85616738d920ce2be6b1fcd4a74dc"
+    },
+    {
+      "kind": "production_forecast_probe",
+      "round": "initial",
+      "site": "location_7",
+      "url": "https://api.open-meteo.com/v1/forecast",
+      "params": {
+        "latitude": 36.777045,
+        "longitude": -119.716862,
+        "hourly": "temperature_2m,relative_humidity_2m,dew_point_2m,precipitation,surface_pressure,vapour_pressure_deficit,wind_speed_10m,wind_speed_100m,wind_gusts_10m,weather_code,cloud_cover_low,soil_temperature_0cm,soil_temperature_6cm,soil_temperature_0_to_7cm",
+        "timezone": "Etc/GMT+8",
+        "past_days": 7,
+        "forecast_days": 1
+      },
+      "resolved_url": "https://api.open-meteo.com/v1/forecast?latitude=36.777045&longitude=-119.716862&hourly=temperature_2m%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Csurface_pressure%2Cvapour_pressure_deficit%2Cwind_speed_10m%2Cwind_speed_100m%2Cwind_gusts_10m%2Cweather_code%2Ccloud_cover_low%2Csoil_temperature_0cm%2Csoil_temperature_6cm%2Csoil_temperature_0_to_7cm&timezone=Etc%2FGMT%2B8&past_days=7&forecast_days=1",
+      "http_status": 200,
+      "rows": 192,
+      "sha256": "7228b8f2b8f9447451563fbaf1ef901d270184a8d472b8a4f51c42b90cb66336"
+    },
+    {
+      "kind": "production_forecast_probe",
+      "round": "initial",
+      "site": "location_8",
+      "url": "https://api.open-meteo.com/v1/forecast",
+      "params": {
+        "latitude": 36.322528,
+        "longitude": -119.394712,
+        "hourly": "temperature_2m,relative_humidity_2m,dew_point_2m,precipitation,surface_pressure,vapour_pressure_deficit,wind_speed_10m,wind_speed_100m,wind_gusts_10m,weather_code,cloud_cover_low,soil_temperature_0cm,soil_temperature_6cm,soil_temperature_0_to_7cm",
+        "timezone": "Etc/GMT+8",
+        "past_days": 7,
+        "forecast_days": 1
+      },
+      "resolved_url": "https://api.open-meteo.com/v1/forecast?latitude=36.322528&longitude=-119.394712&hourly=temperature_2m%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Csurface_pressure%2Cvapour_pressure_deficit%2Cwind_speed_10m%2Cwind_speed_100m%2Cwind_gusts_10m%2Cweather_code%2Ccloud_cover_low%2Csoil_temperature_0cm%2Csoil_temperature_6cm%2Csoil_temperature_0_to_7cm&timezone=Etc%2FGMT%2B8&past_days=7&forecast_days=1",
+      "http_status": 200,
+      "rows": 192,
+      "sha256": "834b36d996b22d205d1a571815b2770ce4e0c5a8e121cf26197bd541a8643bfc"
+    },
+    {
+      "kind": "production_forecast_probe",
+      "round": "initial",
+      "site": "location_9",
+      "url": "https://api.open-meteo.com/v1/forecast",
+      "params": {
+        "latitude": 36.313201,
+        "longitude": -119.626015,
+        "hourly": "temperature_2m,relative_humidity_2m,dew_point_2m,precipitation,surface_pressure,vapour_pressure_deficit,wind_speed_10m,wind_speed_100m,wind_gusts_10m,weather_code,cloud_cover_low,soil_temperature_0cm,soil_temperature_6cm,soil_temperature_0_to_7cm",
+        "timezone": "Etc/GMT+8",
+        "past_days": 7,
+        "forecast_days": 1
+      },
+      "resolved_url": "https://api.open-meteo.com/v1/forecast?latitude=36.313201&longitude=-119.626015&hourly=temperature_2m%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Csurface_pressure%2Cvapour_pressure_deficit%2Cwind_speed_10m%2Cwind_speed_100m%2Cwind_gusts_10m%2Cweather_code%2Ccloud_cover_low%2Csoil_temperature_0cm%2Csoil_temperature_6cm%2Csoil_temperature_0_to_7cm&timezone=Etc%2FGMT%2B8&past_days=7&forecast_days=1",
+      "http_status": 200,
+      "rows": 192,
+      "sha256": "e244f4f71661e384bc88a759a3133f274d21180316e929ab714beceb570c2514"
+    },
+    {
+      "kind": "production_forecast_probe",
+      "round": "initial",
+      "site": "location_10",
+      "url": "https://api.open-meteo.com/v1/forecast",
+      "params": {
+        "latitude": 35.4342,
+        "longitude": -119.0553,
+        "hourly": "temperature_2m,relative_humidity_2m,dew_point_2m,precipitation,surface_pressure,vapour_pressure_deficit,wind_speed_10m,wind_speed_100m,wind_gusts_10m,weather_code,cloud_cover_low,soil_temperature_0cm,soil_temperature_6cm,soil_temperature_0_to_7cm",
+        "timezone": "Etc/GMT+8",
+        "past_days": 7,
+        "forecast_days": 1
+      },
+      "resolved_url": "https://api.open-meteo.com/v1/forecast?latitude=35.4342&longitude=-119.0553&hourly=temperature_2m%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Csurface_pressure%2Cvapour_pressure_deficit%2Cwind_speed_10m%2Cwind_speed_100m%2Cwind_gusts_10m%2Cweather_code%2Ccloud_cover_low%2Csoil_temperature_0cm%2Csoil_temperature_6cm%2Csoil_temperature_0_to_7cm&timezone=Etc%2FGMT%2B8&past_days=7&forecast_days=1",
+      "http_status": 200,
+      "rows": 192,
+      "sha256": "ad4214fac8a75f5cd416bc0a4427e1787b102c5ee111e904e51efc828d7971a0"
+    },
+    {
+      "kind": "archive_replacement_soil_feasibility_observation",
+      "sites": [
+        "location_6",
+        "location_7",
+        "location_8",
+        "location_9",
+        "location_10"
+      ],
+      "source_file": "archive_soil_probe_observed.json",
+      "http_status": null,
+      "note": "Successful requests occurred in an earlier interrupted attempt; retained evidence has no raw-response hash."
+    },
+    {
+      "kind": "local_archive_source",
+      "site": "location_6",
+      "path": "datasets/weather/location_6_weather_appended.csv",
+      "sha256": "d0d0a8b2dfa35ff77aa3aba83fafa33f3c2f9ec50bf23f6c8679421425b5923c",
+      "rows": 400224,
+      "clock": "fixed UTC-8 (Etc/GMT+8)"
+    },
+    {
+      "kind": "local_archive_source",
+      "site": "location_7",
+      "path": "datasets/weather/location_7_weather_appended.csv",
+      "sha256": "56283823dae44722545e87b69efc15d9e16a0e7f76d907705e6f7101c20a9a0c",
+      "rows": 400224,
+      "clock": "fixed UTC-8 (Etc/GMT+8)"
+    },
+    {
+      "kind": "local_archive_source",
+      "site": "location_8",
+      "path": "datasets/weather/location_8_weather_appended.csv",
+      "sha256": "249d5cf388b410f53f84b8299ad0c2693e1945620a1888746e26dad12aea3954",
+      "rows": 400224,
+      "clock": "fixed UTC-8 (Etc/GMT+8)"
+    },
+    {
+      "kind": "local_archive_source",
+      "site": "location_9",
+      "path": "datasets/weather/location_9_weather_appended.csv",
+      "sha256": "e2a2456ce0d43c1b246461235826759c6ac82f4f2ef1ef4311a45814eb5305b0",
+      "rows": 400224,
+      "clock": "fixed UTC-8 (Etc/GMT+8)"
+    },
+    {
+      "kind": "local_archive_source",
+      "site": "location_10",
+      "path": "datasets/weather/location_10_weather_appended.csv",
+      "sha256": "1c125b84d22f00ba11fed280e57f1f4d684dfbe7f28179ed7477f9d78aac914e",
+      "rows": 400224,
+      "clock": "fixed UTC-8 (Etc/GMT+8)"
+    },
+    {
+      "kind": "production_forecast_probe",
+      "round": "serving_verification",
+      "site": "location_6",
+      "url": "https://api.open-meteo.com/v1/forecast",
+      "params": {
+        "latitude": 36.989159,
+        "longitude": -120.11103,
+        "hourly": "temperature_2m,relative_humidity_2m,dew_point_2m,precipitation,surface_pressure,vapour_pressure_deficit,wind_speed_10m,wind_speed_100m,wind_gusts_10m,weather_code,cloud_cover_low,soil_temperature_0cm,soil_temperature_6cm,soil_temperature_0_to_7cm",
+        "timezone": "Etc/GMT+8",
+        "past_days": 7,
+        "forecast_days": 1
+      },
+      "resolved_url": "https://api.open-meteo.com/v1/forecast?latitude=36.989159&longitude=-120.11103&hourly=temperature_2m%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Csurface_pressure%2Cvapour_pressure_deficit%2Cwind_speed_10m%2Cwind_speed_100m%2Cwind_gusts_10m%2Cweather_code%2Ccloud_cover_low%2Csoil_temperature_0cm%2Csoil_temperature_6cm%2Csoil_temperature_0_to_7cm&timezone=Etc%2FGMT%2B8&past_days=7&forecast_days=1",
+      "http_status": 200,
+      "rows": 192,
+      "sha256": "b268c9aed9fe63b8c5a1108bda50ff4b41f1e6b606b4873fd1dd536ecb68c7a7"
+    },
+    {
+      "kind": "production_forecast_probe",
+      "round": "serving_verification",
+      "site": "location_7",
+      "url": "https://api.open-meteo.com/v1/forecast",
+      "params": {
+        "latitude": 36.777045,
+        "longitude": -119.716862,
+        "hourly": "temperature_2m,relative_humidity_2m,dew_point_2m,precipitation,surface_pressure,vapour_pressure_deficit,wind_speed_10m,wind_speed_100m,wind_gusts_10m,weather_code,cloud_cover_low,soil_temperature_0cm,soil_temperature_6cm,soil_temperature_0_to_7cm",
+        "timezone": "Etc/GMT+8",
+        "past_days": 7,
+        "forecast_days": 1
+      },
+      "resolved_url": "https://api.open-meteo.com/v1/forecast?latitude=36.777045&longitude=-119.716862&hourly=temperature_2m%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Csurface_pressure%2Cvapour_pressure_deficit%2Cwind_speed_10m%2Cwind_speed_100m%2Cwind_gusts_10m%2Cweather_code%2Ccloud_cover_low%2Csoil_temperature_0cm%2Csoil_temperature_6cm%2Csoil_temperature_0_to_7cm&timezone=Etc%2FGMT%2B8&past_days=7&forecast_days=1",
+      "http_status": 200,
+      "rows": 192,
+      "sha256": "b8f213230ba4ae5fb80ce97ab072f24b1587c682c3a199d282941641a1e0ead7"
+    },
+    {
+      "kind": "production_forecast_probe",
+      "round": "serving_verification",
+      "site": "location_8",
+      "url": "https://api.open-meteo.com/v1/forecast",
+      "params": {
+        "latitude": 36.322528,
+        "longitude": -119.394712,
+        "hourly": "temperature_2m,relative_humidity_2m,dew_point_2m,precipitation,surface_pressure,vapour_pressure_deficit,wind_speed_10m,wind_speed_100m,wind_gusts_10m,weather_code,cloud_cover_low,soil_temperature_0cm,soil_temperature_6cm,soil_temperature_0_to_7cm",
+        "timezone": "Etc/GMT+8",
+        "past_days": 7,
+        "forecast_days": 1
+      },
+      "resolved_url": "https://api.open-meteo.com/v1/forecast?latitude=36.322528&longitude=-119.394712&hourly=temperature_2m%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Csurface_pressure%2Cvapour_pressure_deficit%2Cwind_speed_10m%2Cwind_speed_100m%2Cwind_gusts_10m%2Cweather_code%2Ccloud_cover_low%2Csoil_temperature_0cm%2Csoil_temperature_6cm%2Csoil_temperature_0_to_7cm&timezone=Etc%2FGMT%2B8&past_days=7&forecast_days=1",
+      "http_status": 200,
+      "rows": 192,
+      "sha256": "201f2f82b140ac5251f02831571d6da4db68af2cf1d0bc386a219cf33becd6e1"
+    },
+    {
+      "kind": "production_forecast_probe",
+      "round": "serving_verification",
+      "site": "location_9",
+      "url": "https://api.open-meteo.com/v1/forecast",
+      "params": {
+        "latitude": 36.313201,
+        "longitude": -119.626015,
+        "hourly": "temperature_2m,relative_humidity_2m,dew_point_2m,precipitation,surface_pressure,vapour_pressure_deficit,wind_speed_10m,wind_speed_100m,wind_gusts_10m,weather_code,cloud_cover_low,soil_temperature_0cm,soil_temperature_6cm,soil_temperature_0_to_7cm",
+        "timezone": "Etc/GMT+8",
+        "past_days": 7,
+        "forecast_days": 1
+      },
+      "resolved_url": "https://api.open-meteo.com/v1/forecast?latitude=36.313201&longitude=-119.626015&hourly=temperature_2m%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Csurface_pressure%2Cvapour_pressure_deficit%2Cwind_speed_10m%2Cwind_speed_100m%2Cwind_gusts_10m%2Cweather_code%2Ccloud_cover_low%2Csoil_temperature_0cm%2Csoil_temperature_6cm%2Csoil_temperature_0_to_7cm&timezone=Etc%2FGMT%2B8&past_days=7&forecast_days=1",
+      "http_status": 200,
+      "rows": 192,
+      "sha256": "4c9d36a42386521821b5f6febd32c84702580e40fae3cd8457576a9f28330448"
+    },
+    {
+      "kind": "production_forecast_probe",
+      "round": "serving_verification",
+      "site": "location_10",
+      "url": "https://api.open-meteo.com/v1/forecast",
+      "params": {
+        "latitude": 35.4342,
+        "longitude": -119.0553,
+        "hourly": "temperature_2m,relative_humidity_2m,dew_point_2m,precipitation,surface_pressure,vapour_pressure_deficit,wind_speed_10m,wind_speed_100m,wind_gusts_10m,weather_code,cloud_cover_low,soil_temperature_0cm,soil_temperature_6cm,soil_temperature_0_to_7cm",
+        "timezone": "Etc/GMT+8",
+        "past_days": 7,
+        "forecast_days": 1
+      },
+      "resolved_url": "https://api.open-meteo.com/v1/forecast?latitude=35.4342&longitude=-119.0553&hourly=temperature_2m%2Crelative_humidity_2m%2Cdew_point_2m%2Cprecipitation%2Csurface_pressure%2Cvapour_pressure_deficit%2Cwind_speed_10m%2Cwind_speed_100m%2Cwind_gusts_10m%2Cweather_code%2Ccloud_cover_low%2Csoil_temperature_0cm%2Csoil_temperature_6cm%2Csoil_temperature_0_to_7cm&timezone=Etc%2FGMT%2B8&past_days=7&forecast_days=1",
+      "http_status": 200,
+      "rows": 192,
+      "sha256": "c1ba0273affc37d0f959d9852f90b61af5a223fff25f2f657c46a96ea13d3441"
+    },
+    {
+      "kind": "historical_forecast_proxy_cache_from_interrupted_run",
+      "site": "location_6",
+      "url": "https://historical-forecast-api.open-meteo.com/v1/forecast",
+      "params": {
+        "latitude": 36.989159,
+        "longitude": -120.11103,
+        "start_date": "2025-11-29",
+        "end_date": "2026-02-28",
+        "hourly": "temperature_2m,relative_humidity_2m,dew_point_2m,precipitation,surface_pressure,vapour_pressure_deficit,wind_speed_10m,wind_speed_100m,wind_gusts_10m,weather_code,cloud_cover_low",
+        "timezone": "Etc/GMT+8"
+      },
+      "http_status": null,
+      "rows": 2208,
+      "sha256": "d8aae320edda000514d2be1f8ab303a86815ab4c83f807788764ea5bad8a71dc",
+      "sha256_scope": "saved normalized CSV",
+      "saved_file": "data/location_6_historical_forecast_proxy_pst.csv"
+    },
+    {
+      "kind": "archival_metar_labels_cache",
+      "site": "location_6",
+      "url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py",
+      "params": {
+        "station": "MAE",
+        "data": [
+          "vsby",
+          "metar"
+        ],
+        "year1": 2025,
+        "month1": 12,
+        "day1": 1,
+        "year2": 2026,
+        "month2": 3,
+        "day2": 1,
+        "tz": "Etc/UTC",
+        "format": "comma",
+        "latlon": "no",
+        "elev": "no",
+        "missing": "empty",
+        "trace": "empty",
+        "direct": "no"
+      },
+      "http_status": null,
+      "rows": 1494,
+      "sha256": "bd431c3945cd54ea5ca4789aa4f070b02002a6a7973e28fa97a28d9656e9e26b",
+      "sha256_scope": "saved normalized CSV",
+      "saved_file": "data/location_6_fog_season_iem_ordinal18_pst.csv"
+    },
+    {
+      "kind": "historical_forecast_proxy_cache_from_interrupted_run",
+      "site": "location_7",
+      "url": "https://historical-forecast-api.open-meteo.com/v1/forecast",
+      "params": {
+        "latitude": 36.777045,
+        "longitude": -119.716862,
+        "start_date": "2025-11-29",
+        "end_date": "2026-02-28",
+        "hourly": "temperature_2m,relative_humidity_2m,dew_point_2m,precipitation,surface_pressure,vapour_pressure_deficit,wind_speed_10m,wind_speed_100m,wind_gusts_10m,weather_code,cloud_cover_low",
+        "timezone": "Etc/GMT+8"
+      },
+      "http_status": null,
+      "rows": 2208,
+      "sha256": "c84b2c3866bab1041309bdd0c41b2a8d3443cd21b62da9718d348ef20f7ce8d3",
+      "sha256_scope": "saved normalized CSV",
+      "saved_file": "data/location_7_historical_forecast_proxy_pst.csv"
+    },
+    {
+      "kind": "archival_metar_labels_cache",
+      "site": "location_7",
+      "url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py",
+      "params": {
+        "station": "FAT",
+        "data": [
+          "vsby",
+          "metar"
+        ],
+        "year1": 2025,
+        "month1": 12,
+        "day1": 1,
+        "year2": 2026,
+        "month2": 3,
+        "day2": 1,
+        "tz": "Etc/UTC",
+        "format": "comma",
+        "latlon": "no",
+        "elev": "no",
+        "missing": "empty",
+        "trace": "empty",
+        "direct": "no"
+      },
+      "http_status": null,
+      "rows": 1803,
+      "sha256": "a17a63f1ad900502b8ce9fc89b587f510df6a339b5978847644f179c8383d744",
+      "sha256_scope": "saved normalized CSV",
+      "saved_file": "data/location_7_fog_season_iem_ordinal18_pst.csv"
+    },
+    {
+      "kind": "historical_forecast_proxy_cache_from_interrupted_run",
+      "site": "location_8",
+      "url": "https://historical-forecast-api.open-meteo.com/v1/forecast",
+      "params": {
+        "latitude": 36.322528,
+        "longitude": -119.394712,
+        "start_date": "2025-11-29",
+        "end_date": "2026-02-28",
+        "hourly": "temperature_2m,relative_humidity_2m,dew_point_2m,precipitation,surface_pressure,vapour_pressure_deficit,wind_speed_10m,wind_speed_100m,wind_gusts_10m,weather_code,cloud_cover_low",
+        "timezone": "Etc/GMT+8"
+      },
+      "http_status": null,
+      "rows": 2208,
+      "sha256": "39540d2cd5501f7a9491dd9435b5478b861c6d61cc528f3d59367aa801a5e829",
+      "sha256_scope": "saved normalized CSV",
+      "saved_file": "data/location_8_historical_forecast_proxy_pst.csv"
+    },
+    {
+      "kind": "archival_metar_labels_cache",
+      "site": "location_8",
+      "url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py",
+      "params": {
+        "station": "VIS",
+        "data": [
+          "vsby",
+          "metar"
+        ],
+        "year1": 2025,
+        "month1": 12,
+        "day1": 1,
+        "year2": 2026,
+        "month2": 3,
+        "day2": 1,
+        "tz": "Etc/UTC",
+        "format": "comma",
+        "latlon": "no",
+        "elev": "no",
+        "missing": "empty",
+        "trace": "empty",
+        "direct": "no"
+      },
+      "http_status": null,
+      "rows": 1481,
+      "sha256": "52969854b858858dfa81daf43158b9e199d7ffa71582404bfa7d10f7905fb057",
+      "sha256_scope": "saved normalized CSV",
+      "saved_file": "data/location_8_fog_season_iem_ordinal18_pst.csv"
+    },
+    {
+      "kind": "historical_forecast_proxy_cache_from_interrupted_run",
+      "site": "location_9",
+      "url": "https://historical-forecast-api.open-meteo.com/v1/forecast",
+      "params": {
+        "latitude": 36.313201,
+        "longitude": -119.626015,
+        "start_date": "2025-11-29",
+        "end_date": "2026-02-28",
+        "hourly": "temperature_2m,relative_humidity_2m,dew_point_2m,precipitation,surface_pressure,vapour_pressure_deficit,wind_speed_10m,wind_speed_100m,wind_gusts_10m,weather_code,cloud_cover_low",
+        "timezone": "Etc/GMT+8"
+      },
+      "http_status": null,
+      "rows": 2208,
+      "sha256": "789c2b043a03144ebeb3a2345c1741812268c93119dc5c96f38169fcb0d49a57",
+      "sha256_scope": "saved normalized CSV",
+      "saved_file": "data/location_9_historical_forecast_proxy_pst.csv"
+    },
+    {
+      "kind": "archival_metar_labels_cache",
+      "site": "location_9",
+      "url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py",
+      "params": {
+        "station": "HJO",
+        "data": [
+          "vsby",
+          "metar"
+        ],
+        "year1": 2025,
+        "month1": 12,
+        "day1": 1,
+        "year2": 2026,
+        "month2": 3,
+        "day2": 1,
+        "tz": "Etc/UTC",
+        "format": "comma",
+        "latlon": "no",
+        "elev": "no",
+        "missing": "empty",
+        "trace": "empty",
+        "direct": "no"
+      },
+      "http_status": null,
+      "rows": 1361,
+      "sha256": "65978d5ec8ce10223bdd3ccc1b30ea56df079974f1e8056f60314ceb9033697f",
+      "sha256_scope": "saved normalized CSV",
+      "saved_file": "data/location_9_fog_season_iem_ordinal18_pst.csv"
+    },
+    {
+      "kind": "historical_forecast_proxy_cache_from_interrupted_run",
+      "site": "location_10",
+      "url": "https://historical-forecast-api.open-meteo.com/v1/forecast",
+      "params": {
+        "latitude": 35.4342,
+        "longitude": -119.0553,
+        "start_date": "2025-11-29",
+        "end_date": "2026-02-28",
+        "hourly": "temperature_2m,relative_humidity_2m,dew_point_2m,precipitation,surface_pressure,vapour_pressure_deficit,wind_speed_10m,wind_speed_100m,wind_gusts_10m,weather_code,cloud_cover_low",
+        "timezone": "Etc/GMT+8"
+      },
+      "http_status": null,
+      "rows": 2208,
+      "sha256": "77e64929ee11e885ab5480c26c1b733a7dc9eb36d256dbd439ccb37caffd3fca",
+      "sha256_scope": "saved normalized CSV",
+      "saved_file": "data/location_10_historical_forecast_proxy_pst.csv"
+    },
+    {
+      "kind": "archival_metar_labels_cache",
+      "site": "location_10",
+      "url": "https://mesonet.agron.iastate.edu/cgi-bin/request/asos.py",
+      "params": {
+        "station": "BFL",
+        "data": [
+          "vsby",
+          "metar"
+        ],
+        "year1": 2025,
+        "month1": 12,
+        "day1": 1,
+        "year2": 2026,
+        "month2": 3,
+        "day2": 1,
+        "tz": "Etc/UTC",
+        "format": "comma",
+        "latlon": "no",
+        "elev": "no",
+        "missing": "empty",
+        "trace": "empty",
+        "direct": "no"
+      },
+      "http_status": null,
+      "rows": 1563,
+      "sha256": "56d48b635a91d762becbcf87a63e2e440b87358e9da5392cade18a3a062fc30c",
+      "sha256_scope": "saved normalized CSV",
+      "saved_file": "data/location_10_fog_season_iem_ordinal18_pst.csv"
+    }
+  ]
+}

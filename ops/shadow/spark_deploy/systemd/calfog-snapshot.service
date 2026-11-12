@@ -1,0 +1,11 @@
+[Unit]
+Description=CalFog V2 shadow snapshot+label logger (private, model-independent, no serving)
+Documentation=CalFog shadow: banks raw Open-Meteo forecast + AviationWeather METAR payloads for later replay
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 %h/calfog-shadow/calfog_snapshot.py
+NoNewPrivileges=true
+PrivateTmp=true

@@ -1,0 +1,18 @@
+# V2 interpreter: CPython / Python 3.12.3 with torch cu128 and a compatible NVIDIA driver.
+# Study results (models/*_v2, run_all_v2.py --jobs) were produced on an NVIDIA DGX Spark (Linux aarch64, GB10);
+# ops/retrain artifacts on Linux x86_64 (RTX 5070). The same pins install on both and give matching metrics.
+# The CNN and every XGBoost family train on the GPU; XGBoost GPU and CPU boosters differ slightly.
+# The extra index supplies the exact CUDA wheel, not the legacy TF environment.
+--extra-index-url https://download.pytorch.org/whl/cu128
+torch==2.11.0+cu128
+ray[tune]==2.57.0
+xgboost==3.4.1
+interpret-core==0.7.8
+scikit-learn==1.9.0
+numpy==2.5.2
+scipy==1.18.0
+pandas==3.0.5
+joblib==1.5.3
+requests==2.34.2
+matplotlib==3.11.1
+pytest==9.1.1
