@@ -219,7 +219,7 @@ def label_tables(weather,vis,site):
     means = verification.rolling(10, min_periods=10).mean()
     lead[['dpd_c', 'wind_kmh']] = means.reindex(
         lead.verification_end - pd.Timedelta(hours=1)).to_numpy(dtype=float)
-    # Explicit core causal audit: feature window ends at issue, never verification time.
+    # Valid-time ordering check only; archive release-time availability is not established.
     for z,task in ((now,'nowcast'),(lead,'lead')):
         z['_max_feature_time']=z.issue_time
         lag = _visibility_lags(z.issue_time, known)

@@ -40,13 +40,14 @@ PM25_PRIORITY = {
 }
 GROUPS = {"NONOxNOy": "42603", "88101": "88101", "88502": "88502"}
 BASE_URL = "https://aqs.epa.gov/aqsweb/airdata/"
-OUTPUT_COLUMNS = ["time", "nox_ppb", "nox_monitor", "pm25_ugm3", "pm25_monitor"]
+OUTPUT_COLUMNS = ["time", "nox_ppb", "nox_monitor", "pm25_ugm3", "pm25_monitor",
+                  "pm25_parameter", "pm25_poc", "pm25_method"]
 # Actual hourly AirData header, verified by the 2008 archive probe (ObservedAQ).
 FILTER_COLUMNS = [
     "State Code", "County Code", "Site Num", "Parameter Code", "POC",
     "Date GMT", "Time GMT", "Sample Measurement", "Units of Measure", "Method Code",
 ]
-OBS_COLUMNS = ["time", "monitor", "variable", "value"]
+OBS_COLUMNS = ["time", "monitor", "variable", "value", "parameter", "poc", "method"]
 
 
 def filter_archive(archive: Path, destination: Path, group: str) -> int:
@@ -87,7 +88,10 @@ def filter_archive(archive: Path, destination: Path, group: str) -> int:
 
 
 def read_observations(paths) -> pd.DataFrame:
-    """Normalize units/GMT and resolve parameter and POC duplicates per hour."""
+    """Resolve duplicates; raw fixed-PST time is sample start, not completion.
+
+    The model loader shifts the complete measured frame by one hour before use.
+    """
     pieces = []
     for path in paths:
         for chunk in pd.read_csv(path, dtype=str, chunksize=100000):
@@ -123,6 +127,7 @@ def read_observations(paths) -> pd.DataFrame:
                 "value": values,
                 "parameter": parameter,
                 "poc": pd.to_numeric(chunk["POC"], errors="raise"),
+                "method": pd.to_numeric(chunk["Method Code"], errors="coerce").astype("Int64"),
             })
             pieces.append(normalized.loc[np.isfinite(normalized.value)])
     if not pieces:
@@ -145,6 +150,8 @@ def splice_site(observations: pd.DataFrame, site: str) -> tuple[pd.DataFrame, di
         return pd.DataFrame(columns=OUTPUT_COLUMNS), chosen_months
     grid = pd.date_range(candidates.time.min(), candidates.time.max(), freq="h", name="time")
     result = pd.DataFrame(index=grid)
+    for column in ("pm25_parameter", "pm25_poc", "pm25_method"):
+        result[column] = pd.Series(pd.NA, index=grid, dtype="Int64")
     for variable, monitor_column, priorities in [
         ("nox_ppb", "nox_monitor", NOX_PRIORITY[site]),
         ("pm25_ugm3", "pm25_monitor", PM25_PRIORITY[site]),
@@ -160,6 +167,9 @@ def splice_site(observations: pd.DataFrame, site: str) -> tuple[pd.DataFrame, di
             selected = rows.loc[rows.monitor.eq(chosen)].set_index("time")
             result.loc[selected.index, variable] = selected.value
             result.loc[selected.index, monitor_column] = chosen
+            if variable == "pm25_ugm3":
+                for field in ("parameter", "poc", "method"):
+                    result.loc[selected.index, f"pm25_{field}"] = selected[field].astype("Int64")
             chosen_months[variable][str(month)] = chosen
     return result.reset_index()[OUTPUT_COLUMNS], chosen_months
 
@@ -241,6 +251,18 @@ def build(years, cache: Path, output: Path, keep_raw=False) -> None:
     for site in NOX_PRIORITY:
         frame, choices = splice_site(observations, site)
         destination = output / f"{site}_aq_measured.csv"
+        if destination.exists():
+            existing = pd.read_csv(destination, float_precision="round_trip")
+            existing["time"] = pd.to_datetime(existing["time"], format="%Y-%m-%d %H:%M:%S", errors="raise")
+            concentration_columns = ["time", "nox_ppb", "pm25_ugm3"]
+            if not existing.time.isin(frame.time).all():
+                raise ValueError(f"{site}: retained concentrations differ; provenance not attached")
+            retained = frame.set_index("time").reindex(existing.time).reset_index()
+            try:
+                pd.testing.assert_frame_equal(existing[concentration_columns], retained[concentration_columns],
+                                              check_dtype=False, check_exact=True)
+            except AssertionError as exc:
+                raise ValueError(f"{site}: retained concentrations differ; provenance not attached") from exc
         temporary = destination.with_suffix(".csv.part")
         frame.to_csv(temporary, index=False, date_format="%Y-%m-%d %H:%M:%S")
         temporary.replace(destination)

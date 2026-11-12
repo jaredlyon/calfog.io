@@ -8,11 +8,13 @@ from .labels import audit_causal_features
 from .visibility import FOG_MAX_CATEGORY
 
 def build_windows(weather, part, aq_cols=(), aq_min_hours=None, *, weather_cols: list[str] = WEATHER_COLS):
-    """Materialize 24 genuine consecutive hourly observations within one site.
+    """Materialize 24 consecutive valid-time-ordered archive hours within one site.
 
     The source grid was already asserted exactly hourly. Integer positions therefore
     mean clock hours, not "surviving rows"; this vectorized form avoids a slow
     per-METAR loop while preserving the same cadence assertion.
+    EPA values have already been aligned to sample completion by the loader;
+    archive valid-time ordering does not establish release-time availability.
     """
     cols = list(weather_cols) + CAL_COLS + list(aq_cols)
     if weather.time.duplicated().any() or not (weather.time.diff().dropna() == pd.Timedelta(hours=1)).all():
@@ -57,7 +59,7 @@ def fit_preprocess(Xtr, *others):
     return (f(Xtr),)+tuple(f(x) for x in others), im, sc
 
 def tree_view(X):
-    """Causal summaries of the 24-hour history, not visibility/target proxies."""
+    """Valid-time-ordered summaries of the history, not visibility/target proxies."""
     return np.concatenate([X[:,-1,:],X.mean(1),X.std(1),X.min(1),X.max(1)],axis=1).astype(np.float32)
 
 @dataclass

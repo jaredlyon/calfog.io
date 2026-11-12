@@ -19,9 +19,9 @@ CATEGORY_LABELS: tuple[str, ...] = (
     "<1/4", "1/4", "1/2", "3/4", "1", "1 1/4", "1 1/2", "1 3/4", "2",
     "2 1/2", "3", "4", "5", "6", "7", "8", "9", "10+",
 )
-CATEGORY_LOWER_M: tuple[float, ...] = tuple(q * SM_TO_M for q in CATEGORY_SM)
-CATEGORY_UPPER_M: tuple[float, ...] = CATEGORY_LOWER_M[1:] + (math.inf,)
-CATEGORY_NOMINAL_M: tuple[float, ...] = (math.nan,) + CATEGORY_LOWER_M[1:]
+CATEGORY_LOWER_M: tuple[float, ...] = (0.0, 0.25 * SM_TO_M) + tuple(q * SM_TO_M for q in CATEGORY_SM[1:-1])
+CATEGORY_UPPER_M: tuple[float, ...] = (0.25 * SM_TO_M,) + tuple(q * SM_TO_M for q in CATEGORY_SM[1:-1]) + (math.inf,)
+CATEGORY_NOMINAL_M: tuple[float, ...] = (math.nan,) + tuple(q * SM_TO_M for q in CATEGORY_SM[1:])
 
 # FMH-1 manual + automated union, FMH-2 Table 4-4; see research/ReportableScale.
 # Above 40 SM the manual scale continues as 40 + 5*k, without an arbitrary cap.
@@ -60,6 +60,9 @@ SOURCE_PROFILES: dict[str, tuple[str, ...]] = {
     "999": ("round_2dp",),
 }
 SYNOP_REPORT_TYPES = frozenset({"FM12", "FM13", "SYSA", "SYMT"})
+QC_GROUP_1 = frozenset({"220", "221", "222", "223", "347", "348"})
+QC_GROUP_2 = frozenset({"313", "314", "315", "322", "335", "343", "344", "346"})
+LABEL_POLICIES = ("baseline", "qc_only", "association_only", "combined", "measurement_restricted")
 
 
 def sm_to_category(q: float) -> int:
@@ -171,7 +174,10 @@ def _summary(candidates: tuple[float, ...]) -> tuple[float, int, int, str]:
 
 
 def _decoded(index, q, lo, hi, status, rem) -> pd.DataFrame:
-    """Vectorized bounds, validator and nullable output shared by both ingests."""
+    """Reported-value support envelope, not optical uncertainty.
+
+    Lower is closed iff cat_lo is 0 or 1; upper iff cat_hi is 1–16.
+    """
     q, lo, hi = np.asarray(q, float), np.asarray(lo, float), np.asarray(hi, float)
     rem = np.asarray(rem, float)
     valid_raw = ~np.isnan(rem)
@@ -231,17 +237,33 @@ def _observation_times(frame: pd.DataFrame) -> tuple[pd.Series, pd.Series]:
     return corrected, time_from_rem
 
 
-def decode_ghcnh(frame: pd.DataFrame) -> pd.DataFrame:
-    """Recover candidates once per stored km/profile set, not once per report."""
-    km = pd.to_numeric(frame["visibility"], errors="coerce").to_numpy(dtype=float)
+def decode_ghcnh(frame: pd.DataFrame, *, station_icao: str, policy: str = "combined") -> pd.DataFrame:
+    """Apply source QC and same-report REM association (D-113).
+
+    Measurement codes restrict only the labelled measurement_restricted sensitivity.
+    """
+    if policy not in LABEL_POLICIES:
+        raise ValueError(f"unknown visibility policy: {policy}")
     sources = frame["visibility_Source_Code"].fillna("").astype(str).str.strip()
     reports = frame["visibility_Report_Type"].fillna("").astype(str).str.strip()
+    measurement = frame["visibility_Measurement_Code"].fillna("").astype(str).str.strip()
+    quality = frame["visibility_Quality_Code"].fillna("").astype(str).str.strip()
+    rejected = ((sources.isin(QC_GROUP_1) & quality.isin({"2", "3", "5"})) |
+                (sources.isin(QC_GROUP_2) & quality.isin({"2", "3", "6", "7"})))
+    assessed = ((sources.isin(QC_GROUP_1) & quality.isin({"1", "2", "3", "4", "5"})) |
+                (sources.isin(QC_GROUP_2) & quality.isin({"0", "1", "2", "3", "4", "5", "6", "7", "9",
+                                                          "A", "U", "P", "I", "M"})))
+    exclude = rejected if policy in {"qc_only", "combined", "measurement_restricted"} else pd.Series(False, index=frame.index)
+    if policy == "measurement_restricted":
+        exclude = exclude | (sources.isin(QC_GROUP_1) & measurement.isin({"A", "L", "M", "N", "S"}))
+    km = pd.to_numeric(frame["visibility"], errors="coerce").to_numpy(dtype=float)
+    usable = ~exclude.to_numpy()
     n = len(frame)
     q, lo, hi = (np.full(n, np.nan) for _ in range(3))
     status = np.full(n, "missing", dtype=object)
     groups = pd.DataFrame({"source": sources.to_numpy(), "report": reports.to_numpy()})
     for (source, report), positions in groups.groupby(["source", "report"]).indices.items():
-        positions = positions[np.isfinite(km[positions]) & (km[positions] >= 0)]
+        positions = positions[np.isfinite(km[positions]) & (km[positions] >= 0) & usable[positions]]
         values, inverse = np.unique(km[positions], return_inverse=True)
         summaries = [_summary(_candidates(float(v), _profiles(source, report))) for v in values]
         if summaries:
@@ -250,17 +272,38 @@ def decode_ghcnh(frame: pd.DataFrame) -> pd.DataFrame:
             lo[positions] = np.asarray(sl)[inverse]
             hi[positions] = np.asarray(sh)[inverse]
             status[positions] = np.asarray(ss)[inverse]
-    top = np.isfinite(km) & (km >= 15.95)
+    top = np.isfinite(km) & (km >= 15.95) & usable
     lo[top], hi[top], status[top] = 17, 17, "censored_high"
     q[top & (q < 10)] = np.nan
-    rem = frame["REM"].map(parse_rem_prevailing_sm).to_numpy(dtype=float)
+    corrected_time, time_from_rem = _observation_times(frame)
+    associated = pd.Series(True, index=frame.index)
+    if policy in {"association_only", "combined", "measurement_restricted"}:
+        for field in ("Source_Code", "Report_Type", "Source_Station_ID"):
+            vis = frame[f"visibility_{field}"].fillna("").astype(str).str.strip()
+            raw = frame[f"REM_{field}"].fillna("").astype(str).str.strip()
+            associated &= vis.ne("") & vis.eq(raw)
+        body = frame["REM"].fillna("").astype(str).str.upper()
+        body = body.str.replace(r"^(?:MET|AWY|SYN)\d{3}", "", regex=True).str.strip()
+        body = body.str.split(r"\bRMK\b", n=1, regex=True).str[0]
+        header = body.str.extract(_HEADER)[0]
+        sao = body.str.extract(r"^([A-Z]{3,4})\s+(?:SA|SP|RS)\s+\d{4}\s+")[0]
+        associated &= ~body.str.startswith("NEW")
+        associated &= header.isna() | (header.eq(station_icao.upper()) & time_from_rem)
+        associated &= sao.isna() | sao.isin({station_icao.upper(), station_icao.upper()[-3:]})
+        corrected_time = corrected_time.where(associated, pd.to_datetime(frame["DATE"], utc=True, errors="coerce"))
+        time_from_rem &= associated
+    rem = frame["REM"].map(parse_rem_prevailing_sm).to_numpy(dtype=float, copy=True)
+    rem[~associated.to_numpy() | ~usable] = np.nan
     out = _decoded(frame.index, q, lo, hi, status, rem)
     out.insert(0, "visibility_km", km)
     out.insert(0, "source_code", sources)
     out.insert(0, "report_type", reports)
-    corrected_time, time_from_rem = _observation_times(frame)
     out.insert(0, "time_utc", corrected_time)
     out["time_from_rem"] = time_from_rem
+    for column in ("DATE", "REM", "visibility_Measurement_Code", "visibility_Quality_Code",
+                   "visibility_Source_Station_ID", "REM_Source_Code", "REM_Report_Type", "REM_Source_Station_ID"):
+        out[column] = frame[column]
+    out["qc_status"] = np.where(rejected, "rejected", np.where(assessed, "accepted", "unassessed"))
     return out.drop_duplicates(["time_utc", "cat_lo", "cat_hi"], keep="first")
 
 
@@ -318,3 +361,26 @@ def hourly_labels(obs: pd.DataFrame) -> pd.DataFrame:
     out["fog"] = pd.array(np.where(out["cat_hi"] <= FOG_MAX_CATEGORY, True,
                           np.where(out["cat_lo"] > FOG_MAX_CATEGORY, False, None)), dtype="boolean")
     return out[["time", "cat_lo", "cat_hi", "category", "fog", "n_reports"]]
+
+
+def select_hourly_report(obs: pd.DataFrame) -> pd.DataFrame:
+    """Select nearest :55 within each fixed-PST hour; envelope tied-time reports."""
+    rows = obs.loc[obs.cat_lo.notna() & obs.cat_hi.notna(),
+                   ["time_utc", "cat_lo", "cat_hi", "report_type"]].copy()
+    rows["time_utc"] = pd.to_datetime(rows.time_utc, utc=True)
+    rows["local"] = (rows.time_utc - pd.Timedelta(hours=8)).dt.tz_localize(None)
+    rows["time"] = rows.local.dt.floor("h")
+    rows["distance"] = (rows.local - rows.time - pd.Timedelta(minutes=55)).abs()
+    winners = rows.sort_values(["time", "distance", "time_utc"], kind="stable").drop_duplicates("time")
+    rows = rows.merge(winners[["time", "time_utc"]], on=["time", "time_utc"])
+    out = rows.groupby("time", as_index=False).agg(
+        cat_lo=("cat_lo", "min"), cat_hi=("cat_hi", "max"),
+        report_type=("report_type", lambda s: "|".join(sorted(set(s)))),
+        obs_minute=("local", lambda s: s.iloc[0].minute),
+    )
+    out["cat_lo"] = out.cat_lo.astype("Int64")
+    out["cat_hi"] = out.cat_hi.astype("Int64")
+    out["category"] = out.cat_lo.where(out.cat_lo.eq(out.cat_hi)).astype("Int64")
+    out["fog"] = pd.array(np.where(out.cat_hi <= FOG_MAX_CATEGORY, True,
+                          np.where(out.cat_lo > FOG_MAX_CATEGORY, False, None)), dtype="boolean")
+    return out[["time", "cat_lo", "cat_hi", "category", "fog", "report_type", "obs_minute"]]

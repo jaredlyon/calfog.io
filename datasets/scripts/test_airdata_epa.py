@@ -109,6 +109,12 @@ def test_pm_parameter_priority_poc_and_superseded_methods(tmp_path):
     assert pd.isna(frame.pm25_ugm3.iloc[4])
     assert frame.pm25_monitor.iloc[4] == ""
     assert frame.pm25_ugm3.iloc[5] == 0
+    assert frame.pm25_parameter.iloc[[0, 1, 2, 3, 5]].tolist() == [88101, 88101, 88502, 88101, 88101]
+    assert frame.pm25_poc.iloc[[0, 1, 2, 3, 5]].tolist() == [3, 3, 1, 1, 1]
+    assert frame.pm25_method.iloc[[0, 1, 2, 3, 5]].tolist() == [99, 99, 99, 738, 99]
+    assert frame[["pm25_parameter", "pm25_poc", "pm25_method"]].iloc[4].isna().all()
+    assert all(str(frame[column].dtype) == "Int64"
+               for column in ("pm25_parameter", "pm25_poc", "pm25_method"))
 
 
 @pytest.mark.parametrize("month", [1, 7])
@@ -139,7 +145,7 @@ def test_contiguous_output_grid_and_empty_missing_values(tmp_path):
     frame.to_csv(output, index=False, date_format="%Y-%m-%d %H:%M:%S")
     with output.open(newline="") as stream:
         saved = list(csv.DictReader(stream))
-    assert saved[1] == dict(zip(epa.OUTPUT_COLUMNS, ["2020-01-01 01:00:00", "", "", "", ""]))
+    assert saved[1] == dict(zip(epa.OUTPUT_COLUMNS, ["2020-01-01 01:00:00"] + [""] * 7))
 
 
 def test_optional_sample_duration_drops_daily_filters(tmp_path):
@@ -181,6 +187,16 @@ def test_resume_skips_existing_filtered_years_and_preserves_provenance(tmp_path,
     saved = pd.read_csv(output / "location_7_aq_measured.csv")
     assert saved.columns.tolist() == epa.OUTPUT_COLUMNS
     assert saved.nox_ppb.tolist() == [7]
+    # Re-attaching lineage to retained exports must preserve concentrations exactly.
+    epa.build([2020], cache, output)
+    retained = pd.read_csv(output / "location_7_aq_measured.csv")
+    pd.testing.assert_frame_equal(saved, retained)
+    retained.loc[0, "nox_ppb"] = 999
+    retained.to_csv(output / "location_7_aq_measured.csv", index=False)
+    before = (output / "location_7_aq_measured.csv").read_bytes()
+    with pytest.raises(ValueError, match="retained concentrations differ"):
+        epa.build([2020], cache, output)
+    assert (output / "location_7_aq_measured.csv").read_bytes() == before
 
 
 def test_download_stream_hash_throttle_raw_cleanup_and_404_resume(tmp_path, monkeypatch):
@@ -230,3 +246,22 @@ def test_keep_raw_and_retained_archive_are_network_free(tmp_path, monkeypatch):
     assert archive.read_bytes() == payload
     assert meta["sha256"] == hashlib.sha256(payload).hexdigest()
     assert meta["row_count"] == 1
+
+
+def test_pm_lineage_retains_unknown_method_and_start_time_at_month_end(tmp_path):
+    rows = [
+        row("2020-01-31 23:00", parameter=88101, poc=4, method=170, value=12),
+        row("2020-02-01 00:00", parameter=88101, poc=4, method="", value=13),
+        row("2020-02-01 01:00", value=7),
+    ]
+    pm_path, _ = filtered(tmp_path, rows[:2], "88101")
+    nox_path, _ = filtered(tmp_path, rows[2:], "NONOxNOy")
+    observations = epa.read_observations([pm_path, nox_path])
+    frame, _ = epa.splice_site(observations, "location_7")
+    assert frame.time.tolist() == list(pd.date_range("2020-01-31 23:00", periods=3, freq="h"))
+    assert frame.pm25_ugm3.iloc[:2].tolist() == [12, 13]
+    assert frame.pm25_parameter.iloc[:2].tolist() == [88101, 88101]
+    assert frame.pm25_poc.iloc[:2].tolist() == [4, 4]
+    assert frame.pm25_method.iloc[0] == 170
+    assert pd.isna(frame.pm25_method.iloc[1])
+    assert frame.loc[2, ["pm25_parameter", "pm25_poc", "pm25_method"]].isna().all()

@@ -24,3 +24,4 @@ ops/shadow/predictions.jsonl
 **/*.exit
 datasets/aq_measured/
 models/**/*_predictions_v2/
+datasets/raw/open_meteo/

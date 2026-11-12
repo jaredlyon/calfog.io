@@ -5,7 +5,7 @@ from pathlib import Path
 
 def calculate_inferred_variables(df):
     df = df.copy()
-    df['time'] = pd.to_datetime(df['time'])
+    df['time'] = pd.to_datetime(df['time'], format="%Y-%m-%d %H:%M:%S", errors="raise")
     
     # Dewpoint Depression (temperature - dewpoint)
     df['dewpoint_depression'] = df['temperature_2m'] - df['dew_point_2m']
@@ -37,24 +37,18 @@ def calculate_inferred_variables(df):
     for i in range(1, len(unique_dates)):
         prev_start = first_indices[i - 1]
         curr_start = first_indices[i]
-        
-        # Previous night: 18:00–23:59 of previous day
-        night_prev_day_idx = np.arange(prev_start, prev_start + 24)[18:24]
-        
-        # Current night portion: 00:00–05:59 of current day
-        night_curr_day_idx = np.arange(curr_start, curr_start + 6)
-        
-        # Combine indices and take min temperature
-        night_temps = df.loc[np.concatenate([night_prev_day_idx, night_curr_day_idx]), 'temperature_2m']
-        
-        night_min = night_temps.min() if not night_temps.empty else np.nan
-        
-        # Assign the previous night low to all rows of the current day
-        if i < len(unique_dates) - 1:
-            next_start = first_indices[i + 1]
+        next_start = first_indices[i + 1] if i < len(unique_dates) - 1 else len(df)
+
+        # Select existing hours, not assumed row offsets in possibly partial days.
+        previous = df.iloc[prev_start:curr_start]
+        current = df.iloc[curr_start:next_start]
+        if unique_dates[i] - unique_dates[i - 1] == pd.Timedelta(days=1):
+            evening = previous.loc[previous['hour'].ge(18), 'temperature_2m']
         else:
-            next_start = len(df)
-            
+            evening = pd.Series(dtype=float)
+        morning = current.loc[current['hour'].lt(6), 'temperature_2m']
+        night_min = pd.concat([evening, morning]).min()
+
         previous_night_lows[curr_start:next_start] = night_min
 
     df['previous_night_low'] = previous_night_lows
@@ -74,14 +68,16 @@ def process_weather_dataset(file_path):
     print(f"\nProcessing: {file_path.name}")
     
     try:
-        df = pd.read_csv(file_path)
+        df = pd.read_csv(file_path, float_precision="round_trip")
         print(f"Loaded {len(df)} records")
         print(f"Original columns: {len(df.columns)}")
         
         df_updated = calculate_inferred_variables(df)
         
         output_path = file_path.parent / file_path.name.replace("_weather.csv", "_weather_appended.csv")
-        df_updated.to_csv(output_path, index=False)
+        temporary = output_path.with_suffix(".csv.part")
+        df_updated.to_csv(temporary, index=False, date_format="%Y-%m-%d %H:%M:%S")
+        temporary.replace(output_path)
         print(f"Saved updated dataset to {output_path.name} with {len(df_updated.columns)} columns")
         print(f"New columns added: dewpoint_depression, previous_night_low, cooling_rate_6h, cooling_rate_12h")
         

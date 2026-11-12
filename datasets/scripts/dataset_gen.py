@@ -2,7 +2,18 @@ import requests
 import pandas as pd
 from datetime import datetime, timedelta
 import time
-import os
+import hashlib
+import json
+from pathlib import Path
+from datetime import timezone
+
+try:
+    from .append_inferred_variables import process_weather_dataset
+except ImportError:
+    from append_inferred_variables import process_weather_dataset
+
+RAW_DIRECTORY = Path("datasets/raw/open_meteo")
+ACQUISITION_MANIFEST = Path("datasets/manifests/weather_cams_acquisition.json")
 
 # api: open-meteo.com
 # TODO: get real api key? limited to 10k requests per day <---- monitor this!!!
@@ -33,7 +44,8 @@ COORDINATES = [
 ]
 
 # data point intervals
-# every day, 1980 through yesterday, inclusive ----> AQI DATASET ONLY STARTS AT 2022-08-03 18:00:00
+# Requests start in 1980 for weather and 2013 for CAMS; observed complete CAMS
+# coverage in the retained California arrays starts 2022-08-03 16:00 fixed PST.
 # at ALL hours: 0:00 1:00 2:00 3:00 4:00 5:00 6:00 7:00 8:00 9:00 10:00 11:00 12:00 13:00 14:00 15:00 16:00 17:00 18:00 19:00 20:00 21:00 22:00 23:00
 # fog usually peaks 3-10am
 
@@ -127,132 +139,199 @@ AIR_QUALITY_VARS = [
 #   all other codes are not fog, so this would be negative binary classification
 # Cloud Cover Low
 
+def file_sha256(path):
+    with Path(path).open("rb") as stream:
+        return hashlib.file_digest(stream, "sha256").hexdigest()
+
+
+def save_json(path, value):
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_suffix(path.suffix + ".part")
+    temporary.write_text(json.dumps(value, indent=2, allow_nan=False) + "\n", encoding="utf-8")
+    temporary.replace(path)
+
+
 def get_json(url, params, retries=5):
-    # back off on HTTP 429; a daily-quota 429 still fails after retries, so re-run tomorrow to resume
     for attempt in range(retries):
         response = requests.get(url, params=params, timeout=120)
-        if response.status_code != 429:
+        if response.status_code != 429 or attempt == retries - 1:
             break
         wait = 60 * (attempt + 1)
         print(f"  Rate limited (429), sleeping {wait}s...")
         time.sleep(wait)
     response.raise_for_status()
-    return response.json()
+    retrieval = datetime.now(timezone.utc).isoformat()
+    content = response.content
+    data = json.loads(content)
+    digest = hashlib.sha256(content).hexdigest()
+    raw_path = RAW_DIRECTORY / f"{digest}.json"
+    raw_path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = raw_path.with_suffix(".json.part")
+    temporary.write_bytes(content)
+    temporary.replace(raw_path)
+    record = {
+        "endpoint": url, "resolved_url": response.url,
+        "query": {**params, "models": params.get("models"), "domains": params.get("domains")},
+        "retrieval_utc": retrieval, "status": response.status_code,
+        "latitude": data.get("latitude"), "longitude": data.get("longitude"),
+        "elevation": data.get("elevation"), "timezone": data.get("timezone"),
+        "utc_offset_seconds": data.get("utc_offset_seconds"), "units": data.get("hourly_units"),
+        "raw_path": raw_path.as_posix(), "response_sha256": digest,
+        "response_hash_scope": "HTTP response-content bytes", "upstream_version": None,
+    }
+    return data, record
 
-def fetch_weather_data(lat, lon, start_date, end_date):
+
+def fetch_weather_data(lat, lon, start_date, end_date, *, model=None, variables=WEATHER_VARS):
     url = "https://archive-api.open-meteo.com/v1/archive"
     params = {
-        "latitude": lat,
-        "longitude": lon,
-        "start_date": start_date,
-        "end_date": end_date,
-        "hourly": ",".join(WEATHER_VARS),
-        "timezone": TIMEZONE
+        "latitude": lat, "longitude": lon, "start_date": start_date, "end_date": end_date,
+        "hourly": ",".join(variables), "timezone": TIMEZONE,
     }
-    
+    if model is not None:
+        params.update(models=model, temperature_unit="celsius", wind_speed_unit="kmh",
+                      precipitation_unit="mm")
     print(f"  Fetching weather data for {start_date} to {end_date}...")
-    
     try:
-        data = get_json(url, params)
-        
+        # A pinned winter request stops on quota exhaustion; resume it the next day.
+        data, record = get_json(url, params, retries=1) if model == "era5" else get_json(url, params)
         hourly = data.get("hourly", {})
-        times = hourly.get("time", [])
-        df = pd.DataFrame({"time": times})
-        
-        for var in WEATHER_VARS:
-            if var in hourly:
-                df[var] = hourly[var]
-        
+        df = pd.DataFrame({"time": hourly.get("time", [])})
+        for var in variables:
+            df[var] = hourly[var] if var in hourly else pd.NA
         df["time"] = pd.to_datetime(df["time"])
         print(f"Weather data: {len(df)} records")
-        return df
+        return df, record
     except requests.exceptions.RequestException as e:
+        if model == "era5":
+            raise
         print(f"Error fetching weather data: {e}")
         return None
 
+
 def fetch_air_quality_data(lat, lon, start_date, end_date):
     url = "https://air-quality-api.open-meteo.com/v1/air-quality"
-    
     params = {
-        "latitude": lat,
-        "longitude": lon,
-        "start_date": start_date,
-        "end_date": end_date,
-        "hourly": ",".join(AIR_QUALITY_VARS),
-        "timezone": TIMEZONE
+        "latitude": lat, "longitude": lon, "start_date": start_date, "end_date": end_date,
+        "hourly": ",".join(AIR_QUALITY_VARS), "timezone": TIMEZONE,
     }
-    
     print(f"  Fetching air quality data for {start_date} to {end_date}...")
-    
     try:
-        data = get_json(url, params)
-        
+        data, record = get_json(url, params)
         hourly = data.get("hourly", {})
-        times = hourly.get("time", [])
-        
-        if not times:
-            print(f"Air quality data empty (no data available)")
-            return pd.DataFrame(columns=["time"] + AIR_QUALITY_VARS)
-        
-        df = pd.DataFrame({"time": times})
-        
+        df = pd.DataFrame({"time": hourly.get("time", [])})
         for var in AIR_QUALITY_VARS:
-            if var in hourly:
-                df[var] = hourly[var]
-            else:
-                df[var] = pd.NA
-        
+            df[var] = hourly[var] if var in hourly else pd.NA
         df["time"] = pd.to_datetime(df["time"])
         print(f"Air quality data: {len(df)} records")
-        return df
+        return df, record
     except requests.exceptions.RequestException as e:
         print(f"Error fetching air quality data: {e}")
         return None
 
 
+def read_hourly_csv(path):
+    frame = pd.read_csv(path, float_precision="round_trip")
+    frame["time"] = pd.to_datetime(frame["time"], format="%Y-%m-%d %H:%M:%S", errors="raise")
+    return frame
+
 
 def pull(fetch, path, coord, first_date=START_DATE):
-    # Append rows after the last timestamp on disk, through END_DATE. Existing rows are never rewritten, and
-    # nothing is written if any request fails, so a re-run resumes cleanly.
-    last = pd.read_csv(path, usecols=["time"], parse_dates=["time"])["time"].max() if os.path.exists(path) else None
-    start = last.normalize() if last is not None else pd.Timestamp(first_date)  # re-fetch last day to finish it
+    # Preserve old bytes and strict >last retention even when archive overlap changes.
+    path = Path(path)
+    old = read_hourly_csv(path) if path.exists() else None
+    last = old.time.max() if old is not None and not old.empty else None
+    start = last.normalize() if last is not None else pd.Timestamp(first_date)
     end = pd.Timestamp(END_DATE)
-    if start > end:
-        print(f"  {path} already up to date")
-        return True
-
-    frames = []
+    manifest = json.loads(ACQUISITION_MANIFEST.read_text(encoding="utf-8")) if ACQUISITION_MANIFEST.exists() else {"files": {}}
+    entry = manifest["files"].setdefault(path.as_posix(), {
+        "imported": None if old is None else {
+            "endpoint": None, "resolved_url": None, "query": None, "retrieval_utc": None,
+            "status": "existing_csv", "response_sha256": None, "raw_path": None,
+            "latitude": None, "longitude": None, "elevation": None, "timezone": None,
+            "utc_offset_seconds": None, "units": None, "upstream_version": None,
+            "csv_sha256": file_sha256(path), "csv_hash_scope": "complete retained CSV bytes",
+        },
+        "requests": [],
+    })
+    save_json(ACQUISITION_MANIFEST, manifest)
+    frames, records = [], []
     for year in range(start.year, end.year + 1):
         chunk_start = max(start, pd.Timestamp(year, 1, 1)).strftime("%Y-%m-%d")
         chunk_end = min(end, pd.Timestamp(year, 12, 31)).strftime("%Y-%m-%d")
-        df = fetch(coord["lat"], coord["lon"], chunk_start, chunk_end)
-        if df is None:
+        if chunk_start > chunk_end:
+            continue
+        fetched = fetch(coord["lat"], coord["lon"], chunk_start, chunk_end)
+        if fetched is None:
             print(f"  Failed {chunk_start}..{chunk_end}; nothing written for {path}")
             return False
-        if not df.empty:
-            frames.append(df)
-        time.sleep(5)  # stay under the per-minute limit
-
-    new = pd.concat(frames, ignore_index=True).sort_values("time") if frames else pd.DataFrame()
-    if last is not None and not new.empty:
-        new = new[new["time"] > last][pd.read_csv(path, nrows=0).columns]  # keep on-disk column order
-    if new.empty:
-        print(f"  No new data for {path}")
-        return True
-    os.makedirs(os.path.dirname(path), exist_ok=True)
-    new.to_csv(path, mode="a" if last is not None else "w", header=last is None, index=False)
-    print(f"  Wrote {len(new)} rows to {path}: {new['time'].min()} to {new['time'].max()}")
+        df, record = fetched
+        accepted = df if last is None else df.loc[df.time.gt(last)]
+        record = {**record, "accepted_start": None, "accepted_end": None,
+                  "accepted_rows": len(accepted), "csv_sha256": None,
+                  "csv_hash_scope": "complete resulting CSV bytes"}
+        if not accepted.empty:
+            record.update(accepted_start=accepted.time.min().isoformat(),
+                          accepted_end=accepted.time.max().isoformat())
+            frames.append(accepted)
+        entry["requests"].append(record)
+        records.append(record)
+        save_json(ACQUISITION_MANIFEST, manifest)
+        time.sleep(5)
+    if frames:
+        new = pd.concat(frames, ignore_index=True).sort_values("time").drop_duplicates("time", keep="first")
+        if old is not None:
+            new = new[old.columns]
+        path.parent.mkdir(parents=True, exist_ok=True)
+        temporary = path.with_suffix(path.suffix + ".part")
+        if old is not None and not old.empty:
+            content = path.read_bytes()
+            with temporary.open("wb") as stream:
+                stream.write(content)
+                if not content.endswith(b"\n"):
+                    stream.write(b"\n")
+                stream.write(new.to_csv(index=False, header=False, date_format="%Y-%m-%d %H:%M:%S").encode("utf-8"))
+        else:
+            new.to_csv(temporary, index=False, date_format="%Y-%m-%d %H:%M:%S")
+        temporary.replace(path)
+        print(f"  Wrote {len(new)} rows to {path}")
+    digest = file_sha256(path) if path.exists() else None
+    for record in records:
+        record["csv_sha256"] = digest
+    entry["csv_sha256"] = digest
+    entry["csv_hash_scope"] = "complete resulting CSV bytes"
+    save_json(ACQUISITION_MANIFEST, manifest)
     return True
 
 
 def generate_dataset_for_location(coord):
-    # run from the repository root, like the other datasets/ and eda/ scripts
     print(f"Generating datasets for {coord['name']}")
-    print(f"Coordinates: Lat {coord['lat']}, Lon {coord['lon']}")
-    weather_ok = pull(fetch_weather_data, os.path.join("datasets", "weather", f"{coord['name']}_weather.csv"), coord)
-    # the air-quality API rejects dates before 2013 (CAMS coverage for California starts 2022-08)
-    aqi_ok = pull(fetch_air_quality_data, os.path.join("datasets", "aqi", f"{coord['name']}_aqi.csv"), coord,
-                  first_date="2013-01-01")
+    weather_path = Path("datasets/weather") / f"{coord['name']}_weather.csv"
+    appended_path = weather_path.with_name(f"{coord['name']}_weather_appended.csv")
+    columns = ["time"] + WEATHER_VARS
+    if appended_path.exists():
+        appended = read_hourly_csv(appended_path)[columns]
+        if not weather_path.exists():
+            temporary = weather_path.with_suffix(".csv.part")
+            appended.to_csv(temporary, index=False, date_format="%Y-%m-%d %H:%M:%S")
+            temporary.replace(weather_path)
+        else:
+            raw = read_hourly_csv(weather_path)[columns]
+            if raw.time.duplicated().any() or appended.time.duplicated().any() or not appended.time.isin(raw.time).all():
+                raise ValueError("raw weather does not cover retained appended weather")
+            overlap = raw.set_index("time").loc[appended.time].reset_index()
+            try:
+                pd.testing.assert_frame_equal(overlap, appended.reset_index(drop=True),
+                                              check_dtype=False, check_exact=True)
+            except AssertionError as exc:
+                raise ValueError("raw/appended weather overlap differs") from exc
+    weather_ok = pull(fetch_weather_data, weather_path, coord)
+    if weather_ok:
+        weather_ok = process_weather_dataset(weather_path)
+    # 2013 is the request boundary, not the start of observed California coverage.
+    aqi_ok = pull(fetch_air_quality_data, Path("datasets/aqi") / f"{coord['name']}_aqi.csv",
+                  coord, first_date="2013-01-01")
     return weather_ok and aqi_ok
 
 def main():
